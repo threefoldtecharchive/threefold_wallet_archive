@@ -1,58 +1,70 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <h1>Hello</h1>
 </template>
 
 <script>
+import * as tfchain from "../service/api"
+
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  mounted() {
+
+    var name = "mathias"
+    var password = "mathias"
+
+    // This should be generated!
+    var seed = "lemon vocal marriage flash soft address barely crazy swarm alert hire riot find know around pill denial labor join spice energy planet deliver dress"
+    // var seed = "group absurd recycle jacket march knock wear number flock future apart fatal hen enhance welcome net gather super earn ten hello rug patch grant"
+    
+    var network = "testnet"
+
+    // api.
+    const account = new tfchain.Account(name, password, {
+        seed: seed,
+        network: network
+      })
+
+    account.wallet_new('default', 0, 1)
+    account.wallet_new('taiko', 1, 1)
+
+    // account.balance.then(function(balence) {
+    //   console.log("Balance: ", balance)
+    // });
+
+    console.log("account_name: ", account.account_name)
+    console.log("address: " + account.address)
+    console.log("account: ", account)
+    console.log("wallet: ", account.wallet)
+    console.log("balance: ", account.balance)
+    console.log("balances: ", account.balances)
+    console.log("info: ", account.info)
+
+    account.balance.then(function(result) {
+      console.log("Wallets:: ", result.balances)
+      console.log("Wallet 0 Name: ", result.balances[0].wallet_name)
+      console.log("Wallet 0: ", result.balances[0])
+
+      console.log("Wallet 0 coins_total: ", result.balances[0].coins_total.str({ precision: 3 }))
+      console.log("Wallet 0 coins_locked: ", result.balances[0].coins_locked.str({ precision: 3 }))
+      console.log("Wallet 0 coins_unlocked: ", result.balances[0].coins_unlocked.str({ precision: 3 }))
+
+      console.log("Wallet 0 unconfirmed_coins_locked: ", result.balances[0].unconfirmed_coins_locked.str({ precision: 3 }))
+      console.log("Wallet 0 unconfirmed_coins_total: ", result.balances[0].unconfirmed_coins_total.str({ precision: 3 }))
+      console.log("Wallet 0 unconfirmed_coins_unlocked: ", result.balances[0].unconfirmed_coins_unlocked.str({ precision: 3 }))
+
+      console.log("Wallet 1 Name: ", result.balances[1].wallet_name)
+      console.log("Wallet 1: ", result.balances[1])
+
+      console.log("Wallet 1 coins_total: ", result.balances[1].coins_total.str({ precision: 3 }))
+      console.log("Wallet 1 coins_locked: ", result.balances[1].coins_locked.str({ precision: 3 }))
+      console.log("Wallet 1 coins_unlocked: ", result.balances[1].coins_unlocked.str({ precision: 3 }))
+
+      console.log("Wallet 1 unconfirmed_coins_locked: ", result.balances[1].unconfirmed_coins_locked.str({ precision: 3 }))
+      console.log("Wallet 1 unconfirmed_coins_total: ", result.balances[1].unconfirmed_coins_total.str({ precision: 3 }))
+      console.log("Wallet 1 unconfirmed_coins_unlocked: ", result.balances[1].unconfirmed_coins_unlocked.str({ precision: 3 }))
+    })
   }
-}
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+<style> 
 </style>
