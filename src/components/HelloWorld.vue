@@ -1,5 +1,5 @@
 <template>
-  <h1>Hello wallet</h1>
+  <h1>Hello</h1>
 </template>
 
 <script>
@@ -12,8 +12,8 @@ export default {
 
     // Account initialization
     var account = new TFAccount(
-      "Username",
-      "seed",
+      "Mathias",
+      "lemon vocal marriage flash soft address barely crazy swarm alert hire riot find know around pill denial labor join spice energy planet deliver dress",
       "testnet"
     );
 
