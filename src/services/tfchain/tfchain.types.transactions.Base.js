@@ -5,7 +5,7 @@ import * as jsobj from './tfchain.polyfill.encoding.object.js';
 import * as jsjson from './tfchain.polyfill.encoding.json.js';
 import * as ConditionTypes from './tfchain.types.ConditionTypes.js';
 import {CoinOutput} from './tfchain.types.IO.js';
-import {Currency, Hash} from './tfchain.types.PrimitiveTypes.js';
+import {BinaryData, Currency, Hash} from './tfchain.types.PrimitiveTypes.js';
 import {SiaBinaryEncoder} from './tfchain.encoding.siabin.js';
 import {RivineBinaryEncoder} from './tfchain.encoding.rivbin.js';
 var __name__ = 'tfchain.types.transactions.Base';
@@ -132,6 +132,7 @@ export var TransactionBaseClass =  __class__ ('TransactionBaseClass', [object], 
 		self._height = -(1);
 		self._block_timestamp = -(1);
 		self._blockid = null;
+		self._txorder = -(1);
 		self._fee_payout_address = null;
 		self._fee_payout_id = null;
 		self._unconfirmed = false;
@@ -153,13 +154,30 @@ export var TransactionBaseClass =  __class__ ('TransactionBaseClass', [object], 
 		}
 		var txn = cls ();
 		var tv = obj.get_or ('version', -(1));
-		if (txn.version.__ne__ (tv)) {
-			var __except0__ = ValueError ('transaction is expected to be of version {}, not version {}'.format (txn.version, tv));
+		txn._from_json_txn_version_validator (tv);
+		txn._from_json_data_object (obj.get_or ('data', jsobj.new_dict ()));
+		return txn;
+	});},
+	get _from_json_txn_version_validator () {return __get__ (this, function (self, tv) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'tv': var tv = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.version.__ne__ (tv)) {
+			var __except0__ = ValueError ('transaction is expected to be of version {}, not version {}'.format (self.version.value, tv));
 			__except0__.__cause__ = null;
 			throw __except0__;
 		}
-		txn._from_json_data_object (obj.get_or ('data', jsobj.new_dict ()));
-		return txn;
 	});},
 	get _get_version () {return __get__ (this, function (self) {
 		if (arguments.length) {
@@ -426,7 +444,7 @@ export var TransactionBaseClass =  __class__ ('TransactionBaseClass', [object], 
 		else {
 		}
 		if (!(isinstance (value, int) && !(isinstance (value, bool)))) {
-			var __except0__ = py_TypeError ('value should be of type int or bool, not {}'.format (py_typeof (value)));
+			var __except0__ = py_TypeError ('value should be of type int, not {}'.format (py_typeof (value)));
 			__except0__.__cause__ = null;
 			throw __except0__;
 		}
@@ -436,6 +454,49 @@ export var TransactionBaseClass =  __class__ ('TransactionBaseClass', [object], 
 			throw __except0__;
 		}
 		self._height = value;
+	});},
+	get _get_transaction_order () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._txorder;
+	});},
+	get _set_transaction_order () {return __get__ (this, function (self, value) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'value': var value = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (!(isinstance (value, int) && !(isinstance (value, bool)))) {
+			var __except0__ = py_TypeError ('value should be of type int, not {}'.format (py_typeof (value)));
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		if (value < 0) {
+			var __except0__ = ValueError ('a transaction order cannot be negative');
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		self._txorder = value;
 	});},
 	get _get_timestamp () {return __get__ (this, function (self) {
 		if (arguments.length) {
@@ -889,7 +950,7 @@ export var TransactionBaseClass =  __class__ ('TransactionBaseClass', [object], 
 		}
 		else {
 		}
-		return bytes (jsarr.new_array (0));
+		return BinaryData (__kwargtrans__ ({strencoding: 'base64'}));
 	});},
 	get _set_data () {return __get__ (this, function (self, value) {
 		if (arguments.length) {
@@ -1124,6 +1185,22 @@ export var TransactionBaseClass =  __class__ ('TransactionBaseClass', [object], 
 		}
 		return bytes ('blstake output  ');
 	});},
+	get transaction_id_new () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._id_new ();
+	});},
 	get coin_outputid_new () {return __get__ (this, function (self, index) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
@@ -1144,7 +1221,7 @@ export var TransactionBaseClass =  __class__ ('TransactionBaseClass', [object], 
 			__except0__.__cause__ = null;
 			throw __except0__;
 		}
-		return self._outputid_new (__kwargtrans__ ({specifier: self._coin_outputid_specifier, index: index}));
+		return self._id_new (__kwargtrans__ ({specifier: self._coin_outputid_specifier, index: index}));
 	});},
 	get blockstake_outputid_new () {return __get__ (this, function (self, index) {
 		if (arguments.length) {
@@ -1166,9 +1243,15 @@ export var TransactionBaseClass =  __class__ ('TransactionBaseClass', [object], 
 			__except0__.__cause__ = null;
 			throw __except0__;
 		}
-		return self._outputid_new (__kwargtrans__ ({specifier: self._blockstake_outputid_specifier, index: index}));
+		return self._id_new (__kwargtrans__ ({specifier: self._blockstake_outputid_specifier, index: index}));
 	});},
-	get _outputid_new () {return __get__ (this, function (self, specifier, index) {
+	get _id_new () {return __get__ (this, function (self, specifier, index) {
+		if (typeof specifier == 'undefined' || (specifier != null && specifier.hasOwnProperty ("__kwargtrans__"))) {;
+			var specifier = null;
+		};
+		if (typeof index == 'undefined' || (index != null && index.hasOwnProperty ("__kwargtrans__"))) {;
+			var index = null;
+		};
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
 			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
@@ -1185,9 +1268,13 @@ export var TransactionBaseClass =  __class__ ('TransactionBaseClass', [object], 
 		else {
 		}
 		var encoder = SiaBinaryEncoder ();
-		encoder.add_array (specifier);
+		if (specifier != null) {
+			encoder.add_array (specifier);
+		}
 		encoder.add_array (self._id_input_compute ());
-		encoder.add_int (index);
+		if (index != null) {
+			encoder.add_int (index);
+		}
 		var hash = blake2b (encoder.data);
 		return Hash (__kwargtrans__ ({value: hash}));
 	});},
@@ -1330,6 +1417,7 @@ Object.defineProperty (TransactionBaseClass, 'coin_outputs', property.call (Tran
 Object.defineProperty (TransactionBaseClass, 'coin_inputs', property.call (TransactionBaseClass, TransactionBaseClass._get_coin_inputs, TransactionBaseClass._set_coin_inputs));
 Object.defineProperty (TransactionBaseClass, 'blockid', property.call (TransactionBaseClass, TransactionBaseClass._get_blockid, TransactionBaseClass._set_blockid));
 Object.defineProperty (TransactionBaseClass, 'timestamp', property.call (TransactionBaseClass, TransactionBaseClass._get_timestamp, TransactionBaseClass._set_timestamp));
+Object.defineProperty (TransactionBaseClass, 'transaction_order', property.call (TransactionBaseClass, TransactionBaseClass._get_transaction_order, TransactionBaseClass._set_transaction_order));
 Object.defineProperty (TransactionBaseClass, 'height', property.call (TransactionBaseClass, TransactionBaseClass._get_height, TransactionBaseClass._set_height));
 Object.defineProperty (TransactionBaseClass, 'fee_payout_id', property.call (TransactionBaseClass, TransactionBaseClass._get_fee_payout_id, TransactionBaseClass._set_fee_payout_id));
 Object.defineProperty (TransactionBaseClass, 'fee_payout_address', property.call (TransactionBaseClass, TransactionBaseClass._get_fee_payout_address, TransactionBaseClass._set_fee_payout_address));
@@ -1442,28 +1530,6 @@ export var OpaqueTransaction =  __class__ ('OpaqueTransaction', [TransactionBase
 		}
 		return self._raw_json_data;
 	});},
-	get version_set () {return __get__ (this, function (self, version) {
-		if (arguments.length) {
-			var __ilastarg0__ = arguments.length - 1;
-			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
-				var __allkwargs0__ = arguments [__ilastarg0__--];
-				for (var __attrib0__ in __allkwargs0__) {
-					switch (__attrib0__) {
-						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
-						case 'version': var version = __allkwargs0__ [__attrib0__]; break;
-					}
-				}
-			}
-		}
-		else {
-		}
-		if (!(isinstance (version, int))) {
-			var __except0__ = py_TypeError ('version is of wrong type: invalid: {} ({})'.format (version, py_typeof (version)));
-			__except0__.__cause__ = null;
-			throw __except0__;
-		}
-		self._version = TransactionVersion (version);
-	});},
 	get _custom_version_getter () {return __get__ (this, function (self) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
@@ -1479,6 +1545,27 @@ export var OpaqueTransaction =  __class__ ('OpaqueTransaction', [TransactionBase
 		else {
 		}
 		return self._version;
+	});},
+	get _from_json_txn_version_validator () {return __get__ (this, function (self, tv) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'tv': var tv = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.version.value == -(1)) {
+			self._version = TransactionVersion (tv);
+			return ;
+		}
+		__super__ (OpaqueTransaction, '_from_json_txn_version_validator') (self, tv);
 	});}
 });
 
