@@ -1,0 +1,30 @@
+<section class="toolbar">
+  <v-toolbar app class="primary white--text elevation-0">
+    <v-toolbar-title class="headline text-uppercase pl-2">
+      <v-layout align-center>
+          <h1>
+            {{($route.meta.title || $route.name) || '3Bot'}}
+          </h1>
+          <v-btn class="accent ml-2" dark icon small v-if="$route.name == 'home'" @click="$emit('ctaClicked')">
+            <v-icon>
+              add
+            </v-icon>
+          </v-btn>
+      </v-layout>
+    </v-toolbar-title>
+    <v-spacer></v-spacer>
+    <div>
+      <v-progress-circular
+        v-if="syncing"
+        indeterminate
+        size="12"
+        color="accent"
+      />
+      <v-btn icon :to="{name: 'settings'}">
+        <v-icon color="white">
+          settings
+        </v-icon>
+      </v-btn>
+    </div>
+  </v-toolbar>
+</section>

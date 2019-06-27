@@ -1,0 +1,10 @@
+@import '../../App/App.scss';
+.bottom-nav {
+    .v-bottom-nav {
+        border-radius: $borderradius $borderradius 0 0;
+    }
+    .center {
+        left: 50%;
+        transform: translate(-50%);
+    }
+}

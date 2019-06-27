@@ -1,0 +1,10 @@
+
+<section class="amount-indicator">
+  <v-layout justify-end row fill-height>
+    <span :class="`text-xs-right  ${small ? 'font-weight-normal' : ' display-1'} ${color}--text`">
+      {{amount}}
+    </span>
+    <span :class="small ? 'pl-1 caption font-weight-light' : 'pl-1 font-weight-light'">{{valuta}}</span>
+  </v-layout>
+</section>
+

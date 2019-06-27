@@ -1,0 +1,35 @@
+<section class="transfer fill-height">
+  <div class="cheat elevation-4"></div>
+  <div class="text-xs-center my-3">
+      <v-btn-toggle v-model="selectedTab" dark active-class="red" mandatory class="primary round elevation-0">
+        <v-btn flat class="px-5 my-1 mx-1 round">Receive</v-btn>
+        <v-btn flat class="px-5 my-1 mx-1 round">Send</v-btn>
+      </v-btn-toggle>
+    </div>
+  <v-layout align-center class="pb-5 fill-height">
+    <v-layout column justify-center class="pb-5 mb-5" fill-height>
+      <v-flex xs4 class="align-self-center mb-5" v-show="selectedTab == 0">
+        <v-img width="200" height="200"
+          src="data:image/png;base64,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" />
+      </v-flex>
+      </v-flex>
+      <v-card dark class="primary">
+        <v-card-text>
+          <p v-if="selectedTab == 0">To</p>
+          <p v-if="selectedTab == 1">From</p>
+          <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet" />
+          <!-- <v-autocomplete prepend-icon="person" append-outer-icon="filter_center_focus" v-show="selectedTab == 1" :items="items" :loading="isLoading" :search-input.sync="search" color="white" hide-no-data hide-selected item-text="email" label="To" return-object/> -->
+          <v-text-field box prepend-icon="person" color="white" label="To" v-model='to'></v-text-field>
+          <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="amount"></v-text-field>
+          <v-textarea box prepend-icon="message" color="white" label="Message" v-model="message"/>
+        </v-card-text>
+      </v-card>
+      <div class="pt-4">
+          <v-btn large block class="accent round" @click='send'>
+            Send
+              <v-icon right>send</v-icon>
+          </v-btn>
+      </div>
+    </v-layout>
+  </v-layout>
+</section>

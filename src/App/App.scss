@@ -1,0 +1,73 @@
+$borderradius: 20px;
+.app {
+    .v-card, 
+    .v-dialog{
+        border-radius: $borderradius;
+        overflow: hidden;
+        .badge-top {
+            border-radius: 0 $borderradius;
+        }
+        .badge-bottom {
+            border-radius: $borderradius 0;
+            &.v-btn {
+                z-index: 2;
+                i.v-icon{
+                    top: -7px;
+                    position: relative;
+                }
+            }
+        }
+        .badge-*{
+            position: relative;
+            top: -50px
+        }
+
+        &.border{
+            .badge-top {
+                border-radius: 0 0 0 $borderradius;
+            }
+    
+            .badge-bottom {
+                border-radius: $borderradius 0 0 0;
+            }
+        }
+        .v-expansion-panel__header {
+            margin: 0!important;
+            padding: 0!important;
+        }
+        .v-expansion-panel__container {
+            background: none;
+        }
+    }
+    .v-content>.content {
+        min-height: 100%;
+
+    }
+    .fill-height {
+        min-height: 100%;
+        min-width: 100%;
+        max-width: 100%;
+    }
+    .cheat{
+        position: absolute;
+        top: -$borderradius;  
+        border-radius: 0 0 $borderradius $borderradius;
+        background: var(--primary-color);
+        height: 95px;
+        width: 100%;
+        z-index: 0;
+        left: 0;
+        
+    }
+    .scrollable{
+        height: 0px;
+        overflow: auto;
+    }
+    .clickable {
+        cursor: pointer;
+    }
+    .round {
+        border-radius: $borderradius !important;
+        overflow: hidden;
+    }
+}

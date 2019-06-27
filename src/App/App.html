@@ -1,0 +1,15 @@
+<section class="app">
+  <v-app :style="cssProps">
+    <toolbar @ctaClicked='handleCTAClick' />
+    <v-content class="mt-0">
+      <v-container class="pb-0 pt-2 content fill-height" justify-start>
+        <router-view />
+      </v-container>
+    </v-content>
+    <bottomNav/>
+    <createWalletDialog :show='showCreateWalletDialog' @ctaClicked='handleCTAClick' />
+    <v-snackbar :value="!!informationMessage" top :timeout="hideSnackbarTimeout">
+      {{ informationMessage }}
+    </v-snackbar>
+  </v-app>
+</section>

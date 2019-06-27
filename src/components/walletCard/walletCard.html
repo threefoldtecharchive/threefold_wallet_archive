@@ -1,0 +1,24 @@
+<section class="wallet-card">
+  <v-card :class="`ma-2 min ${selected ? 'border' : ''}`">
+    <div class="content" :style="clickable ? 'cursor:pointer' : ''" @click="$emit('click')">
+      <v-layout class="pa-1 content-inner white--text">
+        <v-flex xs6>
+          <v-layout column class="py-3 pl-2">
+            <p class="title text-uppercase">{{wallet? wallet.name : 'Wallet name'}}</p>
+            <p class="body-1 text-truncate">{{walletaddress}}</p>
+          </v-layout>
+        </v-flex>
+        <v-flex xs6>
+          <v-layout column class="justify-space-between fill-height">
+            <amountIndicator small class="accent pl-3 pr-2 py-1 align-self-end badge-top ma-0" :amount='totalAmount' valuta='tft'/>
+            <v-btn dark small icon flat @click.stop="copyAddress" class="accent pa-4 align-self-end badge-bottom ma-0">
+              <v-icon size="20">
+                file_copy
+              </v-icon>
+            </v-btn>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </div>
+  </v-card>
+</section>

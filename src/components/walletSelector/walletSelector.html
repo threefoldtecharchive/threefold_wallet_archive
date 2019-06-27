@@ -1,0 +1,5 @@
+<section class="wallet-selector">
+  <v-layout class="horizontal pb-2 px-2" >
+      <walletCard clickable v-for="(wallet, index) in wallets" :key='index' :wallet="wallet" :selected="wallet.name == selected" @click.native='$emit("onWalletSelected", wallet)'/>
+  </v-layout>
+</section>

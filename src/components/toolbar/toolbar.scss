@@ -1,0 +1,6 @@
+@import '../../App/App.scss';
+.toolbar {
+    .v-toolbar {
+        border-radius: 0 0 $borderradius $borderradius;
+    }
+}

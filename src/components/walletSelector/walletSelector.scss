@@ -1,0 +1,13 @@
+.wallet-selector {
+  .horizontal {
+    margin: 0 -20px;
+    left: -50px;
+    white-space: nowrap;
+    overflow: auto;
+    .wallet-card {
+      display: inline-block;
+      width: 316px;
+      // overflow: hidden;
+    }
+  }
+}

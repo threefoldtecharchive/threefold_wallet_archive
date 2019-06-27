@@ -1,0 +1,32 @@
+<section class="history-card">
+  <v-card :class="`mb-2 ${!transaction.confirmed ? 'grey lighten-1' : ''} `" @click="copyTransaction">
+    <v-card-text>
+      <v-expansion-panel class="elevation-0">
+        <v-expansion-panel-content expand-icon="">
+          <template v-slot:header>
+            <v-layout align-center>
+              <v-avatar>
+                <v-img src="https://i.pravatar.cc/50?img=50"></v-img>
+              </v-avatar>
+              <v-flex xs7 class="ml-3">
+                <v-layout column>
+                  <span class="title text-uppercase text-truncate ">{{outgoing? receiverName : senderName}}</span>
+                  <span class="font-weight-light text-truncate ">{{outgoing? receiverAddress: senderAddress}}</span>
+                </v-layout>
+              </v-flex>
+              <v-flex class="text-xs-right">
+                <amountIndicator
+                  :color="outgoing? 'error' : 'accent'"
+                  :amount='amount'
+                  valuta='tft' />
+              </v-flex>
+            </v-layout>
+          </template>
+          <div class="pt-3" style="max-width: 100%; overflow-wrap: break-word;">
+           {{transaction.message}}
+          </div>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-card-text>
+  </v-card>
+</section>

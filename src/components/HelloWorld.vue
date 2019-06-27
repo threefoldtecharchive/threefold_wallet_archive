@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import * as tfchain from "../services/tfchain/api";
+// import * as tfchain from "../services/tfchain/api";
 import { TFAccount } from "../services/tfchain_wrapper/TFAccount";
 import { setInterval } from "timers";
 

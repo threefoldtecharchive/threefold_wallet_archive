@@ -1,0 +1,14 @@
+<section class="history fill-height">
+  <v-layout column fill-height>
+    <div class="cheat elevation-4"></div>
+    <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="$route.params.wallet" />
+    <v-subheader class="pt-0 pl-0 subheading">
+      Recent activities
+    </v-subheader>
+    <v-flex class="scrollable pa-1">
+      <v-layout column class="mb-3">
+        <historyCard v-for="(transaction, index) in wallets.find(x=> x.name == $route.params.wallet).transaction" :key="index" :transaction="transaction"/>
+      </v-layout>
+    </v-flex>
+  </v-layout>
+</section>
