@@ -1,7 +1,5 @@
 import amountIndicator from '../amountIndicator'
 import copy from 'clipboard-copy'
-import { relative } from 'path'
-import { input } from '../../services/tfchain/org.transcrypt.__runtime__'
 
 export default {
   name: 'history-card',
@@ -11,7 +9,9 @@ export default {
   ],
   data () {
     return {
-      outgoing: false
+      outgoing: false,
+      valuta: 'tft',
+      show: false
     }
   },
   computed: {
@@ -28,52 +28,29 @@ export default {
         return '---'
       }
     },
-    receiverName () {
-      return 'receiverName'
-    },
-    senderName () {
-      var senderName = 'senderName not found'
-      if (this.transaction.sender) {
-        senderName = this.transaction.sender
-        try {
-          var sender = JSON.parse(this.transaction.sender)
-          if (sender && sender.walletname && sender.account) {
-            senderName = sender.account
-          } else {
-            senderName = this.getWalletAddresOfInput()
-          }
-        } catch (error) {
-          senderName = this.getWalletAddresOfInput()
-        }
-      } else {
-        senderName = this.getWalletAddresOfInput()
-      }
-      return senderName
-    },
-    receiverAddress () {
+    receiver () {
       if (!this.transaction.confirmed) return 'Pending transaction...'
-      var address = this.getWalletAddresOfOutput()
-      return address
+      var receiverName = this.getWalletAddresOfOutput()
+      return receiverName
     },
-    senderAddress () {
+    sender () {
       if (!this.transaction.confirmed) return 'Pending transaction...'
-      var senderAddress = null
-      if (this.transaction.confirmed && this.transaction.sender) {
-        try {
-          var sender = JSON.parse(this.transaction.sender)
-          if (sender && sender.walletname && sender.account) {
-            senderAddress = `${sender.walletname}@${sender.account}`
-          } else {
-            senderAddress = this.getWalletAddresOfInput()
-          }
-        } catch (error) {
-          senderAddress = this.getWalletAddresOfInput()
-        }
-      } else {
-        senderAddress = this.getWalletAddresOfInput()
-      }
-
+      var senderAddress = this.getWalletAddresOfInput()
       return senderAddress
+    },
+    timeStamp () {
+      var date = new Date(0)
+      date.setUTCSeconds(this.transaction.timestamp)
+      return date.toLocaleDateString()
+    },
+    fee () {
+      var total = 0
+      var fees = this.transaction.outputs.filter(x => x.is_fee)
+      fees.forEach(fee => {
+        var amount = fee.amount.str({ precision: 3 }).replace(',', '')
+        total += parseFloat(amount)
+      })
+      return total.toLocaleString('nl-BE', { minimumFractionDigits: 2, useGrouping: false })
     }
   },
   mounted () {
@@ -114,7 +91,14 @@ export default {
     },
     copyTransaction () {
       copy(JSON.stringify(this.transaction))
-      console.log(this.transaction)
+    },
+    isJsonObject (obj) {
+      try {
+        JSON.parse(obj)
+        return true
+      } catch (e) {
+        return false
+      }
     }
   }
 }

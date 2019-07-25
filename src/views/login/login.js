@@ -1,5 +1,4 @@
 import { mapGetters, mapActions } from 'vuex'
-import { TFAccount } from '../../services/tfchain_wrapper/TFAccount'
 export default {
   name: 'login',
   components: {},
@@ -11,25 +10,35 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'account'
-    ])
+      'account',
+      'loginUrl'
+    ]),
+    isLoggingIn () {
+      return Object.entries(this.$route.query).length === 0
+    }
   },
   mounted () {
-    this.login({
-      doubleName: 'ivan.3bot',
-      seed: 'lemon vocal marriage flash soft address barely crazy swarm alert hire riot find know around pill denial labor join spice energy planet deliver dress'
-    })
+    if (this.isLoggingIn) {
+      this.generateLoginUrl()
+    } else {
+      this.checkResponse(new URL(window.location.href))
+    }
   },
   methods: {
     ...mapActions([
-      'login',
-      'createWallet'
+      'generateLoginUrl',
+      'checkResponse'
     ])
   },
   watch: {
     account (val) {
       if (val) {
         this.$router.push({ name: 'home' })
+      }
+    },
+    loginUrl (val) {
+      if (val) {
+        window.location.href = val
       }
     }
   }

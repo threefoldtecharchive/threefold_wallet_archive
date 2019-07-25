@@ -2,14 +2,18 @@ import walletCard from '../../components/walletCard'
 export default {
   name: 'wallet-selector',
   components: { walletCard },
-  props: [
-    'wallets',
-    'selected',
-    // horizontal: {
-    //   type: Boolean,
-    //   default: true
-    // }
-  ],
+  props: {
+    wallets: {
+      type: Array
+    },
+    selected: {
+      type: String
+    },
+    noClip: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
 

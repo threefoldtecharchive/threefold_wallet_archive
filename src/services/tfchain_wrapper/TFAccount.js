@@ -23,7 +23,6 @@ export class TFAccount {
 
   getTransactions (walletName) {
     return this.account.wallets.find((result) => result.wallet_name === walletName).balance.then((result) => {
-      console.log(result)
       return result.transactions
     })
   }
@@ -43,11 +42,6 @@ export class TFAccount {
   }
 
   sendCoins (walletFrom, toAddress, amount) {
-    console.log(`walletFrom`, walletFrom)
-    console.log(`toAddress`, toAddress)
-    console.log(`amount`, amount)
-    console.log(`this.account.wallets`, this.account.wallets)
-
     const builder = walletFrom.transaction_new()
 
     builder.output_add(toAddress.toString(), amount.toString())
@@ -61,7 +55,6 @@ export class TFAccount {
   }
 
   createWallet (name) {
-    console.log()
     this.account.wallet_new(name, this.account.wallet_count, 1)
     this.address = this.account.address
     this.wallets = this.account.wallets

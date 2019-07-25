@@ -11,9 +11,6 @@ export default {
     createWalletDialog
   },
   mounted () {
-    setInterval(() => {
-      this.updateAccount()
-    }, 30000)
   },
   data () {
     return {
@@ -23,19 +20,20 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'informationMessage'
+      'informationMessage',
+      'fatalError'
     ]),
     cssProps () {
       return {
         '--primary-color': this.$vuetify.theme.primary,
-        '--accent-color': this.$vuetify.theme.accent
+        '--accent-color': this.$vuetify.theme.accent,
+        '--error-color': this.$vuetify.theme.error
       }
     }
   },
   methods: {
     ...mapActions([
       'createWallet',
-      'updateAccount',
       'setInformationMessage'
     ]),
     handleCTAClick (data) {
@@ -52,6 +50,13 @@ export default {
           this.setInformationMessage('')
         }, this.hideSnackbarTimeout)
       }
+    },
+    fatalError (val) {
+      console.error(`ERROR`, val)
+      this.$router.push({
+        name: 'error',
+        query: { msg: val }
+      })
     }
   }
 }

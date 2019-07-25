@@ -1,25 +1,35 @@
 import walletSelector from '../../components/walletSelector'
+// import VueQr from 'vue-qr'
+import qrcode from '@chenfengyuan/vue-qrcode'
+
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
+
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'transfer',
-  components: { walletSelector },
+  components: { walletSelector, qrcode, QrcodeStream, QrcodeDropZone, QrcodeCapture },
   props: [],
   data () {
     return {
       selectedTab: 1,
-      selectedWallet: null,
+      selectedWallet: {},
       isLoading: false,
       entries: [],
       model: null,
       search: null,
       to: null,
-      amount: null,
-      message: null
+      amount: 0,
+      message: null,
+      sender: {},
+      show: false,
+      transaction: {},
+      transactionSent: false
     }
   },
   computed: {
     ...mapGetters([
-      'wallets'
+      'wallets',
+      'transactionSubmited'
     ]),
     fields () {
       if (!this.model) return []
@@ -32,7 +42,6 @@ export default {
       })
     },
     items () {
-      console.log(this.entries)
       return this.entries.map(entry => {
         const email = entry.email.length > this.descriptionLimit
           ? entry.email.slice(0, this.descriptionLimit) + '...'
@@ -40,28 +49,59 @@ export default {
 
         return Object.assign({}, entry, { email })
       })
+    },
+    qrText () {
+      // return { tft: '01ed90bee1d6d50b730a1aacf2890ac6fc0f7718849fba5f7c5719e3cfcc4641be09c5607b0210', amount: 0 }
+      return `tft:${this.selectedWallet.address}?amount=${this.amount}&message=${this.message}&sender=me`
     }
   },
   mounted () {
-    if (!this.selectedWallet) this.selectedWallet = this.wallets[0].name
+    if (!this.selectedWallet.address) this.selectedWallet = this.wallets[0]
   },
   methods: {
     ...mapActions([
       'sendCoins'
     ]),
     selectWallet (wallet) {
-      this.selectedWallet = wallet.name
+      this.selectedWallet = wallet
     },
     send () {
       this.sendCoins({
-        from: this.selectedWallet,
+        from: this.selectedWallet.address,
         to: this.to,
         message: this.message,
         amount: this.amount
       })
+      this.transactionSent = true
       this.to = ''
       this.message = ''
-      this.amount = ''
+      this.amount = '0'
+    },
+    onDecode (code) {
+      code = code.replace('tft:', 'tft://')
+      this.to = this.getQueryVar(code, 'HOST')
+      this.amount = this.getQueryVar(code, 'amount')
+      this.message = this.getQueryVar(code, 'message')
+      this.sender = this.getQueryVar(code, 'sender')
+      this.show = true
+    },
+    getQueryVar (url, varName) {
+      var val
+      url = new URL(url)
+      if (varName === 'HOST') {
+        val = url.pathname.replace('//', '')
+      } else {
+        val = url.searchParams.get(varName)
+      }
+      return val
+    }
+  },
+  watch: {
+    selectedTab (val) {
+      this.selectedWallet = this.wallets[0]
+      this.to = ''
+      this.message = ''
+      this.amount = '0'
     }
   }
 }

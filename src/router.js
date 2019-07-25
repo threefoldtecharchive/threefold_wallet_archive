@@ -35,8 +35,11 @@ export default new Router({
     name: 'login',
     component: () => import(/* webpackChunkName: "login-page" */ './views/login')
   }, {
-    path: '*',
+    path: '/error',
     name: 'error',
     component: () => import(/* webpackChunkName: "error-page" */ './views/errorpage')
-    }]
+  }, {
+    path: '*',
+    redirect: '404'
+  }]
 })

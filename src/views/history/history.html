@@ -1,13 +1,32 @@
 <section class="history fill-height">
   <v-layout column fill-height>
     <div class="cheat elevation-4"></div>
-    <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="$route.params.wallet" />
+    <walletSelector no-clip @onWalletSelected='selectWallet' :wallets="wallets" :selected="$route.params.wallet" />
     <v-subheader class="pt-0 pl-0 subheading">
       Recent activities
     </v-subheader>
     <v-flex class="scrollable pa-1">
       <v-layout column class="mb-3">
-        <historyCard v-for="(transaction, index) in wallets.find(x=> x.name == $route.params.wallet).transaction" :key="index" :transaction="transaction"/>
+        <v-timeline fill-dot align-top dense class="mx-2 pt-0">
+          <v-timeline-item class="white--text pb-3" right fill-dot large v-for="(gt, date) in groupedTransactions" :key="date">
+            <template v-slot:icon>
+              <v-layout column text-xs-center class="px-1">
+                <v-flex class="text-uppercase">
+                  {{getDayName(date)}}
+                </v-flex>
+                <v-layout>
+                  <v-flex text-xs-right style="font-size: 9px" class="font-weight-black ">
+                    {{getDay(date)}}
+                  </v-flex>
+                  <v-flex text-xs-left style="font-size: 9px" class="font-weight-black text-uppercase pl-1">
+                    {{getMonth(date)}}
+                  </v-flex>
+                </v-layout>
+              </v-layout>
+            </template>
+            <historyCard v-for="(transaction, index) in gt" :key="index" :transaction="transaction" />
+          </v-timeline-item>
+        </v-timeline>
       </v-layout>
     </v-flex>
   </v-layout>

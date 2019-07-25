@@ -2,12 +2,7 @@
     <v-layout column fill-height>
         <div class="cheat"></div>
         <div class="content" v-if="wallets.length">
-            <walletCard clickable v-for="(wallet, index) in wallets" :key='index' :wallet="wallet" @click="seeHistory(wallet)"/>
-            <!-- <div class="pa-2">
-                <v-btn large block class="accent" @click="openCreateWalletDialog">
-                    <v-icon left>add</v-icon>Add a new wallet
-                </v-btn>
-            </div> -->
+            <walletCard  no-padding class="my-2" clickable v-for="(wallet, index) in wallets" :key='index' :wallet="wallet" @click="seeHistory(wallet)"/>
         </div>
         <div v-if="!wallets.length" class='fill-height'>
             <v-layout justify-center align-center fill-height column>

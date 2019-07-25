@@ -1,32 +1,81 @@
 <section class="history-card">
-  <v-card :class="`mb-2 ${!transaction.confirmed ? 'grey lighten-1' : ''} `" @click="copyTransaction">
+  <v-card ripple :class="`mb-2 clickable ${!transaction.confirmed ? 'grey lighten-1' : ''} ${outgoing ? 'outgoing' : 'incoming'}`" @click="show = true">
     <v-card-text>
-      <v-expansion-panel class="elevation-0">
-        <v-expansion-panel-content expand-icon="">
-          <template v-slot:header>
-            <v-layout align-center>
-              <v-avatar>
-                <v-img src="https://i.pravatar.cc/50?img=50"></v-img>
-              </v-avatar>
-              <v-flex xs7 class="ml-3">
-                <v-layout column>
-                  <span class="title text-uppercase text-truncate ">{{outgoing? receiverName : senderName}}</span>
-                  <span class="font-weight-light text-truncate ">{{outgoing? receiverAddress: senderAddress}}</span>
-                </v-layout>
-              </v-flex>
-              <v-flex class="text-xs-right">
-                <amountIndicator
-                  :color="outgoing? 'error' : 'accent'"
-                  :amount='amount'
-                  valuta='tft' />
-              </v-flex>
-            </v-layout>
-          </template>
-          <div class="pt-3" style="max-width: 100%; overflow-wrap: break-word;">
-           {{transaction.message}}
-          </div>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
+      <v-layout align-center>
+        <v-avatar>
+          <v-icon class="primary" color="white">person</v-icon>
+          <!-- <v-img src="https://i.pravatar.cc/50?img=50"></v-img> -->
+        </v-avatar>
+        <v-flex xs7 class="ml-3">
+          <v-layout column>
+            <span class="title text-uppercase text-truncate ">{{outgoing? receiver : sender}}</span>
+            <span class="font-weight-light text-truncate" v-if="transaction.message">{{transaction.message}}</span>
+          </v-layout>
+        </v-flex>
+        <v-flex class="text-xs-right">
+          <amountIndicator :color="outgoing? 'error' : 'accent'" :amount='amount' :valuta='valuta' />
+        </v-flex>
+      </v-layout>
     </v-card-text>
   </v-card>
+
+  <v-dialog v-model="show" v-if="show" max-width="500">
+    <v-card style="height:100%">
+      <v-toolbar dark color="primary">
+        <v-toolbar-title class="text-uppercase">
+          <v-icon>
+            info
+          </v-icon>
+          Transaction info
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon flat @click="show = false">
+          <v-icon>
+            close
+          </v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-card-text>
+        <v-layout justify-space-between fill-height column text-xs-center>
+          <v-flex class="my-3">
+            <v-layout row wrap justify-space-around>
+              <v-flex xs5>
+                <v-avatar>
+                  <v-icon class="primary" color="white">person</v-icon>
+                </v-avatar>
+                <p class="body-1 pt-2 text-truncate">{{sender}}</p>
+              </v-flex>
+              <v-flex xs2>
+                <v-avatar>
+                  <v-icon size="25">keyboard_arrow_right</v-icon>
+                </v-avatar>
+              </v-flex>
+              <v-flex xs5>
+                <v-avatar>
+                  <v-icon class="primary" color="white">person</v-icon>
+                </v-avatar>
+                <p class="body-1 pt-2 text-truncate">{{receiver}}</p>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex>
+            <p class="subtitle mb-0 grey--text">Date</p>
+            <p class="title mt-0">{{timeStamp}}</p>
+          </v-flex>
+          <v-flex>
+            <p v-if="transaction.message" class="subtitle mb-0 grey--text">Message</p>
+            <p v-if="transaction.message" class="title mt-0">{{transaction.message}}</p>
+          </v-flex>
+          <v-flex>
+            <p class="subtitle mb-0 grey--text">Amount <span v-if="outgoing && transaction.outputs.some(x => x.is_fee)" >(fee incl)</span></p>
+            <p class="title mt-0">{{amount}}</p>
+          </v-flex>
+          <v-flex>
+            <p v-if="outgoing && transaction.outputs.some(x => x.is_fee)" class="subtitle mb-0 grey--text">Fee</p>
+            <p v-if="outgoing && transaction.outputs.some(x => x.is_fee)" class="title mt-0">{{fee}}</p>
+          </v-flex>
+        </v-layout>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </section>
