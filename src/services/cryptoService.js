@@ -23,8 +23,8 @@ export default ({
     return new Promise(async (resolve, reject) => {
       await sodium.ready
       message = decodeBase64(message)
-      privateKey = sodium.crypto_sign_ed25519_sk_to_curve25519(decodeBase64(privateKey))
-      pubkey = sodium.crypto_sign_ed25519_pk_to_curve25519(decodeBase64(pubkey))
+      privateKey = decodeBase64(privateKey)
+      pubkey = decodeBase64(pubkey)
       nonce = decodeBase64(nonce)
       var decrypted = sodium.crypto_box_open_easy(message, nonce, pubkey, privateKey)
       decrypted = encodeUTF8(decrypted)
