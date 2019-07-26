@@ -25,7 +25,7 @@ export default ({
       context.commit('setState', state)
       context.commit('setKeys', keys)
 
-      context.commit('setLoginUrl', `${config.botFrontEnd}?state=${state}&scope=${scope}&appid=${appid}&publickey=${encodeURIComponent(cryptoService.getEdPkInCurve(keys.publicKey))}&redirecturl=${encodeURIComponent(config.redirect_url)}`)
+      context.commit('setLoginUrl', `${config.botFrontEnd}?state=${state}&scope=${scope}&appid=${appid}&publickey=${encodeURIComponent(keys.publicKey)}&redirecturl=${encodeURIComponent(config.redirect_url)}`)
     },
     async checkResponse (context, responseUrl) {
       var username = responseUrl.searchParams.get('username')

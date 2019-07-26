@@ -53,7 +53,7 @@ export default ({
         phrase = bip39.entropyToMnemonic(seed)
       }
       var ken = new TextEncoder().encode(bip39.mnemonicToEntropy(phrase))
-      var keys = sodium.crypto_sign_seed_keypair(ken)
+      var keys = sodium.crypto_box_seed_keypair(ken)
       resolve({
         privateKey: encodeBase64(keys.privateKey),
         publicKey: encodeBase64(keys.publicKey)
