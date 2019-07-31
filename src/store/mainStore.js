@@ -1,7 +1,8 @@
 export default({
   state: {
     informationMessage: null,
-    fatalError: null
+    fatalError: null,
+    floatingActionButton: null
   },
   actions: {
     setInformationMessage (context, message) {
@@ -9,6 +10,11 @@ export default({
     },
     setFatalError (context, message) {
       context.commit('setFatalError', message)
+    },
+    setFab (context, action) {
+      console.log('setting fab to' , action)
+      console.log('was', context.getters.floatingActionButton)
+      context.commit('setFab', action)
     }
   },
   mutations: {
@@ -17,10 +23,14 @@ export default({
     },
     setFatalError: (state, message) => {
       state.fatalError = message
+    },
+    setFab: (state, fab) => {
+      state.floatingActionButton = fab
     }
   },
   getters: {
     informationMessage: (state) => state.informationMessage,
-    fatalError: (state) => state.fatalError
+    fatalError: (state) => state.fatalError,
+    floatingActionButton: (state) => state.floatingActionButton
   }
 })

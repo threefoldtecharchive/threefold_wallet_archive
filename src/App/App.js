@@ -42,6 +42,7 @@ export default {
         if (data) this.createWallet(data)
       }
     }
+
   },
   watch: {
     informationMessage (val) {

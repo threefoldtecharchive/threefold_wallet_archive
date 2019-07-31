@@ -6,11 +6,12 @@
     <v-btn flat dark :to='{name: "transfer"}'>
       <v-icon class="white--text">swap_horiz</v-icon>
     </v-btn>
-    <v-btn flat dark :to='{name: "profile"}'>
+    <v-btn disabled flat dark :to='{name: "profile"}'>
       <v-icon class="white--text">person</v-icon>
     </v-btn>
   </v-bottom-nav>
-  <v-btn fixed dark fab bottom large class="center" color="accent" :to='{name: "transfer"}'>
-    <v-icon>swap_horiz</v-icon>
+  <v-btn fixed dark fab bottom large class="center" color="accent" @click='handleCta'>
+    <v-icon v-if="$route.name==='transfer'">check</v-icon>
+    <v-icon v-else>swap_horiz</v-icon>
   </v-btn>
 </section>

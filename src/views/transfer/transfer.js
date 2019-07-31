@@ -23,13 +23,16 @@ export default {
       sender: {},
       show: false,
       transaction: {},
-      transactionSent: false
+      transactionSent: false,
+      showQR:false,
+      showQrScanner: false
     }
   },
   computed: {
     ...mapGetters([
       'wallets',
-      'transactionSubmited'
+      'transactionSubmited',
+      'floatingActionButton'
     ]),
     fields () {
       if (!this.model) return []
@@ -60,7 +63,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'sendCoins'
+      'sendCoins',
+      'setFab'
     ]),
     selectWallet (wallet) {
       this.selectedWallet = wallet
@@ -102,6 +106,18 @@ export default {
       this.to = ''
       this.message = ''
       this.amount = '0'
+    },
+    floatingActionButton (val) {
+      if(val) {
+        if(this.selectedTab == 0) {
+          console.log("show QR")
+          this.showQR = true
+        } else if (this.selectedTab == 1) {
+          console.log("send money")
+        }
+
+        this.setFab(false)
+      }
     }
   }
 }

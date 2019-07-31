@@ -18,8 +18,8 @@ export default({
       )
       context.commit('setAccount', account)
       context.dispatch('updateAccount')
-      context.dispatch('createWallet', 'default')
-      context.dispatch('createWallet', 'testWallet')
+      context.dispatch('createWallet', 'Daily')
+      context.dispatch('createWallet', 'Holiday')
     },
     updateAccount (context) {
       var account = context.getters.account
