@@ -14,12 +14,12 @@
         <div>
           <div class="text-xs-left">
             <p v-if="selectedTab == 0">To</p>
-            <p v-if="selectedTab == 1">From</p>
+            <p v-if="selectedTab == 1"><v-layout>From <v-spacer></v-spacer> <v-btn text icon v-if="selectedTab == 1" style="margin: 0px" @click="showQrScanner = true">
+                <v-icon>camera</v-icon>
+              </v-btn></v-layout></p>
           </div>
           <div class="flex text-xs-right">
-            <v-btn text icon v-if="selectedTab == 1" style="margin: 0px" @click="showQrScanner = true">
-              <v-icon>camera</v-icon>
-            </v-btn>
+            
           </div>
         </div>
         <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
@@ -81,7 +81,7 @@
   <v-dialog dark v-model="showQrScanner" max-width="500">
     <v-card class="primary darken-2" style="height:100%">
       <v-toolbar dark color="primary">
-        <v-toolbar-title class="text-uppercase">Scan the QR code from receiver</v-toolbar-title>
+        <v-toolbar-title class="text-uppercase">Scan QR code from receiver</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon flat @click="showQrScanner = false">
           <v-icon color="accent">
@@ -100,7 +100,7 @@
   <v-dialog dark v-model="showQR" max-width="500">
     <v-card class="primary darken-2" style="height:100%">
       <v-toolbar dark color="primary">
-        <v-toolbar-title class="text-uppercase">Show the QR to the sender</v-toolbar-title>
+        <v-toolbar-title class="text-uppercase">Show QR to the sender</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon flat @click="showQR = false">
           <v-icon color="accent">
