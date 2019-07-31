@@ -25,7 +25,8 @@ export default({
       state.fatalError = message
     },
     setFab: (state, fab) => {
-      state.floatingActionButton = fab
+      console.log(fab)
+      state.floatingActionButton = true
     }
   },
   getters: {

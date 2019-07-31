@@ -24,6 +24,7 @@ export default {
     handleCta() {
       console.log(this.$route.name)
       if(this.$route.name === 'transfer') {
+        console.log(this.setFab)
         this.setFab(true)
       } else {
         this.$router.push({name: 'transfer'})

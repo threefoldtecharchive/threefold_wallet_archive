@@ -2,8 +2,8 @@ import axios from 'axios'
 import config from '../../public/config'
 
 export default ({
-  getWalletsFromUser (doublename) {
-    return axios.get(`${config.pubKeyStoreUrl}/users/${doublename}/storage/`)
+  getWalletsFromUser (doubleName) {
+    return axios.get(`${config.pubKeyStoreUrl}/users/${doubleName}/storage/`)
   },
   setWallets (user, wallets) {
     console.log(`Saving wallets for user`, wallets, user)

@@ -29,15 +29,16 @@ export default ({
     },
     async checkResponse (context, responseUrl) {
       var username = responseUrl.searchParams.get('username')
-      var signedhash = responseUrl.searchParams.get('signedhash')
+      var signedHash = responseUrl.searchParams.get('signedhash')
 
       // TODO check state
       if (responseUrl.searchParams.get('error')) {
         context.commit('setFatalError', responseUrl.searchParams.get('error'))
       } else {
         botService.getUserData(username).then(async (response) => {
-          cryptoService.validateSignature(signedhash, response.data.publicKey)
+          cryptoService.validateSignature(signedHash, response.data.publicKey)
             .then(x => {
+              console.log(x)
               if (context.getters.state !== x) {
                 context.commit('setFatalError', `Invalid state. Should be ${context.getters.state} but was ${x}`)
               } else {
@@ -48,6 +49,7 @@ export default ({
                   data = JSON.parse(data)
                   var keys = context.getters.keys
                   var userData = {}
+                  console.log(data, keys, response)
                   cryptoService.decrypt(data.ciphertext, data.nonce, keys.privateKey, response.data.publicKey)
                     .then(decrypted => {
                       console.log(decrypted)
@@ -67,12 +69,13 @@ export default ({
                         seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
                       })
                     }).catch(e => {
+                      console.log(e)
                       context.commit('setFatalError', 'Could not decrypt message.')
                     })
                 }
               }
             })
-            .catch(e => context.commit('setFatalError', 'Signature faild, please try again.'))
+            .catch(e => context.commit('setFatalError', 'Signature failed, please try again.'))
         })
       }
     },

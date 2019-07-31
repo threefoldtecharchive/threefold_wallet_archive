@@ -5,7 +5,8 @@ export default({
     account: window.localStorage.getItem('account') ? JSON.parse(window.localStorage.getItem('account')) : null,
     addressBook: {},
     syncing: false,
-    transactionSubmited: false
+    transactionSubmitted: false,
+    accounts: []
   },
   actions: {
     login (context, userData) {
@@ -16,10 +17,19 @@ export default({
           network: config.tftNetwork
         }
       )
+      // var gfAccount = new tfchain.Account(
+      //   userData.doubleName,
+      //   userData.doubleName, {
+      //     seed: userData.seed,
+      //     network: config.tftNetwork
+      //   },
+
+      // )
       context.commit('setAccount', account)
       context.dispatch('updateAccount')
       context.dispatch('createWallet', 'Daily')
       context.dispatch('createWallet', 'Holiday')
+      context.dispatch('createWallet', 'GFT test')
     },
     updateAccount (context) {
       var account = context.getters.account
@@ -47,9 +57,12 @@ export default({
     },
     sendCoins: (context, data) => {
       context.commit('setSync', true)
+      console.log('sending in store', data)
       var account = context.getters.account
+      console.log(account)
       if (account) {
-        var wallet = account.wallets.find(w => w.wallet_name === data.from)
+        var wallet = account.wallets.find(w => w.address === data.from)
+        console.log(wallet)
         if (wallet) {
           context.commit('setInformationMessage', `Submitting transaction...`)
           const builder = wallet.transaction_new()
@@ -58,14 +71,19 @@ export default({
             walletname: wallet.wallet_name
           })
           builder.output_add(data.to.toString(), data.amount.toString())
+          console.log("sending", sender, builder)
           builder.send({
             sender,
             message: data.message
           }).then(result => {
+            console.log("thenneben")
+            console.log('Sent??', result)
             if (result.submitted) {
               context.commit('setInformationMessage', `Transaction submitted  (${result.transaction.id.substring(4, 0)})...`)
               context.dispatch('updateAccount')
               context.commit('setSync', false)
+            } else {
+              console.log("then else...")
             }
           }).catch(err => {
             console.error(`ERROR while sending coins`, err)
@@ -83,8 +101,8 @@ export default({
       // window.localStorage.setItem('account', JSON.stringify(account))
       state.account = account
     },
-    setTransactionSubmited (state, submitted) {
-      state.transactionSubmited = submitted
+    setTransactionSubmitted (state, submitted) {
+      state.transactionSubmitted = submitted
     },
     updateAddressBook: (state, transactions) => {
     }
@@ -102,6 +120,6 @@ export default({
       }
     }) : null,
     syncing: state => state.syncing,
-    transactionSubmited: state => state.transactionSubmited
+    transactionSubmitted: state => state.transactionSubmitted
   }
 })

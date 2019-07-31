@@ -31,7 +31,7 @@ export default {
   computed: {
     ...mapGetters([
       'wallets',
-      'transactionSubmited',
+      'transactionSubmitted',
       'floatingActionButton'
     ]),
     fields () {
@@ -108,12 +108,16 @@ export default {
       this.amount = '0'
     },
     floatingActionButton (val) {
+      console.log('floating action button')
+      console.log(val)
       if(val) {
+        console.log('selected', this.selectedTab)
         if(this.selectedTab == 0) {
           console.log("show QR")
           this.showQR = true
         } else if (this.selectedTab == 1) {
           console.log("send money")
+          this.send ()
         }
 
         this.setFab(false)
