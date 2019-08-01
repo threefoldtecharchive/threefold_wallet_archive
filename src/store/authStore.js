@@ -64,10 +64,13 @@ export default ({
                       console.log(userData)
                       var newSeed = new Uint8Array(decodeBase64(userData.keys.derivedPrivateKey))
                       console.log(`newSeed`, newSeed)
-                      context.dispatch('login', {
-                        doubleName: username,
-                        seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
-                      })
+                      const userObject = {doubleName: username, seed: newSeed}
+                      window.localStorage.setItem("user",JSON.stringify(userObject))
+                      context.dispatch('login', 
+                        userObject
+                        // doubleName: username,
+                        // seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
+                      )
                     }).catch(e => {
                       console.log(e)
                       context.commit('setFatalError', 'Could not decrypt message.')

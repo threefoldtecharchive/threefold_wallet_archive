@@ -4,7 +4,7 @@
     <span :class="`text-xs-right  ${small ? 'font-weight-normal' : ' display-1'} ${color}--text`">
       {{amount}}
     </span>
-    <span :class="small ? 'pl-1 caption font-weight-light' : 'pl-1 font-weight-light'">{{valuta}}</span>
+    <span :class="small ? 'pl-1 caption font-weight-light' : 'pl-1 font-weight-light'">{{valuta.toLowerCase()}}</span>
   </v-layout>
 </section>
 

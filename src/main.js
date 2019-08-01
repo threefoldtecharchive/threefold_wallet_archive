@@ -7,7 +7,7 @@ import './plugins'
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-  if ((to.name !== 'login' && to.name !== 'error') && !store.state.accountStore.account) {
+  if ((to.name !== 'login' && to.name !== 'error') && !store.state.accountStore.accounts) {
     next({
       name: 'login'
     })

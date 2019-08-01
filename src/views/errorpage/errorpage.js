@@ -4,7 +4,7 @@ export default {
   props: [],
   data () {
     return {
-
+      errorMsg: ''
     }
   },
   computed: {
@@ -12,6 +12,13 @@ export default {
   },
   mounted () {
 
+    var url = new URL(window.location.href)
+    const error = url.searchParams.get('msg')
+    if (error === 'CancelledByUser') {
+        this.errorMsg = `Your login attempt was cancelled.`
+    } else if( error === `Could not decrypt message.`) {
+      this.errorMsg = `Could not decrypt message.`
+    }
   },
   methods: {
 
