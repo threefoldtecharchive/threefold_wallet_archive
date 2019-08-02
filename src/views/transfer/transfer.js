@@ -70,11 +70,13 @@ export default {
       this.selectedWallet = wallet
     },
     send () {
+      console.log(this.selectedWallet)
       this.sendCoins({
         from: this.selectedWallet.address,
         to: this.to,
         message: this.message,
-        amount: this.amount
+        amount: this.amount,
+        currency: this.selectedWallet.currency
       })
       this.transactionSent = true
       this.to = ''

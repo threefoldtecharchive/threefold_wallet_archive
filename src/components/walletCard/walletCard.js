@@ -18,6 +18,7 @@ export default {
   data () {
     return {
       amount: '---',
+      authenticated: 'false'
     }
   },
   computed: {
@@ -27,12 +28,17 @@ export default {
     totalAmount () {
       return parseFloat(this.wallet.totalAmount.replace(',', '')).toLocaleString('nl-BE', { minimumFractionDigits: 2 })
     },
-    walletaddress () {
+    getHumanWalletAddress () {
       // return `${this.wallet.name}@${this.account.account_name}`
       return `${this.wallet.name}@${this.wallet.holder.account_name}`
-    }
+    },
   },
   mounted () {
+    if (this.wallet.currency === "GFT"){
+      this.wallet.isAuthenticated.then( v => {
+        this.authenticated = v
+      })
+    }
   },
   methods: {
     ...mapActions([

@@ -1,0 +1,1 @@
+goldchainc wallet send coins $1 $2

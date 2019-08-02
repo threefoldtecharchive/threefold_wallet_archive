@@ -18,4 +18,9 @@ export default ({
       console.log(error);
     })
   },
+  async getWalletAuthStatus(address) {
+    return Axios.get(`${config.nbhExplorer}/authcoin/status?addr=${address}`).catch(function (error) {
+      console.log(error);
+    })
+  }
 })

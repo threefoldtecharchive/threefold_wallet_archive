@@ -1,5 +1,7 @@
 import config from '../../public/config'
 import * as tfchain from '../services/tfchain/api'
+import nbhService from '../services/nbhService';
+import { async } from 'q';
 export default ({
   state: {
     // account: window.localStorage.getItem('account') ? JSON.parse(window.localStorage.getItem('account')) : null,
@@ -31,6 +33,18 @@ export default ({
           chain: 'GOLDCHAIN'
         },
       )
+      // Temp for dev
+      // var gfAccount = new tfchain.Account(
+      //   `gft:${userData.doubleName}`,
+      //   userData.doubleName,
+      //   {
+      //     network: "devnet",
+      //     addresses: ["http://localhost:2015"],
+      //     chain: 'GolDcHaIn',
+      //     seed: gfASeed
+      //   },
+      // )
+
 
       context.commit('setAccounts', [tfAccount, gfAccount])
       context.dispatch('updateAccounts')
@@ -63,7 +77,8 @@ export default ({
     sendCoins: (context, data) => {
       context.commit('setSync', true)
       console.log('sending in store', data)
-      var account = context.getters.accounts.find(acc => acc.account_name.split(':')[0] === data.chain)
+      var account = context.getters.accounts.find(acc => acc.account_name.split(':')[0] === data.currency.toLowerCase())
+      console.log(account)
       if (account) {
         var wallet = account.wallets.find(w => w.address === data.from)
         console.log(wallet)
@@ -80,9 +95,10 @@ export default ({
             sender,
             message: data.message
           }).then(result => {
+            console.log(result)
             if (result.submitted) {
               context.commit('setInformationMessage', `Transaction submitted  (${result.transaction.id.substring(4, 0)})...`)
-              context.dispatch('updateAccount')
+              context.dispatch('updateAccounts')
               context.commit('setSync', false)
             } else {
               console.log("then else...")
@@ -114,20 +130,26 @@ export default ({
     wallets: (state) => {
       var wallets = []
       if (state.accounts) {
-        state.accounts.forEach(account => {
-          var t = account.wallets.map(wallet => {
+        state.accounts.forEach((account) => {
+          var t = account.wallets.map((wallet) => {
             var balance = wallet.balance
             var total = wallet.balance.coins_total.str({ precision: 3 })
-            // console.log(wallet)
-            return {
-              name: wallet.wallet_name,
-              address: wallet.address,
-              totalAmount: total,
-              transaction: balance.transactions,
-              holder: account,
-              currency: wallet.balance._chain_type.currency_unit(),
-              status: ((wallet.balance._chain_type.currency_unit() === "TFT") ? "noStatus" : account.coin_auth_status_for_address_get(wallet.address) ? "verified" : "unverified")
-            }
+
+            // console.log(account.account_name, account.coin_auth_status_for_account_get(account))
+            // console.log(wallet.address, account.coin_auth_status_for_address_get(wallet.address))
+            
+              // console.log(wallet.address)
+              return {
+                name: wallet.wallet_name,
+                address: wallet.address,
+                totalAmount: total,
+                transaction: balance.transactions,
+                holder: account,
+                currency: wallet.balance._chain_type.currency_unit(),
+                // status: ((wallet.balance._chain_type.currency_unit() === "TFT") ? "noStatus" : account.coin_auth_status_for_address_get(wallet.address) ? "verified" : "unverified")
+                isAuthenticated: nbhService.getWalletAuthStatus(wallet.address).then(status => {return status.data.auths[0]})
+              }
+            // })
           })
           wallets.push(...t)
         })
