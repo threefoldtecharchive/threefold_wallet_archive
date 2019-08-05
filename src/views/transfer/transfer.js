@@ -25,7 +25,16 @@ export default {
       transaction: {},
       transactionSent: false,
       showQR:false,
-      showQrScanner: false
+      showQrScanner: false,
+      maxMessageLength: 128,
+      amountRules: [
+        v => !!v || 'Amount is required',
+        v => v > 0 || 'Amount must be greater than 0',
+      ],
+      toRules: [
+        v => !!v || 'Wallet address is required!',
+        v => (!!v && v.length >= 78 && v.length <= 78) || 'Wallet address length is not valid!',
+      ],
     }
   },
   computed: {
@@ -56,7 +65,12 @@ export default {
     qrText () {
       // return { tft: '01ed90bee1d6d50b730a1aacf2890ac6fc0f7718849fba5f7c5719e3cfcc4641be09c5607b0210', amount: 0 }
       return `tft:${this.selectedWallet.address}?amount=${this.amount}&message=${this.message}&sender=me`
-    }
+    },
+    messageRuless() {
+      if (this.message && this.message.length > maxMessageLength) {
+        return `Message length cannot be more then ${maxMessageLength} characters`;
+      }
+    },
   },
   mounted () {
     if (!this.selectedWallet.address) this.selectedWallet = this.wallets[0]
@@ -64,22 +78,25 @@ export default {
   methods: {
     ...mapActions([
       'sendCoins',
-      'setFab'
+      'setFab',
+      'setSubmitBtnState'
     ]),
     selectWallet (wallet) {
       this.selectedWallet = wallet
     },
     send () {
-      this.sendCoins({
-        from: this.selectedWallet.address,
-        to: this.to,
-        message: this.message,
-        amount: this.amount
-      })
-      this.transactionSent = true
-      this.to = ''
-      this.message = ''
-      this.amount = '0'
+      if (this.checkForm()) {
+        this.sendCoins({
+          from: this.selectedWallet.address,
+          to: this.to,
+          message: this.message,
+          amount: this.amount
+        })
+        this.transactionSent = true
+        this.to = ''
+        this.message = ''
+        this.amount = 0
+      }
     },
     onDecode (code) {
       code = code.replace('tft:', 'tft://')
@@ -98,6 +115,15 @@ export default {
         val = url.searchParams.get(varName)
       }
       return val
+    },
+    checkForm() {
+      let res = this.amount && this.sender && this.amount > 0
+      if (this.message) res = res == this.message.length <= maxMessageLength 
+      if (this.selectedTab === 1) res = res == (this.to.length == 78) && this.amount && this.amount > 0
+      return res
+    },
+    handleFormChange() {
+      this.setSubmitBtnState(!this.checkForm())
     }
   },
   watch: {
@@ -109,7 +135,6 @@ export default {
     },
     floatingActionButton (val) {
       console.log('floating action button')
-      console.log(val)
       if(val) {
         console.log('selected', this.selectedTab)
         if(this.selectedTab == 0) {
@@ -122,6 +147,15 @@ export default {
 
         this.setFab(false)
       }
+    },
+    message (val) {
+      this.handleFormChange()
+    },
+    amount (val) {
+      this.handleFormChange()
+    },
+    to (val) {
+      this.handleFormChange()
     }
   }
 }

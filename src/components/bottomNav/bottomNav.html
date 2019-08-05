@@ -11,7 +11,7 @@
     </v-btn>
   </v-bottom-nav>
   <v-btn fixed dark fab bottom large class="center" color="accent" @click='handleCta'>
-    <v-icon v-if="$route.name==='transfer'">check</v-icon>
+    <v-icon v-if="$route.name==='transfer'" :disabled="submitDisabled" color="white">check</v-icon>
     <v-icon v-else>swap_horiz</v-icon>
   </v-btn>
 </section>
