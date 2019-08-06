@@ -30,7 +30,7 @@ export default {
       amountRules: [
         v => !!v || 'Amount is required',
         v => !!v && v > 0 || 'Amount must be greater than 0',
-        v => !!v && parseInt(v) < parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value',
+        v => !!v && (this.selectedTab == 1) && parseInt(v) < parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value',
       ],
       toRules: [
         v => !!v || 'Wallet address is required!',
@@ -68,8 +68,8 @@ export default {
       return `tft:${this.selectedWallet.address}?amount=${this.amount}&message=${this.message}&sender=me`
     },
     messageRuless() {
-      if (this.message && this.message.length > maxMessageLength) {
-        return `Message length cannot be more then ${maxMessageLength} characters`;
+      if (this.message && (this.message.length > this.maxMessageLength)) {
+        return `Message length cannot be more then ${this.maxMessageLength} characters`;
       }
     },
   },
@@ -118,12 +118,14 @@ export default {
       return val
     },
     checkForm() {
-      let res = this.amount && this.sender && this.amount > 0
-      if (this.message) res = res == this.message.length <= maxMessageLength 
-      //if (this.selectedTab === 1) res = res == (this.to.length == 78) && this.amount && this.amount > 0
-      if (this.selectedTab === 1) { 
-        res = res == this.to && (this.to.length == 78) 
-                    && this.amount && parseInt(this.amount) > parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount)
+      if (this.amount == '' || this.amount <= 0) return false;
+      let res = true
+      if (this.selectedTab === 1) {
+          if ((this.to.length !== 78)) return false;
+          res = (res == (parseInt(this.amount) <= parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount)))
+      }
+      if (this.message != null) {
+        res = (res == (this.message.length <= this.maxMessageLength))
       }
       return res
     },
