@@ -82,11 +82,21 @@ export default {
       return address
     },
     sumTransactionAmount (arr) {
-      var total = 0
+      var total = 0.00
       arr.forEach(output => {
-        var amount = output.amount.str({ precision: 3 }).replace(',', '')
+        var amount = output.amount.str()
         total += parseFloat(amount)
       })
+      
+      total = total.toString()
+      if (total.substr(total.indexOf('')).length < 3) {
+        total = parseInt(total)
+        //total = total.replace(/,/g, '.')
+      } else if ((total.substr(total.indexOf('')).length > 5) && !this.show) {
+        console.log(this.show)
+        total = total.substr(0, total.indexOf('.')+3) + '..' + total.substr(-1)
+      }
+
       return total.toLocaleString('nl-BE', { minimumFractionDigits: 2, useGrouping: false })
     },
     copyTransaction () {
