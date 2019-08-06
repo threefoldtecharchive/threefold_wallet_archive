@@ -6,16 +6,16 @@ export default {
   props: [],
   data () {
     return {
-      bottomnav: 0
+      bottomnav: 0,
     }
   },
   computed: {
     ...mapGetters ([
-      "floatingActionButton"
+      "floatingActionButton",
+      "submitDisabled"
     ])
   },
   mounted () {
-
   },
   methods: {
     ...mapActions([
@@ -29,6 +29,6 @@ export default {
       } else {
         this.$router.push({name: 'transfer'})
       }
-    }
-  }
+    },
+  },
 }

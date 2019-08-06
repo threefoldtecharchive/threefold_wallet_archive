@@ -2,7 +2,8 @@ export default({
   state: {
     informationMessage: null,
     fatalError: null,
-    floatingActionButton: null
+    floatingActionButton: null,
+    submitDisabled: true
   },
   actions: {
     setInformationMessage (context, message) {
@@ -15,6 +16,9 @@ export default({
       console.log('setting fab to' , action)
       // console.log('was', context.getters.floatingActionButton)
       context.commit('setFab', action)
+    },
+    setSubmitBtnState(context, action){
+      context.commit('setSubmitBtnState', action)
     }
   },
   mutations: {
@@ -27,11 +31,15 @@ export default({
     setFab: (state, fab) => {
       console.log(fab)
       state.floatingActionButton = true
+    },
+    setSubmitBtnState: (state, bool) => {
+      state.submitDisabled = bool
     }
   },
   getters: {
     informationMessage: (state) => state.informationMessage,
     fatalError: (state) => state.fatalError,
-    floatingActionButton: (state) => state.floatingActionButton
+    floatingActionButton: (state) => state.floatingActionButton,
+    submitDisabled: (state) => state.submitDisabled
   }
 })
