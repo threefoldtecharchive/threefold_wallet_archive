@@ -66,29 +66,41 @@ export default({
         if (wallet) {
           context.commit('setInformationMessage', `Submitting transaction...`)
           const builder = wallet.transaction_new()
+          console.log(builder)
           var sender = JSON.stringify({
             account: account.account_name,
             walletname: wallet.wallet_name
           })
-          builder.output_add(data.to.toString(), data.amount.toString())
+          try {
+            builder.output_add(data.to.toString(), data.amount.toString())
+          } catch (e) {
+            console.log('catch')
+            console.log(e)
+          }
           console.log("sending", sender, builder)
-          builder.send({
-            sender,
-            message: data.message
-          }).then(result => {
-            console.log("thenneben")
-            console.log('Sent??', result)
-            if (result.submitted) {
-              context.commit('setInformationMessage', `Transaction submitted  (${result.transaction.id.substring(4, 0)})...`)
-              context.dispatch('updateAccount')
-              context.commit('setSync', false)
-            } else {
-              console.log("then else...")
-            }
-          }).catch(err => {
-            console.error(`ERROR while sending coins`, err)
-            throw err
-          })
+          try {
+
+            builder.send({
+              sender,
+              message: data.message
+            }).then(result => {
+              console.log("thenneben")
+              console.log('Sent??', result)
+              if (result.submitted) {
+                context.commit('setInformationMessage', `Transaction submitted  (${result.transaction.id.substring(4, 0)})...`)
+                context.dispatch('updateAccount')
+                context.commit('setSync', false)
+              } else {
+                console.log("then else...")
+              }
+            }).catch(err => {
+              console.error(`ERROR while sending coins`, err)
+              throw err
+            })
+          } catch (e) {
+            console.log('catch')
+            console.log(e)
+          }
         }
       }
     }

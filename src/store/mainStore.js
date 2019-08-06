@@ -13,7 +13,7 @@ export default({
     },
     setFab (context, action) {
       console.log('setting fab to' , action)
-      console.log('was', context.getters.floatingActionButton)
+      // console.log('was', context.getters.floatingActionButton)
       context.commit('setFab', action)
     }
   },
