@@ -7,8 +7,8 @@ import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'transfer',
-  components: { walletSelector, qrcode, QrcodeStream, QrcodeDropZone, QrcodeCapture },
-  props: [],
+  components: {walletSelector, qrcode, QrcodeStream, QrcodeDropZone, QrcodeCapture },
+
   data () {
     return {
       selectedTab: 1,
@@ -29,7 +29,8 @@ export default {
       maxMessageLength: 128,
       amountRules: [
         v => !!v || 'Amount is required',
-        v => v > 0 || 'Amount must be greater than 0',
+        v => !!v && v > 0 || 'Amount must be greater than 0',
+        v => !!v && parseInt(v) < parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value',
       ],
       toRules: [
         v => !!v || 'Wallet address is required!',
@@ -119,7 +120,11 @@ export default {
     checkForm() {
       let res = this.amount && this.sender && this.amount > 0
       if (this.message) res = res == this.message.length <= maxMessageLength 
-      if (this.selectedTab === 1) res = res == (this.to.length == 78) && this.amount && this.amount > 0
+      //if (this.selectedTab === 1) res = res == (this.to.length == 78) && this.amount && this.amount > 0
+      if (this.selectedTab === 1) { 
+        res = res == this.to && (this.to.length == 78) 
+                    && this.amount && parseInt(this.amount) > parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount)
+      }
       return res
     },
     handleFormChange() {
