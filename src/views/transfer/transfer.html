@@ -23,13 +23,15 @@
           </div>
         </div>
         <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
-        <!-- <v-autocomplete prepend-icon="person" append-outer-icon="filter_center_focus" v-show="selectedTab == 1" :items="items" :loading="isLoading" :search-input.sync="search" color="white" hide-no-data hide-selected item-text="email" label="To" return-object/> -->
-        <v-text-field v-if="selectedTab == 1" box prepend-icon="person" color="white" label="To (Wallet Address)"
-          v-model='to'>
-        </v-text-field>
-        <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="amount" type="number">
-        </v-text-field>
-        <v-textarea box prepend-icon="message" color="white" label="Message" v-model="message" />
+        <v-form>
+          <!-- <v-autocomplete prepend-icon="person" append-outer-icon="filter_center_focus" v-show="selectedTab == 1" :items="items" :loading="isLoading" :search-input.sync="search" color="white" hide-no-data hide-selected item-text="email" label="To" return-object/> -->
+          <v-text-field v-if="selectedTab == 1" box prepend-icon="person" color="white" label="To (Wallet Address)"
+            v-model='to' :rules="toRules">
+          </v-text-field>
+          <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="amount" type="number" min="0.00" :rules="amountRules">
+          </v-text-field>
+          <v-textarea box prepend-icon="message" color="white" label="Message" v-model="message" :error-messages="messageRuless" :counter="128" />
+        </v-form>
       </v-card-text>
     </v-card>
     <div v-if="selectedTab == 1" class=" mt-2">
@@ -68,8 +70,6 @@
             <p class="subtitle mb-0 grey--text">Message</p>
             <p class="title mt-0">{{message}}</p>
           </v-flex>
-
-
           <v-btn @click="send" class="accent">
             Confirm
           </v-btn>
