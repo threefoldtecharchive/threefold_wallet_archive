@@ -1,4 +1,5 @@
 import walletSelector from '../../components/walletSelector'
+import { EventBus } from '../../eventBus.js'
 // import VueQr from 'vue-qr'
 import qrcode from '@chenfengyuan/vue-qrcode'
 
@@ -41,8 +42,7 @@ export default {
   computed: {
     ...mapGetters([
       'wallets',
-      'transactionSubmitted',
-      'floatingActionButton'
+      'transactionSubmitted'
     ]),
     fields () {
       if (!this.model) return []
@@ -74,14 +74,28 @@ export default {
     },
   },
   mounted () {
+    EventBus.$on('transfer', (payload) => {
+      this.transferConfirmed()
+    })
     if (!this.selectedWallet.address) this.selectedWallet = this.wallets[0]
+    
   },
   methods: {
     ...mapActions([
       'sendCoins',
-      'setFab',
       'setSubmitBtnState'
     ]),
+    transferConfirmed (val) {
+      console.log('floating action button')
+      console.log('selected', this.selectedTab)
+      if(this.selectedTab == 0) {
+        console.log("show QR")
+        this.showQR = true
+      } else if (this.selectedTab == 1) {
+        console.log("send money")
+        this.send ()
+      }
+    },
     selectWallet (wallet) {
       this.selectedWallet = wallet
     },
@@ -139,21 +153,6 @@ export default {
       this.to = ''
       this.message = ''
       this.amount = '0'
-    },
-    floatingActionButton (val) {
-      console.log('floating action button')
-      if(val) {
-        console.log('selected', this.selectedTab)
-        if(this.selectedTab == 0) {
-          console.log("show QR")
-          this.showQR = true
-        } else if (this.selectedTab == 1) {
-          console.log("send money")
-          this.send ()
-        }
-
-        this.setFab(false)
-      }
     },
     message (val) {
       this.handleFormChange()

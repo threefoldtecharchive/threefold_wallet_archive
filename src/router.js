@@ -23,6 +23,10 @@ export default new Router({
     name: 'profile',
     component: () => import(/* webpackChunkName: "profile-page" */ './views/profile')
   }, {
+    path: '/investments',
+    name: 'investments',
+    component: () => import(/* webpackChunkName: "investment-page" */ './views/investments')
+  },{
     path: '/settings',
     name: 'settings',
     component: () => import(/* webpackChunkName: "settings-page" */ './views/settings')
