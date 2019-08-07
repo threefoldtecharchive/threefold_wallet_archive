@@ -73,19 +73,9 @@ export default({
           })
           try {
             builder.output_add(data.to.toString(), data.amount.toString())
-          } catch (e) {
-            console.log('catch')
-            console.log(e)
-          }
-          console.log("sending", sender, builder)
-          try {
-
-            builder.send({
-              sender,
-              message: data.message
-            }).then(result => {
-              console.log("thenneben")
-              console.log('Sent??', result)
+            console.log("sending", sender, builder)
+            let builderMessage = data.message ? {sender,message:data.message} : sender
+            builder.send(builderMessage).then(result => {
               if (result.submitted) {
                 context.commit('setInformationMessage', `Transaction submitted  (${result.transaction.id.substring(4, 0)})...`)
                 context.dispatch('updateAccount')
@@ -93,13 +83,10 @@ export default({
               } else {
                 console.log("then else...")
               }
-            }).catch(err => {
-              console.error(`ERROR while sending coins`, err)
-              throw err
             })
           } catch (e) {
             console.log('catch')
-            console.log(e)
+            console.error(`ERROR while sending coins`, err)
           }
         }
       }

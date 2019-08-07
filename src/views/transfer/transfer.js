@@ -1,42 +1,36 @@
 import walletSelector from '../../components/walletSelector'
 import { EventBus } from '../../eventBus.js'
-// import VueQr from 'vue-qr'
-import qrcode from '@chenfengyuan/vue-qrcode'
-
-import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
+import FormComponent from './components/formComponent'
+import TransactionInfoDialog from './components/transactionInfoDialog'
+import QrScannerDialog from './components/qrScannerDialog'
+import QrDialog from './components/qrDialog'
 
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'transfer',
-  components: {walletSelector, qrcode, QrcodeStream, QrcodeDropZone, QrcodeCapture },
-
+  components: {
+    walletSelector, 
+     FormComponent, 
+     TransactionInfoDialog, 
+     QrScannerDialog,
+     QrDialog
+    },
   data () {
     return {
+      formObject:{},
+      transactionInfoDialog: false,
+      qrScannerDialog: false,
+      qrDialog: false,
+
       selectedTab: 1,
       selectedWallet: {},
       isLoading: false,
       entries: [],
       model: null,
       search: null,
-      to: null,
-      amount: 0,
-      message: null,
       sender: {},
-      show: false,
       transaction: {},
       transactionSent: false,
-      showQR:false,
-      showQrScanner: false,
-      maxMessageLength: 128,
-      amountRules: [
-        v => !!v || 'Amount is required',
-        v => !!v && v > 0 || 'Amount must be greater than 0',
-        v => !!v && (this.selectedTab == 1) && parseInt(v) < parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value',
-      ],
-      toRules: [
-        v => !!v || 'Wallet address is required!',
-        v => (!!v && v.length >= 78 && v.length <= 78) || 'Wallet address length is not valid!',
-      ],
     }
   },
   computed: {
@@ -62,16 +56,7 @@ export default {
 
         return Object.assign({}, entry, { email })
       })
-    },
-    qrText () {
-      // return { tft: '01ed90bee1d6d50b730a1aacf2890ac6fc0f7718849fba5f7c5719e3cfcc4641be09c5607b0210', amount: 0 }
-      return `tft:${this.selectedWallet.address}?amount=${this.amount}&message=${this.message}&sender=me`
-    },
-    messageRuless() {
-      if (this.message && (this.message.length > this.maxMessageLength)) {
-        return `Message length cannot be more then ${this.maxMessageLength} characters`;
-      }
-    },
+    }
   },
   mounted () {
     EventBus.$on('transfer', (payload) => {
@@ -82,15 +67,13 @@ export default {
   },
   methods: {
     ...mapActions([
-      'sendCoins',
-      'setSubmitBtnState'
+      'sendCoins'
     ]),
     transferConfirmed (val) {
       console.log('floating action button')
-      console.log('selected', this.selectedTab)
       if(this.selectedTab == 0) {
         console.log("show QR")
-        this.showQR = true
+        this.qrDialog = true
       } else if (this.selectedTab == 1) {
         console.log("send money")
         this.send ()
@@ -103,23 +86,22 @@ export default {
       if (this.checkForm()) {
         this.sendCoins({
           from: this.selectedWallet.address,
-          to: this.to,
-          message: this.message,
-          amount: this.amount
+          to: this.formObject.to,
+          message: this.formObject.message,
+          amount: this.formObject.amount
         })
         this.transactionSent = true
-        this.to = ''
-        this.message = ''
-        this.amount = 0
+        this.formObject = {}
+        this.$refs.formComponent.$refs.form.reset()
       }
     },
     onDecode (code) {
       code = code.replace('tft:', 'tft://')
-      this.to = this.getQueryVar(code, 'HOST')
-      this.amount = this.getQueryVar(code, 'amount')
-      this.message = this.getQueryVar(code, 'message')
-      this.sender = this.getQueryVar(code, 'sender')
-      this.show = true
+      this.formObject.to = this.getQueryVar(code, 'HOST')
+      this.formObject.amount = this.getQueryVar(code, 'amount')
+      this.formObject.message = this.getQueryVar(code, 'message')
+      this.formObject.sender = this.getQueryVar(code, 'sender')
+      this.formObject.transactionInfoDialog = true
     },
     getQueryVar (url, varName) {
       var val
@@ -132,35 +114,34 @@ export default {
       return val
     },
     checkForm() {
-      if (this.amount == '' || this.amount <= 0) return false;
-      let res = true
-      if (this.selectedTab === 1) {
-          if ((this.to.length !== 78)) return false;
-          res = (res == (parseInt(this.amount) <= parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount)))
-      }
-      if (this.message != null) {
-        res = (res == (this.message.length <= this.maxMessageLength))
-      }
-      return res
+      return this.$refs.formComponent.$refs.form.validate()
     },
     handleFormChange() {
-      this.setSubmitBtnState(!this.checkForm())
+      EventBus.$emit('transferDisabled', !this.checkForm())
+    },
+    closeTransactionInfoDialog (save) {
+      this.transactionInfoDialog = false
+    },
+    closeQrScannerDialog (save) {
+      this.qrScannerDialog = false
+    },
+    closeQrDialog (save) {
+      this.qrDialog = false
     }
   },
   watch: {
     selectedTab (val) {
       this.selectedWallet = this.wallets[0]
-      this.to = ''
-      this.message = ''
-      this.amount = '0'
+      this.formObject = {}
+      this.$refs.formComponent.$refs.form.resetValidation()
     },
-    message (val) {
+    'formObject.message' (val) {
       this.handleFormChange()
     },
-    amount (val) {
+    'formObject.amount' (val) {
       this.handleFormChange()
     },
-    to (val) {
+    'formObject.to' (val) {
       this.handleFormChange()
     }
   }

@@ -7,14 +7,16 @@ export default {
   data () {
     return {
       bottomnav: 0,
+      submitDisabled: true
     }
   },
   computed: {
-    ...mapGetters ([
-      "submitDisabled"
-    ])
+
   },
   mounted () {
+    EventBus.$on('transferDisabled', (payload) => {
+      this.submitDisabled = payload
+    })
   },
   methods: {
     handleCta() {

@@ -10,9 +10,6 @@ export default({
     },
     setFatalError (context, message) {
       context.commit('setFatalError', message)
-    },
-    setSubmitBtnState(context, action){
-      context.commit('setSubmitBtnState', action)
     }
   },
   mutations: {
@@ -21,14 +18,10 @@ export default({
     },
     setFatalError: (state, message) => {
       state.fatalError = message
-    },
-    setSubmitBtnState: (state, bool) => {
-      state.submitDisabled = bool
     }
   },
   getters: {
     informationMessage: (state) => state.informationMessage,
-    fatalError: (state) => state.fatalError,
-    submitDisabled: (state) => state.submitDisabled
+    fatalError: (state) => state.fatalError
   }
 })

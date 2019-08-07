@@ -1,0 +1,21 @@
+
+<section class="form-component">
+  <v-form ref="form">
+    <!-- <v-autocomplete prepend-icon="person" append-outer-icon="filter_center_focus" v-show="selectedTab == 1" :items="items" :loading="isLoading" :search-input.sync="search" color="white" hide-no-data hide-selected item-text="email" label="To" return-object/> -->
+    
+    <v-text-field v-if="selectedTab == 1" box prepend-icon="person" color="white" label="To (Wallet Address)"
+      v-model='formObject.to' :rules="toRules" append-icon="far fa-address-book"
+      @click:append="toDialog = true" clearable>
+    </v-text-field>
+
+    <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="formObject.amount" 
+      type="number" min="0.00" :rules="amountRules" clearable>
+    </v-text-field>
+
+    <v-textarea box prepend-icon="message" color="white" label="Message" v-model="formObject.message" 
+      :rules="messageRuless" :counter="maxMessageLength" clearable/>
+  </v-form>
+
+  <ToDialog ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog" :wallets="wallets.filter(x => x.address != selectedWallet.address)" :toRules="toRules"></ToDialog>
+</section>
+
