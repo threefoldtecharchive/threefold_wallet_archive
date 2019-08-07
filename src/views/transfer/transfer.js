@@ -1,4 +1,5 @@
 import walletSelector from '../../components/walletSelector'
+import { EventBus } from '../../eventBus.js'
 // import VueQr from 'vue-qr'
 import qrcode from '@chenfengyuan/vue-qrcode'
 
@@ -7,8 +8,8 @@ import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'transfer',
-  components: { walletSelector, qrcode, QrcodeStream, QrcodeDropZone, QrcodeCapture },
-  props: [],
+  components: {walletSelector, qrcode, QrcodeStream, QrcodeDropZone, QrcodeCapture },
+
   data () {
     return {
       selectedTab: 1,
@@ -29,7 +30,8 @@ export default {
       maxMessageLength: 128,
       amountRules: [
         v => !!v || 'Amount is required',
-        v => v > 0 || 'Amount must be greater than 0',
+        v => !!v && v > 0 || 'Amount must be greater than 0',
+        v => !!v && (this.selectedTab == 1) && parseInt(v) < parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value',
       ],
       toRules: [
         v => !!v || 'Wallet address is required!',
@@ -40,8 +42,7 @@ export default {
   computed: {
     ...mapGetters([
       'wallets',
-      'transactionSubmitted',
-      'floatingActionButton'
+      'transactionSubmitted'
     ]),
     fields () {
       if (!this.model) return []
@@ -67,20 +68,34 @@ export default {
       return `tft:${this.selectedWallet.address}?amount=${this.amount}&message=${this.message}&sender=me`
     },
     messageRuless() {
-      if (this.message && this.message.length > maxMessageLength) {
-        return `Message length cannot be more then ${maxMessageLength} characters`;
+      if (this.message && (this.message.length > this.maxMessageLength)) {
+        return `Message length cannot be more then ${this.maxMessageLength} characters`;
       }
     },
   },
   mounted () {
+    EventBus.$on('transfer', (payload) => {
+      this.transferConfirmed()
+    })
     if (!this.selectedWallet.address) this.selectedWallet = this.wallets[0]
+    
   },
   methods: {
     ...mapActions([
       'sendCoins',
-      'setFab',
       'setSubmitBtnState'
     ]),
+    transferConfirmed (val) {
+      console.log('floating action button')
+      console.log('selected', this.selectedTab)
+      if(this.selectedTab == 0) {
+        console.log("show QR")
+        this.showQR = true
+      } else if (this.selectedTab == 1) {
+        console.log("send money")
+        this.send ()
+      }
+    },
     selectWallet (wallet) {
       this.selectedWallet = wallet
     },
@@ -117,9 +132,15 @@ export default {
       return val
     },
     checkForm() {
-      let res = this.amount && this.sender && this.amount > 0
-      if (this.message) res = res == this.message.length <= maxMessageLength 
-      if (this.selectedTab === 1) res = res == (this.to.length == 78) && this.amount && this.amount > 0
+      if (this.amount == '' || this.amount <= 0) return false;
+      let res = true
+      if (this.selectedTab === 1) {
+          if ((this.to.length !== 78)) return false;
+          res = (res == (parseInt(this.amount) <= parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount)))
+      }
+      if (this.message != null) {
+        res = (res == (this.message.length <= this.maxMessageLength))
+      }
       return res
     },
     handleFormChange() {
@@ -132,21 +153,6 @@ export default {
       this.to = ''
       this.message = ''
       this.amount = '0'
-    },
-    floatingActionButton (val) {
-      console.log('floating action button')
-      if(val) {
-        console.log('selected', this.selectedTab)
-        if(this.selectedTab == 0) {
-          console.log("show QR")
-          this.showQR = true
-        } else if (this.selectedTab == 1) {
-          console.log("send money")
-          this.send ()
-        }
-
-        this.setFab(false)
-      }
     },
     message (val) {
       this.handleFormChange()

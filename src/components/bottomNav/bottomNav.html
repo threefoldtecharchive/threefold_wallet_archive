@@ -1,13 +1,13 @@
 <section class="bottom-nav">
   <v-bottom-nav app fixed value="true" :active.sync="bottomnav" color="primary">
     <v-btn flat dark :to='{name: "home"}'>
-      <v-icon class="white--text">home</v-icon>
+      <v-icon class="white--text">fas fa-wallet</v-icon>
     </v-btn>
     <v-btn flat dark :to='{name: "transfer"}'>
       <v-icon class="white--text">swap_horiz</v-icon>
     </v-btn>
-    <v-btn disabled flat dark :to='{name: "profile"}'>
-      <v-icon class="white--text">person</v-icon>
+    <v-btn disabled flat dark :to='{name: "investments"}'>
+      <v-icon class="white--text">fas fa-piggy-bank</v-icon>
     </v-btn>
   </v-bottom-nav>
   <v-btn fixed dark fab bottom large class="center" color="accent" @click='handleCta'>

@@ -1,5 +1,5 @@
 import { mapGetters, mapActions } from "vuex";
-
+import { EventBus } from '../../eventBus.js';
 export default {
   name: 'bottom-nav',
   components: {},
@@ -11,21 +11,16 @@ export default {
   },
   computed: {
     ...mapGetters ([
-      "floatingActionButton",
       "submitDisabled"
     ])
   },
   mounted () {
   },
   methods: {
-    ...mapActions([
-      "setFab"
-    ]),
     handleCta() {
       console.log(this.$route.name)
       if(this.$route.name === 'transfer') {
-        console.log(this.setFab)
-        this.setFab(true)
+        EventBus.$emit('transfer', true)
       } else {
         this.$router.push({name: 'transfer'})
       }
