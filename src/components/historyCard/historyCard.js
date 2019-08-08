@@ -33,6 +33,7 @@ export default {
     },
     timeStamp () {
       var date = new Date(0)
+      console.log('time', this.transaction)
       date.setUTCSeconds(this.transaction.timestamp)
       return date.toLocaleDateString()
     },

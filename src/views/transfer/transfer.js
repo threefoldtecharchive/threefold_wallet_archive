@@ -102,6 +102,12 @@ export default {
       this.selectedWallet = this.wallets[0]
       this.formObject = {}
       this.$refs.formComponent.$refs.form.resetValidation()
+    },
+    wallets: {
+      handler () {
+        this.$refs.formComponent.$refs.form.validate()
+      },
+      deep: true
     }
   }
 }
