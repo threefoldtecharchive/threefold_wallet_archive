@@ -2,7 +2,7 @@
     <v-layout column fill-height>
         <div class="cheat"></div>
         <div class="content" v-if="wallets.length">
-            <walletCard  no-padding class="my-2" clickable v-for="(wallet, index) in wallets" :key='index' :wallet="wallet" @click="seeHistory(wallet)"/>
+            <walletCard  no-padding class="my-2" clickable v-for="(wallet, index) in wallets.filter(x => x.currency === 'TFT')" :key='index' :wallet="wallet" @click="seeHistory(wallet)"/>
         </div>
         <div v-if="!wallets.length" class='fill-height'>
             <v-layout justify-center align-center fill-height column>
