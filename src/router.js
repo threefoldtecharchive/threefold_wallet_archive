@@ -25,6 +25,9 @@ export default new Router({
   }, {
     path: '/investments',
     name: 'investments',
+    meta: {
+      title: 'investments'
+    },
     component: () => import(/* webpackChunkName: "investment-page" */ './views/investments')
   },{
     path: '/settings',

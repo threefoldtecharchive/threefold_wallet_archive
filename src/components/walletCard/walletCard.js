@@ -13,6 +13,10 @@ export default {
     },
     'selected': {
       type: Boolean
+    },
+    'type': {
+      type: String,
+      default: () => 'tft'
     }
   },
   data () {
