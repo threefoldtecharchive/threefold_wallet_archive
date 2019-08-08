@@ -57,9 +57,9 @@ export default {
       console.log(this.selectedWallet)
       this.sendCoins({
         from: this.selectedWallet.address,
-        to: this.to,
-        message: this.message,
-        amount: this.amount,
+        to: this.formObject.to,
+        message: this.formObject.message,
+        amount: this.formObject.amount,
         currency: this.selectedWallet.currency
       })
       this.formObject = {}
