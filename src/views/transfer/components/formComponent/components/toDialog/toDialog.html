@@ -13,13 +13,11 @@
         <template v-slot:extension>
           <div class="text-xs-center" style="margin:auto;" v-if="$vuetify.breakpoint.smAndUp">
             <v-btn-toggle v-model="selected" dark active-class="red" mandatory class="primary round elevation-0">
-              <v-btn flat class="px-5 my-1 mx-1 round">Intern</v-btn>
-              <v-btn flat class="px-5 my-1 mx-1 round">Extern</v-btn>
-              <v-btn flat class="px-5 my-1 mx-1 round">Fiat</v-btn>
+              <v-btn flat class="px-5 my-1 mx-1 round" v-for="tab in tabs">{{tab.name}}</v-btn>
             </v-btn-toggle>
           </div>
           <div v-else style="width: 100%;">
-            <v-select :items="[{name:'Intern', value:0}, {name:'Extern',value:1}, {name:'Fiat',value:2}]" 
+            <v-select :items="tabs" 
               v-model="selected" item-text="name" item-value="value" label="To" color="white" 
               hide-selected hide-details dense single-line full-width style="top:-7px;"></v-select>
           </div>

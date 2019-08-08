@@ -30,13 +30,14 @@ export default {
         v => (!!v && v.length >= 78 && v.length <= 78) || 'Wallet address length is not valid!',
       ],
       toDialog: false,
-      valid: false
+      valid: false,
+      // entries: [],
+      // search: null
     }
   },
   computed: {
     messageRuless() {
       let rules = [
-        // v => !!v || 'Message is required',
         v => ( typeof v == 'undefined' || (typeof v === 'string' && v.length <= this.maxMessageLength)) || `Message cannot be more than ${this.maxMessageLength} characters long`,
       ]
       return rules
@@ -48,7 +49,16 @@ export default {
       ]
       if (this.selectedTab === 1) rules.push(v => !!v && (this.selectedTab == 1) && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value')
       return rules
-    }
+    },
+    // items () {
+    //   return this.entries.map(entry => {
+    //     const email = entry.email.length > this.descriptionLimit
+    //       ? entry.email.slice(0, this.descriptionLimit) + '...'
+    //       : entry.email
+
+    //     return Object.assign({}, entry, { email })
+    //   })
+    // }
   },
   mounted () {
 

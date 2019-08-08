@@ -23,6 +23,7 @@ export default {
     return {
       selected: 0,
       externAddress: '',
+      tabs: [{name:'Intern', value:0}, {name:'Extern',value:1}, {name:'Fiat',value:2}],
       valid: false
     }
   },

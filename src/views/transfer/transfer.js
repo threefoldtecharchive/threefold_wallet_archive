@@ -17,45 +17,12 @@ export default {
     },
   data () {
     return {
-      formObject:{},
       transactionInfoDialog: false,
       qrScannerDialog: false,
       qrDialog: false,
-
+      formObject:{},
       selectedTab: 1,
-      selectedWallet: {},
-      isLoading: false,
-      entries: [],
-      model: null,
-      search: null,
-      sender: {},
-      transaction: {},
-      transactionSent: false,
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'wallets',
-      'transactionSubmitted'
-    ]),
-    fields () {
-      if (!this.model) return []
-
-      return Object.keys(this.model).map(key => {
-        return {
-          key,
-          value: this.model[key] || 'n/a'
-        }
-      })
-    },
-    items () {
-      return this.entries.map(entry => {
-        const email = entry.email.length > this.descriptionLimit
-          ? entry.email.slice(0, this.descriptionLimit) + '...'
-          : entry.email
-
-        return Object.assign({}, entry, { email })
-      })
+      selectedWallet: {}
     }
   },
   mounted () {
@@ -65,35 +32,36 @@ export default {
     if (!this.selectedWallet.address) this.selectedWallet = this.wallets[0]
     
   },
+  computed: {
+    ...mapGetters([
+      'wallets'
+    ]),
+  },
   methods: {
     ...mapActions([
       'sendCoins'
     ]),
     transferConfirmed (val) {
-      console.log('floating action button')
       if(this.selectedTab == 0) {
         console.log("show QR")
-        if (this.$refs.formComponent.$refs.form.validate()) this.qrDialog = true
+        if (this.checkForm()) this.qrDialog = true
       } else if (this.selectedTab == 1) {
         console.log("send money")
-        this.send ()
+        if (this.checkForm()) this.send()
       }
     },
     selectWallet (wallet) {
       this.selectedWallet = wallet
     },
     send () {
-      if (this.checkForm()) {
-        this.sendCoins({
-          from: this.selectedWallet.address,
-          to: this.formObject.to,
-          message: this.formObject.message,
-          amount: this.formObject.amount
-        })
-        this.transactionSent = true
-        this.formObject = {}
-        this.$refs.formComponent.$refs.form.reset()
-      }
+      this.sendCoins({
+        from: this.selectedWallet.address,
+        to: this.formObject.to,
+        message: this.formObject.message,
+        amount: this.formObject.amount
+      })
+      this.formObject = {}
+      this.$refs.formComponent.$refs.form.reset()
     },
     onDecode (code) {
       code = code.replace('tft:', 'tft://')
@@ -101,7 +69,7 @@ export default {
       this.formObject.amount = this.getQueryVar(code, 'amount')
       this.formObject.message = this.getQueryVar(code, 'message')
       this.formObject.sender = this.getQueryVar(code, 'sender')
-      this.formObject.transactionInfoDialog = true
+      this.transactionInfoDialog = true
     },
     getQueryVar (url, varName) {
       var val
