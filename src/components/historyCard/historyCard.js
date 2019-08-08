@@ -84,7 +84,7 @@ export default {
       total = total.toString()
 
       if ((total.substr(total.indexOf('.')).length > 4) && !modal) {
-        total = total.substr(0, total.indexOf('.') + 3) + '..' + total.substr(-1)
+        total = total.substr(0, total.indexOf('.') + 3) + '..'
       } else if (total.substr(total.indexOf('.')).length < 3) {
         total = parseFloat(total)
       }

@@ -27,15 +27,15 @@ export default {
       transactionSent: false,
       showQR:false,
       showQrScanner: false,
-      maxMessageLength: 128,
+      maxMessageLength: 32,
       amountRules: [
         v => !!v || 'Amount is required',
         v => !!v && v > 0 || 'Amount must be greater than 0',
-        v => !!v && (this.selectedTab == 1) && parseInt(v) < parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value',
+        v => (this.selectedTab != 1) || (parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount)) || 'Amount must be smaller than wallet value',
       ],
       toRules: [
         v => !!v || 'Wallet address is required!',
-        v => (!!v && v.length >= 78 && v.length <= 78) || 'Wallet address length is not valid!',
+        v => (!!v && v.length == 78) || 'Wallet address length is not valid!',
       ],
     }
   },
@@ -78,7 +78,6 @@ export default {
       this.transferConfirmed()
     })
     if (!this.selectedWallet.address) this.selectedWallet = this.wallets[0]
-    
   },
   methods: {
     ...mapActions([
@@ -135,8 +134,11 @@ export default {
       if (this.amount == '' || this.amount <= 0) return false;
       let res = true
       if (this.selectedTab === 1) {
-          if ((this.to.length !== 78)) return false;
-          res = (res == (parseInt(this.amount) <= parseInt(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount)))
+          if (this.to == null || this.to == '' || (this.to.length !== 78)) return false;
+          try {
+            if (this.amount > parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount)) return false
+          } catch (e) {}
+          
       }
       if (this.message != null) {
         res = (res == (this.message.length <= this.maxMessageLength))
