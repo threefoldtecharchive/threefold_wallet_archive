@@ -30,13 +30,14 @@ export default {
         v => (!!v && v.length >= 78 && v.length <= 78) || 'Wallet address length is not valid!',
       ],
       toDialog: false,
+      valid: false
     }
   },
   computed: {
     messageRuless() {
       let rules = [
         // v => !!v || 'Message is required',
-        // v => (!!v && v.length < this.maxMessageLength) || `Message length cannot be more then ${this.maxMessageLength} characters`,
+        v => ( typeof v == 'undefined' || (typeof v === 'string' && v.length <= this.maxMessageLength)) || `Message cannot be more than ${this.maxMessageLength} characters long`,
       ]
       return rules
     },
@@ -60,7 +61,5 @@ export default {
       this.toDialog = false
       this.$refs.toDialog.$refs.externForm.reset()
     }
-  },
-  watch: {
   }
 }

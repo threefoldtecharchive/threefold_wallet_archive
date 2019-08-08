@@ -22,7 +22,7 @@
         <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
 
         <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" 
-          :wallets="wallets" :selectedWallet="selectedWallet"></FormComponent>
+          :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)"></FormComponent>
 
       </v-card-text>
     </v-card>

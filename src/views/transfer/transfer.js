@@ -73,7 +73,7 @@ export default {
       console.log('floating action button')
       if(this.selectedTab == 0) {
         console.log("show QR")
-        this.qrDialog = true
+        if (this.$refs.formComponent.$refs.form.validate()) this.qrDialog = true
       } else if (this.selectedTab == 1) {
         console.log("send money")
         this.send ()
@@ -116,8 +116,8 @@ export default {
     checkForm() {
       return this.$refs.formComponent.$refs.form.validate()
     },
-    handleFormChange() {
-      EventBus.$emit('transferDisabled', !this.checkForm())
+    formValidation (valid) {
+      EventBus.$emit('transferDisabled', !valid)
     },
     closeTransactionInfoDialog (save) {
       this.transactionInfoDialog = false
@@ -134,15 +134,6 @@ export default {
       this.selectedWallet = this.wallets[0]
       this.formObject = {}
       this.$refs.formComponent.$refs.form.resetValidation()
-    },
-    'formObject.message' (val) {
-      this.handleFormChange()
-    },
-    'formObject.amount' (val) {
-      this.handleFormChange()
-    },
-    'formObject.to' (val) {
-      this.handleFormChange()
     }
   }
 }

@@ -40,5 +40,10 @@ export default {
         this.selected = 0
       },1000)
     }
+  },
+  watch: {
+    selected () {
+      this.$refs.externForm.resetValidation()
+    }
   }
 }
