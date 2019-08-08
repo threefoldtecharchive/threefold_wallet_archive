@@ -13,7 +13,7 @@
       </v-toolbar>
       <v-card-text>
         <div class="text-xs-center">
-          <qrcode-stream v-if="selectedTab == 1" track @decode="onDecode" />
+          <qrcode-stream v-if="selectedTab == 1" :camera="dialog ? 'auto' : 'off'" track @decode="onDecode" />
         </div>
       </v-card-text>
     </v-card>
