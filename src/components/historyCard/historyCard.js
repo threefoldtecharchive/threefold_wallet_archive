@@ -48,7 +48,7 @@ export default {
     }
   },
   mounted () {
-
+    
   },
   methods: {
     getWalletAddresOfInput () {
@@ -85,12 +85,13 @@ export default {
       total = total.toString()
 
       if ((total.substr(total.indexOf('.')).length > 4) && !modal) {
-        total = total.substr(0, total.indexOf('.') + 3) + '..'
+        total = total.substr(0, total.indexOf('.')+ 3) + '..'
       } else if (total.substr(total.indexOf('.')).length < 3) {
         total = parseFloat(total)
-      }
+      } 
 
-      return total.toLocaleString('en', { minimumFractionDigits: 2, useGrouping: false })
+      if (typeof(total) == 'string') return total.replace('.', ',')
+      return total.toLocaleString('nl', { minimumFractionDigits: 2, useGrouping: false })
     },
     copyTransaction () {
       copy(JSON.stringify(this.transaction))
