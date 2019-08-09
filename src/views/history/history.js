@@ -24,7 +24,7 @@ export default {
           date = new Date(0)
           date.setUTCSeconds(x.timestamp)
         }
-        return date.toLocaleDateString()
+        return date.toDateString()
       })
       return groupedTransactions
     }
