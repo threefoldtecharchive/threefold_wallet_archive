@@ -1,6 +1,7 @@
 @import '../../App/App.scss';
 .toolbar {
-    .v-toolbar {
-        border-radius: 0 0 $borderradius $borderradius;
+    .v-toolbar--fixed {
+        position: fixed;
+        z-index: 3;
     }
 }
