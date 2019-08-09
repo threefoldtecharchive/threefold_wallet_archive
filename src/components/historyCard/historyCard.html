@@ -68,7 +68,7 @@
           </v-flex>
           <v-flex>
             <p class="subtitle mb-0 grey--text">Amount <span v-if="outgoing && transaction.outputs.some(x => x.is_fee)" >(fee incl)</span></p>
-            <p class="title mt-0">{{amount}}</p>
+            <p class="title mt-0">{{amountModal}}</p>
           </v-flex>
           <v-flex>
             <p v-if="outgoing && transaction.outputs.some(x => x.is_fee)" class="subtitle mb-0 grey--text">Fee</p>

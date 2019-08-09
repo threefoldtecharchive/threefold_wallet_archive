@@ -1,6 +1,6 @@
 <section class="wallet-card">
   <v-card :class="`min ${selected ? 'border' : ''}`">
-    <div class="content" :style="clickable ? 'cursor:pointer' : ''" @click="$emit('click')">
+    <div ref="card" class="content" :class="type == 'gold' ? 'gold-image' : 'tft-image'" :style="clickable ? 'cursor:pointer' : ''" @click="$emit('click')">
       <v-layout class="pa-1 content-inner white--text">
         <v-flex xs6>
           <v-layout column class="py-3 pl-2">

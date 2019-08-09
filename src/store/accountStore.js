@@ -45,7 +45,6 @@ export default ({
       //   },
       // )
 
-
       context.commit('setAccounts', [tfAccount, gfAccount])
       context.dispatch('updateAccounts')
       context.dispatch('createWallet', { chain: 'tft', walletName: 'Daily' })
@@ -85,28 +84,28 @@ export default ({
         if (wallet) {
           context.commit('setInformationMessage', `Submitting transaction...`)
           const builder = wallet.transaction_new()
+          console.log(builder)
           var sender = JSON.stringify({
             account: account.account_name,
             walletname: wallet.wallet_name
           })
-          builder.output_add(data.to.toString(), data.amount.toString())
-          console.log("sending", sender, builder)
-          builder.send({
-            sender,
-            message: data.message
-          }).then(result => {
-            console.log(result)
-            if (result.submitted) {
-              context.commit('setInformationMessage', `Transaction submitted  (${result.transaction.id.substring(4, 0)})...`)
-              context.dispatch('updateAccounts')
-              context.commit('setSync', false)
-            } else {
-              console.log("then else...")
-            }
-          }).catch(err => {
+          try {
+            builder.output_add(data.to.toString(), data.amount.toString())
+            console.log("sending", sender, builder)
+            let builderMessage = data.message ? {sender,message:data.message} : sender
+            builder.send(builderMessage).then(result => {
+              if (result.submitted) {
+                context.commit('setInformationMessage', `Transaction submitted  (${result.transaction.id.substring(4, 0)})...`)
+                context.dispatch('updateAccount')
+                context.commit('setSync', false)
+              } else {
+                console.log("then else...")
+              }
+            })
+          } catch (e) {
+            console.log('catch')
             console.error(`ERROR while sending coins`, err)
-            throw err
-          })
+          }
         }
       }
     }

@@ -5,7 +5,6 @@
       <v-btn-toggle v-model="selectedTab" dark active-class="red" mandatory class="primary round elevation-0">
         <v-btn flat class="px-5 my-1 mx-1 round">Receive</v-btn>
         <v-btn flat class="px-5 my-1 mx-1 round">Send</v-btn>
-        <!--<v-btn flat class="px-5 my-1 mx-1 round"><v-icon>camera</v-icon></v-btn>-->
       </v-btn-toggle>
     </div>
    
@@ -14,112 +13,29 @@
         <div>
           <div class="text-xs-left">
             <p v-if="selectedTab == 0">To</p>
-            <p v-if="selectedTab == 1"><v-layout>From <v-spacer></v-spacer> <v-btn text icon v-if="selectedTab == 1" style="margin: 0px" @click="showQrScanner = true">
+            <p v-if="selectedTab == 1"><v-layout>From <v-spacer></v-spacer> <v-btn text icon v-if="selectedTab == 1" style="margin: 0px" @click="qrScannerDialog = true">
                 <v-icon>camera</v-icon>
               </v-btn></v-layout></p>
           </div>
-          <div class="flex text-xs-right">
-            
-          </div>
         </div>
+
         <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
-        <!-- <v-autocomplete prepend-icon="person" append-outer-icon="filter_center_focus" v-show="selectedTab == 1" :items="items" :loading="isLoading" :search-input.sync="search" color="white" hide-no-data hide-selected item-text="email" label="To" return-object/> -->
-        <v-text-field v-if="selectedTab == 1" box prepend-icon="person" color="white" label="To (Wallet Address)"
-          v-model='to'>
-        </v-text-field>
-        <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="amount" type="number">
-        </v-text-field>
-        <v-textarea box prepend-icon="message" color="white" label="Message" v-model="message" />
-        <v-btn @click="send" class="accent">
-          Diene fucking bol is zo kapot als iet
-        </v-btn>
+
+        <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" 
+          :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)"></FormComponent>
+
       </v-card-text>
     </v-card>
-    <div v-if="selectedTab == 1" class=" mt-2">
-    </div>
   </v-layout>
 
-  <v-dialog v-model="show" v-if="show" max-width="500">
-    <v-card style="height:100%">
-      <v-toolbar dark color="primary">
-        <v-toolbar-title class="text-uppercase">
-          <v-icon>
-            info
-          </v-icon>
-          Transaction info
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon flat @click="show = false">
-          <v-icon>
-            close
-          </v-icon>
-        </v-btn>
-      </v-toolbar>
-      <v-card-text>
-        <v-layout justify-space-between fill-height column>
-          <p v-if="selectedTab == 1">From</p>
-          <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
-          <v-flex>
-            <p class="subtitle mb-0 grey--text">To</p>
-            <p class="title mt-0 text-truncate">{{to}}</p>
-          </v-flex>
-          <v-flex>
-            <p class="subtitle mb-0 grey--text">Amount</p>
-            <p class="title mt-0">{{amount}}</p>
-          </v-flex>
-          <v-flex>
-            <p class="subtitle mb-0 grey--text">Message</p>
-            <p class="title mt-0">{{message}}</p>
-          </v-flex>
+  <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog" 
+    :selectedTab="selectedTab" :wallets="wallets" :send="send" :selectedWallet="selectedWallet" 
+    :selectWallet="selectWallet" :formObject="formObject"></TransactionInfoDialog>
+  
+  <QrScannerDialog :dialog="qrScannerDialog" :closeDialog="closeQrScannerDialog" 
+    :selectedTab="selectedTab" :onDecode="onDecode"></QrScannerDialog>
 
+  <QrDialog :dialog="qrDialog" :closeDialog="closeQrDialog" :formObject="formObject" 
+    :selectedWallet="selectedWallet" :selectedTab="selectedTab"></QrDialog>
 
-          <v-btn @click="send" class="accent">
-            Confirm
-          </v-btn>
-        </v-layout>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
-
-  <v-dialog dark v-model="showQrScanner" max-width="500">
-    <v-card class="primary darken-2" style="height:100%">
-      <v-toolbar dark color="primary">
-        <v-toolbar-title class="text-uppercase">Scan QR code from receiver</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon flat @click="showQrScanner = false">
-          <v-icon color="accent">
-            close
-          </v-icon>
-        </v-btn>
-      </v-toolbar>
-      <v-card-text>
-        <div class="text-xs-center">
-          <qrcode-stream v-if="selectedTab == 1" track @decode="onDecode" />
-        </div>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
-
-  <v-dialog dark v-model="showQR" max-width="500">
-    <v-card class="primary darken-2" style="height:100%">
-      <v-toolbar dark color="primary">
-        <v-toolbar-title class="text-uppercase">Show QR to the sender</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon flat @click="showQR = false">
-          <v-icon color="accent">
-            close
-          </v-icon>
-        </v-btn>
-      </v-toolbar>
-      <v-card-text>
-        <div class="text-xs-center">
-          <p>Amount: {{amount}} tft</p>
-          <p>To: {{selectedWallet.name}}</p>
-          <p>Message: {{message}}</p>
-          <qrcode :value="qrText" v-if="selectedTab == 0" class="round"
-            :options="{ color: { darklight: '#fff',  dark: $vuetify.theme.primary}  }" />
-        </div>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
 </section>

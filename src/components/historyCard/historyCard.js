@@ -15,18 +15,11 @@ export default {
     }
   },
   computed: {
+    amountModal () {
+      return this.amountHandler(true)
+    },
     amount () {
-      if (this.transaction) {
-        if (this.transaction.inputs && this.transaction.inputs.length) {
-          this.outgoing = false
-          return this.sumTransactionAmount(this.transaction.inputs)
-        } else if (this.transaction.outputs && this.transaction.outputs.length) {
-          this.outgoing = true
-          return '-' + this.sumTransactionAmount(this.transaction.outputs)
-        }
-      } else {
-        return '---'
-      }
+      return this.amountHandler(false)
     },
     receiver () {
       if (!this.transaction.confirmed) return 'Pending transaction...'
@@ -39,8 +32,13 @@ export default {
       return senderAddress
     },
     timeStamp () {
-      var date = new Date(0)
-      date.setUTCSeconds(this.transaction.timestamp)
+      var date
+      if (this.transaction.timestamp == null || this.transaction.timestamp == '-1') {
+        date = new Date()
+      } else {
+        date = new Date(0)
+        date.setUTCSeconds(this.transaction.timestamp)
+      }
       return date.toLocaleDateString()
     },
     fee () {
@@ -54,7 +52,7 @@ export default {
     }
   },
   mounted () {
-
+    
   },
   methods: {
     getWalletAddresOfInput () {
@@ -81,13 +79,23 @@ export default {
       }
       return address
     },
-    sumTransactionAmount (arr) {
-      var total = 0
+    sumTransactionAmount (arr, modal) {
+      var total = 0.00
       arr.forEach(output => {
-        var amount = output.amount.str({ precision: 3 }).replace(',', '')
+        var amount = output.amount.str()
         total += parseFloat(amount)
       })
-      return total.toLocaleString('nl-BE', { minimumFractionDigits: 2, useGrouping: false })
+      
+      total = total.toString()
+
+      if ((total.substr(total.indexOf('.')).length > 4) && !modal) {
+        total = total.substr(0, total.indexOf('.')+ 3) + '..'
+      } else if (total.substr(total.indexOf('.')).length < 3) {
+        total = parseFloat(total)
+      } 
+
+      if (typeof(total) == 'string') return total.replace('.', ',')
+      return total.toLocaleString('nl', { minimumFractionDigits: 2, useGrouping: false })
     },
     copyTransaction () {
       copy(JSON.stringify(this.transaction))
@@ -98,6 +106,19 @@ export default {
         return true
       } catch (e) {
         return false
+      }
+    },
+    amountHandler (modal) {
+      if (this.transaction) {
+        if (this.transaction.inputs && this.transaction.inputs.length) {
+          this.outgoing = false
+          return this.sumTransactionAmount(this.transaction.inputs, modal)
+        } else if (this.transaction.outputs && this.transaction.outputs.length) {
+          this.outgoing = true
+          return '-' + this.sumTransactionAmount(this.transaction.outputs, modal)
+        }
+      } else {
+        return '---'
       }
     }
   }

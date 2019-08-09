@@ -17,10 +17,14 @@ export default {
     ]),
     groupedTransactions () {
       var transactions = this.wallets.find(x => x.name === this.$route.params.wallet).transaction
-      var groupedTransactions = groupBy(transactions, x => {
-        var date = new Date(0)
-        date.setUTCSeconds(x.timestamp)
-        return date.toLocaleDateString()
+      var groupedTransactions = groupBy(transactions, x => {var date
+        if (x.timestamp == null || x.timestamp == '-1') {
+          date = new Date()
+        } else {
+          date = new Date(0)
+          date.setUTCSeconds(x.timestamp)
+        }
+        return date.toDateString()
       })
       return groupedTransactions
     }
