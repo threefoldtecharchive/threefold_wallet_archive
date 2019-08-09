@@ -45,9 +45,9 @@ export default {
     amountRules() {
       let rules = [
         v => !!v || 'Amount is required',
-        v => !!v && v > 0 || 'Amount must be greater than 0',
+        v => !!v && parseFloat(v.replace(',', '')) > 0 || 'Amount must be greater than 0',
       ]
-      if (this.selectedTab === 1) rules.push(v => !!v && (this.selectedTab == 1) && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value')
+      if (this.selectedTab === 1) rules.push(v => !!v && (this.selectedTab == 1) && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount.replace(',', '')) || 'Amount must be smaller than wallet value')
       return rules
     },
     // items () {
