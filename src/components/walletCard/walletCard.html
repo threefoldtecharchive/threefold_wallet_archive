@@ -1,13 +1,12 @@
 <section class="wallet-card">
   <v-card :class="`min ${selected ? 'border' : ''}`">
-    <div ref="card" class="content" :class="type == 'gold' ? 'gold-image' : 'tft-image'" :style="clickable ? 'cursor:pointer' : ''" @click="$emit('click')">
+    <div ref="card" class="content" :class="type == 'GFT' ? 'gft-image' : 'tft-image'" :style="clickable ? 'cursor:pointer' : ''" @click="$emit('click')">
       <v-layout class="pa-1 content-inner white--text">
         <v-flex xs6>
           <v-layout column class="py-3 pl-2">
             <p class="title text-uppercase">{{wallet? wallet.name : 'Wallet name'}}</p>
             <p class="body-1 text-truncate">{{getHumanWalletAddress}}</p>
-            <p v-if="wallet.currency === 'GFT'" class="body-1 text-truncate">{{authenticated}}
-            </p>
+            <!-- <p v-if="wallet.currency === 'GFT'" class="body-1 text-truncate">{{authenticated}}</p> -->
           </v-layout>
         </v-flex>
         <v-flex xs6>
