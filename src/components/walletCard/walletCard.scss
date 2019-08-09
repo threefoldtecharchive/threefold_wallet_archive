@@ -1,8 +1,9 @@
 @import '../../App/App.scss';
 .wallet-card {
   .content {
+    height: 100%;
     background: var(--primary-color);
-    &.gold-image{
+    &.gft-image{
       &::before {
         background-image: url(https://picsum.photos/id/413/2666/1500);
       }

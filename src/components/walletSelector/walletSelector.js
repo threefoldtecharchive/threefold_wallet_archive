@@ -23,7 +23,7 @@ export default {
 
   },
   mounted () {
-    console.log(`selected`, this.selected)
+    
   },
   methods: {
 

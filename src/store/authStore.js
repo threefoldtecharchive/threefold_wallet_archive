@@ -11,11 +11,11 @@ export default ({
   },
   actions: {
     async generateLoginUrl(context) {
-      /*context.dispatch('login', {
-        doubleName: 'username',
-        // seed:  'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride'
-        seed: "lemon vocal marriage flash soft address barely crazy swarm alert hire riot find know around pill denial labor join spice energy planet deliver dress",
-      })*/
+      // context.dispatch('login', {
+      //   doubleName: 'username',
+      //   // seed:  'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride'
+      //   seed: "lemon vocal marriage flash soft address barely crazy swarm alert hire riot find know around pill denial labor join spice energy planet deliver dress",
+      // })
       context.dispatch('clearStorage')
       var state = ''
       var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'

@@ -27,10 +27,10 @@
         <div v-show="selected === 0">
           <div class="content" v-if="wallets.length">
             <div>
-              <div v-for="(wallet, index) in wallets" :key='index' >
+              <div v-for="(wallet, index) in wallets.filter(x => x.currency === 'TFT')" :key='index' >
                 <v-hover>
                   <div slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
-                    <walletCard type="tft" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>
+                    <walletCard type="TFT" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>
                   </div>
                 </v-hover>
                 </div>
@@ -45,7 +45,7 @@
           </v-form>
           <div class="text-xs-center">
             <div>
-              <v-btn dark fab class="center" color="accent" @click='selectWallet(externAddress)' :disabled="!valid">
+              <v-btn dark fab class="center" color="accent" @click="selectWallet(externAddress)" :disabled="!valid">
                 <v-icon>check</v-icon>
               </v-btn>
             </div>
@@ -55,10 +55,10 @@
         <div v-show="selected === 2">
           <div class="content" v-if="wallets.length">
             <div>
-              <div v-for="(wallet, index) in wallets" :key='index' >
+              <div v-for="(wallet, index) in wallets.filter(x => x.currency === 'GFT')" :key='index' >
                 <v-hover>
                   <div slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
-                    <walletCard type="gold" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>
+                    <walletCard type="GFT" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>
                   </div>
                 </v-hover>
                 </div>

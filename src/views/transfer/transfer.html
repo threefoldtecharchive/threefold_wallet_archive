@@ -7,7 +7,6 @@
         <v-btn flat class="px-5 my-1 mx-1 round">Send</v-btn>
       </v-btn-toggle>
     </div>
-   
     <v-card dark class="primary mt-2" v-if="selectedTab != 2">
       <v-card-text>
         <div>
@@ -16,22 +15,21 @@
             <p v-if="selectedTab == 1"><v-layout>From <v-spacer></v-spacer> <v-btn text icon v-if="selectedTab == 1" style="margin: 0px" @click="qrScannerDialog = true">
                 <v-icon>camera</v-icon>
               </v-btn></v-layout></p>
+            </div>
           </div>
-        </div>
-
-        <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
-
-        <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" 
+          <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
+          
+          <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" 
           :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)"></FormComponent>
-
-      </v-card-text>
-    </v-card>
-  </v-layout>
-
-  <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog" 
+          
+        </v-card-text>
+      </v-card>
+    </v-layout>
+    
+    <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog" 
     :selectedTab="selectedTab" :wallets="wallets" :send="send" :selectedWallet="selectedWallet" 
     :selectWallet="selectWallet" :formObject="formObject"></TransactionInfoDialog>
-  
+    
   <QrScannerDialog :dialog="qrScannerDialog" :closeDialog="closeQrScannerDialog" 
     :selectedTab="selectedTab" :onDecode="onDecode"></QrScannerDialog>
 
