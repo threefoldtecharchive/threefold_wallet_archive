@@ -20,7 +20,7 @@ export default {
       transactionInfoDialog: false,
       qrScannerDialog: false,
       qrDialog: false,
-      formObject:{},
+      formObject:{to:{}},
       selectedTab: 1,
       selectedWallet: {}
     }
@@ -29,13 +29,20 @@ export default {
     EventBus.$on('transfer', (payload) => {
       this.transferConfirmed()
     })
-    if (!this.selectedWallet.address) this.selectedWallet = this.wallets[0]
-    
+    if (!this.selectedWallet.address) this.selectedWallet = this.computedWallets[0]
   },
   computed: {
     ...mapGetters([
       'wallets'
     ]),
+    investments () {
+      if (this.$route.name === 'transfer investments') return true
+      return false
+    },
+    computedWallets () {
+      if (this.$route.name === 'transfer investments') return this.wallets.filter(x => x.currency === 'gram')
+      return this.wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')
+    }
   },
   methods: {
     ...mapActions([
@@ -43,10 +50,8 @@ export default {
     ]),
     transferConfirmed (val) {
       if(this.selectedTab == 0) {
-        console.log("show QR")
         if (this.checkForm()) this.qrDialog = true
       } else if (this.selectedTab == 1) {
-        console.log("send money")
         if (this.checkForm()) this.send()
       }
     },
@@ -56,31 +61,13 @@ export default {
     send () {
       this.sendCoins({
         from: this.selectedWallet.address,
-        to: this.formObject.to,
+        to: this.formObject.to.address,
         message: this.formObject.message,
         amount: this.formObject.amount,
         currency: this.selectedWallet.currency
       })
-      this.formObject = {}
+      this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
-    },
-    onDecode (code) {
-      code = code.replace('tft:', 'tft://')
-      this.formObject.to = this.getQueryVar(code, 'HOST')
-      this.formObject.amount = this.getQueryVar(code, 'amount')
-      this.formObject.message = this.getQueryVar(code, 'message')
-      this.formObject.sender = this.getQueryVar(code, 'sender')
-      this.transactionInfoDialog = true
-    },
-    getQueryVar (url, varName) {
-      var val
-      url = new URL(url)
-      if (varName === 'HOST') {
-        val = url.pathname.replace('//', '')
-      } else {
-        val = url.searchParams.get(varName)
-      }
-      return val
     },
     checkForm() {
       return this.$refs.formComponent.$refs.form.validate()
@@ -101,7 +88,7 @@ export default {
   watch: {
     selectedTab (val) {
       this.selectedWallet = this.wallets[0]
-      this.formObject = {}
+      this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.resetValidation()
     }
   }

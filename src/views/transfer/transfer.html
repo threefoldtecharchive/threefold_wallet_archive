@@ -1,8 +1,8 @@
 <section class="transfer fill-height">
   <v-layout column fill-height>
     <div class="cheat"></div>
-    <div class="text-xs-center my-3">
-      <v-btn-toggle v-model="selectedTab" dark active-class="red" mandatory class="primary round elevation-0">
+    <div class="text-xs-center my-3 div-toggle-buttons">
+      <v-btn-toggle v-model="selectedTab" dark active-class="red" mandatory class="primary round elevation-0" v-if="!investments">
         <v-btn flat class="px-5 my-1 mx-1 round">Receive</v-btn>
         <v-btn flat class="px-5 my-1 mx-1 round">Send</v-btn>
       </v-btn-toggle>
@@ -12,14 +12,18 @@
         <div>
           <div class="text-xs-left">
             <p v-if="selectedTab == 0">To</p>
-            <p v-if="selectedTab == 1"><v-layout>From <v-spacer></v-spacer> <v-btn text icon v-if="selectedTab == 1" style="margin: 0px" @click="qrScannerDialog = true">
-                <v-icon>camera</v-icon>
-              </v-btn></v-layout></p>
+            <p v-if="selectedTab == 1">
+              <v-layout>From<v-spacer/> 
+                <v-btn text icon v-if="selectedTab == 1 && !investments" style="margin: 0px" @click="qrScannerDialog = true">
+                  <v-icon>camera</v-icon>
+                </v-btn>
+              </v-layout>
+            </p>
             </div>
           </div>
-          <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
+          <walletSelector @onWalletSelected='selectWallet' :wallets="computedWallets" :selected="selectedWallet.name" />
           
-          <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" 
+          <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" :investments="investments"
           :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)"></FormComponent>
           
         </v-card-text>
@@ -31,7 +35,7 @@
     :selectWallet="selectWallet" :formObject="formObject"></TransactionInfoDialog>
     
   <QrScannerDialog :dialog="qrScannerDialog" :closeDialog="closeQrScannerDialog" 
-    :selectedTab="selectedTab" :onDecode="onDecode"></QrScannerDialog>
+    :selectedTab="selectedTab" :formObject="formObject"></QrScannerDialog>
 
   <QrDialog :dialog="qrDialog" :closeDialog="closeQrDialog" :formObject="formObject" 
     :selectedWallet="selectedWallet" :selectedTab="selectedTab"></QrDialog>

@@ -1,6 +1,6 @@
 
 <section class="to-dialog">
-  <v-dialog dark v-model="dialog" max-width="500" persistent>
+  <v-dialog dark v-model="dialog" max-width="550" persistent>
     <v-card class="primary darken-2" style="height:100%">
       <v-toolbar dark color="primary" dense>
         <!-- <v-toolbar-title class="text-uppercase"></v-toolbar-title> -->
@@ -27,7 +27,8 @@
         <div v-show="selected === 0">
           <div class="content" v-if="wallets.length">
             <div>
-              <div v-for="(wallet, index) in wallets.filter(x => x.currency === 'TFT')" :key='index' >
+              <!-- last filter is needed until transactions between gft and tft are possible -->
+              <div v-for="(wallet, index) in wallets.filter(x => (x.currency === 'TFT' || x.currency === 'GFT') && (x.currency == selectedWallet.currency))" :key='index' >
                 <v-hover>
                   <div slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
                     <walletCard type="TFT" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>
@@ -55,7 +56,7 @@
         <div v-show="selected === 2">
           <div class="content" v-if="wallets.length">
             <div>
-              <div v-for="(wallet, index) in wallets.filter(x => x.currency === 'GFT')" :key='index' >
+              <div v-for="(wallet, index) in wallets.filter(x => x.currency === 'gram')" :key='index' >
                 <v-hover>
                   <div slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
                     <walletCard type="GFT" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>

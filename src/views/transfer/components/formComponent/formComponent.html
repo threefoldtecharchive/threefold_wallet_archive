@@ -1,21 +1,39 @@
 
 <section class="form-component">
   <v-form ref="form" v-model="valid" @input="$emit('formValidation', valid)">
-    <!-- <v-autocomplete prepend-icon="person" append-outer-icon="filter_center_focus" v-show="selectedTab == 1" :items="items" :loading="isLoading" :search-input.sync="search" color="white" hide-no-data hide-selected item-text="email" label="To" return-object/> -->
     
-    <v-text-field v-if="selectedTab == 1" box prepend-icon="person" color="white" label="To (Wallet Address)"
-      v-model='formObject.to' :rules="toRules" append-icon="far fa-address-book"
+    <div class="text-xs-left" v-if="investments">
+      <p>To</p>
+      <walletSelector @onWalletSelected='selectWallet' :wallets="wallets.filter(x=>x.currency==='GFT')" 
+        :selected="formObject.to.name"/>
+    </div>
+
+    <v-text-field v-if="selectedTab == 1 && !investments" box prepend-icon="person" color="white" label="To (Wallet Address)"
+      v-model='formObject.to.address' :rules="toRules" append-icon="far fa-address-book"
       @click:append="toDialog = true" clearable>
     </v-text-field>
 
-    <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="formObject.amount" 
-      type="number" min="0.00" :rules="amountRules" clearable>
-    </v-text-field>
+    <v-layout>
+      <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="formObject.amount" 
+        type="number" min="0.00" :rules="amountRules"  class="inputNumber"
+        clearable :append-icon="investments ? 'far fa-question-circle' : ''">   
+      </v-text-field>
+      <!-- this is icon is invisible -->
+      <div style="margin: auto; position: absolute; right: 30px; margin-top: 16px;" v-if="investments">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-icon dark v-on="on" style="opacity: 0">far fa-question-circle</v-icon>
+          </template>
+          <span>1 gram is equal to 1 GFT token</span>
+        </v-tooltip>
+      </div>
+    </v-layout>
 
     <v-textarea box prepend-icon="message" color="white" label="Message" v-model="formObject.message" 
       :rules="messageRuless" :counter="maxMessageLength" clearable/>
   </v-form>
 
-  <ToDialog ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog" :wallets="wallets.filter(x => x.address != selectedWallet.address)" :toRules="toRules"></ToDialog>
+  <ToDialog ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog" :selectedWallet="selectedWallet"
+  :wallets="wallets.filter(x => x.address != selectedWallet.address)" :toRules="toRules"></ToDialog>
 </section>
 

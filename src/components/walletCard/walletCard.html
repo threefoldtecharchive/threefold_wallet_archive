@@ -10,7 +10,7 @@
           </v-layout>
         </v-flex>
         <v-flex xs6>
-          <v-layout column class="justify-space-between fill-height">
+          <v-layout column class="justify-space-between fill-height" v-if="wallet.currency === 'GFT' || wallet.currency === 'TFT'">
             <amountIndicator small class="accent pl-3 pr-2 py-1 align-self-end badge-top ma-0" :amount='totalAmount'
               :valuta='wallet.currency' />
             <v-btn dark small icon flat @click.stop="copyAddress" class="accent pa-3 align-self-end badge-bottom ma-0">

@@ -152,6 +152,16 @@ export default ({
             // })
           })
           wallets.push(...t)
+          // fake investment wallets
+        })
+        wallets.push({
+          name: 'gold_investment',
+          address: 'fake',
+          totalAmount: '5',
+          transaction: [],
+          holder: 'fake',
+          currency: 'gram',
+          isAuthenticated: true
         })
         return wallets
       }

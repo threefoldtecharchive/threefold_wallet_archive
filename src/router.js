@@ -12,7 +12,8 @@ export default new Router({
     name: 'home',
     component: home,
     meta: {
-      title: 'accounts'
+      title: 'accounts',
+      transfer: 'transfer'
     }
   }, {
     path: '/history/:wallet',
@@ -26,10 +27,15 @@ export default new Router({
     path: '/investments',
     name: 'investments',
     meta: {
-      title: 'investments'
+      title: 'investments',
+      transfer: 'transfer investments'
     },
     component: () => import(/* webpackChunkName: "investment-page" */ './views/investments')
-  },{
+  }, {
+    path: '/investments/transfer',
+    name: 'transfer investments',
+    component: () => import(/* webpackChunkName: "transfer-page" */ './views/transfer')
+  }, {
     path: '/settings',
     name: 'settings',
     component: () => import(/* webpackChunkName: "settings-page" */ './views/settings')

@@ -1,9 +1,11 @@
 import { stringify } from "querystring";
 import ToDialog from './components/toDialog'
+import walletSelector from '../../../../components/walletSelector'
 export default {
   name: 'form-component',
   components: {
-    ToDialog
+    ToDialog,
+    walletSelector
   },
   props: {
     formObject: {
@@ -20,6 +22,9 @@ export default {
     selectedWallet: {
       type: Object,
       default: () => {}
+    },
+    investments: {
+      type: Boolean
     }
   },
   data () {
@@ -31,8 +36,7 @@ export default {
       ],
       toDialog: false,
       valid: false,
-      // entries: [],
-      // search: null
+      tooltip: false
     }
   },
   computed: {
@@ -49,16 +53,7 @@ export default {
       ]
       if (this.selectedTab === 1) rules.push(v => !!v && (this.selectedTab == 1) && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value')
       return rules
-    },
-    // items () {
-    //   return this.entries.map(entry => {
-    //     const email = entry.email.length > this.descriptionLimit
-    //       ? entry.email.slice(0, this.descriptionLimit) + '...'
-    //       : entry.email
-
-    //     return Object.assign({}, entry, { email })
-    //   })
-    // }
+    }
   },
   mounted () {
 
@@ -66,10 +61,13 @@ export default {
   methods: {
     closetoDialog (save, address) {
       if (save) {
-        this.formObject.to = address
+        this.formObject.to.address = address
       }
       this.toDialog = false
       this.$refs.toDialog.$refs.externForm.reset()
+    },
+    selectWallet (wallet) {
+      this.formObject.to = wallet
     }
   }
 }

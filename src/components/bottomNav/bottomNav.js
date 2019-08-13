@@ -21,10 +21,10 @@ export default {
   methods: {
     handleCta() {
       console.log(this.$route.name)
-      if(this.$route.name === 'transfer') {
+      if(this.$route.name === 'transfer'|| this.$route.name === 'transfer investments') {
         EventBus.$emit('transfer', true)
       } else {
-        this.$router.push({name: 'transfer'})
+        this.$router.push({name: this.$route.meta.transfer})
       }
     },
   },
