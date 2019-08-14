@@ -1,6 +1,6 @@
 
 <section class="to-dialog">
-  <v-dialog dark v-model="dialog" max-width="550" persistent>
+  <v-dialog dark v-model="dialog" max-width="500" persistent>
     <v-card class="primary darken-2" style="height:100%">
       <v-toolbar dark color="primary" dense>
         <!-- <v-toolbar-title class="text-uppercase"></v-toolbar-title> -->
@@ -53,19 +53,19 @@
           </div>
         </div>
 
-        <div v-show="selected === 2">
+        <!-- <div v-show="selected === 2">
           <div class="content" v-if="wallets.length">
             <div>
               <div v-for="(wallet, index) in wallets.filter(x => x.currency === 'gram')" :key='index' >
                 <v-hover>
                   <div slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
-                    <walletCard type="GFT" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>
+                    <walletCard :type="wallet.currency" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>
                   </div>
                 </v-hover>
                 </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </v-card-text>
     </v-card>
   </v-dialog>

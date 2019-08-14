@@ -4,7 +4,7 @@
     
     <div class="text-xs-left" v-if="investments">
       <p>To</p>
-      <walletSelector @onWalletSelected='selectWallet' :wallets="wallets.filter(x=>x.currency==='GFT')" 
+      <walletSelector @onWalletSelected='selectWallet' :wallets="computedWallets" 
         :selected="formObject.to.name"/>
     </div>
 
@@ -16,7 +16,7 @@
     <v-layout>
       <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="formObject.amount" 
         type="number" min="0.00" :rules="amountRules"  class="inputNumber"
-        clearable :append-icon="investments ? 'far fa-question-circle' : ''">   
+        clearable :append-icon="investments ? 'far fa-question-circle' : ''"  :suffix="selectedWallet.currency">   
       </v-text-field>
       <!-- this is icon is invisible -->
       <div style="margin: auto; position: absolute; right: 30px; margin-top: 16px;" v-if="investments">

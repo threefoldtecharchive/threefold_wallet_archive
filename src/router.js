@@ -13,46 +13,103 @@ export default new Router({
     component: home,
     meta: {
       title: 'accounts',
-      transfer: 'transfer'
+      transfer: 'transfer',
+      accent: 'accent',
+      info: {
+        title: 'one hell of a title',
+        text: 'this is info'
+      }
     }
   }, {
     path: '/history/:wallet',
     name: 'history',
+    meta: {
+      accent: 'accent',
+      info: {
+        title: 'one hell of a title',
+        text: 'this is info'
+      }
+    },
     component: () => import(/* webpackChunkName: "history-page" */ './views/history')
   }, {
     path: '/profile',
     name: 'profile',
+    meta: {
+      accent: 'accent'
+    },
     component: () => import(/* webpackChunkName: "profile-page" */ './views/profile')
   }, {
     path: '/investments',
     name: 'investments',
     meta: {
       title: 'investments',
-      transfer: 'transfer investments'
+      transfer: 'transfer investments',
+      accent: 'gold',
+      info: {
+        title: 'one hell of a title',
+        text: 'this is info'
+      }
     },
     component: () => import(/* webpackChunkName: "investment-page" */ './views/investments')
   }, {
+    path: '/investments/history/:wallet',
+    name: 'investments history',
+    meta: {
+      accent: 'gold',
+      info: {
+        title: 'one hell of a title',
+        text: 'this is info'
+      }
+    },
+    component: () => import(/* webpackChunkName: "history-page" */ './views/history')
+  }, {
     path: '/investments/transfer',
     name: 'transfer investments',
+    meta: {
+      accent: 'gold',
+      info: {
+        title: 'one hell of a title',
+        text: 'this is info'
+      }
+    },
     component: () => import(/* webpackChunkName: "transfer-page" */ './views/transfer')
   }, {
     path: '/settings',
     name: 'settings',
+    meta: {
+      accent: 'accent'
+    },
     component: () => import(/* webpackChunkName: "settings-page" */ './views/settings')
   }, {
     path: '/transfer',
     name: 'transfer',
+    meta: {
+      accent: 'accent',
+      info: {
+        title: 'one hell of a title',
+        text: 'this is info'
+      }
+    },
     component: () => import(/* webpackChunkName: "transfer-page" */ './views/transfer')
   }, {
     path: '/login',
     name: 'login',
+    meta: {
+      accent: 'accent'
+    },
     component: () => import(/* webpackChunkName: "login-page" */ './views/login')
   }, {
     path: '/error',
     name: 'error',
+    meta: {
+      accent: 'accent'
+    },
     component: () => import(/* webpackChunkName: "error-page" */ './views/errorpage')
   }, {
     path: '*',
-    redirect: '404'
+    redirect: '404',
+    meta: {
+      accent: 'accent'
+    }
   }]
 })

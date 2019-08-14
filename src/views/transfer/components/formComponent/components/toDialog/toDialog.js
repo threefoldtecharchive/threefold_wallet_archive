@@ -29,7 +29,7 @@ export default {
       tabs: [
         {name:'Intern', value:0}, 
         {name:'Extern',value:1}, 
-        {name:'Deregister',value:2}
+        // {name:'Fiat',value:2}
       ],
       valid: false
     }

@@ -40,6 +40,10 @@ export default {
     }
   },
   computed: {
+    computedWallets () {
+      if (this.$route.query.tab != 'register') return this.wallets.filter(x => x.currency == 'GFT')
+      else return this.wallets.filter(x => x.currency === 'gram')
+    },
     messageRuless() {
       let rules = [
         v => ( typeof v == 'undefined' || (typeof v === 'string' && v.length <= this.maxMessageLength)) || `Message cannot be more than ${this.maxMessageLength} characters long`,

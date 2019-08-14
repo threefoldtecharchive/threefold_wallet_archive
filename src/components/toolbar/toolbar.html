@@ -13,6 +13,14 @@
       </v-layout>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-progress-circular v-if="syncing" indeterminate size="12" color="accent" />
+    <div class="spinner">
+      <v-progress-circular v-if="syncing" indeterminate size="12" color="accent"/>
+    </div>
+    <v-fab-transition>
+      <v-btn small flat fab dark right top class="v-btn--example" @click="informationDialog = true" v-if="$route.meta.info">
+        <v-icon>fas fa-info</v-icon>
+      </v-btn>
+    </v-fab-transition>
   </v-toolbar>
+  <InformationDialog :dialog="informationDialog" :closeDialog="closeInformationDialog" v-if="$route.meta.info"></InformationDialog>
 </section>

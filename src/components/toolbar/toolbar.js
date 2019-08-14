@@ -1,11 +1,14 @@
 import { mapGetters } from 'vuex'
+import InformationDialog from '../informationDialog'
 export default {
-  components: {},
+  components: {
+    InformationDialog
+  },
   name: 'toolbar',
   props: [],
   data () {
     return {
-
+      informationDialog: false
     }
   },
   computed: {
@@ -17,6 +20,8 @@ export default {
 
   },
   methods: {
-
+    closeInformationDialog () {
+      this.informationDialog = false
+    }
   }
 }

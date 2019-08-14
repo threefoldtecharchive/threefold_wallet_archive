@@ -3,4 +3,14 @@
     .v-toolbar {
         border-radius: 0 0 $borderradius $borderradius;
     }
+    .v-btn--example {
+        position: absolute;
+        margin: 0 0 16px 16px;
+    }
+    .spinner {
+        position: absolute;
+        margin: 0 0 16px 16px;
+        right: 10px;
+        top: 7px;
+    }
 }

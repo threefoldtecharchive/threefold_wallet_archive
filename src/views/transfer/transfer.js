@@ -29,18 +29,28 @@ export default {
     EventBus.$on('transfer', (payload) => {
       this.transferConfirmed()
     })
+    this.$router.replace({query: {tab: this.tabs[this.tabs.length - 1]}})
     if (!this.selectedWallet.address) this.selectedWallet = this.computedWallets[0]
   },
   computed: {
     ...mapGetters([
       'wallets'
     ]),
+    tabs () {
+      if (this.$route.name === 'transfer') return ['receive', 'send']
+      else if (this.$route.name === 'transfer investments') return ['register', 'deregister']
+      else return []
+    },
+    active () {
+      return this.$route.query.tab
+    },
     investments () {
       if (this.$route.name === 'transfer investments') return true
       return false
     },
     computedWallets () {
-      if (this.$route.name === 'transfer investments') return this.wallets.filter(x => x.currency === 'gram')
+      if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'register') return this.wallets.filter(x => x.currency === 'gram')
+      else if (this.$route.name === 'transfer investments') return this.wallets.filter(x => x.currency === 'GFT')
       return this.wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')
     }
   },
@@ -55,9 +65,6 @@ export default {
         if (this.checkForm()) this.send()
       }
     },
-    selectWallet (wallet) {
-      this.selectedWallet = wallet
-    },
     send () {
       this.sendCoins({
         from: this.selectedWallet.address,
@@ -68,6 +75,9 @@ export default {
       })
       this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
+    },
+    selectWallet (wallet) {
+      this.selectedWallet = wallet
     },
     checkForm() {
       return this.$refs.formComponent.$refs.form.validate()
