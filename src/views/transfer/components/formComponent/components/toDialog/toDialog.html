@@ -27,8 +27,8 @@
         <div v-show="selected === 0">
           <div class="content" v-if="wallets.length">
             <div>
-              <!-- last filter is needed until transactions between gft and tft are possible -->
-              <div v-for="(wallet, index) in wallets.filter(x => (x.currency === 'TFT' || x.currency === 'GFT') && (x.currency == selectedWallet.currency))" :key='index' >
+              <!-- last filter is needed until transactions between gft and tft are possible  && (x.currency == selectedWallet.currency)--> 
+              <div v-for="(wallet, index) in wallets.filter(x => (x.currency === 'TFT' || x.currency === 'GFT'))" :key='index' >
                 <v-hover>
                   <div slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
                     <walletCard type="TFT" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>

@@ -1,13 +1,13 @@
 import config from '../../public/config'
 import * as tfchain from '../services/tfchain/api'
 import nbhService from '../services/nbhService';
+import {cloneDeep} from 'lodash'
 import { async } from 'q';
 export default ({
   state: {
     // account: window.localStorage.getItem('account') ? JSON.parse(window.localStorage.getItem('account')) : null,
     // addressBook: {},
     syncing: false,
-    transactionSubmitted: false,
     accounts: null
   },
   actions: {
@@ -73,42 +73,6 @@ export default ({
         account.wallet_new(data.walletName, account.wallet_count, 1)
         // pkid.setWallets(account, account.wallets)
       }
-    },
-    sendCoins: (context, data) => {
-      context.commit('setSync', true)
-      console.log('sending in store', data)
-      var account = context.getters.accounts.find(acc => acc.account_name.split(':')[0] === data.currency.toLowerCase())
-      console.log(account)
-      if (account) {
-        var wallet = account.wallets.find(w => w.address === data.from)
-        console.log(wallet)
-        if (wallet) {
-          context.commit('setInformationMessage', `Submitting transaction...`)
-          const builder = wallet.transaction_new()
-          console.log(builder)
-          var sender = JSON.stringify({
-            account: account.account_name,
-            walletname: wallet.wallet_name
-          })
-          try {
-            builder.output_add(data.to.toString(), data.amount.toString())
-            console.log("sending", sender, builder)
-            let builderMessage = data.message ? {sender,message:data.message} : sender
-            builder.send(builderMessage).then(result => {
-              if (result.submitted) {
-                context.commit('setInformationMessage', `Transaction submitted  (${result.transaction.id.substring(4, 0)})...`)
-                context.dispatch('updateAccount')
-                context.commit('setSync', false)
-              } else {
-                console.log("then else...")
-              }
-            })
-          } catch (e) {
-            console.log('catch')
-            console.error(`ERROR while sending coins`, err)
-          }
-        }
-      }
     }
   },
   mutations: {
@@ -118,9 +82,6 @@ export default ({
     setAccounts: (state, accounts) => {
       // window.localStorage.setItem('account', JSON.stringify(account))
       state.accounts = accounts
-    },
-    setTransactionSubmitted(state, submitted) {
-      state.transactionSubmitted = submitted
     },
     updateAddressBook: (state, transactions) => {
     }
@@ -152,13 +113,34 @@ export default ({
             // })
           })
           wallets.push(...t)
-          // fake investment wallets
+        })
+
+        // faking gold wallet
+        let amount = 500
+        let transactions = []
+        wallets.forEach(wallet => {
+          // sender is faucet
+          wallet.transaction.filter(x => x.inputs.length  && x.inputs[0].senders[0] === '0178C06A59ECA06CA656C400CFC5960DA128162A8AA122A41B1051BFF93D4C10C17B024CC8AF88'.toLowerCase()).forEach(async transaction => {
+            if(transaction.confirmed) amount -= parseFloat(transaction.inputs[0].amount.str())
+            let myObj = cloneDeep(await transaction)
+            myObj._outputs = cloneDeep(await transaction._inputs)
+            delete myObj._inputs
+            transactions.push(cloneDeep(myObj))
+          })
+          // receiver is alex' gft wallet
+          wallet.transaction.filter(x => x.outputs.length && x.outputs[0].recipient === '01527bb9b6852cc565c0f19a7fcd0ef764e57808552adb4ab16c7764e40cd37673c303578ddff9'.toLowerCase()).forEach(async transaction => {
+            if(transaction.confirmed) amount += parseFloat(transaction.outputs[0].amount.str())
+            let myObj = cloneDeep(await transaction)
+            myObj._inputs = cloneDeep(await transaction._outputs)
+            delete myObj._outputs
+            transactions.push(cloneDeep(myObj))
+          })
         })
         wallets.push({
           name: 'gold_investment',
           address: 'fake',
-          totalAmount: '5',
-          transaction: [],
+          totalAmount: amount.toString(),
+          transaction: transactions,
           holder: 'fake',
           currency: 'gram',
           isAuthenticated: true
@@ -166,7 +148,6 @@ export default ({
         return wallets
       }
     },
-    syncing: state => state.syncing,
-    transactionSubmitted: state => state.transactionSubmitted
+    syncing: state => state.syncing
   }
 })

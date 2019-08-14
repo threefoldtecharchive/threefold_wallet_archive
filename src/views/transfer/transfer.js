@@ -4,6 +4,7 @@ import FormComponent from './components/formComponent'
 import TransactionInfoDialog from './components/transactionInfoDialog'
 import QrScannerDialog from './components/qrScannerDialog'
 import QrDialog from './components/qrDialog'
+import {cloneDeep} from 'lodash'
 
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -59,9 +60,9 @@ export default {
       'sendCoins'
     ]),
     transferConfirmed (val) {
-      if(this.selectedTab == 0) {
+      if(this.active == 'receive') {
         if (this.checkForm()) this.qrDialog = true
-      } else if (this.selectedTab == 1) {
+      } else if (this.active == 'send' || this.active == 'deregister' || this.active == 'register') {
         if (this.checkForm()) this.send()
       }
     },
@@ -71,7 +72,8 @@ export default {
         to: this.formObject.to.address,
         message: this.formObject.message,
         amount: this.formObject.amount,
-        currency: this.selectedWallet.currency
+        currency: this.selectedWallet.currency,
+        type: `${this.selectedWallet.currency}/${this.wallets.find( x => x.address == this.formObject.to.address).currency}`
       })
       this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
@@ -80,6 +82,8 @@ export default {
       this.selectedWallet = wallet
     },
     checkForm() {
+      // sometimes 'this' is undefined which is incorrect
+      // this error happens when you both visit 'transfer' and 'transfer investments'
       return this.$refs.formComponent.$refs.form.validate()
     },
     formValidation (valid) {

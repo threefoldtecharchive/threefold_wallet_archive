@@ -6,7 +6,7 @@
         <v-btn flat v-for="tab in tabs" :key="tab" class="px-5 my-1 mx-1 round" exact :to="{query:{tab: tab}}" >{{tab}}</v-btn>
       </v-btn-toggle>
     </div>
-    <v-card dark class="primary mt-2" v-if="selectedTab != 2">
+    <v-card dark class="primary mt-2">
       <v-card-text>
         <div>
           <div class="text-xs-left">
