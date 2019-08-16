@@ -25,6 +25,7 @@ export default new Router({
     name: 'history',
     meta: {
       accent: 'accent',
+      transfer: 'transfer',
       info: {
         title: 'one hell of a title',
         text: 'this is info'
@@ -56,6 +57,7 @@ export default new Router({
     name: 'investments history',
     meta: {
       accent: 'gold',
+      transfer: 'transfer investments',
       info: {
         title: 'one hell of a title',
         text: 'this is info'

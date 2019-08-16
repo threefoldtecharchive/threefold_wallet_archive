@@ -31,7 +31,7 @@
               <div v-for="(wallet, index) in wallets.filter(x => (x.currency === 'TFT' || x.currency === 'GFT') && (x.currency == selectedWallet.currency))" :key='index' >
                 <v-hover>
                   <div slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
-                    <walletCard type="TFT" no-padding class="my-2 wallet-card" @click="selectWallet(wallet)" :wallet="wallet"/>
+                    <walletCard no-padding class="my-2 wallet-card" @click="selectWallet(wallet)" :wallet="wallet"/>
                   </div>
                 </v-hover>
                 </div>
@@ -59,7 +59,7 @@
               <div v-for="(wallet, index) in wallets.filter(x => x.currency === 'gram')" :key='index' >
                 <v-hover>
                   <div slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
-                    <walletCard :type="wallet.currency" no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>
+                    <walletCard no-padding class="my-2 wallet-card" @click="selectWallet(wallet.address)" :wallet="wallet"/>
                   </div>
                 </v-hover>
                 </div>
