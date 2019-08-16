@@ -3,15 +3,18 @@
     <v-btn flat dark :to='{name: "home"}'>
       <v-icon class="white--text">fas fa-wallet</v-icon>
     </v-btn>
-    <v-btn flat dark :to='{name: "transfer"}'>
+    <v-btn flat dark :to='{name: $route.meta.transfer}'>
       <v-icon class="white--text">swap_horiz</v-icon>
     </v-btn>
     <v-btn flat dark :to='{name: "investments"}'>
       <v-icon class="white--text">fas fa-piggy-bank</v-icon>
     </v-btn>
   </v-bottom-nav>
-  <v-btn fixed dark fab bottom large class="center" color="accent" @click='handleCta'>
-    <v-icon v-if="$route.name==='transfer'" :disabled="submitDisabled" color="white">check</v-icon>
-    <v-icon v-else>swap_horiz</v-icon>
-  </v-btn>
+  <v-fab-transition>
+    <v-btn fixed dark fab bottom large class="center" :color="$route.meta.accent ? $route.meta.accent : 'accent'" @click='handleCta'>
+      <v-icon v-if="$route.query.tab === 'receive'" :disabled="submitDisabled" color="white">fas fa-qrcode</v-icon>
+      <v-icon v-if="$route.name==='transfer' || $route.name==='transfer investments'" :disabled="submitDisabled" color="white">check</v-icon>
+      <v-icon v-else>swap_horiz</v-icon>
+    </v-btn>
+  </v-fab-transition>
 </section>

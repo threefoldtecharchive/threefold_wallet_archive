@@ -2841,7 +2841,6 @@ export var SingleSignatureWallet =  __class__ ('SingleSignatureWallet', [BaseWal
 		self._balance = SingleSignatureBalance (self._account._chain, self._tfwallet.network_type, __kwargtrans__ ({tfbalance: value, addresses_all: self.addresses}));
 	});},
 	get transaction_new () {return __get__ (this, function (self) {
-		console.log("pipeloi")
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
 			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {

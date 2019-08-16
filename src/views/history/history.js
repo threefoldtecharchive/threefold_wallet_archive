@@ -15,6 +15,10 @@ export default {
     ...mapGetters([
       'wallets'
     ]),
+    computedWallets () {
+      if (this.$route.name == 'investments history') return this.wallets.filter(x => x.currency == 'gram')
+      return this.wallets.filter(x => x.currency != 'gram')
+    },
     groupedTransactions () {
       var transactions = this.wallets.find(x => x.name === this.$route.params.wallet).transaction
       var groupedTransactions = groupBy(transactions, x => {var date
@@ -34,7 +38,7 @@ export default {
   methods: {
     selectWallet (wallet) {
       this.$router.push({
-        name: 'history',
+        name: this.$route.name,
         params: {
           wallet: wallet.name
         }

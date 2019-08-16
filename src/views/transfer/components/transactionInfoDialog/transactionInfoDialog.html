@@ -22,7 +22,7 @@
           <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
           <v-flex>
             <p class="subtitle mb-0 grey--text">To</p>
-            <p class="title mt-0 text-truncate">{{formObject.to}}</p>
+            <p class="title mt-0 text-truncate">{{formObject.to.address}}</p>
           </v-flex>
           <v-flex>
             <p class="subtitle mb-0 grey--text">Amount</p>

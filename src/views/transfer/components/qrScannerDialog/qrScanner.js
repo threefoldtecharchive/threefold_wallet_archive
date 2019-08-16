@@ -17,22 +17,29 @@ export default {
     selectedTab: {
       type: Number
     },
-    onDecode: {
-      type: Function
+    formObject: {
+      type: Object,
+      default: () => {}
     }
-  },
-  data () {
-    return {
-
-    }
-  },
-  computed: {
-
-  },
-  mounted () {
-
   },
   methods: {
-
+    onDecode (code) {
+      code = code.replace('tft:', 'tft://')
+      this.formObject.to.address = this.getQueryVar(code, 'HOST')
+      this.formObject.amount = this.getQueryVar(code, 'amount')
+      this.formObject.message = this.getQueryVar(code, 'message')
+      this.formObject.sender = this.getQueryVar(code, 'sender')
+      this.transactionInfoDialog = true
+    },
+    getQueryVar (url, varName) {
+      var val
+      url = new URL(url)
+      if (varName === 'HOST') {
+        val = url.pathname.replace('//', '')
+      } else {
+        val = url.searchParams.get(varName)
+      }
+      return val
+    }
   }
 }

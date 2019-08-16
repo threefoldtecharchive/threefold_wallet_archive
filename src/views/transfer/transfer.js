@@ -4,6 +4,7 @@ import FormComponent from './components/formComponent'
 import TransactionInfoDialog from './components/transactionInfoDialog'
 import QrScannerDialog from './components/qrScannerDialog'
 import QrDialog from './components/qrDialog'
+import {cloneDeep} from 'lodash'
 
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -20,7 +21,7 @@ export default {
       transactionInfoDialog: false,
       qrScannerDialog: false,
       qrDialog: false,
-      formObject:{},
+      formObject:{to:{}},
       selectedTab: 1,
       selectedWallet: {}
     }
@@ -29,58 +30,59 @@ export default {
     EventBus.$on('transfer', (payload) => {
       this.transferConfirmed()
     })
-    if (!this.selectedWallet.address) this.selectedWallet = this.wallets[0]
-    
+    this.$router.replace({query: {tab: this.tabs[this.tabs.length - 1]}})
+    if (!this.selectedWallet.address) this.selectedWallet = this.computedWallets[0]
+  },
+  beforeDestroy () {
+    EventBus.$off('transfer')
   },
   computed: {
     ...mapGetters([
       'wallets'
     ]),
+    tabs () {
+      if (this.$route.name === 'transfer') return ['receive', 'send']
+      else if (this.$route.name === 'transfer investments') return ['register', 'deregister']
+      else return []
+    },
+    active () {
+      return this.$route.query.tab
+    },
+    investments () {
+      if (this.$route.name === 'transfer investments') return true
+      return false
+    },
+    computedWallets () {
+      if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'register') return this.wallets.filter(x => x.currency === 'gram')
+      else if (this.$route.name === 'transfer investments') return this.wallets.filter(x => x.currency === 'GFT')
+      return this.wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')
+    }
   },
   methods: {
     ...mapActions([
       'sendCoins'
     ]),
     transferConfirmed (val) {
-      if(this.selectedTab == 0) {
-        console.log("show QR")
+      if(this.active == 'receive') {
         if (this.checkForm()) this.qrDialog = true
-      } else if (this.selectedTab == 1) {
-        console.log("send money")
+      } else if (this.active == 'send' || this.active == 'deregister' || this.active == 'register') {
         if (this.checkForm()) this.send()
       }
-    },
-    selectWallet (wallet) {
-      this.selectedWallet = wallet
     },
     send () {
       this.sendCoins({
         from: this.selectedWallet.address,
-        to: this.formObject.to,
+        to: this.formObject.to.address,
         message: this.formObject.message,
         amount: this.formObject.amount,
-        currency: this.selectedWallet.currency
+        currency: this.selectedWallet.currency,
+        type: `${this.selectedWallet.currency}/${this.wallets.find( x => x.address == this.formObject.to.address).currency}`
       })
-      this.formObject = {}
+      this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
     },
-    onDecode (code) {
-      code = code.replace('tft:', 'tft://')
-      this.formObject.to = this.getQueryVar(code, 'HOST')
-      this.formObject.amount = this.getQueryVar(code, 'amount')
-      this.formObject.message = this.getQueryVar(code, 'message')
-      this.formObject.sender = this.getQueryVar(code, 'sender')
-      this.transactionInfoDialog = true
-    },
-    getQueryVar (url, varName) {
-      var val
-      url = new URL(url)
-      if (varName === 'HOST') {
-        val = url.pathname.replace('//', '')
-      } else {
-        val = url.searchParams.get(varName)
-      }
-      return val
+    selectWallet (wallet) {
+      this.selectedWallet = wallet
     },
     checkForm() {
       return this.$refs.formComponent.$refs.form.validate()
@@ -99,9 +101,9 @@ export default {
     }
   },
   watch: {
-    selectedTab (val) {
-      this.selectedWallet = this.wallets[0]
-      this.formObject = {}
+    '$route.query.tab' (val) {
+      this.selectedWallet = this.computedWallets[0]
+      this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.resetValidation()
     },
     wallets: {

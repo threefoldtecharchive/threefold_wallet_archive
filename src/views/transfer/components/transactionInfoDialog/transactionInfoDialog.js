@@ -32,19 +32,5 @@ export default {
       type: Object,
       default: () => {}
     }
-  },
-  data () {
-    return {
-
-    }
-  },
-  computed: {
-
-  },
-  mounted () {
-    
-  },
-  methods: {
-
   }
 }

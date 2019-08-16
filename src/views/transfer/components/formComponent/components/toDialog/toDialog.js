@@ -17,13 +17,20 @@ export default {
     },
     toRules: {
       type: Array
+    },
+    selectedWallet: {
+      type: Object
     }
   },
   data () {
     return {
       selected: 0,
       externAddress: '',
-      tabs: [{name:'Intern', value:0}, {name:'Extern',value:1}], // , {name:'Fiat',value:2}
+      tabs: [
+        {name:'Intern', value:0}, 
+        {name:'Extern',value:1}, 
+        // {name:'Fiat',value:2}
+      ],
       valid: false
     }
   },
