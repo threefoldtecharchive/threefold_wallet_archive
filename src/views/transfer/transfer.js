@@ -105,13 +105,7 @@ export default {
   watch: {
     '$route.query.tab' () {
       this.formObject = {to:{}}
-      this.$refs.formComponent.$refs.form.resetValidation()
-    },
-    wallets: {
-      handler () {
-        this.$refs.formComponent.$refs.form.validate()
-      },
-      deep: true
+      this.$refs.formComponent.$refs.form.reset()
     }
   }
 }
