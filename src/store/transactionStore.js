@@ -9,7 +9,7 @@ export default ({
 			let type = data.type.toLowerCase()
 			if (type == 'gram/gft' || type == 'gft/gram') context.dispatch('transferGold', data)
 			else if (type == 'gft/gft' || type == 'tft/tft') context.dispatch('transferCoins', data)
-			else context.commit('setInformationMessage', `Something went wrong with your transaction`)
+			else context.commit('setInformationMessage', `This transaction is currently not supported`)
 		},
 		transferGold: (context, data) => {
 			// gram/gft => sell gold for gft

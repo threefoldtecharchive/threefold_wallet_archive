@@ -18,6 +18,9 @@ export default {
       this.submitDisabled = payload
     })
   },
+  beforeDestroy () {
+    EventBus.$off('transferDisabled')
+  },
   methods: {
     handleCta() {
       console.log(this.$route.name)

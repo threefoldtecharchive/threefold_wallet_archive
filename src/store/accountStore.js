@@ -120,25 +120,27 @@ export default ({
         let transactions = []
         wallets.forEach(wallet => {
           // sender is faucet
-          wallet.transaction.filter(x => x.inputs.length  && x.inputs[0].senders[0] === '0178C06A59ECA06CA656C400CFC5960DA128162A8AA122A41B1051BFF93D4C10C17B024CC8AF88'.toLowerCase()).forEach(async transaction => {
+          let sender = '0178C06A59ECA06CA656C400CFC5960DA128162A8AA122A41B1051BFF93D4C10C17B024CC8AF88'
+          wallet.transaction.filter(x => x.inputs.length  && x.inputs[0].senders[0] === sender.toLowerCase()).forEach(transaction => {
             if(transaction.confirmed) amount -= parseFloat(transaction.inputs[0].amount.str())
-            let myObj = cloneDeep(await transaction)
-            myObj._outputs = cloneDeep(await transaction._inputs)
+            let myObj = cloneDeep(transaction)
+            myObj._outputs = cloneDeep(transaction._inputs)
             delete myObj._inputs
             transactions.push(cloneDeep(myObj))
           })
           // receiver is alex' gft wallet
-          wallet.transaction.filter(x => x.outputs.length && x.outputs[0].recipient === '01527bb9b6852cc565c0f19a7fcd0ef764e57808552adb4ab16c7764e40cd37673c303578ddff9'.toLowerCase()).forEach(async transaction => {
+          let receiver = '01527bb9b6852cc565c0f19a7fcd0ef764e57808552adb4ab16c7764e40cd37673c303578ddff9'
+          wallet.transaction.filter(x => x.outputs.length && x.outputs[0].recipient === receiver.toLowerCase()).forEach(transaction => {
             if(transaction.confirmed) amount += parseFloat(transaction.outputs[0].amount.str())
-            let myObj = cloneDeep(await transaction)
-            myObj._inputs = cloneDeep(await transaction._outputs)
+            let myObj = cloneDeep(transaction)
+            myObj._inputs = cloneDeep(transaction._outputs)
             delete myObj._outputs
             transactions.push(cloneDeep(myObj))
           })
         })
         wallets.push({
           name: 'gold_investment',
-          address: 'fake',
+          address: '01ca604e0cee992bcbace7c8201a3898a4c56ce3aa5503546bfakegoldfakegoldfakegoldfake',
           totalAmount: amount.toString(),
           transaction: transactions,
           holder: 'fake',

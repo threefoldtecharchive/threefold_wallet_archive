@@ -33,6 +33,9 @@ export default {
     this.$router.replace({query: {tab: this.tabs[this.tabs.length - 1]}})
     if (!this.selectedWallet.address) this.selectedWallet = this.computedWallets[0]
   },
+  beforeDestroy () {
+    EventBus.$off('transfer')
+  },
   computed: {
     ...mapGetters([
       'wallets'
@@ -82,8 +85,6 @@ export default {
       this.selectedWallet = wallet
     },
     checkForm() {
-      // sometimes 'this' is undefined which is incorrect
-      // this error happens when you both visit 'transfer' and 'transfer investments'
       return this.$refs.formComponent.$refs.form.validate()
     },
     formValidation (valid) {
@@ -100,8 +101,8 @@ export default {
     }
   },
   watch: {
-    selectedTab (val) {
-      this.selectedWallet = this.wallets[0]
+    '$route.query.tab' (val) {
+      this.selectedWallet = this.computedWallets[0]
       this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.resetValidation()
     }

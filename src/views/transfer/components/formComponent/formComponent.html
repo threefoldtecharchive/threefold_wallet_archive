@@ -6,6 +6,8 @@
       <p>To</p>
       <walletSelector @onWalletSelected='selectWallet' :wallets="computedWallets" 
         :selected="formObject.to.name"/>
+      <!-- invisible text-field to force validation for walletSelector-->
+      <v-text-field v-model='formObject.to.address' :rules="toRules" v-show="false"></v-text-field>
     </div>
 
     <v-text-field v-if="selectedTab == 1 && !investments" box prepend-icon="person" color="white" label="To (Wallet Address)"
