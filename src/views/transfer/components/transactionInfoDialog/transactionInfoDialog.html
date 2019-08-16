@@ -19,7 +19,8 @@
       <v-card-text>
         <v-layout justify-space-between fill-height column>
           <p v-if="selectedTab == 1">From</p>
-          <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" />
+          <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" v-if="$route.query.tab == 'receive'"/>
+          <walletCard  no-padding class="my-2" :wallet="selectedWallet" v-else/>
           <v-flex>
             <p class="subtitle mb-0 grey--text">To</p>
             <p class="title mt-0 text-truncate">{{formObject.to.address}}</p>
@@ -32,7 +33,7 @@
             <p class="subtitle mb-0 grey--text">Message</p>
             <p class="title mt-0">{{formObject.message}}</p>
           </v-flex>
-          <v-btn @click="send" class="accent">
+          <v-btn @click="closeDialog(true)" class="accent">
             Confirm
           </v-btn>
         </v-layout>

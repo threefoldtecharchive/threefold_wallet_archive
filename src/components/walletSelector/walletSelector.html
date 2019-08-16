@@ -1,5 +1,7 @@
 <section class="wallet-selector">
   <v-layout :class="`horizontal align-center pb-2 mb-3 ${noClip? 'noclip' : ''}`" >
-      <walletCard style="height:100%;" :type="wallet.currency" class="mx-2" clickable v-for="(wallet, index) in wallets" :key='index' :wallet="wallet" :selected="wallet.name == selected" @click.native='$emit("onWalletSelected", wallet)'/>
+      <walletCard style="height:100%;" :type="wallet.currency" class="mx-2" clickable 
+      v-for="(wallet, index) in wallets" :key='index' :wallet="wallet" 
+      :selected="wallet.name == selected" @click.native='$emit("onWalletSelected", wallet)'/>
   </v-layout>
 </section>
