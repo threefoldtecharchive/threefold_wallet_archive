@@ -20,9 +20,10 @@
       clearable  :suffix="selectedWallet.currency">   
     </v-text-field>
 
-    <div>
-      test
-    </div>
+    <v-layout px-4 mx-2 mb-3 column wrap v-if="$route.query.tab != 'receive'">
+      <v-flex>Exchange rate: {{exchangeRate}}</v-flex>
+      <v-flex>Your rate: {{yourExchangeRate}}</v-flex>
+    </v-layout>
 
     <v-textarea box prepend-icon="message" color="white" label="Message" v-model="formObject.message" 
       :rules="messageRuless" :counter="maxMessageLength" clearable/>

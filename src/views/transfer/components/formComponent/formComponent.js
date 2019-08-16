@@ -57,15 +57,23 @@ export default {
       ]
       if (this.selectedTab === 1) rules.push(v => !!v && (this.selectedTab == 1) && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount.replace(',', '')) || 'Amount must be smaller than wallet value')
       return rules
+    },
+    exchangeRate () {
+      if (this.formObject.to.currency) return `1 ${this.selectedWallet.currency} = 1 ${this.formObject.to.currency}`
+      return ''
+    },
+    yourExchangeRate () {
+      if (this.formObject.to.currency && this.formObject.amount) return `${this.formObject.amount} ${this.selectedWallet.currency} = ${this.formObject.amount} ${this.formObject.to.currency}`
+      return ''
     }
   },
   mounted () {
 
   },
   methods: {
-    closetoDialog (save, address) {
+    closetoDialog (save, wallet) {
       if (save) {
-        this.formObject.to.address = address
+        this.formObject.to = wallet
       }
       this.toDialog = false
       this.$refs.toDialog.$refs.externForm.reset()
