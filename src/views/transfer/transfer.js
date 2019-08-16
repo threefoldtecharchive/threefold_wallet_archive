@@ -83,6 +83,8 @@ export default {
     },
     selectWallet (wallet) {
       this.selectedWallet = wallet
+      this.formObject = {to:{}}
+      this.$refs.formComponent.$refs.form.reset()
     },
     checkForm() {
       return this.$refs.formComponent.$refs.form.validate()
@@ -101,10 +103,9 @@ export default {
     }
   },
   watch: {
-    '$route.query.tab' (val) {
-      this.selectedWallet = this.computedWallets[0]
+    '$route.query.tab' () {
       this.formObject = {to:{}}
-      this.$refs.formComponent.$refs.form.resetValidation()
+      this.$refs.formComponent.$refs.form.reset()
     }
   }
 }

@@ -41,8 +41,8 @@ export default {
 
   },
   methods: {
-    selectWallet (address) {
-      this.closeDialog(true, address)
+    selectWallet (wallet) {
+      this.closeDialog(true, {address: wallet.address, currency: wallet.currency})
       this.$refs.externForm.reset()
       setTimeout(() => {
         this.selected = 0
