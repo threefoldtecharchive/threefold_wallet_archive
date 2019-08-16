@@ -1,7 +1,8 @@
 import walletSelector from '../../../../components/walletSelector'
+import walletCard from '../../../../components/walletCard'
 export default {
   name: 'transaction-info-dialog',
-  components: {walletSelector},
+  components: {walletSelector, walletCard},
   props: [],
   props: {
     dialog: {

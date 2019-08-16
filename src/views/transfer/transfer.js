@@ -42,7 +42,7 @@ export default {
     ]),
     tabs () {
       if (this.$route.name === 'transfer') return ['receive', 'send']
-      else if (this.$route.name === 'transfer investments') return ['register', 'deregister']
+      else if (this.$route.name === 'transfer investments') return ['deregister', 'register']
       else return []
     },
     active () {
@@ -53,7 +53,7 @@ export default {
       return false
     },
     computedWallets () {
-      if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'register') return this.wallets.filter(x => x.currency === 'gram')
+      if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'deregister') return this.wallets.filter(x => x.currency === 'gram')
       else if (this.$route.name === 'transfer investments') return this.wallets.filter(x => x.currency === 'GFT')
       return this.wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')
     }
@@ -65,8 +65,8 @@ export default {
     transferConfirmed (val) {
       if(this.active == 'receive') {
         if (this.checkForm()) this.qrDialog = true
-      } else if (this.active == 'send' || this.active == 'deregister' || this.active == 'register') {
-        if (this.checkForm()) this.send()
+      } else if (this.active == 'send' || this.active == 'register' || this.active == 'deregister') {
+        if (this.checkForm()) this.transactionInfoDialog = true
       }
     },
     send () {
@@ -76,7 +76,7 @@ export default {
         message: this.formObject.message,
         amount: this.formObject.amount,
         currency: this.selectedWallet.currency,
-        type: `${this.selectedWallet.currency}/${this.wallets.find( x => x.address == this.formObject.to.address).currency}`
+        type: `${this.selectedWallet.currency}/${this.formObject.to.currency}`
       })
       this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
@@ -93,6 +93,7 @@ export default {
       EventBus.$emit('transferDisabled', !valid)
     },
     closeTransactionInfoDialog (save) {
+      if (save) this.send()
       this.transactionInfoDialog = false
     },
     closeQrScannerDialog (save) {
@@ -106,6 +107,7 @@ export default {
     '$route.query.tab' () {
       this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
+      this.selectedWallet = this.computedWallets[0]
     }
   }
 }

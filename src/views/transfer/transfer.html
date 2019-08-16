@@ -31,7 +31,7 @@
     
     <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog" 
     :selectedTab="selectedTab" :wallets="wallets" :send="send" :selectedWallet="selectedWallet" 
-    :selectWallet="selectWallet" :formObject="formObject"></TransactionInfoDialog>
+    :selectWallet="selectWallet" :formObject="formObject" v-if="selectedWallet.address"></TransactionInfoDialog>
     
   <QrScannerDialog :dialog="qrScannerDialog" :closeDialog="closeQrScannerDialog" 
     :selectedTab="selectedTab" :formObject="formObject"></QrScannerDialog>

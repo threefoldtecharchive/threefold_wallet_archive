@@ -1,4 +1,3 @@
-import { stringify } from "querystring";
 import ToDialog from './components/toDialog'
 import walletSelector from '../../../../components/walletSelector'
 export default {
@@ -41,7 +40,7 @@ export default {
   },
   computed: {
     computedWallets () {
-      if (this.$route.query.tab != 'register') return this.wallets.filter(x => x.currency == 'GFT')
+      if (this.$route.query.tab != 'deregister') return this.wallets.filter(x => x.currency == 'GFT')
       else return this.wallets.filter(x => x.currency === 'gram')
     },
     messageRuless() {
@@ -55,7 +54,7 @@ export default {
         v => !!v || 'Amount is required',
         v => !!v && parseFloat(v.replace(',', '')) > 0 || 'Amount must be greater than 0',
       ]
-      if (this.selectedTab === 1) rules.push(v => !!v && (this.selectedTab == 1) && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount.replace(',', '')) || 'Amount must be smaller than wallet value')
+      if (['send', 'deregister', 'register'].some(x => x === this.$route.query.tab)) rules.push(v => !!v && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value')
       return rules
     },
     exchangeRate () {
@@ -79,7 +78,11 @@ export default {
       this.$refs.toDialog.$refs.externForm.reset()
     },
     selectWallet (wallet) {
-      this.formObject.to = wallet
+      this.formObject.to = {
+        name: wallet.name,
+        currency: wallet.currency,
+        address: wallet.address
+      }
     }
   }
 }

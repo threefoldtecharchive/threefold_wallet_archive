@@ -13,7 +13,7 @@
           <v-layout column class="justify-space-between fill-height">
             <amountIndicator small class="accent pl-3 pr-2 py-1 align-self-end badge-top ma-0" :amount='totalAmount'
               :valuta='wallet.currency' />
-            <v-btn dark small icon flat @click.stop="copyAddress" class="accent pa-3 align-self-end badge-bottom ma-0"  v-if="wallet.currency === 'GFT' || wallet.currency === 'TFT'">
+            <v-btn dark small icon flat @click.stop="copyAddress" class="accent pa-3 align-self-end badge-bottom ma-0"  v-if="wallet.currency != 'gram'">
               <v-icon size="15">
                 file_copy
               </v-icon>
