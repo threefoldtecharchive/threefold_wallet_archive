@@ -142,7 +142,7 @@ export default ({
           name: 'gold_investment',
           address: '01ca604e0cee992bcbace7c8201a3898a4c56ce3aa5503546bfakegoldfakegoldfakegoldfake',
           totalAmount: amount.toString(),
-          transaction: transactions,
+          transaction: transactions.sort((a, b) => b.timestamp - a.timestamp),
           holder: 'fake',
           currency: 'gram',
           isAuthenticated: true
