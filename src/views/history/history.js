@@ -2,7 +2,7 @@ import walletSelector from '../../components/walletSelector'
 import historyCard from '../../components/historyCard'
 import { mapGetters } from 'vuex'
 import { groupBy } from 'lodash'
-
+import moment from 'moment'
 export default {
   name: 'history',
   components: { walletSelector, historyCard },
@@ -45,18 +45,25 @@ export default {
       })
     },
     getMonth (date) {
+      date = this.parseDate(date)
       const options = { month: 'short' }
-      date = Date.parse(date)
       return new Intl.DateTimeFormat('en-US', options).format(date)
     },
     getDay (date) {
-      date = Date.parse(date)
+      date = this.parseDate(date)
       return date.getDate()
     },
     getDayName (date) {
+      date = this.parseDate(date)
       const options = { weekday: 'short' }
-      date = Date.parse(date)
       return new Intl.DateTimeFormat('en-US', options).format(date)
+    },
+    parseDate(date) {
+      if (Date.parse(date).getTime() - 60000 * Date.parse(date).getTimezoneOffset() == 0){
+        return new Date()
+      } else {
+        return Date.parse(date)
+      }
     }
   }
 }
