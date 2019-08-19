@@ -38,7 +38,7 @@
               <p class="title mt-0">{{formObject.message}}</p>
             </v-flex>
           </v-layout>
-          <v-btn @click="closeDialog(true)" class="accent">
+          <v-btn @click="closeDialog(true)" dark :color="$route.meta.accent">
             Confirm
           </v-btn>
         </v-layout>

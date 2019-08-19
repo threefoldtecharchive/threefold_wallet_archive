@@ -5,7 +5,7 @@
     height: 100%;
     border-left: 5px solid var(--error-color);
     &.incoming {
-      border-color: var(--active-color);
+      border-color: var(--accent-color);
     }
     .v-btn {
       position: absolute !important;
