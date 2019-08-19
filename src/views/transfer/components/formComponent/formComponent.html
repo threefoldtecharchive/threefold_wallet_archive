@@ -21,8 +21,11 @@
     </v-text-field>
 
     <v-layout px-4 mx-2 mb-3 column wrap v-if="$route.query.tab != 'receive'">
-      <v-flex>Exchange rate: {{exchangeRate}}</v-flex>
-      <v-flex>Your rate: {{yourExchangeRate}}</v-flex>
+      <v-flex>Fee: 0,10 {{selectedWallet.currency}}</v-flex>
+      <span v-if="(formObject.to.currency && selectedWallet.currency != formObject.to.currency)">
+        <v-flex>Exchange rate: {{exchangeRate}}</v-flex>
+        <v-flex v-if="formObject.amount">Your rate: {{yourExchangeRate}}</v-flex>
+      </span>
     </v-layout>
 
     <v-textarea box prepend-icon="message" color="white" label="Message" v-model="formObject.message" 

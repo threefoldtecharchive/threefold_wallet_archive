@@ -69,8 +69,8 @@ export default {
         if (this.checkForm()) this.transactionInfoDialog = true
       }
     },
-    send () {
-      this.sendCoins({
+    async send () {
+      await this.sendCoins({
         from: this.selectedWallet.address,
         to: this.formObject.to.address,
         message: this.formObject.message,
@@ -80,6 +80,7 @@ export default {
       })
       this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
+      this.$router.push({name: this.$route.meta.overview})
     },
     selectWallet (wallet) {
       this.selectedWallet = wallet

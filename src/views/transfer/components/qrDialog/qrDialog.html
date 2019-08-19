@@ -1,7 +1,7 @@
 
 <section class="qr-dialog">
-  <v-dialog dark v-model="dialog" max-width="500" persistent>
-    <v-card class="primary darken-2" style="height:100%">
+  <v-dialog v-model="dialog" max-width="400" persistent>
+    <v-card style="height:100%">
       <v-toolbar dark color="primary">
         <v-toolbar-title class="text-uppercase">Show QR to the sender</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -12,12 +12,23 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <div class="text-xs-center">
-          <p>Amount: {{formObject.amount}} tft</p>
-          <p>To: {{selectedWallet.name}}</p>
-          <p>Message: {{formObject.message}}</p>
-          <qrcode :value="qrText" v-if="selectedTab == 0" class="round"
-            :options="{ color: { darklight: '#fff',  dark: $vuetify.theme.primary}  }" />
+        <div class="px-2">
+          <v-layout justify-space-between fill-height column px-2>
+            <p class="subtitle mb-0 grey--text">From</p>
+            <walletCard  no-padding class="my-2" :wallet="selectedWallet" v-if="selectedWallet.address"/>
+            <v-flex>
+              <p class="subtitle mb-0 grey--text">Amount</p>
+              <p class="title mt-0">{{formObject.amount}}</p>
+            </v-flex>
+            <v-flex v-if="formObject.message">
+              <p class="subtitle mb-0 grey--text">Message</p>
+              <p class="title mt-0">{{formObject.message}}</p>
+            </v-flex>
+          </v-layout>
+          <div class="text-xs-center">
+            <qrcode :value="qrText" v-if="selectedTab == 0" class="round"
+              :options="{ color: { darklight: '#fff',  dark: $vuetify.theme.primary}  }" />
+          </div>
         </div>
       </v-card-text>
     </v-card>

@@ -28,7 +28,7 @@ export default {
   },
   data () {
     return {
-      maxMessageLength: 32,
+      maxMessageLength: 10,
       toRules: [
         v => !!v || 'Wallet address is required!',
         v => (!!v && v.length >= 78 && v.length <= 78) || 'Wallet address length is not valid!',
@@ -81,7 +81,11 @@ export default {
       this.formObject.to = {
         name: wallet.name,
         currency: wallet.currency,
-        address: wallet.address
+        address: wallet.address,
+        name: wallet.name,
+        holder: wallet.holder,
+        totalAmount: wallet.totalAmount,
+        isAuthenticated: wallet.isAuthenticated
       }
     }
   }

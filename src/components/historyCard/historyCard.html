@@ -1,7 +1,7 @@
 <section class="history-card">
   <v-card ripple :class="`mb-2 clickable ${!transaction.confirmed ? 'grey lighten-1' : ''} ${outgoing ? 'outgoing' : 'incoming'}`" @click="show = true">
     <v-card-text>
-      <v-layout align-center>
+      <v-layout  align-center v-if="$vuetify.breakpoint.mdAndUp">
         <v-avatar>
           <v-icon class="primary" color="white">person</v-icon>
           <!-- <v-img src="https://i.pravatar.cc/50?img=50"></v-img> -->
@@ -13,7 +13,24 @@
           </v-layout>
         </v-flex>
         <v-flex class="text-xs-right">
-          <amountIndicator :color="outgoing? 'error' : 'accent'" :amount='amount' :valuta='valuta' />
+          <amountIndicator :color="outgoing? 'error' : 'accent'" :amount='amount' :valuta='valuta'/>
+        </v-flex>
+      </v-layout>
+      <v-layout v-else column>
+        <v-flex class="mb-3">
+          <v-layout column>
+            <span class="title text-uppercase text-truncate ">{{outgoing? receiver : sender}}</span>
+          </v-layout>
+        </v-flex>
+        <v-flex>
+          <v-layout row>
+            <v-flex>
+              <span class="font-weight-light text-truncate" v-if="transaction.message">{{transaction.message}}</span>
+            </v-flex>
+            <v-flex>
+              <amountIndicator :color="outgoing? 'error' : 'accent'" :amount='amount' :valuta='valuta' />
+            </v-flex>
+          </v-layout>
         </v-flex>
       </v-layout>
     </v-card-text>

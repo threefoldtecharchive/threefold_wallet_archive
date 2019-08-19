@@ -47,10 +47,10 @@ export default ({
 
       context.commit('setAccounts', [tfAccount, gfAccount])
       context.dispatch('updateAccounts')
-      context.dispatch('createWallet', { chain: 'tft', walletName: 'Daily' })
-      context.dispatch('createWallet', { chain: 'tft', walletName: 'Holiday' })
-      context.dispatch('createWallet', { chain: 'gft', walletName: 'GFT_Daily' })
-      context.dispatch('createWallet', { chain: 'gft', walletName: 'GFT_Holiday' })
+      context.dispatch('createWallet', { chain: 'tft', walletName: 'daily' })
+      context.dispatch('createWallet', { chain: 'tft', walletName: 'savings' })
+      context.dispatch('createWallet', { chain: 'gft', walletName: 'gold tokens' })
+      context.dispatch('createWallet', { chain: 'gft', walletName: 'gold tokens savings' })
     },
     updateAccounts(context) {
       context.getters.accounts.forEach(account => {
@@ -138,7 +138,7 @@ export default ({
           })
         })
         wallets.push({
-          name: 'gold_investment',
+          name: 'physical gold',
           address: '01ca604e0cee992bcbace7c8201a3898a4c56ce3aa5503546bfakegoldfakegoldfakegoldfake',
           totalAmount: amount.toString(),
           transaction: transactions.sort((a, b) => b.timestamp - a.timestamp),
