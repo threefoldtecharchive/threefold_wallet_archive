@@ -17,22 +17,24 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <v-layout justify-space-between fill-height column>
-          <p v-if="selectedTab == 1">From</p>
-          <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" v-if="$route.query.tab == 'receive'"/>
-          <walletCard  no-padding class="my-2" :wallet="selectedWallet" v-else/>
-          <v-flex>
-            <p class="subtitle mb-0 grey--text">To</p>
-            <p class="title mt-0 text-truncate">{{formObject.to.address}}</p>
-          </v-flex>
-          <v-flex>
-            <p class="subtitle mb-0 grey--text">Amount</p>
-            <p class="title mt-0">{{formObject.amount}}</p>
-          </v-flex>
-          <v-flex>
-            <p class="subtitle mb-0 grey--text">Message</p>
-            <p class="title mt-0">{{formObject.message}}</p>
-          </v-flex>
+        <v-layout fill-height column>
+          <v-layout justify-space-between fill-height column px-2>
+            <p v-if="selectedTab == 1">From</p>
+            <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name" v-if="$route.query.tab == 'receive'"/>
+            <walletCard  no-padding class="my-2" :wallet="selectedWallet" v-else/>
+            <v-flex>
+              <p class="subtitle mb-0 grey--text">To</p>
+              <p class="title mt-0 text-truncate">{{formObject.to.address}}</p>
+            </v-flex>
+            <v-flex>
+              <p class="subtitle mb-0 grey--text">Amount</p>
+              <p class="title mt-0">{{formObject.amount}}</p>
+            </v-flex>
+            <v-flex>
+              <p class="subtitle mb-0 grey--text">Message</p>
+              <p class="title mt-0">{{formObject.message}}</p>
+            </v-flex>
+          </v-layout>
           <v-btn @click="closeDialog(true)" class="accent">
             Confirm
           </v-btn>
