@@ -1,26 +1,21 @@
 
 <section class="to-dialog">
-  <v-dialog v-model="dialog" max-width="500" persistent>
-    <v-card style="height:100%">
+  <v-dialog dark v-model="dialog" max-width="500" persistent>
+    <v-card class="primary darken-2" style="height:100%">
       <v-toolbar dark color="primary" dense>
         <!-- <v-toolbar-title class="text-uppercase"></v-toolbar-title> -->
         <v-spacer></v-spacer>
         <v-btn icon flat @click="closeDialog(false)">
-          <v-icon color="$route.meta.accent">
+          <v-icon :color="$route.meta.accent">
             close
           </v-icon>
         </v-btn>
         <template v-slot:extension>
           <div class="text-xs-center" style="margin:auto;">
-            <v-btn-toggle v-model="selected" dark active-class="red" mandatory class="round elevation-0">
+            <v-btn-toggle v-model="selected" dark active-class="red" mandatory class="primary round elevation-0">
               <v-btn flat class="px-5 my-1 mx-1 round" v-for="tab in tabs">{{tab.name}}</v-btn>
             </v-btn-toggle>
           </div>
-          <!-- <div v-else style="width: 100%;">
-            <v-select :items="tabs" 
-              v-model="selected" item-text="name" item-value="value" label="To" color="white" 
-              hide-selected hide-details dense single-line full-width style="top:-7px;"></v-select>
-          </div> -->
         </template>
       </v-toolbar>
       <v-card-text>
@@ -30,9 +25,9 @@
               <!-- last filter is needed until transactions between gft and tft are possible  && (x.currency == selectedWallet.currency)--> 
               <div v-for="(wallet, index) in wallets.filter(x => (x.currency === 'TFT' || x.currency === 'GFT') && (x.currency == selectedWallet.currency))" :key='index' >
                 <v-hover>
-                  <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
-                    <walletCard no-padding class="my-2 wallet-card remove-margin" @click="selectWallet(wallet)" :wallet="wallet" clickable/>
-                  </v-card>
+                  <div slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
+                    <walletCard no-padding class="my-2 wallet-card" @click="selectWallet(wallet)" :wallet="wallet"/>
+                  </div>
                 </v-hover>
                 </div>
             </div>
@@ -41,12 +36,12 @@
 
         <div v-show="selected === 1">
           <v-form ref="externForm" v-model="valid">
-            <v-text-field box clearable prepend-icon="person" color="primary" label="To (Wallet Address)"
+            <v-text-field box clearable prepend-icon="person" color="white" label="To (Wallet Address)"
               v-model='externAddress' :rules="toRules"/>
           </v-form>
           <div class="text-xs-center">
             <div>
-              <v-btn fab class="center" :color="$route.meta.accent" @click="selectWallet({address: externAddress})" :disabled="!valid">
+              <v-btn dark fab class="center" :color="$route.meta.accent" @click="selectWallet({address: externAddress})" :disabled="!valid">
                 <v-icon>check</v-icon>
               </v-btn>
             </div>
