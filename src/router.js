@@ -69,6 +69,7 @@ export default new Router({
     name: 'transfer investments',
     meta: {
       accent: 'gold',
+      overview: 'investments',
       info: {
         title: 'one hell of a title',
         text: 'this is info'
@@ -87,6 +88,7 @@ export default new Router({
     name: 'transfer',
     meta: {
       accent: 'accent',
+      overview: 'home',
       info: {
         title: 'one hell of a title',
         text: 'this is info'
