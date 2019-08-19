@@ -6,7 +6,7 @@
         <v-toolbar-title class="text-uppercase">Show QR to the sender</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon flat @click="closeDialog(false)">
-          <v-icon color="accent">
+          <v-icon :color="$route.meta.accent">
             close
           </v-icon>
         </v-btn>

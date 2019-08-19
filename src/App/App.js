@@ -27,7 +27,9 @@ export default {
       return {
         '--primary-color': this.$vuetify.theme.primary,
         '--accent-color': this.$vuetify.theme.accent,
-        '--error-color': this.$vuetify.theme.error
+        '--error-color': this.$vuetify.theme.error,
+        '--gold-color': this.$vuetify.theme.gold,
+        '--active-color': this.$vuetify.theme[this.$route.meta.accent]
       }
     }
   },

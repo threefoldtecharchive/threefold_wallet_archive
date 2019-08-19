@@ -2,7 +2,7 @@
   <v-toolbar app class="primary white--text elevation-0">
     <v-toolbar-title class="headline text-uppercase pl-2">
       <div class="spinner">
-        <v-progress-circular v-if="syncing" indeterminate size="12" color="accent"/>
+        <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent"/>
       </div>
       <v-layout align-center>
         <h1>
