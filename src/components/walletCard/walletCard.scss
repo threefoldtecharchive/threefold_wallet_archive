@@ -5,12 +5,17 @@
     background: var(--primary-color);
     &.gft-image{
       &::before {
-        background-image: url(https://picsum.photos/id/413/2666/1500);
+        background-image: url(https://picsum.photos/id/222/1800/977);
       }
     }
     &.tft-image{
       &::before {
         background-image: url(https://picsum.photos/id/795/500/180);
+      }
+    }
+    &.gram-image{
+      &::before {
+        background-image: url(https://picsum.photos/id/413/2666/1500);
       }
     }
     &::before {
