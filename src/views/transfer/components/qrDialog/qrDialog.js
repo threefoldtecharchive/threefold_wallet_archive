@@ -1,8 +1,10 @@
 import qrcode from '@chenfengyuan/vue-qrcode'
+import walletCard from '../../../../components/walletCard'
 export default {
   name: 'qr-dialog',
   components: {
-    qrcode
+    qrcode,
+    walletCard
   },
   props: {
     dialog: {

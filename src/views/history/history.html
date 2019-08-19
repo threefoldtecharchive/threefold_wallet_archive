@@ -1,7 +1,7 @@
 <section class="history fill-height">
   <v-layout column fill-height>
     <div class="cheat elevation-4"></div>
-    <walletSelector no-clip @onWalletSelected='selectWallet' :wallets="computedWallets" :selected="$route.params.wallet" />
+    <walletSelector ref="selector" no-clip @onWalletSelected='selectWallet' :wallets="computedWallets" :selected="$route.params.wallet" />
     <v-subheader class="pt-0 pl-0 subheading">
       Recent activities
     </v-subheader>

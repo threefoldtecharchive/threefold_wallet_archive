@@ -42,7 +42,14 @@ export default {
   },
   methods: {
     selectWallet (wallet) {
-      this.closeDialog(true, {address: wallet.address, currency: wallet.currency})
+      this.closeDialog(true, {
+        address: wallet.address, 
+        currency: wallet.currency, 
+        holder: wallet.holder, 
+        name: wallet.name, 
+        totalAmount: wallet.totalAmount,
+        isAuthenticated: wallet.isAuthenticated
+      })
       this.$refs.externForm.reset()
       setTimeout(() => {
         this.selected = 0

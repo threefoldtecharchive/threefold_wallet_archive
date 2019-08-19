@@ -30,6 +30,7 @@ export default {
     }
   },
   mounted () {
+    this.$refs.selector.$children.find(x => x.selected).$el.scrollIntoView({behavior: "auto", block: "center", inline: "center"})
   },
   methods: {
     selectWallet (wallet) {

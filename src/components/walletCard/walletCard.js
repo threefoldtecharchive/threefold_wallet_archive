@@ -30,7 +30,7 @@ export default {
     },
     getHumanWalletAddress () {
       // return `${this.wallet.name}@${this.account.account_name}`
-      return `${this.wallet.name}@${this.wallet.holder.account_name}`
+      return `${this.wallet.name.replace(/\s/g,'')}@${this.wallet.holder.account_name}`
     },
     image () {
       let currency = this.wallet.currency.toLowerCase()
