@@ -1,7 +1,7 @@
 .transfer {
     .v-btn--active {
-        background-color: #1abc9c !important;
-        border-color: #1abc9c !important;
+        background-color: var(--active-color) !important;
+        border-color: var(--active-color) !important;
     }
     .div-toggle-buttons {
         min-height: 50px;

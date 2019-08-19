@@ -12,13 +12,13 @@
         <v-flex :class="clickable ? 'xs4' : ''" v-if="clickable">
           <v-layout column class="justify-space-between fill-height align-end">
             <v-flex>
-              <v-btn dark small icon flat @click.stop="copyAddress" class="accent px-3 align-self-end badge-top ma-0"  v-show="wallet.currency != 'gram'">
+              <v-btn dark small icon flat @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0" :class="$route.meta.accent"  v-show="wallet.currency != 'gram'">
                 <v-icon size="15">
                   file_copy
                 </v-icon>
               </v-btn>
             </v-flex>
-            <amountIndicator small class="accent pl-3 pr-2 pt-1 align-self-end badge-bottom ma-0" :amount='totalAmount'
+            <amountIndicator small class="pl-3 pr-2 pt-1 align-self-end badge-bottom ma-0" :class="$route.meta.accent" :amount='totalAmount'
               :valuta='wallet.currency'/>
           </v-layout>
         </v-flex>

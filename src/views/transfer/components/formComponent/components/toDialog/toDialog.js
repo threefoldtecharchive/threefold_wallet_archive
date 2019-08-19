@@ -28,8 +28,7 @@ export default {
       externAddress: '',
       tabs: [
         {name:'Intern', value:0}, 
-        {name:'Extern',value:1}, 
-        // {name:'Fiat',value:2}
+        {name:'Extern',value:1}
       ],
       valid: false
     }
