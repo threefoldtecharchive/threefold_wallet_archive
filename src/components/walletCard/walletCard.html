@@ -1,5 +1,5 @@
 <section class="wallet-card">
-  <v-card :class="`min ${selected ? 'border' : ''}`">
+  <v-card :class="`min ${(selected && authenticated) ? 'border' : ''}`">
     <div ref="card" class="content" :class="image" :style="clickable ? 'cursor:pointer' : ''" @click="clicked">
       <v-layout class="pa-1 content-inner white--text">
         <v-flex :class="clickable ? 'xs8' : 'xs12'">
@@ -9,7 +9,7 @@
             <!-- <p v-if="wallet.currency === 'GFT'" class="body-1 text-truncate">{{authenticated}}</p> -->
           </v-layout>
         </v-flex>
-        <v-flex :class="clickable ? 'xs4' : ''" v-if="clickable && authenticated">
+        <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs4' : ''">
           <v-layout column class="justify-space-between fill-height align-end">
             <v-flex>
               <v-btn dark small icon flat @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0" :class="$route.meta.accent"  v-show="wallet.currency != 'gram'">
@@ -22,7 +22,7 @@
               :valuta='wallet.currency'/>
           </v-layout>
         </v-flex>
-        <div v-if="!authenticated">
+        <div v-else>
           <div class="overlay-card" style="opacity: 0.7; background-color: black;">
           </div>
           <div class="overlay-card">

@@ -18,7 +18,7 @@ export default {
   data () {
     return {
       amount: '---',
-      authenticated: 'false'
+      authenticated: true
     }
   },
   computed: {
@@ -40,12 +40,10 @@ export default {
     }
   },
   mounted () {
-    if (this.wallet.currency === "GFT"){
+    if (this.wallet.currency === "GFT" || this.wallet.currency == "gram"){
       this.wallet.isAuthenticated.then( v => {
         this.authenticated = v
       })
-    } else if (this.wallet.isAuthenticated === false) {
-      this.authenticated = false
     }
   },
   methods: {

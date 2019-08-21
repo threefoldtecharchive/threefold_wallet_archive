@@ -112,6 +112,7 @@ export default {
       this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
       this.selectedWallet = this.computedWallets[0]
+      this.$forceUpdate()
     }
   }
 }

@@ -141,6 +141,11 @@ export default ({
             transactions.push(cloneDeep(myObj))
           })
         })
+
+        let isAuthenticated = false
+        wallets.filter(x=>x.currency=='GFT').forEach(x => {
+          if (!isAuthenticated) isAuthenticated = x.isAuthenticated.then(r => {return r})
+        })
         wallets.push({
           name: 'physical gold',
           address: '01ca604e0cee992bcbace7c8201a3898a4c56ce3aa5503546bfakegoldfakegoldfakegoldfake',
@@ -150,7 +155,7 @@ export default ({
             account_name: 'maxim'
           },
           currency: 'gram',
-          isAuthenticated: null
+          isAuthenticated: isAuthenticated
         })
         return wallets
       }
