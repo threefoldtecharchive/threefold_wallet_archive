@@ -17,7 +17,7 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-fab-transition>
-      <v-btn small flat fab dark class="v-btn--example" @click="informationDialog = true" v-if="$route.meta.info">
+      <v-btn small absolute right flat fab dark @click="informationDialog = true" v-if="$route.meta.info">
         <v-icon>fas fa-info</v-icon>
       </v-btn>
     </v-fab-transition>

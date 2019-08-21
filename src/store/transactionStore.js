@@ -11,26 +11,24 @@ export default ({
 			else if (type == 'gft/gft' || type == 'tft/tft') context.dispatch('transferCoins', data)
 			else context.commit('setInformationMessage', `This transaction is currently not supported`)
 		},
-		transferGold: (context, data) => {
+		transferGold: async (context, data) => {
 			// gram/gft => sell gold for gft
-			try {
-				let type = data.type.toLowerCase()
-				if (type == 'gram/gft') {
-					// localStorage.setItem("gold_investment", JSON.stringify(parseInt(localStorage.getItem("gold_investment")) - data.amount))
-					goldService.goldTransaction(data.to, parseInt(data.amount))
+				try {
+					let type = data.type.toLowerCase()
+					if (type == 'gram/gft') {	
+						await goldService.goldTransaction(data.to, parseInt(data.amount))
+					}
+					else if (type == 'gft/gram') {
+						context.dispatch('transferCoins', {
+							to: '01527bb9b6852cc565c0f19a7fcd0ef764e57808552adb4ab16c7764e40cd37673c303578ddff9',
+							from: data.from,
+							currency: 'GFT',
+							amount: data.amount
+						})
+					}
+				} catch (e) {
+					context.commit('setInformationMessage', `Something went wrong with your transaction`)
 				}
-				else if (type == 'gft/gram') {
-					// localStorage.setItem("gold_investment", JSON.stringify(parseInt(localStorage.getItem("gold_investment")) + parseInt(data.amount)))
-					context.dispatch('transferCoins', {
-						to: '01527bb9b6852cc565c0f19a7fcd0ef764e57808552adb4ab16c7764e40cd37673c303578ddff9',
-						from: data.from,
-						currency: 'GFT',
-						amount: data.amount
-					})
-				}
-			} catch (e) {
-				context.commit('setInformationMessage', `Something went wrong with your transaction`)
-			}
 		},
 		transferCoins: (context, data) => {
 			try {

@@ -23,7 +23,7 @@
           <walletSelector @onWalletSelected='selectWallet' :wallets="computedWallets" :selected="selectedWallet.name" />
           
           <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" :investments="investments"
-          :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)"></FormComponent>
+          :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)" :fee="fee"></FormComponent>
           
         </v-card-text>
       </v-card>
@@ -31,7 +31,7 @@
     
     <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog" 
     :selectedTab="selectedTab" :wallets="wallets" :send="send" :selectedWallet="selectedWallet" 
-    :selectWallet="selectWallet" :formObject="formObject" v-if="selectedWallet.address"></TransactionInfoDialog>
+    :selectWallet="selectWallet" :formObject="formObject" v-if="selectedWallet.address" :fee="fee"></TransactionInfoDialog>
     
   <QrScannerDialog :dialog="qrScannerDialog" :closeDialog="closeQrScannerDialog" 
     :selectedTab="selectedTab" :formObject="formObject"></QrScannerDialog>

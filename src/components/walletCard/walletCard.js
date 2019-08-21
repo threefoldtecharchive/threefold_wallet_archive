@@ -30,7 +30,7 @@ export default {
     },
     getHumanWalletAddress () {
       // return `${this.wallet.name}@${this.account.account_name}`
-      return `${this.wallet.name.replace(/\s/g,'')}@${this.wallet.holder.account_name}`
+      return `${this.wallet.name.replace(/\s/g,'')}@${this.wallet.holder.account_name.split(':')[1]}`
     },
     image () {
       let currency = this.wallet.currency.toLowerCase()
@@ -44,6 +44,8 @@ export default {
       this.wallet.isAuthenticated.then( v => {
         this.authenticated = v
       })
+    } else if (this.wallet.isAuthenticated === false) {
+      this.authenticated = false
     }
   },
   methods: {
@@ -53,6 +55,9 @@ export default {
     copyAddress () {
       copy(this.wallet.address)
       this.setInformationMessage(`Address has been copied to clipboard (${this.wallet.address.substring(0, 8)}...).`)
+    },
+    clicked () {
+      if(this.clickable && this.authenticated) this.$emit('click', this.wallet)
     }
-  }
+  },
 }

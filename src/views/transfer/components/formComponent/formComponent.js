@@ -24,6 +24,9 @@ export default {
     },
     investments: {
       type: Boolean
+    },
+    fee: {
+      type: Number
     }
   },
   data () {
@@ -66,9 +69,6 @@ export default {
         return `${this.formObject.amount} ${this.selectedWallet.currency} = ${(parseFloat(this.formObject.amount) - this.fee).toFixed(2)} ${this.formObject.to.currency}`
       }
       return ''
-    },
-    fee () {
-      return 0.1
     }
   },
   mounted () {

@@ -1,15 +1,15 @@
 <section class="wallet-card">
   <v-card :class="`min ${selected ? 'border' : ''}`">
-    <div ref="card" class="content" :class="image" :style="clickable ? 'cursor:pointer' : ''" @click="$emit('click')">
+    <div ref="card" class="content" :class="image" :style="clickable ? 'cursor:pointer' : ''" @click="clicked">
       <v-layout class="pa-1 content-inner white--text">
         <v-flex :class="clickable ? 'xs8' : 'xs12'">
-          <v-layout column class="py-3 pl-2">
+          <v-layout column class="py-3 pl-2" >
             <p class="title text-uppercase">{{wallet? wallet.name : 'Wallet name'}}</p>
             <p class="body-1 text-truncate">{{getHumanWalletAddress}}</p>
             <!-- <p v-if="wallet.currency === 'GFT'" class="body-1 text-truncate">{{authenticated}}</p> -->
           </v-layout>
         </v-flex>
-        <v-flex :class="clickable ? 'xs4' : ''" v-if="clickable">
+        <v-flex :class="clickable ? 'xs4' : ''" v-if="clickable && authenticated">
           <v-layout column class="justify-space-between fill-height align-end">
             <v-flex>
               <v-btn dark small icon flat @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0" :class="$route.meta.accent"  v-show="wallet.currency != 'gram'">
@@ -18,10 +18,22 @@
                 </v-icon>
               </v-btn>
             </v-flex>
-            <amountIndicator small class="pl-3 pr-2 pt-1 align-self-end badge-bottom ma-0" :class="$route.meta.accent" :amount='totalAmount'
+            <amountIndicator small class="pl-3 pr-2 pt-1 align-self-end badge-bottom" :class="$route.meta.accent" :amount='totalAmount'
               :valuta='wallet.currency'/>
           </v-layout>
         </v-flex>
+        <div v-if="!authenticated">
+          <div class="overlay-card" style="opacity: 0.7; background-color: black;">
+          </div>
+          <div class="overlay-card">
+            <v-layout align-center justify-center row fill-height px-4>
+              <div>
+                Not authorized for Gold transactions.
+                Please contact us at onboarding@nbh-digital.com
+              </div>
+            </v-layout>
+          </div>
+        </div>
       </v-layout>
     </div>
   </v-card>

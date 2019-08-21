@@ -56,6 +56,9 @@ export default {
       if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'deregister') return this.wallets.filter(x => x.currency === 'gram')
       else if (this.$route.name === 'transfer investments') return this.wallets.filter(x => x.currency === 'GFT')
       return this.wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')
+    },
+    fee () {
+      return 0.1
     }
   },
   methods: {
