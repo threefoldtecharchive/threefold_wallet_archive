@@ -15,7 +15,7 @@
         <div class="px-2">
           <v-layout justify-space-between fill-height column px-2>
             <p class="subtitle mb-0 grey--text">To</p>
-            <walletCard  no-padding class="my-2" :wallet="selectedWallet" v-if="selectedWallet.address"/>
+            <walletCard no-padding class="my-2" :wallet="selectedWallet" v-if="selectedWallet.address" clickable :displayAttributes="false"/>
             <v-flex>
               <p class="subtitle mb-0 grey--text">Amount</p>
               <p class="title mt-0">{{formObject.amount}}</p>

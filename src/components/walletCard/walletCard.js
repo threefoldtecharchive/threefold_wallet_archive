@@ -13,6 +13,10 @@ export default {
     },
     'selected': {
       type: Boolean
+    },
+    'displayAttributes': {
+      type: Boolean,
+      default: true
     }
   },
   data () {

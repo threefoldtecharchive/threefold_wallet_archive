@@ -11,7 +11,6 @@ export default {
   data () {
     return {
       outgoing: false,
-      valuta: 'tft',
       show: false
     }
   },
@@ -19,6 +18,16 @@ export default {
     ...mapGetters({
       wallets: 'wallets'
     }),
+    valuta () {
+      let currency
+      if (this.transaction.inputs && this.transaction.inputs.length) {
+        currency = this.transaction.inputs[0].amount.unit
+      } else {
+        currency = this.transaction.outputs[0].amount.unit
+      }
+
+      return currency
+    },
     amountModal () {
       return this.amountHandler(true)
     },
