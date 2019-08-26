@@ -7,6 +7,7 @@ Vue.use(Vuetify, {
   theme: {
     primary: '#34495e',
     accent: '#1abc9c',
+    gold: '#dea600',
     error: '#CE796B'
   }
 })

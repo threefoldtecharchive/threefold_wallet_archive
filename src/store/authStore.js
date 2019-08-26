@@ -11,11 +11,11 @@ export default ({
   },
   actions: {
     async generateLoginUrl(context) {
-      context.dispatch('login', {
-        doubleName: 'username',
-        // seed:  'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride'
-        seed: "lemon vocal marriage flash soft address barely crazy swarm alert hire riot find know around pill denial labor join spice energy planet deliver dress",
-      })
+      // context.dispatch('login', {
+      //   doubleName: 'username',
+      //   // seed:  'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride'
+      //   seed: "lemon vocal marriage flash soft address barely crazy swarm alert hire riot find know around pill denial labor join spice energy planet deliver dress",
+      // })
       context.dispatch('clearStorage')
       var state = ''
       var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -69,10 +69,13 @@ export default ({
                       console.log(userData)
                       var newSeed = new Uint8Array(decodeBase64(userData.keys.derivedPrivateKey))
                       console.log(`newSeed`, newSeed)
-                      context.dispatch('login', {
-                        doubleName: username,
-                        seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
-                      })
+                      const userObject = {doubleName: username, seed: newSeed}
+                      window.localStorage.setItem("user",JSON.stringify(userObject))
+                      context.dispatch('login', 
+                        userObject
+                        // doubleName: username,
+                        // seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
+                      )
                     }).catch(e => {
                       console.log(e)
                       context.commit('setFatalError', 'Could not decrypt message.')

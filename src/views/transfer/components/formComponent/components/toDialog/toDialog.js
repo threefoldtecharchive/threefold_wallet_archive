@@ -17,13 +17,19 @@ export default {
     },
     toRules: {
       type: Array
+    },
+    selectedWallet: {
+      type: Object
     }
   },
   data () {
     return {
       selected: 0,
       externAddress: '',
-      tabs: [{name:'Intern', value:0}, {name:'Extern',value:1}], // , {name:'Fiat',value:2}
+      tabs: [
+        {name:'Intern', value:0}, 
+        {name:'Extern',value:1}
+      ],
       valid: false
     }
   },
@@ -34,8 +40,15 @@ export default {
 
   },
   methods: {
-    selectWallet (address) {
-      this.closeDialog(true, address)
+    selectWallet (wallet) {
+      this.closeDialog(true, {
+        address: wallet.address, 
+        currency: wallet.currency, 
+        holder: wallet.holder, 
+        name: wallet.name, 
+        totalAmount: wallet.totalAmount,
+        isAuthenticated: wallet.isAuthenticated
+      })
       this.$refs.externForm.reset()
       setTimeout(() => {
         this.selected = 0

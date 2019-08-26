@@ -9,6 +9,7 @@ export class TFAccount {
     this.account = new tfchain.Account(this.name, this.name, {
       seed: this.seed,
       network: this.network
+      
     })
 
     this.address = this.account.address

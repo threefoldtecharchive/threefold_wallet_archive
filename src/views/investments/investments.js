@@ -20,7 +20,7 @@ export default {
   methods: {
     seeHistory (wallet) {
       this.$router.push({
-        name: 'history',
+        name: 'investments history',
         params: {
           wallet: wallet.name
         }

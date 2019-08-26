@@ -23,12 +23,12 @@ export default {
     },
     receiver () {
       if (!this.transaction.confirmed) return 'Pending transaction...'
-      var receiverName = this.getWalletAddresOfOutput()
+      var receiverName = this.getWalletAddresRecipient()
       return receiverName
     },
     sender () {
       if (!this.transaction.confirmed) return 'Pending transaction...'
-      var senderAddress = this.getWalletAddresOfInput()
+      var senderAddress = this.getWalletAddresSender()
       return senderAddress
     },
     timeStamp () {
@@ -55,27 +55,25 @@ export default {
     
   },
   methods: {
-    getWalletAddresOfInput () {
+    getWalletAddresRecipient () {
       var address = null
       if (this.transaction.inputs && this.transaction.inputs.length) {
         var input = this.transaction.inputs.find(x => !x.fee)
-        if (input) {
-          address = input.senders[0]
-        }
+        if (input) address = input.recipient
       } else {
-        address = 'Address not found'
+        var output = this.transaction.outputs.find(x => !x.fee)
+        if (output) address = output.recipient 
       }
       return address
     },
-    getWalletAddresOfOutput () {
+    getWalletAddresSender () {
       var address = null
       if (this.transaction.outputs && this.transaction.outputs.length) {
         var output = this.transaction.outputs.find(x => !x.fee)
-        if (output) {
-          address = output.recipient
-        }
-      } else {
-        address = 'Address not found'
+        if (output) address = output.senders[0]
+      }  else {
+        var input = this.transaction.inputs.find(x => !x.fee)
+        if (input) address = input.senders[0]
       }
       return address
     },
