@@ -152,7 +152,7 @@ export default ({
           totalAmount: amount.toString(),
           transaction: transactions.sort((a, b) => b.timestamp - a.timestamp),
           holder: {
-            account_name: 'gold:maxim.3bot'
+            account_name: wallets[0].holder.account_name
           },
           currency: 'gram',
           isAuthenticated: isAuthenticated
