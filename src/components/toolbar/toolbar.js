@@ -8,6 +8,7 @@ export default {
   props: [],
   data () {
     return {
+      isScrolling: false,
       informationDialog: false
     }
   },
@@ -22,6 +23,10 @@ export default {
   methods: {
     closeInformationDialog () {
       this.informationDialog = false
+    },
+    onScroll () {
+      this.isScrolling = (window.pageYOffset ||
+        document.documentElement.scrollTop || 0) > 50
     }
   }
 }

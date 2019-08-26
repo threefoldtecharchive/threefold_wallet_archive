@@ -16,19 +16,22 @@
           <amountIndicator :color="outgoing? 'error' : 'accent'" :amount='amount' :valuta='valuta'/>
         </v-flex>
       </v-layout>
+
       <v-layout v-else column>
         <v-flex class="mb-3">
           <v-layout column>
-            <span class="title text-uppercase text-truncate ">{{outgoing? receiver : sender}}</span>
+            <span class="subheading font-weight-medium text-uppercase text-truncate ">{{outgoing? receiver : sender}}</span>
           </v-layout>
         </v-flex>
         <v-flex>
-          <v-layout row>
+          <v-layout row wrap>
             <v-flex>
               <span class="font-weight-light text-truncate" v-if="transaction.message">{{transaction.message}}</span>
             </v-flex>
             <v-flex>
-              <amountIndicator :color="outgoing? 'error' : 'accent'" :amount='amount' :valuta='valuta' />
+              <v-layout justify-end>
+               <amountIndicator :color="outgoing? 'error' : 'accent'" :amount='amount' :valuta='valuta' />
+              </v-layout>
             </v-flex>
           </v-layout>
         </v-flex>

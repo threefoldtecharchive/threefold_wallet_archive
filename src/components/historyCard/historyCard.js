@@ -1,5 +1,6 @@
 import amountIndicator from '../amountIndicator'
 import copy from 'clipboard-copy'
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'history-card',
@@ -10,11 +11,23 @@ export default {
   data () {
     return {
       outgoing: false,
-      valuta: 'tft',
       show: false
     }
   },
   computed: {
+    ...mapGetters({
+      wallets: 'wallets'
+    }),
+    valuta () {
+      let currency
+      if (this.transaction.inputs && this.transaction.inputs.length) {
+        currency = this.transaction.inputs[0].amount.unit
+      } else {
+        currency = this.transaction.outputs[0].amount.unit
+      }
+
+      return currency
+    },
     amountModal () {
       return this.amountHandler(true)
     },
@@ -22,12 +35,20 @@ export default {
       return this.amountHandler(false)
     },
     receiver () {
+      if (this.wallets.some(x => x.address == this.getWalletAddresRecipient())) {
+        let wallet = this.wallets.find(x => x.address == this.getWalletAddresRecipient())
+        return `${wallet.name}@${wallet.holder.account_name.split(':')[1]}`
+      }
       if (!this.transaction.confirmed) return 'Pending transaction...'
       var receiverName = this.getWalletAddresRecipient()
       return receiverName
     },
     sender () {
-      if (!this.transaction.confirmed) return 'Pending transaction...'
+      if (this.transaction.sender) {
+        let sender = JSON.parse(this.transaction.sender)
+        return `${sender.walletname}@${sender.account.split(':')[1]}`
+      }
+      else if (!this.transaction.confirmed) return 'Pending transaction...'
       var senderAddress = this.getWalletAddresSender()
       return senderAddress
     },

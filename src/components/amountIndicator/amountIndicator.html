@@ -1,10 +1,12 @@
 
 <section class="amount-indicator">
-  <v-layout justify-end row fill-height>
-    <span :class="`text-xs-right  ${small ? 'font-weight-normal' : ' display-1'} ${color}--text`">
-      {{amount}}
-    </span>
-    <span :class="small ? 'pl-1 body-1 font-weight-light' : 'pl-1 font-weight-light'">{{valuta.toLowerCase()}}</span>
+  <v-layout>
+    <div :class="`text-xs-right  ${small ? 'font-weight-normal' : ' headline'} ${color}--text`">
+      <span>{{amount}}</span>
+    </div>
+    <div :class="small ? 'ml-1 body-1 font-weight-light' : 'ml-1 font-weight-light'">
+      <span >{{valuta.toLowerCase()}}</span>
+    </div>
   </v-layout>
 </section>
 

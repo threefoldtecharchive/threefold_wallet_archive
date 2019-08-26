@@ -39,7 +39,7 @@
     transform: rotate(-45deg);
   }
   .min {
-    min-width: 300px;
+    min-width: 275px;
   }
 
   .border::after {
@@ -55,5 +55,14 @@
     box-shadow: inset 0px 0px 0px 4px var(--active-color);
     box-sizing: border-box;
     border-radius: $borderradius;
+  }
+  .overlay-card {
+    position: absolute; 
+    width: 100%; 
+    top: 0; 
+    left: 0; 
+    height: 100%; 
+    font-weight: 400;
+    white-space: normal;
   }
 }

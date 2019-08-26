@@ -45,7 +45,6 @@ export default ({
       //   },
       // )
 
-
       context.commit('setAccounts', [tfAccount, gfAccount])
       context.dispatch('updateAccounts')
       context.dispatch('createWallet', { chain: 'tft', walletName: 'daily' })
@@ -94,11 +93,12 @@ export default ({
         state.accounts.forEach((account) => {
           var t = account.wallets.map((wallet) => {
             var balance = wallet.balance
+            // balance.transactions.forEach(x => x._sender = JSON.parse(x._sender))
             var total = wallet.balance.coins_total.str({ precision: 3 })
 
             // console.log(account.account_name, account.coin_auth_status_for_account_get(account))
             // console.log(wallet.address, account.coin_auth_status_for_address_get(wallet.address))
-            
+
               // console.log(wallet.address)
               return {
                 name: wallet.wallet_name,
@@ -108,7 +108,10 @@ export default ({
                 holder: account,
                 currency: wallet.balance._chain_type.currency_unit(),
                 // status: ((wallet.balance._chain_type.currency_unit() === "TFT") ? "noStatus" : account.coin_auth_status_for_address_get(wallet.address) ? "verified" : "unverified")
-                isAuthenticated: nbhService.getWalletAuthStatus(wallet.address).then(status => {return status.data.auths[0]})
+                isAuthenticated: nbhService.getWalletAuthStatus(wallet.address).then(status => {
+                  if (status) return status.data.auths[0]
+                  return false
+                })
               }
             // })
           })
@@ -138,14 +141,21 @@ export default ({
         //     transactions.push(cloneDeep(myObj))
         //   })
         // })
+
+        // let isAuthenticated = false
+        // wallets.filter(x=>x.currency=='GFT').forEach(x => {
+        //   if (!isAuthenticated) isAuthenticated = x.isAuthenticated.then(r => {return r})
+        // })
         // wallets.push({
         //   name: 'physical gold',
         //   address: '01ca604e0cee992bcbace7c8201a3898a4c56ce3aa5503546bfakegoldfakegoldfakegoldfake',
         //   totalAmount: amount.toString(),
         //   transaction: transactions.sort((a, b) => b.timestamp - a.timestamp),
-        //   holder: 'fake',
+        //   holder: {
+        //     account_name: wallets[0].holder.account_name
+        //   },
         //   currency: 'gram',
-        //   isAuthenticated: true
+        //   isAuthenticated: isAuthenticated
         // })
         return wallets
       }

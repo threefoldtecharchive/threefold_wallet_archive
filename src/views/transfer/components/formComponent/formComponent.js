@@ -24,6 +24,9 @@ export default {
     },
     investments: {
       type: Boolean
+    },
+    fee: {
+      type: Number
     }
   },
   data () {
@@ -62,7 +65,9 @@ export default {
       return ''
     },
     yourExchangeRate () {
-      if (this.formObject.to.currency && this.formObject.amount) return `${this.formObject.amount} ${this.selectedWallet.currency} = ${this.formObject.amount} ${this.formObject.to.currency}`
+      if (this.formObject.to.currency && this.formObject.amount) {
+        return `${this.formObject.amount} ${this.selectedWallet.currency} = ${(parseFloat(this.formObject.amount) - this.fee).toFixed(2)} ${this.formObject.to.currency}`
+      }
       return ''
     }
   },

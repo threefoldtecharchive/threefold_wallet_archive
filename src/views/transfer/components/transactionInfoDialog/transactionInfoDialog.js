@@ -32,6 +32,15 @@ export default {
     formObject: {
       type: Object,
       default: () => {}
+    },
+    fee: {
+      type: Number
+    }
+  },
+  computed: {
+    amount () {
+      if (this.$route.query.tab == 'receive') return parseFloat(this.formObject.amount)
+      return parseFloat(this.formObject.amount) - this.fee
     }
   }
 }
