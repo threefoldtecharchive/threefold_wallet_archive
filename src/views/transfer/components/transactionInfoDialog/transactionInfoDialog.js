@@ -40,7 +40,7 @@ export default {
   computed: {
     amount () {
       if (this.$route.query.tab == 'receive') return parseFloat(this.formObject.amount)
-      return parseFloat(this.formObject.amount) - this.fee
+      return parseFloat(this.formObject.amount) + this.fee
     }
   }
 }

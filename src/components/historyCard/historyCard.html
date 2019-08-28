@@ -83,16 +83,16 @@
             <p class="title mt-0">{{timeStamp}}</p>
           </v-flex>
           <v-flex>
-            <p v-if="transaction.message" class="subtitle mb-0 grey--text">Message</p>
-            <p v-if="transaction.message" class="title mt-0">{{transaction.message}}</p>
-          </v-flex>
-          <v-flex>
             <p class="subtitle mb-0 grey--text">Amount <span v-if="outgoing && transaction.outputs.some(x => x.is_fee)" >(fee incl)</span></p>
             <p class="title mt-0">{{amountModal}}</p>
           </v-flex>
           <v-flex>
             <p v-if="outgoing && transaction.outputs.some(x => x.is_fee)" class="subtitle mb-0 grey--text">Fee</p>
             <p v-if="outgoing && transaction.outputs.some(x => x.is_fee)" class="title mt-0">{{fee}}</p>
+          </v-flex>
+          <v-flex>
+            <p v-if="transaction.message" class="subtitle mb-0 grey--text">Message</p>
+            <p v-if="transaction.message" class="title mt-0">{{transaction.message}}</p>
           </v-flex>
         </v-layout>
       </v-card-text>
