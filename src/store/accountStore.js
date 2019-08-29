@@ -13,6 +13,7 @@ export default ({
   actions: {
     login(context, userData) {
       console.log(userData)
+      context.dispatch('setPkidClient', userData.seed)
       var tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
         userData.doubleName, {
