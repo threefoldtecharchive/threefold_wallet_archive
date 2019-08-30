@@ -25,10 +25,10 @@ export default {
     ]),
     cssProps () {
       return {
-        '--primary-color': this.$vuetify.theme.primary,
-        '--accent-color': this.$vuetify.theme.accent,
-        '--error-color': this.$vuetify.theme.error,
-        '--gold-color': this.$vuetify.theme.gold,
+        '--primary-color': this.$vuetify.theme.themes.light.primary,
+       '--accent-color': this.$vuetify.theme.themes.light.accent,
+        '--error-color': this.$vuetify.theme.themes.light.error,
+        '--gold-color': this.$vuetify.theme.themes.light.gold,
         '--active-color': this.$vuetify.theme[this.$route.meta.accent]
       }
     }

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import store from './store/'
 import router from './router'
-import './plugins'
+import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
 
@@ -18,6 +18,8 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
   store,
+  el: '#app',
+  vuetify,
   router,
   render: h => h(App)
 }).$mount('#app')
