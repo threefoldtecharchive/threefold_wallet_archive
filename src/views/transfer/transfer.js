@@ -1,127 +1,118 @@
 import walletSelector from '../../components/walletSelector'
-// import VueQr from 'vue-qr'
-import qrcode from '@chenfengyuan/vue-qrcode'
-
-import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
+import { EventBus } from '../../eventBus.js'
+import FormComponent from './components/formComponent'
+import TransactionInfoDialog from './components/transactionInfoDialog'
+import QrScannerDialog from './components/qrScannerDialog'
+import QrDialog from './components/qrDialog'
+import {cloneDeep} from 'lodash'
 
 import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'transfer',
-  components: { walletSelector, qrcode, QrcodeStream, QrcodeDropZone, QrcodeCapture },
-  props: [],
+  components: {
+    walletSelector, 
+     FormComponent, 
+     TransactionInfoDialog, 
+     QrScannerDialog,
+     QrDialog
+    },
   data () {
     return {
+      transactionInfoDialog: false,
+      qrScannerDialog: false,
+      qrDialog: false,
+      formObject:{to:{}},
       selectedTab: 1,
-      selectedWallet: {},
-      isLoading: false,
-      entries: [],
-      model: null,
-      search: null,
-      to: null,
-      amount: 0,
-      message: null,
-      sender: {},
-      show: false,
-      transaction: {},
-      transactionSent: false,
-      showQR:false,
-      showQrScanner: false
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'wallets',
-      'transactionSubmitted',
-      'floatingActionButton'
-    ]),
-    fields () {
-      if (!this.model) return []
-
-      return Object.keys(this.model).map(key => {
-        return {
-          key,
-          value: this.model[key] || 'n/a'
-        }
-      })
-    },
-    items () {
-      return this.entries.map(entry => {
-        const email = entry.email.length > this.descriptionLimit
-          ? entry.email.slice(0, this.descriptionLimit) + '...'
-          : entry.email
-
-        return Object.assign({}, entry, { email })
-      })
-    },
-    qrText () {
-      // return { tft: '01ed90bee1d6d50b730a1aacf2890ac6fc0f7718849fba5f7c5719e3cfcc4641be09c5607b0210', amount: 0 }
-      return `tft:${this.selectedWallet.address}?amount=${this.amount}&message=${this.message}&sender=me`
+      selectedWallet: {}
     }
   },
   mounted () {
-    if (!this.selectedWallet.address) this.selectedWallet = this.wallets[0]
+    EventBus.$on('transfer', (payload) => {
+      this.transferConfirmed()
+    })
+    this.$router.replace({query: {tab: this.tabs[this.tabs.length - 1]}})
+    if (!this.selectedWallet.address) this.selectedWallet = this.computedWallets[0]
+  },
+  beforeDestroy () {
+    EventBus.$off('transfer')
+  },
+  computed: {
+    ...mapGetters([
+      'wallets'
+    ]),
+    tabs () {
+      if (this.$route.name === 'transfer') return ['receive', 'send']
+      else if (this.$route.name === 'transfer investments') return ['deregister', 'register']
+      else return []
+    },
+    active () {
+      return this.$route.query.tab
+    },
+    investments () {
+      if (this.$route.name === 'transfer investments') return true
+      return false
+    },
+    computedWallets () {
+      if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'deregister') return this.wallets.filter(x => x.currency === 'gram')
+      else if (this.$route.name === 'transfer investments') return this.wallets.filter(x => x.currency === 'GFT')
+      return this.wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')
+    },
+    fee () {
+      return 0.1
+    }
   },
   methods: {
     ...mapActions([
-      'sendCoins',
-      'setFab'
+      'sendCoins'
     ]),
+    transferConfirmed (val) {
+      if(this.active == 'receive') {
+        if (this.checkForm()) this.qrDialog = true
+      } else if (this.active == 'send' || this.active == 'register' || this.active == 'deregister') {
+        if (this.checkForm()) this.transactionInfoDialog = true
+      }
+    },
+    async send () {
+      await this.sendCoins({
+        from: this.selectedWallet.address,
+        to: this.formObject.to.address,
+        message: this.formObject.message,
+        amount: this.formObject.amount,
+        currency: this.selectedWallet.currency,
+        type: `${this.selectedWallet.currency}/${this.formObject.to.currency}`
+      })
+      this.formObject = {to:{}}
+      this.$refs.formComponent.$refs.form.reset()
+      this.$router.push({name: this.$route.meta.overview})
+    },
     selectWallet (wallet) {
       this.selectedWallet = wallet
+      this.formObject = {to:{}}
+      this.$refs.formComponent.$refs.form.reset()
     },
-    send () {
-      this.sendCoins({
-        from: this.selectedWallet.address,
-        to: this.to,
-        message: this.message,
-        amount: this.amount
-      })
-      this.transactionSent = true
-      this.to = ''
-      this.message = ''
-      this.amount = '0'
+    checkForm() {
+      return this.$refs.formComponent.$refs.form.validate()
     },
-    onDecode (code) {
-      code = code.replace('tft:', 'tft://')
-      this.to = this.getQueryVar(code, 'HOST')
-      this.amount = this.getQueryVar(code, 'amount')
-      this.message = this.getQueryVar(code, 'message')
-      this.sender = this.getQueryVar(code, 'sender')
-      this.show = true
+    formValidation (valid) {
+      EventBus.$emit('transferDisabled', !valid)
     },
-    getQueryVar (url, varName) {
-      var val
-      url = new URL(url)
-      if (varName === 'HOST') {
-        val = url.pathname.replace('//', '')
-      } else {
-        val = url.searchParams.get(varName)
-      }
-      return val
+    closeTransactionInfoDialog (save) {
+      if (save) this.send()
+      this.transactionInfoDialog = false
+    },
+    closeQrScannerDialog (save) {
+      this.qrScannerDialog = false
+    },
+    closeQrDialog (save) {
+      this.qrDialog = false
     }
   },
   watch: {
-    selectedTab (val) {
-      this.selectedWallet = this.wallets[0]
-      this.to = ''
-      this.message = ''
-      this.amount = '0'
-    },
-    floatingActionButton (val) {
-      console.log('floating action button')
-      console.log(val)
-      if(val) {
-        console.log('selected', this.selectedTab)
-        if(this.selectedTab == 0) {
-          console.log("show QR")
-          this.showQR = true
-        } else if (this.selectedTab == 1) {
-          console.log("send money")
-          this.send ()
-        }
-
-        this.setFab(false)
-      }
+    '$route.query.tab' () {
+      this.formObject = {to:{}}
+      this.$refs.formComponent.$refs.form.reset()
+      this.selectedWallet = this.computedWallets[0]
+      this.$forceUpdate()
     }
   }
 }

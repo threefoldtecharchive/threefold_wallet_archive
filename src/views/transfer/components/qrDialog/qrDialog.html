@@ -1,0 +1,37 @@
+
+<section class="qr-dialog">
+  <v-dialog v-model="dialog" max-width="400" persistent>
+    <v-card style="height:100%">
+      <v-toolbar dark color="primary">
+        <v-toolbar-title class="text-uppercase">Show QR to the sender</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon flat @click="closeDialog(false)">
+          <v-icon :color="$route.meta.accent">
+            close
+          </v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-card-text>
+        <div class="px-2">
+          <v-layout justify-space-between fill-height column px-2>
+            <p class="subtitle mb-0 grey--text">To</p>
+            <walletCard no-padding class="my-2" :wallet="selectedWallet" v-if="selectedWallet.address" clickable :displayAttributes="false"/>
+            <v-flex>
+              <p class="subtitle mb-0 grey--text">Amount</p>
+              <p class="title mt-0">{{formObject.amount}}</p>
+            </v-flex>
+            <v-flex v-if="formObject.message">
+              <p class="subtitle mb-0 grey--text">Message</p>
+              <p class="title mt-0">{{formObject.message}}</p>
+            </v-flex>
+          </v-layout>
+          <div class="text-xs-center">
+            <qrcode :value="qrText" v-if="selectedTab == 0" class="round"
+              :options="{ color: { darklight: '#fff',  dark: $vuetify.theme.primary}  }" />
+          </div>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+</section>
+

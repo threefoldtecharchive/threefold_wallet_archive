@@ -10,7 +10,12 @@ export default ({
     loginUrl: null
   },
   actions: {
-    async generateLoginUrl (context) {
+    async generateLoginUrl(context) {
+      // context.dispatch('login', {
+      //   doubleName: 'username',
+      //   // seed:  'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride'
+      //   seed: "lemon vocal marriage flash soft address barely crazy swarm alert hire riot find know around pill denial labor join spice energy planet deliver dress",
+      // })
       context.dispatch('clearStorage')
       var state = ''
       var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -27,7 +32,7 @@ export default ({
 
       context.commit('setLoginUrl', `${config.botFrontEnd}?state=${state}&scope=${scope}&appid=${appid}&publickey=${encodeURIComponent(keys.publicKey)}&redirecturl=${encodeURIComponent(config.redirect_url)}`)
     },
-    async checkResponse (context, responseUrl) {
+    async checkResponse(context, responseUrl) {
       var username = responseUrl.searchParams.get('username')
       var signedHash = responseUrl.searchParams.get('signedhash')
 
@@ -64,10 +69,13 @@ export default ({
                       console.log(userData)
                       var newSeed = new Uint8Array(decodeBase64(userData.keys.derivedPrivateKey))
                       console.log(`newSeed`, newSeed)
-                      context.dispatch('login', {
-                        doubleName: username,
-                        seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
-                      })
+                      const userObject = {doubleName: username, seed: newSeed}
+                      window.localStorage.setItem("user",JSON.stringify(userObject))
+                      context.dispatch('login', 
+                        userObject
+                        // doubleName: username,
+                        // seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
+                      )
                     }).catch(e => {
                       console.log(e)
                       context.commit('setFatalError', 'Could not decrypt message.')
@@ -79,21 +87,21 @@ export default ({
         })
       }
     },
-    clearStorage (context) {
+    clearStorage(context) {
       context.commit('setState', null)
       context.commit('setKeys', null)
     }
   },
   mutations: {
-    setKeys (state, keys) {
+    setKeys(state, keys) {
       window.localStorage.setItem('tempKeys', JSON.stringify(keys))
       state.keys = keys
     },
-    setState (state, stateHash) {
+    setState(state, stateHash) {
       window.localStorage.setItem('state', stateHash)
       state.state = stateHash
     },
-    setLoginUrl (state, url) {
+    setLoginUrl(state, url) {
       state.loginUrl = url
     }
   },

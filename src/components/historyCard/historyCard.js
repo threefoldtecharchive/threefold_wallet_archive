@@ -1,5 +1,6 @@
 import amountIndicator from '../amountIndicator'
 import copy from 'clipboard-copy'
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'history-card',
@@ -10,37 +11,55 @@ export default {
   data () {
     return {
       outgoing: false,
-      valuta: 'tft',
       show: false
     }
   },
   computed: {
-    amount () {
-      if (this.transaction) {
-        if (this.transaction.inputs && this.transaction.inputs.length) {
-          this.outgoing = false
-          return this.sumTransactionAmount(this.transaction.inputs)
-        } else if (this.transaction.outputs && this.transaction.outputs.length) {
-          this.outgoing = true
-          return '-' + this.sumTransactionAmount(this.transaction.outputs)
-        }
+    ...mapGetters({
+      wallets: 'wallets'
+    }),
+    valuta () {
+      let currency
+      if (this.transaction.inputs && this.transaction.inputs.length) {
+        currency = this.transaction.inputs[0].amount.unit
       } else {
-        return '---'
+        currency = this.transaction.outputs[0].amount.unit
       }
+
+      return currency
+    },
+    amountModal () {
+      return this.amountHandler(true)
+    },
+    amount () {
+      return this.amountHandler(false)
     },
     receiver () {
+      if (this.wallets.some(x => x.address == this.getWalletAddresRecipient())) {
+        let wallet = this.wallets.find(x => x.address == this.getWalletAddresRecipient())
+        return `${wallet.name}@${wallet.holder.account_name.split(':')[1]}`
+      }
       if (!this.transaction.confirmed) return 'Pending transaction...'
-      var receiverName = this.getWalletAddresOfOutput()
+      var receiverName = this.getWalletAddresRecipient()
       return receiverName
     },
     sender () {
-      if (!this.transaction.confirmed) return 'Pending transaction...'
-      var senderAddress = this.getWalletAddresOfInput()
+      if (this.transaction.sender) {
+        let sender = JSON.parse(this.transaction.sender)
+        return `${sender.walletname}@${sender.account.split(':')[1]}`
+      }
+      else if (!this.transaction.confirmed) return 'Pending transaction...'
+      var senderAddress = this.getWalletAddresSender()
       return senderAddress
     },
     timeStamp () {
-      var date = new Date(0)
-      date.setUTCSeconds(this.transaction.timestamp)
+      var date
+      if (this.transaction.timestamp == null || this.transaction.timestamp == '-1') {
+        date = new Date()
+      } else {
+        date = new Date(0)
+        date.setUTCSeconds(this.transaction.timestamp)
+      }
       return date.toLocaleDateString()
     },
     fee () {
@@ -54,40 +73,48 @@ export default {
     }
   },
   mounted () {
-
+    
   },
   methods: {
-    getWalletAddresOfInput () {
+    getWalletAddresRecipient () {
       var address = null
       if (this.transaction.inputs && this.transaction.inputs.length) {
         var input = this.transaction.inputs.find(x => !x.fee)
-        if (input) {
-          address = input.senders[0]
-        }
+        if (input) address = input.recipient
       } else {
-        address = 'Address not found'
+        var output = this.transaction.outputs.find(x => !x.fee)
+        if (output) address = output.recipient 
       }
       return address
     },
-    getWalletAddresOfOutput () {
+    getWalletAddresSender () {
       var address = null
       if (this.transaction.outputs && this.transaction.outputs.length) {
         var output = this.transaction.outputs.find(x => !x.fee)
-        if (output) {
-          address = output.recipient
-        }
-      } else {
-        address = 'Address not found'
+        if (output) address = output.senders[0]
+      }  else {
+        var input = this.transaction.inputs.find(x => !x.fee)
+        if (input) address = input.senders[0]
       }
       return address
     },
-    sumTransactionAmount (arr) {
-      var total = 0
+    sumTransactionAmount (arr, modal) {
+      var total = 0.00
       arr.forEach(output => {
-        var amount = output.amount.str({ precision: 3 }).replace(',', '')
+        var amount = output.amount.str()
         total += parseFloat(amount)
       })
-      return total.toLocaleString('nl-BE', { minimumFractionDigits: 2, useGrouping: false })
+      
+      total = total.toString()
+
+      if ((total.substr(total.indexOf('.')).length > 4) && !modal) {
+        total = total.substr(0, total.indexOf('.')+ 3) + '..'
+      } else if (total.substr(total.indexOf('.')).length < 3) {
+        total = parseFloat(total)
+      } 
+
+      if (typeof(total) == 'string') return total.replace('.', ',')
+      return total.toLocaleString('nl', { minimumFractionDigits: 2, useGrouping: false })
     },
     copyTransaction () {
       copy(JSON.stringify(this.transaction))
@@ -98,6 +125,19 @@ export default {
         return true
       } catch (e) {
         return false
+      }
+    },
+    amountHandler (modal) {
+      if (this.transaction) {
+        if (this.transaction.inputs && this.transaction.inputs.length) {
+          this.outgoing = false
+          return this.sumTransactionAmount(this.transaction.inputs, modal)
+        } else if (this.transaction.outputs && this.transaction.outputs.length) {
+          this.outgoing = true
+          return '-' + this.sumTransactionAmount(this.transaction.outputs, modal)
+        }
+      } else {
+        return '---'
       }
     }
   }

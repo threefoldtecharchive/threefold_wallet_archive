@@ -1,4 +1,4 @@
-import walletCard from '../../components/walletCard'
+import walletCard from '../walletCard'
 export default {
   name: 'wallet-selector',
   components: { walletCard },
@@ -23,7 +23,7 @@ export default {
 
   },
   mounted () {
-    console.log(`selected`, this.selected)
+    
   },
   methods: {
 

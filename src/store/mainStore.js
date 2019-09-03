@@ -2,7 +2,7 @@ export default({
   state: {
     informationMessage: null,
     fatalError: null,
-    floatingActionButton: null
+    submitDisabled: true
   },
   actions: {
     setInformationMessage (context, message) {
@@ -10,11 +10,6 @@ export default({
     },
     setFatalError (context, message) {
       context.commit('setFatalError', message)
-    },
-    setFab (context, action) {
-      console.log('setting fab to' , action)
-      console.log('was', context.getters.floatingActionButton)
-      context.commit('setFab', action)
     }
   },
   mutations: {
@@ -23,15 +18,10 @@ export default({
     },
     setFatalError: (state, message) => {
       state.fatalError = message
-    },
-    setFab: (state, fab) => {
-      console.log(fab)
-      state.floatingActionButton = true
     }
   },
   getters: {
     informationMessage: (state) => state.informationMessage,
-    fatalError: (state) => state.fatalError,
-    floatingActionButton: (state) => state.floatingActionButton
+    fatalError: (state) => state.fatalError
   }
 })

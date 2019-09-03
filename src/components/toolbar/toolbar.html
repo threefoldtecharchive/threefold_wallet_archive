@@ -1,6 +1,9 @@
 <section class="toolbar">
-  <v-toolbar app class="primary white--text elevation-0">
+  <v-toolbar app class="primary white--text" :flat="!isScrolling" v-scroll="onScroll">
     <v-toolbar-title class="headline text-uppercase pl-2">
+      <div class="spinner">
+        <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent"/>
+      </div>
       <v-layout align-center>
         <h1>
           {{($route.meta.title || $route.name) || '3Bot'}}
@@ -13,6 +16,11 @@
       </v-layout>
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-progress-circular v-if="syncing" indeterminate size="12" color="accent" />
+    <!-- <v-fab-transition>
+      <v-btn small absolute right flat fab dark @click="informationDialog = true" v-if="$route.meta.info">
+        <v-icon>fas fa-info</v-icon>
+      </v-btn>
+    </v-fab-transition> -->
   </v-toolbar>
+  <InformationDialog :dialog="informationDialog" :closeDialog="closeInformationDialog" v-if="$route.meta.info"></InformationDialog>
 </section>
