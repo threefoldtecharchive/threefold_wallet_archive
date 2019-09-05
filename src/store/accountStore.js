@@ -67,7 +67,7 @@ export default ({
         }
       })
 
-      setInterval(() => {
+      setTimeout(() => {
         context.dispatch('updateAccounts')
       }, 60000)
 
