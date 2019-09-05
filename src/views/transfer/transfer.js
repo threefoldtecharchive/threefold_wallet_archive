@@ -73,6 +73,11 @@ export default {
       }
     },
     async send () {
+      console.log(this.selectedWallet.currency, this.formObject.to.currency)
+      // This is temporary untill the atomic exchange
+      if (this.selectedWallet.currency === "TFT") {
+        this.formObject.to.currency = this.selectedWallet.currency;
+      }
       await this.sendCoins({
         from: this.selectedWallet.address,
         to: this.formObject.to.address,

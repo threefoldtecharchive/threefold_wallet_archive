@@ -6,6 +6,7 @@ export default ({
   },
   actions: {
     sendCoins: (context, data) => {
+			console.log(data);
 			let type = data.type.toLowerCase()
 			if (type == 'gram/gft' || type == 'gft/gram') context.dispatch('transferGold', data)
 			else if (type == 'gft/gft' || type == 'tft/tft') context.dispatch('transferCoins', data)
