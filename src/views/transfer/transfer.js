@@ -4,7 +4,6 @@ import FormComponent from './components/formComponent'
 import TransactionInfoDialog from './components/transactionInfoDialog'
 import QrScannerDialog from './components/qrScannerDialog'
 import QrDialog from './components/qrDialog'
-import {cloneDeep} from 'lodash'
 
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -27,7 +26,7 @@ export default {
     }
   },
   mounted () {
-    EventBus.$on('transfer', (payload) => {
+    EventBus.$on('transfer', () => {
       this.transferConfirmed()
     })
     this.$router.replace({query: {tab: this.tabs[this.tabs.length - 1]}})
@@ -65,7 +64,7 @@ export default {
     ...mapActions([
       'sendCoins'
     ]),
-    transferConfirmed (val) {
+    transferConfirmed () {
       if(this.active == 'receive') {
         if (this.checkForm()) this.qrDialog = true
       } else if (this.active == 'send' || this.active == 'register' || this.active == 'deregister') {
@@ -105,10 +104,10 @@ export default {
       if (save) this.send()
       this.transactionInfoDialog = false
     },
-    closeQrScannerDialog (save) {
+    closeQrScannerDialog () {
       this.qrScannerDialog = false
     },
-    closeQrDialog (save) {
+    closeQrDialog () {
       this.qrDialog = false
     }
   },

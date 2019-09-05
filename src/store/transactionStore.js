@@ -1,4 +1,3 @@
-import config from '../../public/config'
 import goldService from '../services/faucetGoldService'
 export default ({
   state: {

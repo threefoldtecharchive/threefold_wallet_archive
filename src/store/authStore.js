@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import botService from '../services/3botService'
 import config from '../../public/config'
 import cryptoService from '../services/cryptoService'
