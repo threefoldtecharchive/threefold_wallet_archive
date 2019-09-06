@@ -56,6 +56,7 @@ export default ({
                   var keys = context.getters.keys
                   var userData = {}
                   console.log(data, keys, response)
+                  // Add derivedSeed to ciphertext. 
                   cryptoService.decrypt(data.ciphertext, data.nonce, keys.privateKey, response.data.publicKey)
                     .then(decrypted => {
                       console.log(decrypted)
@@ -68,9 +69,9 @@ export default ({
                         }
                       }
                       console.log(userData)
-                      var newSeed = new Uint8Array(decodeBase64(userData.keys.derivedPrivateKey))
-                      console.log(`newSeed`, newSeed)
-                      const userObject = {doubleName: username, seed: newSeed}
+                      // var newSeed = new Uint8Array(decodeBase64(userData.keys.derivedPrivateKey))
+                      // console.log(`newSeed`, newSeed)
+                      const userObject = {doubleName: username, seed: userData.derivedSeed}
                       window.localStorage.setItem("user",JSON.stringify(userObject))
                       context.dispatch('login', 
                         userObject

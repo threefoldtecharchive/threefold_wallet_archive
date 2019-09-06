@@ -1,8 +1,6 @@
 import config from '../../public/config'
 import * as tfchain from '../services/tfchain/api'
 import nbhService from '../services/nbhService';
-import {cloneDeep} from 'lodash'
-import { async } from 'q';
 export default ({
   state: {
     // account: window.localStorage.getItem('account') ? JSON.parse(window.localStorage.getItem('account')) : null,
@@ -13,7 +11,8 @@ export default ({
   actions: {
     login(context, userData) {
       console.log(userData)
-      context.dispatch('setPkidClient', userData.seed)
+      // context.dispatch('setPkidClient', userData.seed)
+
       var tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
         userData.doubleName, {
@@ -22,18 +21,19 @@ export default ({
         }
       )
 
-      var gfASeed = [...userData.seed] //Copy by value
-      gfASeed[gfASeed.length - 1] = 'g'.charCodeAt(0) // Otherwise the wallet address would be the same, makes for confusing user experience
-      gfASeed = new Uint8Array(gfASeed)
+      // var gfASeed = [...userData.seed] //Copy by value
+      // gfASeed[gfASeed.length - 1] = 'g'.charCodeAt(0) // Otherwise the wallet address would be the same, makes for confusing user experience
+      // gfASeed = new Uint8Array(gfASeed)
 
-      var gfAccount = new tfchain.Account(
-        `gft:${userData.doubleName}`,
-        userData.doubleName, {
-          seed: gfASeed,
-          network: config.gftNetwork,
-          chain: 'GOLDCHAIN'
-        },
-      )
+      // var gfAccount = new tfchain.Account(
+      //   `gft:${userData.doubleName}`,
+      //   userData.doubleName, {
+      //     seed: gfASeed,
+      //     network: config.gftNetwork,
+      //     chain: 'GOLDCHAIN'
+      //   },
+      // )
+
       // Temp for dev
       // var gfAccount = new tfchain.Account(
       //   `gft:${userData.doubleName}`,
@@ -46,10 +46,13 @@ export default ({
       //   },
       // )
 
-      context.commit('setAccounts', [tfAccount, gfAccount])
+      context.commit('setAccounts', [tfAccount])
+
       context.dispatch('updateAccounts')
+      
       context.dispatch('createWallet', { chain: 'tft', walletName: 'daily' })
       context.dispatch('createWallet', { chain: 'tft', walletName: 'savings' })
+
       // context.dispatch('createWallet', { chain: 'gft', walletName: 'gold tokens' })
       // context.dispatch('createWallet', { chain: 'gft', walletName: 'gold tokens savings' })
     },
@@ -57,7 +60,8 @@ export default ({
       context.getters.accounts.forEach(account => {
         if (account && !context.getters.syncing) {
           context.commit('setSync', true)
-          account.update_account((updatedAccount) => {
+
+          account.update_account(() => {
             context.commit('setSync', false)
           })
         }
@@ -66,9 +70,11 @@ export default ({
       setTimeout(() => {
         context.dispatch('updateAccounts')
       }, 60000)
+
     },
     createWallet: (context, data) => {
       var account = context.getters.accounts.find(x => x.account_name.split(':')[0] === data.chain)
+
       if (account) {
         account.wallet_new(data.walletName, account.wallet_count, 1)
         // pkid.setWallets(account, account.wallets)
