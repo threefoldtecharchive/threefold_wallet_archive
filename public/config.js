@@ -7,5 +7,5 @@ export default({
   botFrontEnd: 'http://192.168.2.60:8081/',
   botBackend: 'http://192.168.2.60:5000',
   redirect_url: '/login',
-  scope: JSON.stringify({doubleName: true, keys: true})
+  scope: JSON.stringify({doubleName: true, derivedSeed: true})
 })
