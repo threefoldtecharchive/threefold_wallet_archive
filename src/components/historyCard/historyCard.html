@@ -80,7 +80,7 @@
           </v-flex>
           <v-flex>
             <p class="subtitle mb-0 grey--text">Date</p>
-            <p class="title mt-0">{{timeStamp}}</p>
+            <p class="title mt-0">{{timeStamp | formatDate}} </p>
           </v-flex>
           <v-flex>
             <p class="subtitle mb-0 grey--text">Amount <span v-if="outgoing && transaction.outputs.some(x => x.is_fee)" >(fee incl)</span></p>

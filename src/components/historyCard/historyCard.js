@@ -60,7 +60,7 @@ export default {
         date = new Date(0)
         date.setUTCSeconds(this.transaction.timestamp)
       }
-      return date.toLocaleDateString()
+      return date
     },
     fee () {
       var total = 0
