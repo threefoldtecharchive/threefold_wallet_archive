@@ -69,9 +69,9 @@ export default ({
                         }
                       }
                       console.log(userData)
-                      // var newSeed = new Uint8Array(decodeBase64(userData.keys.derivedPrivateKey))
+                      var derivedSeed = new Uint8Array(decodeBase64(userData.derivedSeed))
                       // console.log(`newSeed`, newSeed)
-                      const userObject = {doubleName: username, seed: userData.derivedSeed}
+                      const userObject = {doubleName: username, seed: derivedSeed}
                       window.localStorage.setItem("user",JSON.stringify(userObject))
                       context.dispatch('login', 
                         userObject
