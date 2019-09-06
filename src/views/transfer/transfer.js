@@ -87,7 +87,7 @@ export default {
       })
       this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
-      this.$router.push({name: this.$route.meta.overview})
+      this.$router.push({name: this.$route.meta.history, params: {wallet: this.selectedWallet.name}})
     },
     selectWallet (wallet) {
       this.selectedWallet = wallet
