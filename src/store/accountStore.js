@@ -6,7 +6,8 @@ export default ({
     // account: window.localStorage.getItem('account') ? JSON.parse(window.localStorage.getItem('account')) : null,
     // addressBook: {},
     syncing: false,
-    accounts: null
+    accounts: null,
+    intervalIsSet: false
   },
   actions: {
     login(context, userData) {
@@ -67,10 +68,12 @@ export default ({
         }
       })
 
-      setTimeout(() => {
-        context.dispatch('updateAccounts')
-      }, 60000)
-
+      if (!context.intervalIsSet){
+        context.commit('setIntervalIsSet',true)
+        setInterval(() => {
+          context.dispatch('updateAccounts')
+        }, 60000)
+      }
     },
     createWallet: (context, data) => {
       var account = context.getters.accounts.find(x => x.account_name.split(':')[0] === data.chain)
@@ -82,6 +85,7 @@ export default ({
     }
   },
   mutations: {
+    setIntervalIsSet: (state, bool) => {state.intervalIsSet = bool},
     setDoubleName: (state, doubleName) => { state.doubleName = doubleName },
     setSeed: (state, seed) => { state.seed = seed },
     setSync: (state, syncing) => { state.syncing = syncing },

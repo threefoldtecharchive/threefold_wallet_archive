@@ -6,6 +6,7 @@ import QrScannerDialog from './components/qrScannerDialog'
 import QrDialog from './components/qrDialog'
 
 import { mapGetters, mapActions } from 'vuex'
+import store from '../../store';
 export default {
   name: 'transfer',
   components: {
@@ -87,6 +88,7 @@ export default {
       })
       this.formObject = {to:{}}
       this.$refs.formComponent.$refs.form.reset()
+      setTimeout(function(){store.dispatch('updateAccounts')}, 1000)      
       this.$router.push({name: this.$route.meta.history, params: {wallet: this.selectedWallet.name}})
     },
     selectWallet (wallet) {
