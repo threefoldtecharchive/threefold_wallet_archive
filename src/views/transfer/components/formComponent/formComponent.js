@@ -1,5 +1,6 @@
 import ToDialog from './components/toDialog'
 import walletSelector from '../../../../components/walletSelector'
+
 export default {
   name: 'form-component',
   components: {
@@ -54,11 +55,11 @@ export default {
     },
     amountRules() {
       let rules = [
-        v => !!v || 'Amount is required',
-        v => !!v && parseFloat(v.replace(',', '')) > 0 || 'Amount must be greater than 0'
+        v => !!v || 'The amount is required',
+        v => !!v && Number(v) > 0 || 'The amount must be greater than 0'
       ]
       if (['send', 'deregister', 'register'].some(x => x === this.$route.query.tab)) {
-        rules.push(v => !!v && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount.replace(",", "").replace(".", ",")) || 'Amount must be smaller than wallet value')
+        rules.push(v => !!v && Number(v) <= Number((this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount.replace(",", "") - 0.10).toFixed(9)) || 'The amount must be smaller or equal than the wallet value minus the fee')
       }
       return rules
     },
