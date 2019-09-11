@@ -2,7 +2,7 @@
   <v-app :style="cssProps">
     <toolbar @ctaClicked='handleCTAClick' />
     <v-content class="mt-0">
-      <v-container class="pb-0 pt-2 content fill-height" justify-start>
+      <v-container class="pb-0 pt-2 content fill-height" style="overflow: hidden;" justify-start>
         <router-view />
       </v-container>
     </v-content>

@@ -5,7 +5,7 @@
     <v-subheader class="pt-0 pl-0 subheading">
       Recent activities
     </v-subheader>
-    <v-flex class="scrollable pa-1">
+    <v-flex class="pa-1" style="overflow: visible">
       <v-layout column class="mb-3">
         <v-timeline fill-dot align-top dense class=" pt-0" style="width: 100%;">
           <v-timeline-item class="white--text pb-3" right fill-dot large v-for="(gt, date) in groupedTransactions" :key="date">

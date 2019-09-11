@@ -30,7 +30,7 @@ export default {
       'accounts'
     ]),
     totalAmount () {
-      return parseFloat(this.wallet.totalAmount.replace(',', '')).toLocaleString('nl-BE', { minimumFractionDigits: 2 })
+      return Number(this.wallet.totalAmount.replace(/,/g, "")).toFixed(2)
     },
     getHumanWalletAddress () {
       // return `${this.wallet.name}@${this.account.account_name}`

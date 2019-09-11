@@ -3,6 +3,7 @@
   .content {
     height: 100%;
     background: var(--primary-color);
+    overflow: hidden;
     &.gft-image{
       &::before {
         background-image: url(https://picsum.photos/id/943/3000/2002);

@@ -4,6 +4,7 @@ import mainStore from './mainStore'
 import accountStore from './accountStore'
 import authStore from './authStore'
 import transactionStore from './transactionStore'
+import pkidStore from './pkidStore'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -11,6 +12,7 @@ export default new Vuex.Store({
     mainStore,
     accountStore,
     authStore,
-    transactionStore
+    transactionStore,
+    pkidStore
   }
 })

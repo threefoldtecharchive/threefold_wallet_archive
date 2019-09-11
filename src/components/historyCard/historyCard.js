@@ -60,7 +60,7 @@ export default {
         date = new Date(0)
         date.setUTCSeconds(this.transaction.timestamp)
       }
-      return date.toLocaleDateString()
+      return date
     },
     fee () {
       var total = 0
@@ -101,20 +101,12 @@ export default {
     sumTransactionAmount (arr, modal) {
       var total = 0.00
       arr.forEach(output => {
-        var amount = output.amount.str()
-        total += parseFloat(amount)
+        var amount = output.amount.str().replace(",", "")
+
+        total = Number((Number(total) + Number(amount)).toFixed(9))
       })
-      
-      total = total.toString()
-
-      if ((total.substr(total.indexOf('.')).length > 4) && !modal) {
-        total = total.substr(0, total.indexOf('.')+ 3) + '..'
-      } else if (total.substr(total.indexOf('.')).length < 3) {
-        total = parseFloat(total)
-      } 
-
-      if (typeof(total) == 'string') return total.replace('.', ',')
-      return total.toLocaleString('nl', { minimumFractionDigits: 2, useGrouping: false })
+  
+      return total.toFixed(2)
     },
     copyTransaction () {
       copy(JSON.stringify(this.transaction))
