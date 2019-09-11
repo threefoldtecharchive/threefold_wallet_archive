@@ -46,7 +46,7 @@ export default {
       if (this.$route.query.tab != 'deregister') return this.wallets.filter(x => x.currency == 'GFT')
       else return this.wallets.filter(x => x.currency === 'gram')
     },
-    messageRuless() {
+    messageRules() {
       let rules = [
         v => ( typeof v == 'undefined' || (typeof v === 'string' && v.length <= this.maxMessageLength)) || `Message cannot be more than ${this.maxMessageLength} characters long`,
       ]
@@ -55,9 +55,11 @@ export default {
     amountRules() {
       let rules = [
         v => !!v || 'Amount is required',
-        v => !!v && parseFloat(v.replace(',', '')) > 0 || 'Amount must be greater than 0',
+        v => !!v && parseFloat(v.replace(',', '')) > 0 || 'Amount must be greater than 0'
       ]
-      if (['send', 'deregister', 'register'].some(x => x === this.$route.query.tab)) rules.push(v => !!v && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value')
+      if (['send', 'deregister', 'register'].some(x => x === this.$route.query.tab)) {
+        rules.push(v => !!v && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount.replace(",", "").replace(".", ",")) || 'Amount must be smaller than wallet value')
+      }
       return rules
     },
     exchangeRate () {
