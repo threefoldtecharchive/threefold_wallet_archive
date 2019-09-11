@@ -5,7 +5,7 @@
           <v-toolbar dark color="primary">
             <v-toolbar-title class="headline text-uppercase">Search wallet</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn icon flat @click="$emit('close'); walletName = null">
+            <v-btn text icon @click="$emit('close'); walletName = null">
               <v-icon :color="$route.meta.accent">
                 close
               </v-icon>
@@ -14,10 +14,10 @@
           <v-card-text>
             <v-form @submit.prevent="$emit('close', walletName); walletName = null" >
               <v-layout justify-space-between fill-height column>
-                <v-text-field v-model="walletName" box label="Walletname" :color="$route.meta.accent"/>
+                <v-text-field v-model="walletName" filled label="Walletname" :color="$route.meta.accent"/>
                 <v-flex>
                   <v-layout align-end justify-end row fill-height>
-                    <v-btn type="submit" outline round flat :color="$route.meta.accent">Save</v-btn>
+                    <v-btn text type="submit" outline rounded :color="$route.meta.accent">Save</v-btn>
                   </v-layout>
                 </v-flex>
             </v-layout>

@@ -3,7 +3,7 @@
     <div class="cheat"></div>
     <div class="text-xs-center my-3 div-toggle-buttons">
       <v-btn-toggle v-model="selectedTab" dark mandatory class="primary round elevation-0">
-        <v-btn flat v-for="tab in tabs" :key="tab" class="px-5 my-1 mx-1 round" exact :to="{query:{tab: tab}}" >{{tab}}</v-btn>
+        <v-btn v-for="tab in tabs" :key="tab" class="px-5 my-1 mx-1 round" exact :to="{query:{tab: tab}}" >{{tab}}</v-btn>
       </v-btn-toggle>
     </div>
     <v-card dark class="primary mt-2">

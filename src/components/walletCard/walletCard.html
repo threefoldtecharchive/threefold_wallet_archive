@@ -12,7 +12,7 @@
         <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs4' : ''">
           <v-layout column class="justify-space-between fill-height align-end" v-if="displayAttributes">
             <v-flex>
-              <v-btn dark small icon flat @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0" :class="$route.meta.accent"  v-show="wallet.currency != 'gram'">
+              <v-btn text dark small icon @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0" :class="$route.meta.accent"  v-show="wallet.currency != 'gram'">
                 <v-icon size="15">
                   file_copy
                 </v-icon>

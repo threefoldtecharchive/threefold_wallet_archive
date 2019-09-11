@@ -1,5 +1,5 @@
 <section class="toolbar">
-  <v-toolbar app class="primary white--text" :flat="!isScrolling" v-scroll="onScroll">
+  <v-app-bar app class="primary white--text" :flat="!isScrolling" v-scroll="onScroll">
     <v-toolbar-title class="headline text-uppercase pl-2">
       <div class="spinner">
         <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent"/>
@@ -17,10 +17,10 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-fab-transition>
-      <v-btn small absolute right flat fab dark @click="informationDialog = true" v-if="$route.meta.info">
+      <v-btn text small absolute right fab dark @click="informationDialog = true" v-if="$route.meta.info">
         <v-icon>fas fa-info</v-icon>
       </v-btn>
     </v-fab-transition>
-  </v-toolbar>
+  </v-app-bar>
   <InformationDialog :dialog="informationDialog" :closeDialog="closeInformationDialog" v-if="$route.meta.info"></InformationDialog>
 </section>
