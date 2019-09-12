@@ -6,7 +6,7 @@
           <v-layout column class="py-3 pl-2" >
             <p class="title text-uppercase">{{wallet? wallet.name : 'Wallet name'}}</p>
             <p class="body-1 text-truncate">{{getHumanWalletAddress}}</p>
-            <!-- <p v-if="wallet.currency === 'GFT'" class="body-1 text-truncate">{{authenticated}}</p> -->
+            <p v-if="wallet.currency === 'GFT'" class="body-1 text-truncate">{{authenticated}}</p>
           </v-layout>
         </v-flex>
         <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs4' : ''">
