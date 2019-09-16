@@ -12,16 +12,16 @@
       </v-toolbar>
       <v-card-text>
         This will soon be available
-        <!-- <v-form @submit.prevent="$emit('ctaClicked', walletName); walletName = null">
+        <v-form @submit.prevent="$emit('ctaClicked', walletName); walletName = null">
           <v-layout justify-space-between fill-height column>
             <v-text-field v-model="walletName" box label="Walletname" :color="$route.meta.accent" />
             <v-flex>
               <v-layout align-end justify-end row fill-height>
-                <v-btn type="submit" outline round flat :color="$route.meta.accent">Save</v-btn>
+                <v-btn type="submit" outline round text :color="$route.meta.accent">Save</v-btn>
               </v-layout>
             </v-flex>
           </v-layout>
-        </v-form> -->
+        </v-form>
       </v-card-text>
     </v-card>
   </v-dialog>

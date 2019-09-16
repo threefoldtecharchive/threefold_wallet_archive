@@ -29,7 +29,7 @@
     </v-layout>
 
     <v-textarea filled prepend-icon="message" color="white" label="Message" v-model="formObject.message" 
-      :rules="messageRuless" :counter="maxMessageLength" clearable/>
+      :rules="messageRules" :counter="maxMessageLength" clearable/>
   </v-form>
 
   <ToDialog ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog" :selectedWallet="selectedWallet"
