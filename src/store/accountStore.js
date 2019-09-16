@@ -171,6 +171,7 @@ export default ({
         return wallets
       }
     },
-    syncing: state => state.syncing
+    syncing: state => state.syncing,
+    intervalIsSet: state => state.intervalIsSet
   }
 })
