@@ -67,8 +67,8 @@ export default ({
           })
         }
       })
-
-      if (!context.intervalIsSet){
+      
+      if (!context.getters.intervalIsSet){
         context.commit('setIntervalIsSet',true)
         setInterval(() => {
           context.dispatch('updateAccounts')
