@@ -1,0 +1,38 @@
+
+<section class="form-component">
+  <v-form ref="form" v-model="valid" @input="$emit('formValidation', valid)">
+    
+    <div class="text-xs-left" v-if="investments">
+      <p>To</p>
+      <walletSelector @onWalletSelected='selectWallet' :wallets="computedWallets" 
+        :selected="formObject.to.name"/>
+      <!-- invisible text-field to force validation for walletSelector-->
+      <v-text-field v-model='formObject.to.address' :rules="toRules" v-show="false"></v-text-field>
+    </div>
+
+    <v-text-field v-if="selectedTab == 1 && !investments" box prepend-icon="person" color="white" label="To (Wallet Address)"
+      v-model='formObject.to.address' :rules="toRules" append-icon="far fa-address-book"
+      @click:append="toDialog = true" clearable>
+    </v-text-field>
+
+    <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="formObject.amount" 
+      type="number" min="0.00" :rules="amountRules"  class="inputNumber"
+      clearable  :suffix="selectedWallet.currency">   
+    </v-text-field>
+
+    <v-layout px-4 mx-2 mb-3 column wrap v-if="$route.query.tab != 'receive'">
+      <v-flex>Fee: {{fee.toFixed(2)}} {{selectedWallet.currency}}</v-flex>
+      <span v-if="(formObject.to.currency && selectedWallet.currency != formObject.to.currency)">
+        <v-flex>Exchange rate: {{exchangeRate}}</v-flex>
+        <v-flex v-if="formObject.amount">Your rate: {{yourExchangeRate}}</v-flex>
+      </span>
+    </v-layout>
+
+    <v-textarea box prepend-icon="message" color="white" label="Message" v-model="formObject.message" 
+      :rules="messageRules" :counter="maxMessageLength" clearable :maxlength="maxMessageLength"/>
+  </v-form>
+
+  <ToDialog ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog" :selectedWallet="selectedWallet"
+  :wallets="wallets.filter(x => x.address != selectedWallet.address)" :toRules="toRules"></ToDialog>
+</section>
+

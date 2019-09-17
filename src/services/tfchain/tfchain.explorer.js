@@ -269,6 +269,16 @@ export var Client =  __class__ ('Client', [object], {
 				__except0__.__cause__ = null;
 				throw __except0__;
 			}
+			if (result.code == 403) {
+				var __except0__ = tferrors.ExplorerForbidden ('error (code: {}): {}'.format (result.code, result.data), endpoint);
+				__except0__.__cause__ = null;
+				throw __except0__;
+			}
+			if (Math.floor (result.code / 100) == 4) {
+				var __except0__ = tferrors.ExplorerClientError ('client error (code: {}): {}'.format (result.code, result.data), endpoint);
+				__except0__.__cause__ = null;
+				throw __except0__;
+			}
 			var __except0__ = tferrors.ExplorerServerError ('error (code: {}): {}'.format (result.code, result.data), endpoint);
 			__except0__.__cause__ = null;
 			throw __except0__;
@@ -434,6 +444,16 @@ export var Client =  __class__ ('Client', [object], {
 			if (result.code == 400) {
 				jslog.warning ('invalid data object posted to {}:'.format (endpoint), s);
 				var __except0__ = tferrors.ExplorerBadRequest ('error (code: {}): {}'.format (result.code, result.data), endpoint);
+				__except0__.__cause__ = null;
+				throw __except0__;
+			}
+			if (result.code == 403) {
+				var __except0__ = tferrors.ExplorerForbidden ('error (code: {}): {}'.format (result.code, result.data), endpoint);
+				__except0__.__cause__ = null;
+				throw __except0__;
+			}
+			if (Math.floor (result.code / 100) == 4) {
+				var __except0__ = tferrors.ExplorerClientError ('client error (code: {}): {}'.format (result.code, result.data), endpoint);
 				__except0__.__cause__ = null;
 				throw __except0__;
 			}

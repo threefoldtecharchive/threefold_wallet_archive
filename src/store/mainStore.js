@@ -1,7 +1,8 @@
 export default({
   state: {
     informationMessage: null,
-    fatalError: null
+    fatalError: null,
+    submitDisabled: true
   },
   actions: {
     setInformationMessage (context, message) {

@@ -1,6 +1,13 @@
 @import '../../App/App.scss';
 .toolbar {
-    .v-toolbar {
-        border-radius: 0 0 $borderradius $borderradius;
+    .v-toolbar--fixed {
+        position: fixed;
+        z-index: 3;
+    }
+    .spinner {
+        position: absolute;
+        margin: 0 0 8px 8px;
+        left: 0px;
+        top: 5px;
     }
 }

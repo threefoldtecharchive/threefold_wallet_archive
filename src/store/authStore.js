@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import botService from '../services/3botService'
 import config from '../../public/config'
 import cryptoService from '../services/cryptoService'
@@ -44,11 +45,12 @@ export default ({
           var derivedSeed = responseUrl.searchParams.get('derivedSeed')
           if (!data && derivedSeed) {
             var newSeed = new Uint8Array(decodeBase64(derivedSeed))
+            const userObject = { doubleName: username, seed: newSeed }
+            window.localStorage.setItem('user', JSON.stringify(userObject))
+            context.dispatch('login',
+              userObject
+            )
             console.log(`newSeed`, newSeed)
-            context.dispatch('login', {
-              doubleName: username,
-              seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
-            })
           } else if (data) {
             data = JSON.parse(data)
             var keys = context.getters.keys
@@ -65,12 +67,13 @@ export default ({
                   }
                 }
                 console.log(userData)
-                var newSeed = new Uint8Array(decodeBase64(userData.keys.derivedPrivateKey))
+                var newSeed = new Uint8Array(decodeBase64(userData.derivedSeed))
+                const userObject = { doubleName: username, seed: newSeed }
+                window.localStorage.setItem('user', JSON.stringify(userObject))
+                context.dispatch('login',
+                  userObject
+                )
                 console.log(`newSeed`, newSeed)
-                context.dispatch('login', {
-                  doubleName: username,
-                  seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
-                })
               }).catch(e => context.commit('setFatalError', 'Could not decrypt message.'))
           } else {
             context.commit('setFatalError', 'Got no data from 3bot')

@@ -33,6 +33,9 @@ export var UnknownTransansactionVersion =  __class__ ('UnknownTransansactionVers
 export var InsufficientFunds =  __class__ ('InsufficientFunds', [TFChainBaseException], {
 	__module__: __name__,
 });
+export var UnsupporedFeature =  __class__ ('UnsupporedFeature', [TFChainBaseException], {
+	__module__: __name__,
+});
 export var CurrencyPrecisionOverflow =  __class__ ('CurrencyPrecisionOverflow', [TFChainBaseException], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, value) {
@@ -181,6 +184,12 @@ export var ExplorerNoContent =  __class__ ('ExplorerNoContent', [ExplorerUserErr
 	__module__: __name__,
 });
 export var ExplorerBadRequest =  __class__ ('ExplorerBadRequest', [ExplorerUserError], {
+	__module__: __name__,
+});
+export var ExplorerForbidden =  __class__ ('ExplorerForbidden', [ExplorerUserError], {
+	__module__: __name__,
+});
+export var ExplorerClientError =  __class__ ('ExplorerClientError', [ExplorerUserError], {
 	__module__: __name__,
 });
 export var ExplorerServerError =  __class__ ('ExplorerServerError', [ExplorerError], {

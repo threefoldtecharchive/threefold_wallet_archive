@@ -13,25 +13,42 @@ export default {
     },
     'selected': {
       type: Boolean
+    },
+    'displayAttributes': {
+      type: Boolean,
+      default: true
     }
   },
   data () {
     return {
-      amount: '---'
+      amount: '---',
+      authenticated: true
     }
   },
   computed: {
     ...mapGetters([
-      'account'
+      'accounts'
     ]),
     totalAmount () {
-      return parseFloat(this.wallet.totalAmount.replace(',', '')).toLocaleString('nl-BE', { minimumFractionDigits: 2 })
+      return Number(this.wallet.totalAmount.replace(/,/g, "")).toFixed(2)
     },
-    walletaddress () {
-      return `${this.wallet.name}@${this.account.account_name}`
+    getHumanWalletAddress () {
+      // return `${this.wallet.name}@${this.account.account_name}`
+      return `${this.wallet.name.replace(/\s/g,'')}@${this.wallet.holder.account_name.split(':')[1]}`
+    },
+    image () {
+      let currency = this.wallet.currency.toLowerCase()
+      if (currency == 'gram') return 'gram-image'
+      if (currency == 'gft') return 'gft-image'
+      if (currency == 'tft') return 'tft-image'
     }
   },
   mounted () {
+    if (this.wallet.currency === "GFT" || this.wallet.currency == "gram"){
+      this.wallet.isAuthenticated.then( v => {
+        this.authenticated = v
+      })
+    }
   },
   methods: {
     ...mapActions([
@@ -40,6 +57,9 @@ export default {
     copyAddress () {
       copy(this.wallet.address)
       this.setInformationMessage(`Address has been copied to clipboard (${this.wallet.address.substring(0, 8)}...).`)
+    },
+    clicked () {
+      if(this.clickable && this.authenticated) this.$emit('click', this.wallet)
     }
-  }
+  },
 }

@@ -3,11 +3,13 @@ import App from './App'
 import store from './store/'
 import router from './router'
 import './plugins'
+import moment from 'moment'
 
 Vue.config.productionTip = false
 
+
 router.beforeEach((to, from, next) => {
-  if ((to.name !== 'login' && to.name !== 'error') && !store.state.accountStore.account) {
+  if ((to.name !== 'login' && to.name !== 'error') && !store.state.accountStore.accounts) {
     next({
       name: 'login'
     })
@@ -15,6 +17,14 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
+Vue.filter(
+  Vue.filter('formatDate', function(value) {
+    if (value) {
+      return moment(String(value)).format('D MMMM YYYY HH:mm:ss')
+    }
+  })
+)
 
 new Vue({
   store,

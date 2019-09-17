@@ -19,26 +19,26 @@ export default ({
       resolve(encodeUTF8(unsigned))
     })
   },
-  decrypt (message, nonce, privateKey, pubkey) {
+  decrypt (message, nonce, privateKey, publicKey) {
     return new Promise(async (resolve, reject) => {
       await sodium.ready
       message = decodeBase64(message)
       privateKey = decodeBase64(privateKey)
-      pubkey = sodium.crypto_sign_ed25519_pk_to_curve25519(decodeBase64(pubkey))
+      publicKey = sodium.crypto_sign_ed25519_pk_to_curve25519(decodeBase64(publicKey))
       nonce = decodeBase64(nonce)
-      var decrypted = sodium.crypto_box_open_easy(message, nonce, pubkey, privateKey)
+      var decrypted = sodium.crypto_box_open_easy(message, nonce, publicKey, privateKey)
       decrypted = encodeUTF8(decrypted)
       resolve(decrypted)
     })
   },
-  encrypt (message, privateKey, pubkey) {
+  encrypt (message, privateKey, publicKey) {
     return new Promise(async (resolve, reject) => {
       message = new TextEncoder().encode(message)
       privateKey = sodium.crypto_sign_ed25519_sk_to_curve25519(decodeBase64(privateKey))
-      pubkey = sodium.crypto_sign_ed25519_pk_to_curve25519(decodeBase64(pubkey))
+      publicKey = sodium.crypto_sign_ed25519_pk_to_curve25519(decodeBase64(publicKey))
 
       var nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES)
-      var encrypted = sodium.crypto_box_easy(message, nonce, pubkey, privateKey)
+      var encrypted = sodium.crypto_box_easy(message, nonce, publicKey, privateKey)
       resolve({
         encrypted: encodeBase64(encrypted),
         nonce: encodeBase64(nonce)
@@ -60,7 +60,7 @@ export default ({
       })
     })
   },
-  getEdPkInCurve (pubkey) {
-    return encodeBase64(sodium.crypto_sign_ed25519_pk_to_curve25519(decodeBase64(pubkey)))
+  getEdPkInCurve (publicKey) {
+    return encodeBase64(sodium.crypto_sign_ed25519_pk_to_curve25519(decodeBase64(publicKey)))
   }
 })
