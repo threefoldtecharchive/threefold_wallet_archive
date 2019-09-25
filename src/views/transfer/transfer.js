@@ -28,7 +28,6 @@ export default {
   },
   mounted () {
     EventBus.$on('transfer', () => {
-      this.transactionInfoDialog = true
       this.transferConfirmed()
     })
     this.$router.replace({ query: { tab: this.tabs[this.tabs.length - 1] } })
