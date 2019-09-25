@@ -11,7 +11,7 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <v-text-field ref="copyField" @focus="$event.target.select()" append-icon="file_copy" @click:append="copyAndCallback" filled outlined box label="Copy this" v-model="data.toCopy"></v-text-field>
+        <v-text-field filled outlined box label="Copy this" v-model="data.toCopy"></v-text-field>
       </v-card-text>
     </v-card>
   </v-dialog>

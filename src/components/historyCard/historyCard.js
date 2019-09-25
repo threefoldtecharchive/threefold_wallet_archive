@@ -10,7 +10,7 @@ export default {
   data () {
     return {
       outgoing: false,
-      show: true
+      show: false
     }
   },
   computed: {

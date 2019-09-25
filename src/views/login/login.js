@@ -18,17 +18,18 @@ export default {
     }
   },
   mounted () {
-    if (this.isLoggingIn) {
+    console.log(this.isLoggingIn)
+    console.log(window.location.href.indexOf('#') === -1)
+    if (this.isLoggingIn && window.location.href.indexOf('#') === -1) {
       const account = JSON.parse(window.localStorage.getItem('user'))
-      console.log(account)
       if (account && account.doubleName && account.seed) {
         account.seed = new Uint8Array(Object.values(account.seed))
-        console.log(account)
         this.login(account)
       } else {
         this.generateLoginUrl()
       }
     } else {
+      console.log(`Checkresponse`)
       this.checkResponse(new URL(window.location.href))
     }
   },
@@ -47,7 +48,7 @@ export default {
     },
     loginUrl (val) {
       if (val) {
-        window.location.href = val
+        // window.location.href = val
       }
     }
   }
