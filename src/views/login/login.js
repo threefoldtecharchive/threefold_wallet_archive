@@ -3,7 +3,7 @@ export default {
   name: 'login',
   components: {},
   props: [],
-  data() {
+  data () {
     return {
 
     }
@@ -13,11 +13,11 @@ export default {
       'loginUrl',
       'accounts'
     ]),
-    isLoggingIn() {
+    isLoggingIn () {
       return Object.entries(this.$route.query).length === 0
     }
   },
-  mounted() {
+  mounted () {
     if (this.isLoggingIn) {
       const account = JSON.parse(window.localStorage.getItem('user'))
       console.log(account)
@@ -40,12 +40,12 @@ export default {
     ])
   },
   watch: {
-    accounts(val) {
+    accounts (val) {
       if (val.length) {
         this.$router.push({ name: 'home' })
       }
     },
-    loginUrl(val) {
+    loginUrl (val) {
       if (val) {
         window.location.href = val
       }
