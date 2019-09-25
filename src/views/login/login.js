@@ -18,8 +18,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.isLoggingIn)
-    console.log(window.location.href.indexOf('#') === -1)
     if (this.isLoggingIn && window.location.href.indexOf('#') === -1) {
       const account = JSON.parse(window.localStorage.getItem('user'))
       if (account && account.doubleName && account.seed) {
@@ -29,7 +27,6 @@ export default {
         this.generateLoginUrl()
       }
     } else {
-      console.log(`Checkresponse`)
       this.checkResponse(new URL(window.location.href))
     }
   },
@@ -48,7 +45,7 @@ export default {
     },
     loginUrl (val) {
       if (val) {
-        // window.location.href = val
+        window.location.href = val
       }
     }
   }
