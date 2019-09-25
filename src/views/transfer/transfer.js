@@ -21,7 +21,7 @@ export default {
       transactionInfoDialog: false,
       qrScannerDialog: false,
       qrDialog: false,
-      formObject: { to: {} },
+      formObject: { to: {address: null}, amount: null, message: null, sender: null },
       selectedTab: 1,
       selectedWallet: {}
     }
@@ -91,14 +91,14 @@ export default {
         currency: this.selectedWallet.currency,
         type: `${this.selectedWallet.currency}/${this.formObject.to.currency}`
       })
-      this.formObject = { to: {} }
+      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
       setTimeout(function () { store.dispatch('updateAccounts') }, 1000)
       this.$router.push({ name: this.$route.meta.history, params: { wallet: this.selectedWallet.name } })
     },
     selectWallet (wallet) {
       this.selectedWallet = wallet
-      this.formObject = { to: {} }
+      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
     },
     checkForm () {
@@ -120,7 +120,7 @@ export default {
   },
   watch: {
     '$route.query.tab' () {
-      this.formObject = { to: {} }
+      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
       this.selectedWallet = this.computedWallets[0]
       this.$forceUpdate()
