@@ -29,7 +29,6 @@ export default ({
       context.commit('setLoginUrl', `${config.botFrontEnd}?state=${state}&scope=${scope}&appid=${appid}&publickey=${encodeURIComponent(keys.publicKey)}&redirecturl=${encodeURIComponent(config.redirect_url)}`)
     },
     async checkResponse (context, responseUrl) {
-      // https://localhost:8080#username=ivan&derivedSeed=abc123
       var username = responseUrl.searchParams.get('username')
       var signedHash = responseUrl.searchParams.get('signedhash')
 
@@ -41,11 +40,17 @@ export default ({
           if (signedHash && context.getters.state !== await cryptoService.validateSignature(signedHash, response.data.publicKey)) {
             context.commit('setFatalError', `Invalid state.`)
           }
+          // http://localhost:8080/login#username=ivan&derivedSeed=abc123
           var data = responseUrl.searchParams.get('data')
-          var derivedSeed = responseUrl.searchParams.get('derivedSeed')
-          if (!data && derivedSeed) {
-            var newSeed = new Uint8Array(decodeBase64(derivedSeed))
-            const userObject = { doubleName: username, seed: newSeed }
+          var directLoginData = window.location.hash.substr(1).split('&').reduce(function (result, item) {
+            var parts = item.split('=')
+            result[parts[0]] = parts[1]
+            return result
+          }, {})
+
+          if (!data && directLoginData) {
+            var newSeed = new Uint8Array(decodeBase64(directLoginData.derivedSeed))
+            const userObject = { doubleName: directLoginData.username, seed: newSeed }
             window.localStorage.setItem('user', JSON.stringify(userObject))
             context.dispatch('login',
               userObject
