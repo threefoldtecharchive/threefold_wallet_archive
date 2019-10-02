@@ -89,6 +89,7 @@ export default new Router({
     meta: {
       accent: 'accent',
       overview: 'home',
+      history: 'history',
       info: {
         title: 'one hell of a title',
         text: 'this is info'

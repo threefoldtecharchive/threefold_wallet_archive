@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import botService from '../services/3botService'
 import config from '../../public/config'
 import cryptoService from '../services/cryptoService'
@@ -10,12 +11,7 @@ export default ({
     loginUrl: null
   },
   actions: {
-    async generateLoginUrl(context) {
-      // context.dispatch('login', {
-      //   doubleName: 'username',
-      //   // seed:  'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride'
-      //   seed: "lemon vocal marriage flash soft address barely crazy swarm alert hire riot find know around pill denial labor join spice energy planet deliver dress",
-      // })
+    async generateLoginUrl (context) {
       context.dispatch('clearStorage')
       var state = ''
       var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -32,7 +28,7 @@ export default ({
 
       context.commit('setLoginUrl', `${config.botFrontEnd}?state=${state}&scope=${scope}&appid=${appid}&publickey=${encodeURIComponent(keys.publicKey)}&redirecturl=${encodeURIComponent(config.redirect_url)}`)
     },
-    async checkResponse(context, responseUrl) {
+    async checkResponse (context, responseUrl) {
       var username = responseUrl.searchParams.get('username')
       var signedHash = responseUrl.searchParams.get('signedhash')
 
@@ -41,67 +37,70 @@ export default ({
         context.commit('setFatalError', responseUrl.searchParams.get('error'))
       } else {
         botService.getUserData(username).then(async (response) => {
-          cryptoService.validateSignature(signedHash, response.data.publicKey)
-            .then(x => {
-              console.log(x)
-              if (context.getters.state !== x) {
-                context.commit('setFatalError', `Invalid state. Should be ${context.getters.state} but was ${x}`)
-              } else {
-                var data = responseUrl.searchParams.get('data')
-                if (!data) {
-                  context.commit('setFatalError', 'Got no data from 3bot')
-                } else {
-                  data = JSON.parse(data)
-                  var keys = context.getters.keys
-                  var userData = {}
-                  console.log(data, keys, response)
-                  cryptoService.decrypt(data.ciphertext, data.nonce, keys.privateKey, response.data.publicKey)
-                    .then(decrypted => {
-                      console.log(decrypted)
-                      if (decrypted) {
-                        decrypted = JSON.parse(decrypted)
-                        for (var k in decrypted) {
-                          if (decrypted.hasOwnProperty(k)) {
-                            userData[k] = decrypted[k]
-                          }
-                        }
-                      }
-                      console.log(userData)
-                      var newSeed = new Uint8Array(decodeBase64(userData.keys.derivedPrivateKey))
-                      console.log(`newSeed`, newSeed)
-                      const userObject = {doubleName: username, seed: newSeed}
-                      window.localStorage.setItem("user",JSON.stringify(userObject))
-                      context.dispatch('login', 
-                        userObject
-                        // doubleName: username,
-                        // seed: newSeed // (userData.seed || 'buzz sock ten heavy occur grant grant oil tip awful warrior need asthma device actor promote imitate record air ring pottery company analyst ride')
-                      )
-                    }).catch(e => {
-                      console.log(e)
-                      context.commit('setFatalError', 'Could not decrypt message.')
-                    })
+          if (signedHash && context.getters.state !== await cryptoService.validateSignature(signedHash, response.data.publicKey)) {
+            context.commit('setFatalError', `Invalid state.`)
+          }
+          // http://localhost:8080/login#username=ivan&derivedSeed=abc123
+          var data = responseUrl.searchParams.get('data')
+          var directLoginData = window.location.hash.substr(1).split('&').reduce(function (result, item) {
+            var parts = item.split('=')
+            result[parts[0]] = parts[1]
+            return result
+          }, {})
+
+          if (!data && directLoginData) {
+            var newSeed = new Uint8Array(decodeBase64(directLoginData.derivedSeed))
+            const userObject = { doubleName: directLoginData.username, seed: newSeed }
+            window.localStorage.setItem('user', JSON.stringify(userObject))
+            context.dispatch('login',
+              userObject
+            )
+            console.log(`newSeed`, newSeed)
+          } else if (data) {
+            data = JSON.parse(data)
+            var keys = context.getters.keys
+            var userData = {}
+            cryptoService.decrypt(data.ciphertext, data.nonce, keys.privateKey, response.data.publicKey)
+              .then(decrypted => {
+                console.log(decrypted)
+                if (decrypted) {
+                  decrypted = JSON.parse(decrypted)
+                  for (var k in decrypted) {
+                    if (decrypted.hasOwnProperty(k)) {
+                      userData[k] = decrypted[k]
+                    }
+                  }
                 }
-              }
-            })
-            .catch(e => context.commit('setFatalError', 'Signature failed, please try again.'))
-        })
+                console.log(userData)
+                var newSeed = new Uint8Array(decodeBase64(userData.derivedSeed))
+                const userObject = { doubleName: username, seed: newSeed }
+                window.localStorage.setItem('user', JSON.stringify(userObject))
+                context.dispatch('login',
+                  userObject
+                )
+                console.log(`newSeed`, newSeed)
+              }).catch(e => context.commit('setFatalError', 'Could not decrypt message.'))
+          } else {
+            context.commit('setFatalError', 'Got no data from 3bot')
+          }
+        }).catch(e => context.commit('setFatalError', 'Signature failed, please try again.'))
       }
     },
-    clearStorage(context) {
+    clearStorage (context) {
       context.commit('setState', null)
       context.commit('setKeys', null)
     }
   },
   mutations: {
-    setKeys(state, keys) {
+    setKeys (state, keys) {
       window.localStorage.setItem('tempKeys', JSON.stringify(keys))
       state.keys = keys
     },
-    setState(state, stateHash) {
+    setState (state, stateHash) {
       window.localStorage.setItem('state', stateHash)
       state.state = stateHash
     },
-    setLoginUrl(state, url) {
+    setLoginUrl (state, url) {
       state.loginUrl = url
     }
   },

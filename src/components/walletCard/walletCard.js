@@ -1,6 +1,5 @@
 import amountIndicator from '../amountIndicator'
 import { mapGetters, mapActions } from 'vuex'
-import copy from 'clipboard-copy'
 export default {
   name: 'wallet-card',
   components: { amountIndicator },
@@ -30,11 +29,11 @@ export default {
       'accounts'
     ]),
     totalAmount () {
-      return parseFloat(this.wallet.totalAmount.replace(',', '')).toLocaleString('nl-BE', { minimumFractionDigits: 2 })
+      return Number(this.wallet.totalAmount.replace(/,/g, '')).toFixed(2)
     },
     getHumanWalletAddress () {
       // return `${this.wallet.name}@${this.account.account_name}`
-      return `${this.wallet.name.replace(/\s/g,'')}@${this.wallet.holder.account_name.split(':')[1]}`
+      return `${this.wallet.name.replace(/\s/g, '')}@${this.wallet.holder.account_name.split(':')[1]}`
     },
     image () {
       let currency = this.wallet.currency.toLowerCase()
@@ -44,8 +43,8 @@ export default {
     }
   },
   mounted () {
-    if (this.wallet.currency === "GFT" || this.wallet.currency == "gram"){
-      this.wallet.isAuthenticated.then( v => {
+    if (this.wallet.currency === 'GFT' || this.wallet.currency == 'gram') {
+      this.wallet.isAuthenticated.then(v => {
         this.authenticated = v
       })
     }
@@ -55,11 +54,14 @@ export default {
       'setInformationMessage'
     ]),
     copyAddress () {
-      copy(this.wallet.address)
-      this.setInformationMessage(`Address has been copied to clipboard (${this.wallet.address.substring(0, 8)}...).`)
+      this.$root.$emit('copy', {
+        title: 'Copy wallet address to clipboard',
+        toCopy: this.wallet.address,
+        callback: () => { this.setInformationMessage(`Address has been copied to clipboard (${this.wallet.address.substring(0, 8)}...).`) }
+      })
     },
     clicked () {
-      if(this.clickable && this.authenticated) this.$emit('click', this.wallet)
+      if (this.clickable && this.authenticated) this.$emit('click', this.wallet)
     }
-  },
+  }
 }

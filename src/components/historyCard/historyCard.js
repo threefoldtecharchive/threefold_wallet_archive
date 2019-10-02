@@ -1,6 +1,5 @@
 import amountIndicator from '../amountIndicator'
-import copy from 'clipboard-copy'
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'history-card',
@@ -47,8 +46,7 @@ export default {
       if (this.transaction.sender) {
         let sender = JSON.parse(this.transaction.sender)
         return `${sender.walletname}@${sender.account.split(':')[1]}`
-      }
-      else if (!this.transaction.confirmed) return 'Pending transaction...'
+      } else if (!this.transaction.confirmed) return 'Pending transaction...'
       var senderAddress = this.getWalletAddresSender()
       return senderAddress
     },
@@ -60,7 +58,7 @@ export default {
         date = new Date(0)
         date.setUTCSeconds(this.transaction.timestamp)
       }
-      return date.toLocaleDateString()
+      return date
     },
     fee () {
       var total = 0
@@ -73,7 +71,7 @@ export default {
     }
   },
   mounted () {
-    
+
   },
   methods: {
     getWalletAddresRecipient () {
@@ -83,7 +81,7 @@ export default {
         if (input) address = input.recipient
       } else {
         var output = this.transaction.outputs.find(x => !x.fee)
-        if (output) address = output.recipient 
+        if (output) address = output.recipient
       }
       return address
     },
@@ -92,7 +90,7 @@ export default {
       if (this.transaction.outputs && this.transaction.outputs.length) {
         var output = this.transaction.outputs.find(x => !x.fee)
         if (output) address = output.senders[0]
-      }  else {
+      } else {
         var input = this.transaction.inputs.find(x => !x.fee)
         if (input) address = input.senders[0]
       }
@@ -101,23 +99,12 @@ export default {
     sumTransactionAmount (arr, modal) {
       var total = 0.00
       arr.forEach(output => {
-        var amount = output.amount.str()
-        total += parseFloat(amount)
+        var amount = output.amount.str().replace(',', '')
+
+        total = Number((Number(total) + Number(amount)).toFixed(9))
       })
-      
-      total = total.toString()
 
-      if ((total.substr(total.indexOf('.')).length > 4) && !modal) {
-        total = total.substr(0, total.indexOf('.')+ 3) + '..'
-      } else if (total.substr(total.indexOf('.')).length < 3) {
-        total = parseFloat(total)
-      } 
-
-      if (typeof(total) == 'string') return total.replace('.', ',')
-      return total.toLocaleString('nl', { minimumFractionDigits: 2, useGrouping: false })
-    },
-    copyTransaction () {
-      copy(JSON.stringify(this.transaction))
+      return total.toFixed(2)
     },
     isJsonObject (obj) {
       try {

@@ -39,8 +39,8 @@
     </v-card-text>
   </v-card>
 
-  <v-dialog v-model="show" v-if="show" max-width="500">
-    <v-card style="height:100%">
+  <v-dialog scrollable v-model="show" v-if="show" max-width="500">
+    <v-card>
       <v-toolbar dark color="primary">
         <v-toolbar-title class="text-uppercase">
           <v-icon>
@@ -80,7 +80,7 @@
           </v-flex>
           <v-flex>
             <p class="subtitle mb-0 grey--text">Date</p>
-            <p class="title mt-0">{{timeStamp}}</p>
+            <p class="title mt-0">{{timeStamp | formatDate}} </p>
           </v-flex>
           <v-flex>
             <p class="subtitle mb-0 grey--text">Amount <span v-if="outgoing && transaction.outputs.some(x => x.is_fee)" >(fee incl)</span></p>

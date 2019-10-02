@@ -1,5 +1,6 @@
 import ToDialog from './components/toDialog'
 import walletSelector from '../../../../components/walletSelector'
+
 export default {
   name: 'form-component',
   components: {
@@ -46,7 +47,7 @@ export default {
       if (this.$route.query.tab != 'deregister') return this.wallets.filter(x => x.currency == 'GFT')
       else return this.wallets.filter(x => x.currency === 'gram')
     },
-    messageRuless() {
+    messageRules() {
       let rules = [
         v => ( typeof v == 'undefined' || (typeof v === 'string' && v.length <= this.maxMessageLength)) || `Message cannot be more than ${this.maxMessageLength} characters long`,
       ]
@@ -54,10 +55,12 @@ export default {
     },
     amountRules() {
       let rules = [
-        v => !!v || 'Amount is required',
-        v => !!v && parseFloat(v.replace(',', '')) > 0 || 'Amount must be greater than 0',
+        v => !!v || 'The amount is required',
+        v => !!v && Number(v) > 0 || 'The amount must be greater than 0'
       ]
-      if (['send', 'deregister', 'register'].some(x => x === this.$route.query.tab)) rules.push(v => !!v && parseFloat(v) <= parseFloat(this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount) || 'Amount must be smaller than wallet value')
+      if (['send', 'deregister', 'register'].some(x => x === this.$route.query.tab)) {
+        rules.push(v => !!v && Number(v) <= Number((this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount.replace(",", "") - 0.10).toFixed(9)) || 'The amount must be smaller or equal than the wallet value minus the fee')
+      }
       return rules
     },
     exchangeRate () {
@@ -87,7 +90,6 @@ export default {
         name: wallet.name,
         currency: wallet.currency,
         address: wallet.address,
-        name: wallet.name,
         holder: wallet.holder,
         totalAmount: wallet.totalAmount,
         isAuthenticated: wallet.isAuthenticated

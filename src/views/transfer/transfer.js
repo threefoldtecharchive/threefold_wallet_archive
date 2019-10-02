@@ -4,33 +4,33 @@ import FormComponent from './components/formComponent'
 import TransactionInfoDialog from './components/transactionInfoDialog'
 import QrScannerDialog from './components/qrScannerDialog'
 import QrDialog from './components/qrDialog'
-import {cloneDeep} from 'lodash'
 
 import { mapGetters, mapActions } from 'vuex'
+import store from '../../store'
 export default {
   name: 'transfer',
   components: {
-    walletSelector, 
-     FormComponent, 
-     TransactionInfoDialog, 
-     QrScannerDialog,
-     QrDialog
-    },
+    walletSelector,
+    FormComponent,
+    TransactionInfoDialog,
+    QrScannerDialog,
+    QrDialog
+  },
   data () {
     return {
       transactionInfoDialog: false,
       qrScannerDialog: false,
       qrDialog: false,
-      formObject:{to:{}},
+      formObject: { to: {address: null}, amount: null, message: null, sender: null },
       selectedTab: 1,
       selectedWallet: {}
     }
   },
   mounted () {
-    EventBus.$on('transfer', (payload) => {
+    EventBus.$on('transfer', () => {
       this.transferConfirmed()
     })
-    this.$router.replace({query: {tab: this.tabs[this.tabs.length - 1]}})
+    this.$router.replace({ query: { tab: this.tabs[this.tabs.length - 1] } })
     if (!this.selectedWallet.address) this.selectedWallet = this.computedWallets[0]
   },
   beforeDestroy () {
@@ -53,8 +53,12 @@ export default {
       return false
     },
     computedWallets () {
-      if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'deregister') return this.wallets.filter(x => x.currency === 'gram')
-      else if (this.$route.name === 'transfer investments') return this.wallets.filter(x => x.currency === 'GFT')
+      if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'deregister') {
+        return this.wallets.filter(x => x.currency === 'gram')
+      } else if (this.$route.name === 'transfer investments') {
+        return this.wallets.filter(x => x.currency === 'GFT')
+      }
+
       return this.wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')
     },
     fee () {
@@ -65,14 +69,19 @@ export default {
     ...mapActions([
       'sendCoins'
     ]),
-    transferConfirmed (val) {
-      if(this.active == 'receive') {
+    transferConfirmed () {
+      if (this.active == 'receive') {
         if (this.checkForm()) this.qrDialog = true
       } else if (this.active == 'send' || this.active == 'register' || this.active == 'deregister') {
         if (this.checkForm()) this.transactionInfoDialog = true
       }
     },
     async send () {
+      console.log(this.selectedWallet.currency, this.formObject.to.currency)
+      // This is temporary untill the atomic exchange
+      if (this.selectedWallet.currency === 'TFT') {
+        this.formObject.to.currency = this.selectedWallet.currency
+      }
       await this.sendCoins({
         from: this.selectedWallet.address,
         to: this.formObject.to.address,
@@ -81,16 +90,17 @@ export default {
         currency: this.selectedWallet.currency,
         type: `${this.selectedWallet.currency}/${this.formObject.to.currency}`
       })
-      this.formObject = {to:{}}
+      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
-      this.$router.push({name: this.$route.meta.overview})
+      setTimeout(function () { store.dispatch('updateAccounts') }, 1000)
+      this.$router.push({ name: this.$route.meta.history, params: { wallet: this.selectedWallet.name } })
     },
     selectWallet (wallet) {
       this.selectedWallet = wallet
-      this.formObject = {to:{}}
+      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
     },
-    checkForm() {
+    checkForm () {
       return this.$refs.formComponent.$refs.form.validate()
     },
     formValidation (valid) {
@@ -100,16 +110,16 @@ export default {
       if (save) this.send()
       this.transactionInfoDialog = false
     },
-    closeQrScannerDialog (save) {
+    closeQrScannerDialog () {
       this.qrScannerDialog = false
     },
-    closeQrDialog (save) {
+    closeQrDialog () {
       this.qrDialog = false
     }
   },
   watch: {
     '$route.query.tab' () {
-      this.formObject = {to:{}}
+      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
       this.selectedWallet = this.computedWallets[0]
       this.$forceUpdate()

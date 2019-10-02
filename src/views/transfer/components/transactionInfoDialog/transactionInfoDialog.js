@@ -39,8 +39,11 @@ export default {
   },
   computed: {
     amount () {
-      if (this.$route.query.tab == 'receive') return parseFloat(this.formObject.amount)
-      return parseFloat(this.formObject.amount) + this.fee
+      if (this.$route.query.tab == 'receive') {
+        return Number(this.formObject.amount).toFixed(2)
+      }
+      
+      return (Number(this.formObject.amount) + Number(this.fee)).toFixed(2)
     }
   }
 }

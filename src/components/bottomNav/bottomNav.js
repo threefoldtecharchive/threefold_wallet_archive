@@ -1,5 +1,4 @@
-import { mapGetters, mapActions } from "vuex";
-import { EventBus } from '../../eventBus.js';
+import { EventBus } from '../../eventBus.js'
 export default {
   name: 'bottom-nav',
   components: {},
@@ -21,12 +20,12 @@ export default {
     EventBus.$off('transferDisabled')
   },
   methods: {
-    handleCta() {
-      if(this.$route.name === 'transfer'|| this.$route.name === 'transfer investments') {
+    handleCta () {
+      if (this.$route.name === 'transfer' || this.$route.name === 'transfer investments') {
         EventBus.$emit('transfer', true)
       } else {
-        this.$router.push({name: this.$route.meta.transfer})
+        this.$router.push({ name: this.$route.meta.transfer })
       }
-    },
-  },
+    }
+  }
 }
