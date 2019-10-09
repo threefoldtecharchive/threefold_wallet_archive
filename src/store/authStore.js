@@ -29,61 +29,61 @@ export default ({
       context.commit('setLoginUrl', `${config.botFrontEnd}?state=${state}&scope=${scope}&appid=${appid}&publickey=${encodeURIComponent(keys.publicKey)}&redirecturl=${encodeURIComponent(config.redirect_url)}`)
     },
     async checkResponse (context, responseUrl) {
-      var username = responseUrl.searchParams.get('username')
-      var signedHash = responseUrl.searchParams.get('signedhash')
-
-      // TODO check state
       if (responseUrl.searchParams.get('error')) {
         context.commit('setFatalError', responseUrl.searchParams.get('error'))
       } else {
-        botService.getUserData(username).then(async (response) => {
-          if (signedHash && context.getters.state !== await cryptoService.validateSignature(signedHash, response.data.publicKey)) {
-            context.commit('setFatalError', `Invalid state.`)
-          }
-          // http://localhost:8080/login#username=ivan&derivedSeed=abc123
-          var data = responseUrl.searchParams.get('data')
-          var directLoginData = window.location.hash.substr(1).split('&').reduce(function (result, item) {
+        var username = responseUrl.searchParams.get('username')
+        var signedHash = responseUrl.searchParams.get('signedhash')
+        var directLoginData
+        if (window.location.hash) {
+          directLoginData = window.location.hash.substr(1).split('&').reduce(function (result, item) {
             var parts = item.split('=')
             result[parts[0]] = parts[1]
             return result
           }, {})
+          var newSeed = new Uint8Array(decodeBase64(directLoginData.derivedSeed))
+          const userObject = { doubleName: directLoginData.username, seed: newSeed }
+          window.localStorage.setItem('user', JSON.stringify(userObject))
+          context.dispatch('login',
+            userObject
+          )
+        } else {
+          botService.getUserData(username).then(async (response) => {
+            if (signedHash && context.getters.state !== await cryptoService.validateSignature(signedHash, response.data.publicKey)) {
+              context.commit('setFatalError', `Invalid state.`)
+            }
+            // http://localhost:8080/login#username=ivan&derivedSeed=abc123
+            var data = responseUrl.searchParams.get('data')
 
-          if (!data && directLoginData) {
-            var newSeed = new Uint8Array(decodeBase64(directLoginData.derivedSeed))
-            const userObject = { doubleName: directLoginData.username, seed: newSeed }
-            window.localStorage.setItem('user', JSON.stringify(userObject))
-            context.dispatch('login',
-              userObject
-            )
-            console.log(`newSeed`, newSeed)
-          } else if (data) {
-            data = JSON.parse(data)
-            var keys = context.getters.keys
-            var userData = {}
-            cryptoService.decrypt(data.ciphertext, data.nonce, keys.privateKey, response.data.publicKey)
-              .then(decrypted => {
-                console.log(decrypted)
-                if (decrypted) {
-                  decrypted = JSON.parse(decrypted)
-                  for (var k in decrypted) {
-                    if (decrypted.hasOwnProperty(k)) {
-                      userData[k] = decrypted[k]
+            if (data) {
+              data = JSON.parse(data)
+              var keys = context.getters.keys
+              var userData = {}
+              cryptoService.decrypt(data.ciphertext, data.nonce, keys.privateKey, response.data.publicKey)
+                .then(decrypted => {
+                  console.log(decrypted)
+                  if (decrypted) {
+                    decrypted = JSON.parse(decrypted)
+                    for (var k in decrypted) {
+                      if (decrypted.hasOwnProperty(k)) {
+                        userData[k] = decrypted[k]
+                      }
                     }
                   }
-                }
-                console.log(userData)
-                var newSeed = new Uint8Array(decodeBase64(userData.derivedSeed))
-                const userObject = { doubleName: username, seed: newSeed }
-                window.localStorage.setItem('user', JSON.stringify(userObject))
-                context.dispatch('login',
-                  userObject
-                )
-                console.log(`newSeed`, newSeed)
-              }).catch(e => context.commit('setFatalError', 'Could not decrypt message.'))
-          } else {
-            context.commit('setFatalError', 'Got no data from 3bot')
-          }
-        }).catch(e => context.commit('setFatalError', 'Signature failed, please try again.'))
+                  console.log(userData)
+                  var newSeed = new Uint8Array(decodeBase64(userData.derivedSeed))
+                  const userObject = { doubleName: username, seed: newSeed }
+                  window.localStorage.setItem('user', JSON.stringify(userObject))
+                  context.dispatch('login',
+                    userObject
+                  )
+                  console.log(`newSeed`, newSeed)
+                }).catch(e => context.commit('setFatalError', 'Could not decrypt message.'))
+            } else {
+              context.commit('setFatalError', 'Got no data from 3bot')
+            }
+          }).catch(e => context.commit('setFatalError', 'Signature failed, please try again.'))
+        }
       }
     },
     clearStorage (context) {
