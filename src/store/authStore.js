@@ -38,7 +38,7 @@ export default ({
         if (window.location.hash) {
           directLoginData = window.location.hash.substr(1).split('&').reduce(function (result, item) {
             var parts = item.split('=')
-            result[parts[0]] = parts[1]
+            result[parts[0]] = decodeURIComponent(parts[1])
             return result
           }, {})
           var newSeed = new Uint8Array(decodeBase64(directLoginData.derivedSeed))
