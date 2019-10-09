@@ -1,6 +1,6 @@
 import config from '../../public/config'
 import * as tfchain from '../services/tfchain/api'
-import nbhService from '../services/nbhService';
+import nbhService from '../services/nbhService'
 export default ({
   state: {
     // account: window.localStorage.getItem('account') ? JSON.parse(window.localStorage.getItem('account')) : null,
@@ -10,8 +10,7 @@ export default ({
     intervalIsSet: false
   },
   actions: {
-    login(context, userData) {
-      console.log(userData)
+    login (context, userData) {
       // context.dispatch('setPkidClient', userData.seed)
 
       var tfAccount = new tfchain.Account(
@@ -50,14 +49,14 @@ export default ({
       context.commit('setAccounts', [tfAccount])
 
       context.dispatch('updateAccounts')
-      
+
       context.dispatch('createWallet', { chain: 'tft', walletName: 'daily' })
       context.dispatch('createWallet', { chain: 'tft', walletName: 'savings' })
 
       // context.dispatch('createWallet', { chain: 'gft', walletName: 'gold tokens' })
       // context.dispatch('createWallet', { chain: 'gft', walletName: 'gold tokens savings' })
     },
-    updateAccounts(context) {
+    updateAccounts (context) {
       context.getters.accounts.forEach(account => {
         if (account && !context.getters.syncing) {
           context.commit('setSync', true)
@@ -67,9 +66,9 @@ export default ({
           })
         }
       })
-      
-      if (!context.getters.intervalIsSet){
-        context.commit('setIntervalIsSet',true)
+
+      if (!context.getters.intervalIsSet) {
+        context.commit('setIntervalIsSet', true)
         setInterval(() => {
           context.dispatch('updateAccounts')
         }, 60000)
@@ -85,7 +84,7 @@ export default ({
     }
   },
   mutations: {
-    setIntervalIsSet: (state, bool) => {state.intervalIsSet = bool},
+    setIntervalIsSet: (state, bool) => { state.intervalIsSet = bool },
     setDoubleName: (state, doubleName) => { state.doubleName = doubleName },
     setSeed: (state, seed) => { state.seed = seed },
     setSync: (state, syncing) => { state.syncing = syncing },
@@ -110,20 +109,20 @@ export default ({
             // console.log(account.account_name, account.coin_auth_status_for_account_get(account))
             // console.log(wallet.address, account.coin_auth_status_for_address_get(wallet.address))
 
-              // console.log(wallet.address)
-              return {
-                name: wallet.wallet_name,
-                address: wallet.address,
-                totalAmount: total,
-                transaction: balance.transactions,
-                holder: account,
-                currency: wallet.balance._chain_type.currency_unit(),
-                // status: ((wallet.balance._chain_type.currency_unit() === "TFT") ? "noStatus" : account.coin_auth_status_for_address_get(wallet.address) ? "verified" : "unverified")
-                isAuthenticated: nbhService.getWalletAuthStatus(wallet.address).then(status => {
-                  if (status) return status.data.auths[0]
-                  return false
-                })
-              }
+            // console.log(wallet.address)
+            return {
+              name: wallet.wallet_name,
+              address: wallet.address,
+              totalAmount: total,
+              transaction: balance.transactions,
+              holder: account,
+              currency: wallet.balance._chain_type.currency_unit(),
+              // status: ((wallet.balance._chain_type.currency_unit() === "TFT") ? "noStatus" : account.coin_auth_status_for_address_get(wallet.address) ? "verified" : "unverified")
+              isAuthenticated: nbhService.getWalletAuthStatus(wallet.address).then(status => {
+                if (status) return status.data.auths[0]
+                return false
+              })
+            }
             // })
           })
           wallets.push(...t)
