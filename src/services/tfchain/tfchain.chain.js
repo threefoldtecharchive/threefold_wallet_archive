@@ -40,14 +40,50 @@ export var NetworkType =  __class__ ('NetworkType', [object], {
 		__except0__.__cause__ = null;
 		throw __except0__;
 	});},
-	get default_explorer_addresses () {return __getcm__ (this, function (cls) {
+	get block_creation_fee () {return __get__ (this, function (self) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
 			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
 				var __allkwargs0__ = arguments [__ilastarg0__--];
 				for (var __attrib0__ in __allkwargs0__) {
 					switch (__attrib0__) {
-						case 'cls': var cls = __allkwargs0__ [__attrib0__]; break;
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var __except0__ = NotImplementedError ('block_creation_fee not implemented');
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get miner_payout_block_delay () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var __except0__ = NotImplementedError ('miner_payout_block_delay not implemented');
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get default_explorer_addresses () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
 					}
 				}
 			}
@@ -55,6 +91,42 @@ export var NetworkType =  __class__ ('NetworkType', [object], {
 		else {
 		}
 		var __except0__ = NotImplementedError ('default_explorer_addresses not implemented');
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get faucet_address () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var __except0__ = NotImplementedError ('faucet_address not implemented');
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get chain_type () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var __except0__ = NotImplementedError ('chain_type not implemented');
 		__except0__.__cause__ = null;
 		throw __except0__;
 	});}
@@ -256,6 +328,44 @@ export var TFChainNetworkType =  __class__ ('TFChainNetworkType', [NetworkType],
 		}
 		return Currency ('0.1');
 	});},
+	get block_creation_fee () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (TFChainNetworkType.STANDARD)) {
+			return Currency ('1.0');
+		}
+		return Currency ('10.0');
+	});},
+	get miner_payout_block_delay () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (TFChainNetworkType.DEVNET)) {
+			return 10;
+		}
+		return 720;
+	});},
 	get default_explorer_addresses () {return __get__ (this, function (self) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
@@ -276,7 +386,45 @@ export var TFChainNetworkType =  __class__ ('TFChainNetworkType', [NetworkType],
 		if (self.__eq__ (TFChainNetworkType.TESTNET)) {
 			return ['https://explorer.testnet.threefoldtoken.com', 'https://explorer2.testnet.threefoldtoken.com'];
 		}
-		return ['http://localhost:23110'];
+		return ['http://localhost:2015'];
+	});},
+	get faucet_address () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (TFChainNetworkType.TESTNET)) {
+			return 'https://faucet.testnet.threefoldtoken.com';
+		}
+		if (self.__eq__ (TFChainNetworkType.DEVNET)) {
+			return 'http://localhost:2016';
+		}
+		return null;
+	});},
+	get chain_type () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return Type.TFCHAIN;
 	});}
 });
 Object.defineProperty (TFChainNetworkType, 'value', property.call (TFChainNetworkType, TFChainNetworkType._get_value));;
@@ -411,6 +559,22 @@ export var GoldChainNetworkType =  __class__ ('GoldChainNetworkType', [NetworkTy
 		__except0__.__cause__ = null;
 		throw __except0__;
 	});},
+	get str () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self.__str__ ();
+	});},
 	get from_str () {return __getcm__ (this, function (cls, s) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
@@ -477,6 +641,49 @@ export var GoldChainNetworkType =  __class__ ('GoldChainNetworkType', [NetworkTy
 		}
 		return Currency ('0.1');
 	});},
+	get block_creation_fee () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (GoldChainNetworkType.DEVNET)) {
+			return Currency ('10.0');
+		}
+		return Currency (0);
+	});},
+	get miner_payout_block_delay () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (GoldChainNetworkType.TESTNET)) {
+			return 720;
+		}
+		if (self.__eq__ (GoldChainNetworkType.DEVNET)) {
+			return 10;
+		}
+		var __except0__ = ValueError ('invalid Goldchain network type {}'.format (self.value));
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
 	get default_explorer_addresses () {return __get__ (this, function (self) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
@@ -495,16 +702,951 @@ export var GoldChainNetworkType =  __class__ ('GoldChainNetworkType', [NetworkTy
 			return ['https://explorer.testnet.nbh-digital.com', 'https://explorer2.testnet.nbh-digital.com'];
 		}
 		if (self.__eq__ (GoldChainNetworkType.DEVNET)) {
-			return ['http://localhost:22110'];
+			return ['http://localhost:2015'];
 		}
 		var __except0__ = ValueError ('invalid Goldchain network type {}'.format (self.value));
 		__except0__.__cause__ = null;
 		throw __except0__;
+	});},
+	get faucet_address () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (GoldChainNetworkType.TESTNET)) {
+			return 'https://faucet.testnet.nbh-digital.com';
+		}
+		if (self.__eq__ (GoldChainNetworkType.DEVNET)) {
+			return 'http://localhost:2016';
+		}
+		return null;
+	});},
+	get chain_type () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return Type.GOLDCHAIN;
 	});}
 });
 Object.defineProperty (GoldChainNetworkType, 'value', property.call (GoldChainNetworkType, GoldChainNetworkType._get_value));;
 GoldChainNetworkType.TESTNET = GoldChainNetworkType (1);
 GoldChainNetworkType.DEVNET = GoldChainNetworkType (2);
+export var ThreefoldBonusNetworkType =  __class__ ('ThreefoldBonusNetworkType', [NetworkType], {
+	__module__: __name__,
+	get __init__ () {return __get__ (this, function (self, value) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'value': var value = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (isinstance (value, ThreefoldBonusNetworkType)) {
+			var value = value.value;
+		}
+		else if (isinstance (value, str)) {
+			var value = ThreefoldBonusNetworkType.from_str (value).value;
+		}
+		if (!(isinstance (value, int))) {
+			var __except0__ = py_TypeError ('ThreeFoldBonus network type value was expected to be an int, not be of type {}'.format (py_typeof (value)));
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		if (value < 1 || value > 2) {
+			var __except0__ = ValueError ('ThreeFoldBonus network type out of range: {}'.format (value));
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		self._value = value;
+	});},
+	get _get_value () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._value;
+	});},
+	get __eq__ () {return __get__ (this, function (self, other) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'other': var other = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (isinstance (other, ThreefoldBonusNetworkType)) {
+			return self.value == other.value;
+		}
+		return self.value == other;
+	});},
+	get __ne__ () {return __get__ (this, function (self, other) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'other': var other = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return !(self.__eq__ (other));
+	});},
+	get __int__ () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self.value;
+	});},
+	get __str__ () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (ThreefoldBonusNetworkType.TESTNET)) {
+			return 'testnet';
+		}
+		if (self.__eq__ (ThreefoldBonusNetworkType.DEVNET)) {
+			return 'devnet';
+		}
+		var __except0__ = ValueError ('invalid ThreeFoldBonus network type {}'.format (self.value));
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get from_str () {return __getcm__ (this, function (cls, s) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'cls': var cls = __allkwargs0__ [__attrib0__]; break;
+						case 's': var s = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (!(isinstance (s, str))) {
+			var __except0__ = py_TypeError ('can only convert from a string');
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		var s = jsstr.lower (s);
+		if (__in__ (s, tuple (['testnet', 'test']))) {
+			return ThreefoldBonusNetworkType.TESTNET;
+		}
+		if (__in__ (s, tuple (['devnet', 'dev']))) {
+			return ThreefoldBonusNetworkType.DEVNET;
+		}
+		var __except0__ = ValueError (s + ' is not a supported ThreeFoldBonus network type str');
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get default_network_type () {return __getcm__ (this, function (cls) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'cls': var cls = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return ThreefoldBonusNetworkType.TESTNET;
+	});},
+	get minimum_miner_fee () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return Currency ('0.1');
+	});},
+	get block_creation_fee () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return Currency ('1.0');
+	});},
+	get miner_payout_block_delay () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (ThreefoldBonusNetworkType.DEVNET)) {
+			return 10;
+		}
+		return 720;
+	});},
+	get default_explorer_addresses () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (ThreefoldBonusNetworkType.TESTNET)) {
+			return ['https://explorer.testnet.tfb.threefold.tech'];
+		}
+		if (self.__eq__ (ThreefoldBonusNetworkType.DEVNET)) {
+			return ['http://localhost:2015'];
+		}
+		var __except0__ = ValueError ('invalid ThreeFoldBonus network type {}'.format (self.value));
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get faucet_address () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (ThreefoldBonusNetworkType.DEVNET)) {
+			return 'http://localhost:2016';
+		}
+		return null;
+	});},
+	get chain_type () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return Type.TFBCHAIN;
+	});}
+});
+Object.defineProperty (ThreefoldBonusNetworkType, 'value', property.call (ThreefoldBonusNetworkType, ThreefoldBonusNetworkType._get_value));;
+ThreefoldBonusNetworkType.TESTNET = ThreefoldBonusNetworkType (1);
+ThreefoldBonusNetworkType.DEVNET = ThreefoldBonusNetworkType (2);
+export var FreeFlowTokenNetworkType =  __class__ ('FreeFlowTokenNetworkType', [NetworkType], {
+	__module__: __name__,
+	get __init__ () {return __get__ (this, function (self, value) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'value': var value = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (isinstance (value, FreeFlowTokenNetworkType)) {
+			var value = value.value;
+		}
+		else if (isinstance (value, str)) {
+			var value = FreeFlowTokenNetworkType.from_str (value).value;
+		}
+		if (!(isinstance (value, int))) {
+			var __except0__ = py_TypeError ('FreeFlowToken network type value was expected to be an int, not be of type {}'.format (py_typeof (value)));
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		if (value < 1 || value > 2) {
+			var __except0__ = ValueError ('FreeFlowToken network type out of range: {}'.format (value));
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		self._value = value;
+	});},
+	get _get_value () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._value;
+	});},
+	get __eq__ () {return __get__ (this, function (self, other) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'other': var other = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (isinstance (other, FreeFlowTokenNetworkType)) {
+			return self.value == other.value;
+		}
+		return self.value == other;
+	});},
+	get __ne__ () {return __get__ (this, function (self, other) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'other': var other = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return !(self.__eq__ (other));
+	});},
+	get __int__ () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self.value;
+	});},
+	get __str__ () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (FreeFlowTokenNetworkType.TESTNET)) {
+			return 'testnet';
+		}
+		if (self.__eq__ (FreeFlowTokenNetworkType.DEVNET)) {
+			return 'devnet';
+		}
+		var __except0__ = ValueError ('invalid FreeFlowToken network type {}'.format (self.value));
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get from_str () {return __getcm__ (this, function (cls, s) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'cls': var cls = __allkwargs0__ [__attrib0__]; break;
+						case 's': var s = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (!(isinstance (s, str))) {
+			var __except0__ = py_TypeError ('can only convert from a string');
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		var s = jsstr.lower (s);
+		if (__in__ (s, tuple (['testnet', 'test']))) {
+			return FreeFlowTokenNetworkType.TESTNET;
+		}
+		if (__in__ (s, tuple (['devnet', 'dev']))) {
+			return FreeFlowTokenNetworkType.DEVNET;
+		}
+		var __except0__ = ValueError (s + ' is not a supported FreeFlowToken network type str');
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get default_network_type () {return __getcm__ (this, function (cls) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'cls': var cls = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return FreeFlowTokenNetworkType.TESTNET;
+	});},
+	get minimum_miner_fee () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return Currency ('0.1');
+	});},
+	get block_creation_fee () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return Currency ('0.0');
+	});},
+	get miner_payout_block_delay () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (FreeFlowTokenNetworkType.DEVNET)) {
+			return 10;
+		}
+		return 720;
+	});},
+	get default_explorer_addresses () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (FreeFlowTokenNetworkType.TESTNET)) {
+			return ['https://explorer.testnet.fft.threefold.tech'];
+		}
+		if (self.__eq__ (FreeFlowTokenNetworkType.DEVNET)) {
+			return ['http://localhost:2015'];
+		}
+		var __except0__ = ValueError ('invalid FreeFlowToken network type {}'.format (self.value));
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get faucet_address () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (FreeFlowTokenNetworkType.DEVNET)) {
+			return 'http://localhost:2016';
+		}
+		return null;
+	});},
+	get chain_type () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return Type.FFTCHAIN;
+	});}
+});
+Object.defineProperty (FreeFlowTokenNetworkType, 'value', property.call (FreeFlowTokenNetworkType, FreeFlowTokenNetworkType._get_value));;
+FreeFlowTokenNetworkType.TESTNET = FreeFlowTokenNetworkType (1);
+FreeFlowTokenNetworkType.DEVNET = FreeFlowTokenNetworkType (2);
+export var EuroChainNetworkType =  __class__ ('EuroChainNetworkType', [NetworkType], {
+	__module__: __name__,
+	get __init__ () {return __get__ (this, function (self, value) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'value': var value = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (isinstance (value, EuroChainNetworkType)) {
+			var value = value.value;
+		}
+		else if (isinstance (value, str)) {
+			var value = EuroChainNetworkType.from_str (value).value;
+		}
+		if (!(isinstance (value, int))) {
+			var __except0__ = py_TypeError ('EuroChain network type value was expected to be an int, not be of type {}'.format (py_typeof (value)));
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		if (value < 1 || value > 2) {
+			var __except0__ = ValueError ('EuroChain network type out of range: {}'.format (value));
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		self._value = value;
+	});},
+	get _get_value () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._value;
+	});},
+	get __eq__ () {return __get__ (this, function (self, other) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'other': var other = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (isinstance (other, EuroChainNetworkType)) {
+			return self.value == other.value;
+		}
+		return self.value == other;
+	});},
+	get __ne__ () {return __get__ (this, function (self, other) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'other': var other = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return !(self.__eq__ (other));
+	});},
+	get __int__ () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self.value;
+	});},
+	get __str__ () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (EuroChainNetworkType.TESTNET)) {
+			return 'testnet';
+		}
+		if (self.__eq__ (EuroChainNetworkType.DEVNET)) {
+			return 'devnet';
+		}
+		var __except0__ = ValueError ('invalid EuroChain network type {}'.format (self.value));
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get str () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self.__str__ ();
+	});},
+	get from_str () {return __getcm__ (this, function (cls, s) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'cls': var cls = __allkwargs0__ [__attrib0__]; break;
+						case 's': var s = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (!(isinstance (s, str))) {
+			var __except0__ = py_TypeError ('can only convert from a string');
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		var s = jsstr.lower (s);
+		if (__in__ (s, tuple (['testnet', 'test']))) {
+			return EuroChainNetworkType.TESTNET;
+		}
+		if (__in__ (s, tuple (['devnet', 'dev']))) {
+			return EuroChainNetworkType.DEVNET;
+		}
+		var __except0__ = ValueError (s + ' is not a supported EuroChain network type str');
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get default_network_type () {return __getcm__ (this, function (cls) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'cls': var cls = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return EuroChainNetworkType.TESTNET;
+	});},
+	get minimum_miner_fee () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (EuroChainNetworkType.DEVNET)) {
+			return Currency ('1.0');
+		}
+		return Currency ('0.1');
+	});},
+	get block_creation_fee () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (EuroChainNetworkType.DEVNET)) {
+			return Currency ('10.0');
+		}
+		return Currency (0);
+	});},
+	get miner_payout_block_delay () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (EuroChainNetworkType.TESTNET)) {
+			return 720;
+		}
+		if (self.__eq__ (EuroChainNetworkType.DEVNET)) {
+			return 10;
+		}
+		var __except0__ = ValueError ('invalid Eurochain network type {}'.format (self.value));
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get default_explorer_addresses () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (EuroChainNetworkType.TESTNET)) {
+			return ['https://explorer.testnet.euroflow.io', 'https://explorer2.testnet.euroflow.io'];
+		}
+		if (self.__eq__ (EuroChainNetworkType.DEVNET)) {
+			return ['http://localhost:2015'];
+		}
+		var __except0__ = ValueError ('invalid Eurochain network type {}'.format (self.value));
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get faucet_address () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (self.__eq__ (EuroChainNetworkType.TESTNET)) {
+			return 'https://faucet.testnet.euroflow.io';
+		}
+		if (self.__eq__ (EuroChainNetworkType.DEVNET)) {
+			return 'http://localhost:2016';
+		}
+		return null;
+	});},
+	get chain_type () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return Type.EUROCHAIN;
+	});}
+});
+Object.defineProperty (EuroChainNetworkType, 'value', property.call (EuroChainNetworkType, EuroChainNetworkType._get_value));;
+EuroChainNetworkType.TESTNET = EuroChainNetworkType (1);
+EuroChainNetworkType.DEVNET = EuroChainNetworkType (2);
 export var Type =  __class__ ('Type', [object], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, value) {
@@ -536,7 +1678,7 @@ export var Type =  __class__ ('Type', [object], {
 			__except0__.__cause__ = null;
 			throw __except0__;
 		}
-		if (value < 1 || value > 2) {
+		if (value < 1 || value > 5) {
 			var __except0__ = ValueError ('chain type out of range: {}'.format (value));
 			__except0__.__cause__ = null;
 			throw __except0__;
@@ -632,6 +1774,15 @@ export var Type =  __class__ ('Type', [object], {
 		if (self.__eq__ (Type.GOLDCHAIN)) {
 			return 'goldchain';
 		}
+		if (self.__eq__ (Type.EUROCHAIN)) {
+			return 'eurochain';
+		}
+		if (self.__eq__ (Type.TFBCHAIN)) {
+			return 'tfbchain';
+		}
+		if (self.__eq__ (Type.FFTCHAIN)) {
+			return 'fftchain';
+		}
 		var __except0__ = ValueError ('invalid network type {}'.format (self.value));
 		__except0__.__cause__ = null;
 		throw __except0__;
@@ -679,6 +1830,15 @@ export var Type =  __class__ ('Type', [object], {
 		if (s == 'goldchain') {
 			return Type.GOLDCHAIN;
 		}
+		if (s == 'eurochain') {
+			return Type.EUROCHAIN;
+		}
+		if (s == 'tfbchain') {
+			return Type.TFBCHAIN;
+		}
+		if (s == 'fftchain') {
+			return Type.FFTCHAIN;
+		}
 		var __except0__ = ValueError (s + ' is not a supported chain type str');
 		__except0__.__cause__ = null;
 		throw __except0__;
@@ -702,6 +1862,15 @@ export var Type =  __class__ ('Type', [object], {
 		}
 		if (self.__eq__ (Type.GOLDCHAIN)) {
 			return GoldChainNetworkType;
+		}
+		if (self.__eq__ (Type.EUROCHAIN)) {
+			return EuroChainNetworkType;
+		}
+		if (self.__eq__ (Type.TFBCHAIN)) {
+			return ThreefoldBonusNetworkType;
+		}
+		if (self.__eq__ (Type.FFTCHAIN)) {
+			return FreeFlowTokenNetworkType;
 		}
 		var __except0__ = ValueError ('invalid network type {}'.format (self.value));
 		__except0__.__cause__ = null;
@@ -727,6 +1896,15 @@ export var Type =  __class__ ('Type', [object], {
 		if (self.__eq__ (Type.GOLDCHAIN)) {
 			return 'GFT';
 		}
+		if (self.__eq__ (Type.EUROCHAIN)) {
+			return 'EUR';
+		}
+		if (self.__eq__ (Type.TFBCHAIN)) {
+			return 'TFB';
+		}
+		if (self.__eq__ (Type.FFTCHAIN)) {
+			return 'FFT';
+		}
 		var __except0__ = ValueError ('invalid network type {}'.format (self.value));
 		__except0__.__cause__ = null;
 		throw __except0__;
@@ -735,5 +1913,8 @@ export var Type =  __class__ ('Type', [object], {
 Object.defineProperty (Type, 'value', property.call (Type, Type._get_value));;
 Type.TFCHAIN = Type (1);
 Type.GOLDCHAIN = Type (2);
+Type.TFBCHAIN = Type (3);
+Type.FFTCHAIN = Type (4);
+Type.EUROCHAIN = Type (5);
 
 //# sourceMappingURL=tfchain.chain.map
