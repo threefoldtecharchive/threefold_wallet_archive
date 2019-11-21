@@ -48,7 +48,7 @@ export default {
     },
     loginUrl (val) {
       if (val) {
-        // window.location.href = val
+        window.location.href = val
       }
     }
   }

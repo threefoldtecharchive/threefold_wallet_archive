@@ -4,8 +4,8 @@ export default({
   nbhFaucet: `https://faucet.testnet.nbh-digital.com/`,
   nbhExplorer: `https://explorer2.testnet.nbh-digital.com/explorer`,
   appId: `${window.location.host}`,
-  botFrontEnd: 'http://192.168.43.211:8081/',
-  botBackend: 'http://192.168.43.211:5000',
+  botFrontEnd: 'http://192.168.1.3:8081/',
+  botBackend: 'http://192.168.1.3:5000',
   redirect_url: '/login',
   scope: JSON.stringify({derivedSeed: true})
 })
