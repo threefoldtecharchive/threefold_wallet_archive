@@ -1,6 +1,7 @@
 import toolbar from '../components/toolbar'
 import bottomNav from '../components/bottomNav'
 import createWalletDialog from '../components/createWallet'
+import copyDialog from '../components/copydialog'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -8,7 +9,8 @@ export default {
   components: {
     toolbar,
     bottomNav,
-    createWalletDialog
+    createWalletDialog,
+    copyDialog
   },
   mounted () {
   },

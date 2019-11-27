@@ -90,7 +90,6 @@ export default {
         name: wallet.name,
         currency: wallet.currency,
         address: wallet.address,
-        name: wallet.name,
         holder: wallet.holder,
         totalAmount: wallet.totalAmount,
         isAuthenticated: wallet.isAuthenticated

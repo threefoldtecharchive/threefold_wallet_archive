@@ -3,7 +3,7 @@ export default {
   name: 'login',
   components: {},
   props: [],
-  data() {
+  data () {
     return {
 
     }
@@ -13,17 +13,15 @@ export default {
       'loginUrl',
       'accounts'
     ]),
-    isLoggingIn() {
+    isLoggingIn () {
       return Object.entries(this.$route.query).length === 0
     }
   },
-  mounted() {
-    if (this.isLoggingIn) {
+  mounted () {
+    if (this.isLoggingIn && window.location.href.indexOf('#') === -1) {
       const account = JSON.parse(window.localStorage.getItem('user'))
-      console.log(account)
       if (account && account.doubleName && account.seed) {
         account.seed = new Uint8Array(Object.values(account.seed))
-        console.log(account)
         this.login(account)
       } else {
         this.generateLoginUrl()
@@ -40,12 +38,12 @@ export default {
     ])
   },
   watch: {
-    accounts(val) {
+    accounts (val) {
       if (val.length) {
         this.$router.push({ name: 'home' })
       }
     },
-    loginUrl(val) {
+    loginUrl (val) {
       if (val) {
         window.location.href = val
       }

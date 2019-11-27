@@ -24,12 +24,18 @@ export default {
   },
   methods: {
     onDecode (code) {
+      console.log(code)
       code = code.replace('tft:', 'tft://')
       this.formObject.to.address = this.getQueryVar(code, 'HOST')
       this.formObject.amount = this.getQueryVar(code, 'amount')
       this.formObject.message = this.getQueryVar(code, 'message')
       this.formObject.sender = this.getQueryVar(code, 'sender')
+      console.log(this.formObject.to.address)
+      console.log(this.formObject.amount)
+      console.log(this.formObject.message)
+      console.log(this.formObject.sender)
       this.transactionInfoDialog = true
+      this.closeDialog()
     },
     getQueryVar (url, varName) {
       var val
