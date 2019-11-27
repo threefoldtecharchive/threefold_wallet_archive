@@ -2,8 +2,7 @@ import walletSelector from '../../../../components/walletSelector'
 import walletCard from '../../../../components/walletCard'
 export default {
   name: 'transaction-info-dialog',
-  components: {walletSelector, walletCard},
-  props: [],
+  components: { walletSelector, walletCard },
   props: {
     dialog: {
       type: Boolean,
@@ -23,7 +22,7 @@ export default {
     },
     wallets: {
       type: Array,
-      default: () =>[]
+      default: () => []
     },
     selectedWallet: {
       type: Object,
@@ -42,7 +41,7 @@ export default {
       if (this.$route.query.tab == 'receive') {
         return Number(this.formObject.amount).toFixed(2)
       }
-      
+
       return (Number(this.formObject.amount) + Number(this.fee)).toFixed(2)
     }
   }

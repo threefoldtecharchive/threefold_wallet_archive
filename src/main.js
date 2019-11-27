@@ -2,9 +2,8 @@ import Vue from 'vue'
 import App from './App'
 import store from './store/'
 import router from './router'
-import './plugins'
+import vuetify from './plugins/vuetify'
 import moment from 'moment'
-
 Vue.config.productionTip = false
 
 
@@ -28,6 +27,8 @@ Vue.filter(
 
 new Vue({
   store,
+  el: '#app',
+  vuetify,
   router,
   render: h => h(App)
 }).$mount('#app')
