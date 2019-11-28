@@ -15,6 +15,7 @@ import * as tferrors from './tfchain.errors.js';
 import * as tfrivbin from './tfchain.encoding.rivbin.js';
 import * as tfsiabin from './tfchain.encoding.siabin.js';
 import * as bip39 from './tfchain.crypto.mnemonic.js';
+import * as jshttp from './tfchain.polyfill.http.js';
 import * as jsarr from './tfchain.polyfill.array.js';
 import * as jsobj from './tfchain.polyfill.encoding.object.js';
 import * as jsstr from './tfchain.polyfill.encoding.str.js';
@@ -246,6 +247,7 @@ export var Account =  __class__ ('Account', [object], {
 		self._chain_info = ChainInfo (self._chain);
 		self._selected_wallet = null;
 		self._address_book = AddressBook ();
+		self._faucet = FaucetClient (self);
 		self._address_auth_state = dict ({});
 		self._loaded = false;
 		self._intermezzo_update_count = 0;
@@ -382,18 +384,18 @@ export var Account =  __class__ ('Account', [object], {
 			var network_type = npt (network_type);
 			var explorer_addresses = network_type.default_explorer_addresses ();
 			self._explorer_client = tfexplorer.Client (explorer_addresses);
-			self._explorer_client = tfclient.TFChainClient (self._explorer_client);
+			self._explorer_client = tfclient.TFChainClient (self._explorer_client, network_type);
 		}
 		else {
-			self._explorer_client = tfexplorer.Client (explorer_addresses);
-			self._explorer_client = tfclient.TFChainClient (self._explorer_client);
 			if (network_type == null) {
 				var __except0__ = ValueError ('network_type is not given, while explorer addresses are given, this is currently not supported');
 				__except0__.__cause__ = null;
 				throw __except0__;
 			}
+			var network_type = npt (network_type);
+			self._explorer_client = tfexplorer.Client (explorer_addresses);
+			self._explorer_client = tfclient.TFChainClient (self._explorer_client, network_type);
 		}
-		var network_type = npt (network_type);
 		self._network_type = network_type;
 	});},
 	get _get_mnemonic () {return __get__ (this, function (self) {
@@ -459,6 +461,22 @@ export var Account =  __class__ ('Account', [object], {
 		else {
 		}
 		return self._address_book;
+	});},
+	get _get_faucet () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._faucet;
 	});},
 	get _get_chain_info () {return __get__ (this, function (self) {
 		if (arguments.length) {
@@ -908,6 +926,22 @@ export var Account =  __class__ ('Account', [object], {
 		}
 		return self._chain.currency_unit ();
 	});},
+	get _get_chain_faucet_web_address () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._network_type.faucet_address ();
+	});},
 	get _get_network_type () {return __get__ (this, function (self) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
@@ -938,7 +972,9 @@ export var Account =  __class__ ('Account', [object], {
 		}
 		else {
 		}
-		return Currency (self._network_type.minimum_miner_fee ());
+		var mf = Currency (self._network_type.minimum_miner_fee ());
+		mf.unit = self.chain_currency_unit;
+		return mf;
 	});},
 	get _get_explorer () {return __get__ (this, function (self) {
 		if (arguments.length) {
@@ -1825,7 +1861,7 @@ export var Account =  __class__ ('Account', [object], {
 			};
 			var itcb = stub_cb;
 		}
-		return jsasync.chain (self._update_chain_info (), self._update_singlesig_wallet_balances (itcb), self._update_known_multisig_wallet_balances (itcb), self._collect_unknown_multisig_wallet_balances (itcb), self._update_goldchain_specific_info, cb_return_self);
+		return jsasync.chain (self._update_chain_info (), self._update_singlesig_wallet_balances (itcb), self._update_known_multisig_wallet_balances (itcb), self._collect_unknown_multisig_wallet_balances (itcb), self._update_chain_specific_info, cb_return_self);
 	});},
 	get _update_chain_info () {return __get__ (this, function (self) {
 		if (arguments.length) {
@@ -2087,7 +2123,7 @@ export var Account =  __class__ ('Account', [object], {
 		};
 		return body;
 	});},
-	get _update_goldchain_specific_info () {return __get__ (this, function (self) {
+	get _update_chain_specific_info () {return __get__ (this, function (self) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
 			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
@@ -2101,7 +2137,7 @@ export var Account =  __class__ ('Account', [object], {
 		}
 		else {
 		}
-		if (self._chain.__ne__ (tfchaintype.Type.GOLDCHAIN)) {
+		if (self._chain.__ne__ (tfchaintype.Type.GOLDCHAIN) && self._chain.__ne__ (tfchaintype.Type.EUROCHAIN)) {
 			return null;
 		}
 		var addresses = self.addresses_get (__kwargtrans__ ({opts: dict ({'singlesig': true, 'multisig': false})}));
@@ -2177,6 +2213,7 @@ Object.defineProperty (Account, 'wallets', property.call (Account, Account._get_
 Object.defineProperty (Account, 'explorer', property.call (Account, Account._get_explorer));
 Object.defineProperty (Account, 'minimum_miner_fee', property.call (Account, Account._get_minimum_miner_fee));
 Object.defineProperty (Account, 'network_type', property.call (Account, Account._get_network_type));
+Object.defineProperty (Account, 'chain_faucet_web_address', property.call (Account, Account._get_chain_faucet_web_address));
 Object.defineProperty (Account, 'chain_currency_unit', property.call (Account, Account._get_chain_currency_unit));
 Object.defineProperty (Account, 'chain_type', property.call (Account, Account._get_chain_type));
 Object.defineProperty (Account, 'wallet', property.call (Account, Account._get_wallet));
@@ -2184,6 +2221,7 @@ Object.defineProperty (Account, 'selected_wallet', property.call (Account, Accou
 Object.defineProperty (Account, 'selected_wallet_name', property.call (Account, Account._get_selected_wallet_name));
 Object.defineProperty (Account, 'balance', property.call (Account, Account._get_balance));
 Object.defineProperty (Account, 'chain_info', property.call (Account, Account._get_chain_info));
+Object.defineProperty (Account, 'faucet', property.call (Account, Account._get_faucet));
 Object.defineProperty (Account, 'address_book', property.call (Account, Account._get_address_book));
 Object.defineProperty (Account, 'password', property.call (Account, Account._get_password));
 Object.defineProperty (Account, 'seed', property.call (Account, Account._get_seed));
@@ -2193,6 +2231,256 @@ Object.defineProperty (Account, 'account_name', property.call (Account, Account.
 Object.defineProperty (Account, 'previous_account_name', property.call (Account, Account._get_previous_account_name));
 Object.defineProperty (Account, 'intermezzo_update_count', property.call (Account, Account._get_intermezzo_update_count));
 Object.defineProperty (Account, 'is_loaded', property.call (Account, Account._get_is_loaded));;
+export var FaucetClient =  __class__ ('FaucetClient', [object], {
+	__module__: __name__,
+	get __init__ () {return __get__ (this, function (self, account) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'account': var account = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		self._account = account;
+	});},
+	get coins_receive () {return __get__ (this, function (self, opts) {
+		if (typeof opts == 'undefined' || (opts != null && opts.hasOwnProperty ("__kwargtrans__"))) {;
+			var opts = null;
+		};
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'opts': var opts = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._faucet_action ('/api/v1/coins', __kwargtrans__ ({opts: opts}));
+	});},
+	get auth_address () {return __get__ (this, function (self, opts) {
+		if (typeof opts == 'undefined' || (opts != null && opts.hasOwnProperty ("__kwargtrans__"))) {;
+			var opts = null;
+		};
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'opts': var opts = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._faucet_action ('/api/v1/authorize', __kwargtrans__ ({opts: opts}));
+	});},
+	get deauth_address () {return __get__ (this, function (self, opts) {
+		if (typeof opts == 'undefined' || (opts != null && opts.hasOwnProperty ("__kwargtrans__"))) {;
+			var opts = null;
+		};
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'opts': var opts = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._faucet_action ('/api/v1/deauthorize', __kwargtrans__ ({opts: opts}));
+	});},
+	get _faucet_action () {return __get__ (this, function (self, endpoint, opts) {
+		if (typeof opts == 'undefined' || (opts != null && opts.hasOwnProperty ("__kwargtrans__"))) {;
+			var opts = null;
+		};
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'endpoint': var endpoint = __allkwargs0__ [__attrib0__]; break;
+						case 'opts': var opts = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var __left0__ = jsfunc.opts_get (opts, 'wallet', 'address');
+		var wallet = __left0__ [0];
+		var address = __left0__ [1];
+		var wallet_address = self._get_wallet (wallet, address);
+		var sdata = jsjson.json_dumps (dict ({'address': wallet_address}));
+		var faucet_address = self._get_faucet_address ();
+		var cb = function (result) {
+			if (arguments.length) {
+				var __ilastarg0__ = arguments.length - 1;
+				if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+					var __allkwargs0__ = arguments [__ilastarg0__--];
+					for (var __attrib0__ in __allkwargs0__) {
+						switch (__attrib0__) {
+							case 'result': var result = __allkwargs0__ [__attrib0__]; break;
+						}
+					}
+				}
+			}
+			else {
+			}
+			if (result.code != 200) {
+				var __except0__ = tferrors.ExplorerServerError ('error (code: {}): {}'.format (result.code, result.data), endpoint);
+				__except0__.__cause__ = null;
+				throw __except0__;
+			}
+			try {
+				return FaucetResult (result.data ['txid']);
+			}
+			catch (__except0__) {
+				if (isinstance (__except0__, KeyError)) {
+					var exc = __except0__;
+					var __except1__ = tferrors.ExplorerInvalidResponse (str (exc), endpoint, result.data);
+					__except1__.__cause__ = exc;
+					throw __except1__;
+				}
+				else {
+					throw __except0__;
+				}
+			}
+		};
+		return jsasync.chain (jshttp.http_post (faucet_address, endpoint, sdata), cb);
+	});},
+	get _get_wallet () {return __get__ (this, function (self, wallet, address) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'wallet': var wallet = __allkwargs0__ [__attrib0__]; break;
+						case 'address': var address = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		if (wallet == null && address == null) {
+			var address = self._account.address;
+			if (address == null) {
+				var __except0__ = ValueError ('no address or wallet given, and account {} has no addresses to use'.format (self._account.account_name));
+				__except0__.__cause__ = null;
+				throw __except0__;
+			}
+			return address;
+		}
+		var wallet = self._account.wallet_get (__kwargtrans__ ({opts: dict ({'name': wallet, 'address': address, 'singlesig': true, 'multisig': false})}));
+		if (wallet == null) {
+			var __except0__ = ValueError ('no matching singlesig wallet (name={}, addr={}) found on account {}'.format (wallet, address, self._account.account_name));
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		return address;
+	});},
+	get _get_faucet_address () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var address = self._account._network_type.faucet_address ();
+		if (address == null) {
+			var __except0__ = ValueError ('current network {} on chain {} does not have an official faucet'.format (self._account._network_type.str (), self._account._chain.str ()));
+			__except0__.__cause__ = null;
+			throw __except0__;
+		}
+		return address;
+	});}
+});
+export var FaucetResult =  __class__ ('FaucetResult', [object], {
+	__module__: __name__,
+	get __init__ () {return __get__ (this, function (self, txid) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'txid': var txid = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		self._txid = txid;
+	});},
+	get _get_transaction_id () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return self._txid;
+	});},
+	get _get_submitted () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		return true;
+	});}
+});
+Object.defineProperty (FaucetResult, 'submitted', property.call (FaucetResult, FaucetResult._get_submitted));
+Object.defineProperty (FaucetResult, 'transaction_id', property.call (FaucetResult, FaucetResult._get_transaction_id));;
 export var BaseWallet =  __class__ ('BaseWallet', [object], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self, wallet_name) {
@@ -2544,7 +2832,6 @@ export var BaseWallet =  __class__ ('BaseWallet', [object], {
 		throw __except0__;
 	});},
 	get transaction_new () {return __get__ (this, function (self) {
-		console.log("oi")
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
 			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
@@ -2559,6 +2846,24 @@ export var BaseWallet =  __class__ ('BaseWallet', [object], {
 		else {
 		}
 		var __except0__ = NotImplementedError ('transaction_new is not implemented');
+		__except0__.__cause__ = null;
+		throw __except0__;
+	});},
+	get custody_fees_to_pay_for () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var __except0__ = NotImplementedError ('custody_fees_to_pay_for is not implemented');
 		__except0__.__cause__ = null;
 		throw __except0__;
 	});},
@@ -2856,6 +3161,49 @@ export var SingleSignatureWallet =  __class__ ('SingleSignatureWallet', [BaseWal
 		}
 		return CoinTransactionBuilder (self);
 	});},
+	get custody_fees_to_pay_for () {return __get__ (this, function (self, amount) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'amount': var amount = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		try {
+			if (isinstance (amount, Currency)) {
+				var amount = amount._value;
+			}
+			var __left0__ = self.balance._tfbalance.fund (amount);
+			var inputs = __left0__ [0];
+			var _ = __left0__ [1];
+			var _ = __left0__ [2];
+			var cfee = Currency ();
+			cfee.unit = self._account.chain_currency_unit;
+			for (var ci of inputs) {
+				var cfee = cfee.plus (ci.parent_output.custody_fee);
+			}
+			return cfee;
+		}
+		catch (__except0__) {
+			if (isinstance (__except0__, Exception)) {
+				var exc = __except0__;
+				jslog.warning ('exception while trying to esitmate custody fees to pay for amount', amount, exc);
+				var cfee = Currency ();
+				cfee.unit = self._account.chain_currency_unit;
+				return cfee;
+			}
+			else {
+				throw __except0__;
+			}
+		}
+	});},
 	get coins_burn () {return __get__ (this, function (self, amount, opts) {
 		if (typeof opts == 'undefined' || (opts != null && opts.hasOwnProperty ("__kwargtrans__"))) {;
 			var opts = null;
@@ -2875,7 +3223,7 @@ export var SingleSignatureWallet =  __class__ ('SingleSignatureWallet', [BaseWal
 		}
 		else {
 		}
-		if (self._account._chain.value != tfchaintype.Type.GOLDCHAIN.value) {
+		if (self._account._chain.value != tfchaintype.Type.GOLDCHAIN.value && self._account._chain.value != tfchaintype.Type.EUROCHAIN.value) {
 			var __except0__ = tferrors.UnsupporedFeature ('blockchain {} does not support the minting coin burn transaction'.format (self._account._chain.str ()));
 			__except0__.__cause__ = null;
 			throw __except0__;
@@ -3305,6 +3653,49 @@ export var MultiSignatureWallet =  __class__ ('MultiSignatureWallet', [BaseWalle
 		}
 		var owner_wallets = self._authorized_owners_get ();
 		return MultiSignatureCoinTransactionBuilder (self, owner_wallets);
+	});},
+	get custody_fees_to_pay_for () {return __get__ (this, function (self, amount) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'amount': var amount = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		try {
+			if (isinstance (amount, Currency)) {
+				var amount = amount._value;
+			}
+			var __left0__ = self.balance._tfbalance.fund (amount);
+			var inputs = __left0__ [0];
+			var _ = __left0__ [1];
+			var _ = __left0__ [2];
+			var cfee = Currency ();
+			cfee.unit = self._account.chain_currency_unit;
+			for (var ci of inputs) {
+				var cfee = cfee.plus (ci.parent_output.custody_fee);
+			}
+			return cfee;
+		}
+		catch (__except0__) {
+			if (isinstance (__except0__, Exception)) {
+				var exc = __except0__;
+				jslog.warning ('exception while trying to esitmate custody fees to pay for amount', amount, exc);
+				var cfee = Currency ();
+				cfee.unit = self._account.chain_currency_unit;
+				return cfee;
+			}
+			else {
+				throw __except0__;
+			}
+		}
 	});},
 	get transaction_sign () {return __get__ (this, function (self, transaction, balance) {
 		if (typeof balance == 'undefined' || (balance != null && balance.hasOwnProperty ("__kwargtrans__"))) {;
@@ -4019,6 +4410,72 @@ export var AccountBalance =  __class__ ('AccountBalance', [object], {
 		c.unit = self._chain_type.currency_unit ();
 		return c;
 	});},
+	get _get_custody_fee_debt () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var c = self.custody_fee_debt_unlocked.plus (self.custody_fee_debt_locked);
+		c.unit = self._chain_type.currency_unit ();
+		return c;
+	});},
+	get _get_custody_fee_debt_unlocked () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var c = Currency.sum (...(function () {
+			var __accu0__ = [];
+			for (var balance of self._balances) {
+				__accu0__.append (balance.custody_fee_debt_unlocked);
+			}
+			return __accu0__;
+		}) ());
+		c.unit = self._chain_type.currency_unit ();
+		return c;
+	});},
+	get _get_custody_fee_debt_locked () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var c = Currency.sum (...(function () {
+			var __accu0__ = [];
+			for (var balance of self._balances) {
+				__accu0__.append (balance.custody_fee_debt_locked);
+			}
+			return __accu0__;
+		}) ());
+		c.unit = self._chain_type.currency_unit ();
+		return c;
+	});},
 	get _get_unconfirmed_coins_unlocked () {return __get__ (this, function (self) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
@@ -4089,6 +4546,9 @@ export var AccountBalance =  __class__ ('AccountBalance', [object], {
 Object.defineProperty (AccountBalance, 'unconfirmed_coins_total', property.call (AccountBalance, AccountBalance._get_unconfirmed_coins_total));
 Object.defineProperty (AccountBalance, 'unconfirmed_coins_locked', property.call (AccountBalance, AccountBalance._get_unconfirmed_coins_locked));
 Object.defineProperty (AccountBalance, 'unconfirmed_coins_unlocked', property.call (AccountBalance, AccountBalance._get_unconfirmed_coins_unlocked));
+Object.defineProperty (AccountBalance, 'custody_fee_debt_locked', property.call (AccountBalance, AccountBalance._get_custody_fee_debt_locked));
+Object.defineProperty (AccountBalance, 'custody_fee_debt_unlocked', property.call (AccountBalance, AccountBalance._get_custody_fee_debt_unlocked));
+Object.defineProperty (AccountBalance, 'custody_fee_debt', property.call (AccountBalance, AccountBalance._get_custody_fee_debt));
 Object.defineProperty (AccountBalance, 'coins_total', property.call (AccountBalance, AccountBalance._get_coins_total));
 Object.defineProperty (AccountBalance, 'coins_locked', property.call (AccountBalance, AccountBalance._get_coins_locked));
 Object.defineProperty (AccountBalance, 'coins_unlocked', property.call (AccountBalance, AccountBalance._get_coins_unlocked));;
@@ -4251,6 +4711,60 @@ export var Balance =  __class__ ('Balance', [object], {
 		c.unit = self._chain_type.currency_unit ();
 		return c;
 	});},
+	get _get_custody_fee_debt () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var c = Currency (self._tfbalance.custody_fee_debt);
+		c.unit = self._chain_type.currency_unit ();
+		return c;
+	});},
+	get _get_custody_fee_debt_unlocked () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var c = Currency (self._tfbalance.custody_fee_debt_unlocked);
+		c.unit = self._chain_type.currency_unit ();
+		return c;
+	});},
+	get _get_custody_fee_debt_locked () {return __get__ (this, function (self) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		var c = Currency (self._tfbalance.custody_fee_debt_locked);
+		c.unit = self._chain_type.currency_unit ();
+		return c;
+	});},
 	get _get_coins_total () {return __get__ (this, function (self) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
@@ -4349,6 +4863,9 @@ Object.defineProperty (Balance, 'unconfirmed_coins_total', property.call (Balanc
 Object.defineProperty (Balance, 'unconfirmed_coins_locked', property.call (Balance, Balance._get_unconfirmed_coins_locked));
 Object.defineProperty (Balance, 'unconfirmed_coins_unlocked', property.call (Balance, Balance._get_unconfirmed_coins_unlocked));
 Object.defineProperty (Balance, 'coins_total', property.call (Balance, Balance._get_coins_total));
+Object.defineProperty (Balance, 'custody_fee_debt_locked', property.call (Balance, Balance._get_custody_fee_debt_locked));
+Object.defineProperty (Balance, 'custody_fee_debt_unlocked', property.call (Balance, Balance._get_custody_fee_debt_unlocked));
+Object.defineProperty (Balance, 'custody_fee_debt', property.call (Balance, Balance._get_custody_fee_debt));
 Object.defineProperty (Balance, 'coins_locked', property.call (Balance, Balance._get_coins_locked));
 Object.defineProperty (Balance, 'coins_unlocked', property.call (Balance, Balance._get_coins_unlocked));
 Object.defineProperty (Balance, 'addresses_used', property.call (Balance, Balance._get_addresses_used));
@@ -4726,20 +5243,20 @@ export var TransactionView =  __class__ ('TransactionView', [object], {
 		}
 		var aggregator = WalletOutputAggregator (chain_type, addresses);
 		for (var co of transaction.coin_outputs) {
-			if (!(co.is_fee)) {
-				aggregator.add_coin_output (__kwargtrans__ ({address: co.condition.unlockhash.__str__ (), lock: co.condition.lock.value, amount: co.value}));
+			if (co.is_fee) {
+				aggregator.add_fee (__kwargtrans__ ({address: co.condition.unlockhash.__str__ (), lock: co.condition.lock.value, amount: co.value}));
+			}
+			else if (co.is_reward) {
+				aggregator.add_reward (__kwargtrans__ ({address: co.condition.unlockhash.__str__ (), lock: co.condition.lock.value, amount: co.value}));
 			}
 			else {
-				aggregator.add_fee (__kwargtrans__ ({address: co.condition.unlockhash.__str__ (), amount: co.value}));
+				aggregator.add_coin_output (__kwargtrans__ ({address: co.condition.unlockhash.__str__ (), lock: co.condition.lock.value, amount: co.value}));
 			}
 		}
 		for (var ci of transaction.coin_inputs) {
 			if (ci.has_parent_output) {
 				var co = ci.parent_output;
 				aggregator.add_coin_input (__kwargtrans__ ({address: co.condition.unlockhash.__str__ (), amount: co.value}));
-			}
-			else {
-				aggregator.add_coin_input (__kwargtrans__ ({address: null, amount: co.value}));
 			}
 		}
 		var __left0__ = aggregator.inputs_outputs_collect ();
@@ -5043,6 +5560,7 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 		}
 		self._chain_type = chain_type;
 		self._our_addresses = addresses;
+		self._total_output = Currency ();
 		self._our_input = Currency ();
 		self._our_input.unit = self._chain_type.currency_unit ();
 		self._our_send_addresses = set ();
@@ -5051,6 +5569,7 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 		self._other_send_addresses = set ();
 		self._all_balances = dict ({});
 		self._fee_balances = dict ({});
+		self._reward_balances = dict ({});
 	});},
 	get _modify_balance () {return __get__ (this, function (self, address, lock, amount, negate) {
 		if (typeof negate == 'undefined' || (negate != null && negate.hasOwnProperty ("__kwargtrans__"))) {;
@@ -5090,7 +5609,7 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 			balances [slock] = balances [slock].plus (amount);
 		}
 	});},
-	get _modify_fee_balance () {return __get__ (this, function (self, address, amount) {
+	get _modify_fee_balance () {return __get__ (this, function (self, address, lock, amount) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
 			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
@@ -5099,6 +5618,7 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 					switch (__attrib0__) {
 						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
 						case 'address': var address = __allkwargs0__ [__attrib0__]; break;
+						case 'lock': var lock = __allkwargs0__ [__attrib0__]; break;
 						case 'amount': var amount = __allkwargs0__ [__attrib0__]; break;
 					}
 				}
@@ -5106,12 +5626,46 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 		}
 		else {
 		}
+		var slock = jsstr.from_int (lock);
 		if (!__in__ (address, self._fee_balances)) {
-			self._fee_balances [address] = Currency (amount);
+			self._fee_balances [address] = dict ([[slock, Currency (amount)]]);
+			return ;
+		}
+		var balances = self._fee_balances [address];
+		if (!__in__ (slock, balances)) {
+			balances [slock] = Currency (amount);
+			return ;
+		}
+		balances [slock] = balances [slock].plus (amount);
+	});},
+	get _modify_reward_balance () {return __get__ (this, function (self, address, lock, amount) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'address': var address = __allkwargs0__ [__attrib0__]; break;
+						case 'lock': var lock = __allkwargs0__ [__attrib0__]; break;
+						case 'amount': var amount = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
 		}
 		else {
-			self._fee_balances [address] = self._fee_balances [address].plus (amount);
 		}
+		var slock = jsstr.from_int (lock);
+		if (!__in__ (address, self._reward_balances)) {
+			self._reward_balances [address] = dict ([[slock, Currency (amount)]]);
+			return ;
+		}
+		var balances = self._reward_balances [address];
+		if (!__in__ (slock, balances)) {
+			balances [slock] = Currency (amount);
+			return ;
+		}
+		balances [slock] = balances [slock].plus (amount);
 	});},
 	get add_coin_input () {return __get__ (this, function (self, address, amount) {
 		if (arguments.length) {
@@ -5158,9 +5712,10 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 		}
 		else {
 		}
+		self._total_output = self._total_output.plus (amount);
 		self._modify_balance (address, lock, amount, __kwargtrans__ ({negate: false}));
 	});},
-	get add_fee () {return __get__ (this, function (self, address, amount) {
+	get add_fee () {return __get__ (this, function (self, address, lock, amount) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
 			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
@@ -5169,6 +5724,7 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 					switch (__attrib0__) {
 						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
 						case 'address': var address = __allkwargs0__ [__attrib0__]; break;
+						case 'lock': var lock = __allkwargs0__ [__attrib0__]; break;
 						case 'amount': var amount = __allkwargs0__ [__attrib0__]; break;
 					}
 				}
@@ -5176,7 +5732,28 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 		}
 		else {
 		}
-		self._modify_fee_balance (address, amount);
+		self._total_output = self._total_output.plus (amount);
+		self._modify_fee_balance (address, lock, amount);
+	});},
+	get add_reward () {return __get__ (this, function (self, address, lock, amount) {
+		if (arguments.length) {
+			var __ilastarg0__ = arguments.length - 1;
+			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+				var __allkwargs0__ = arguments [__ilastarg0__--];
+				for (var __attrib0__ in __allkwargs0__) {
+					switch (__attrib0__) {
+						case 'self': var self = __allkwargs0__ [__attrib0__]; break;
+						case 'address': var address = __allkwargs0__ [__attrib0__]; break;
+						case 'lock': var lock = __allkwargs0__ [__attrib0__]; break;
+						case 'amount': var amount = __allkwargs0__ [__attrib0__]; break;
+					}
+				}
+			}
+		}
+		else {
+		}
+		self._total_output = self._total_output.plus (amount);
+		self._modify_reward_balance (address, lock, amount);
 	});},
 	get inputs_outputs_collect () {return __get__ (this, function (self) {
 		if (arguments.length) {
@@ -5195,8 +5772,9 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 		var inputs = [];
 		var outputs = [];
 		var ratio = Currency (1);
+		var total_input = self._other_input.plus (self._our_input);
 		if (self._our_input.greater_than (0) && self._other_input.greater_than (0)) {
-			var ratio = self._our_input.divided_by (self._other_input.plus (self._our_input));
+			var ratio = self._our_input.divided_by (total_input);
 		}
 		var our_send_addresses = list (self._our_send_addresses);
 		var other_send_addresses = list (self._other_send_addresses);
@@ -5209,17 +5787,48 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 				}
 				amount.unit = self._chain_type.currency_unit ();
 				if (__in__ (address, self._our_addresses)) {
-					inputs.append (CoinOutputView (__kwargtrans__ ({senders: other_send_addresses, recipient: address, amount: amount, lock: lock, lock_is_timestamp: (lock == 0 ? false : OutputLock (lock).is_timestamp), fee: false})));
+					inputs.append (CoinOutputView (__kwargtrans__ ({senders: other_send_addresses, recipient: address, amount: amount, lock: lock, lock_is_timestamp: (lock == 0 ? false : OutputLock (lock).is_timestamp), output_description: ''})));
 				}
 				else if (we_sent_coin_outputs) {
-					outputs.append (CoinOutputView (__kwargtrans__ ({senders: our_send_addresses, recipient: address, amount: amount.times (ratio), lock: lock, lock_is_timestamp: (lock == 0 ? false : OutputLock (lock).is_timestamp), fee: false})));
+					outputs.append (CoinOutputView (__kwargtrans__ ({senders: our_send_addresses, recipient: address, amount: amount.times (ratio), lock: lock, lock_is_timestamp: (lock == 0 ? false : OutputLock (lock).is_timestamp), output_description: (jsstr.startswith (address, '80') ? 'custody fee' : '')})));
 				}
 			}
 		}
-		if (we_sent_coin_outputs) {
-			for (var [address, amount] of jsobj.get_items (self._fee_balances)) {
+		for (var [address, balances] of jsobj.get_items (self._reward_balances)) {
+			if (!__in__ (address, self._our_addresses)) {
+				continue;
+			}
+			for (var [slock, amount] of jsobj.get_items (balances)) {
+				var lock = jsstr.to_int (slock);
 				amount.unit = self._chain_type.currency_unit ();
-				outputs.append (CoinOutputView (__kwargtrans__ ({senders: our_send_addresses, recipient: address, amount: amount.times (ratio), lock: 0, lock_is_timestamp: false, fee: true})));
+				inputs.append (CoinOutputView (__kwargtrans__ ({senders: null, recipient: address, amount: amount, lock: lock, lock_is_timestamp: false, output_description: 'block reward'})));
+			}
+		}
+		for (var [address, balances] of jsobj.get_items (self._fee_balances)) {
+			if (!__in__ (address, self._our_addresses)) {
+				continue;
+			}
+			for (var [slock, amount] of jsobj.get_items (balances)) {
+				var lock = jsstr.to_int (slock);
+				amount.unit = self._chain_type.currency_unit ();
+				inputs.append (CoinOutputView (__kwargtrans__ ({senders: other_send_addresses, recipient: address, amount: amount, lock: lock, lock_is_timestamp: false, output_description: 'fee'})));
+			}
+		}
+		if (we_sent_coin_outputs) {
+			for (var [address, balances] of jsobj.get_items (self._fee_balances)) {
+				if (__in__ (address, self._our_addresses)) {
+					continue;
+				}
+				for (var [slock, amount] of jsobj.get_items (balances)) {
+					var lock = jsstr.to_int (slock);
+					amount.unit = self._chain_type.currency_unit ();
+					outputs.append (CoinOutputView (__kwargtrans__ ({senders: our_send_addresses, recipient: (address ? address : null), amount: amount.times (ratio), lock: lock, lock_is_timestamp: false, output_description: 'fee'})));
+				}
+			}
+			if (total_input.greater_than (self._total_output)) {
+				var amount = total_input.minus (self._total_output);
+				amount.unit = self._chain_type.currency_unit ();
+				outputs.append (CoinOutputView (__kwargtrans__ ({senders: our_send_addresses, recipient: null, amount: amount.times (ratio), lock: 0, lock_is_timestamp: false, output_description: ''})));
 			}
 		}
 		return tuple ([inputs, outputs]);
@@ -5227,7 +5836,7 @@ export var WalletOutputAggregator =  __class__ ('WalletOutputAggregator', [objec
 });
 export var CoinOutputView =  __class__ ('CoinOutputView', [object], {
 	__module__: __name__,
-	get __init__ () {return __get__ (this, function (self, senders, recipient, amount, lock, lock_is_timestamp, fee) {
+	get __init__ () {return __get__ (this, function (self, senders, recipient, amount, lock, lock_is_timestamp, output_description) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
 			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
@@ -5240,7 +5849,7 @@ export var CoinOutputView =  __class__ ('CoinOutputView', [object], {
 						case 'amount': var amount = __allkwargs0__ [__attrib0__]; break;
 						case 'lock': var lock = __allkwargs0__ [__attrib0__]; break;
 						case 'lock_is_timestamp': var lock_is_timestamp = __allkwargs0__ [__attrib0__]; break;
-						case 'fee': var fee = __allkwargs0__ [__attrib0__]; break;
+						case 'output_description': var output_description = __allkwargs0__ [__attrib0__]; break;
 					}
 				}
 			}
@@ -5252,7 +5861,7 @@ export var CoinOutputView =  __class__ ('CoinOutputView', [object], {
 		self._amount = amount;
 		self._lock = lock;
 		self._lock_is_timestamp = lock_is_timestamp;
-		self._fee = fee;
+		self._output_description = output_description;
 	});},
 	get _get_senders () {return __get__ (this, function (self) {
 		if (arguments.length) {
@@ -5334,7 +5943,7 @@ export var CoinOutputView =  __class__ ('CoinOutputView', [object], {
 		}
 		return self._lock_is_timestamp;
 	});},
-	get _get_is_fee () {return __get__ (this, function (self) {
+	get _get_description () {return __get__ (this, function (self) {
 		if (arguments.length) {
 			var __ilastarg0__ = arguments.length - 1;
 			if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
@@ -5348,10 +5957,10 @@ export var CoinOutputView =  __class__ ('CoinOutputView', [object], {
 		}
 		else {
 		}
-		return self._fee;
+		return self._output_description;
 	});}
 });
-Object.defineProperty (CoinOutputView, 'is_fee', property.call (CoinOutputView, CoinOutputView._get_is_fee));
+Object.defineProperty (CoinOutputView, 'description', property.call (CoinOutputView, CoinOutputView._get_description));
 Object.defineProperty (CoinOutputView, 'lock_is_timestamp', property.call (CoinOutputView, CoinOutputView._get_lock_is_timestamp));
 Object.defineProperty (CoinOutputView, 'lock', property.call (CoinOutputView, CoinOutputView._get_lock));
 Object.defineProperty (CoinOutputView, 'amount', property.call (CoinOutputView, CoinOutputView._get_amount));
@@ -5681,7 +6290,7 @@ export var Currency =  __class__ ('Currency', [object], {
 			var fraction = '0';
 		}
 		if (!(jsstr.equal (group, ''))) {
-			var integer = jsstr.py_replace (integer, group, '');
+			var integer = jsstr.replace_all (integer, group, '');
 		}
 		return cls (TFCurrency (__kwargtrans__ ({value: jsstr.sprintf ('%s.%s', integer, fraction)})));
 	});},
@@ -6804,8 +7413,8 @@ export var FormattedStructuredData =  __class__ ('FormattedStructuredData', [For
 		}
 		else {
 		}
-		if (len (data) != 8) {
-			var __except0__ = ValueError ('invalid binary data set for FormattedSenderMessageData: {}'.format (data));
+		if (len (data) != 7) {
+			var __except0__ = ValueError ('invalid binary data set for FormattedStructuredData: {}'.format (data));
 			__except0__.__cause__ = null;
 			throw __except0__;
 		}
@@ -8049,6 +8658,48 @@ export var wallet_address_from_recipient = function (recipient) {
 	else {
 	}
 	return unlock_condition_from_recipient (recipient).unlockhash.__str__ ();
+};
+export var address_description = function (address) {
+	if (arguments.length) {
+		var __ilastarg0__ = arguments.length - 1;
+		if (arguments [__ilastarg0__] && arguments [__ilastarg0__].hasOwnProperty ("__kwargtrans__")) {
+			var __allkwargs0__ = arguments [__ilastarg0__--];
+			for (var __attrib0__ in __allkwargs0__) {
+				switch (__attrib0__) {
+					case 'address': var address = __allkwargs0__ [__attrib0__]; break;
+				}
+			}
+		}
+	}
+	else {
+	}
+	try {
+		var uh = UnlockHash.from_str (address);
+		if (uh.uhtype.value == UnlockHashType.CUSTODY_FEE.value) {
+			return 'cust. fee void';
+		}
+		if (uh.uhtype.value == UnlockHashType.NIL.value) {
+			return 'free-for-all wallet';
+		}
+		if (uh.uhtype.value == UnlockHashType.MULTI_SIG.value) {
+			return 'multisig wallet';
+		}
+		if (uh.uhtype.value == UnlockHashType.PUBLIC_KEY.value) {
+			return 'singlesig wallet';
+		}
+		if (uh.uhtype.value == UnlockHashType.ATOMIC_SWAP.value) {
+			return 'atomic swap contract';
+		}
+		return null;
+	}
+	catch (__except0__) {
+		if (isinstance (__except0__, Exception)) {
+			return null;
+		}
+		else {
+			throw __except0__;
+		}
+	}
 };
 
 //# sourceMappingURL=api.map
