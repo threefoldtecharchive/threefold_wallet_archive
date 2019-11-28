@@ -10,12 +10,12 @@
       <v-text-field v-model='formObject.to.address' :rules="toRules" v-show="false"></v-text-field>
     </div>
 
-    <v-text-field v-if="selectedTab == 1 && !investments" box prepend-icon="person" color="white" label="To (Wallet Address)"
+    <v-text-field v-if="selectedTab == 1 && !investments" filled prepend-icon="person" color="white" label="To (Wallet Address)"
       v-model='formObject.to.address' :rules="toRules" append-icon="far fa-address-book"
       @click:append="toDialog = true" clearable>
     </v-text-field>
 
-    <v-text-field box prepend-icon="local_atm" color="white" label="Amount" v-model="formObject.amount" 
+    <v-text-field filled prepend-icon="local_atm" color="white" label="Amount" v-model="formObject.amount" 
       type="number" min="0.00" :rules="amountRules"  class="inputNumber"
       clearable  :suffix="selectedWallet.currency">   
     </v-text-field>
@@ -28,8 +28,8 @@
       </span>
     </v-layout>
 
-    <v-textarea box prepend-icon="message" color="white" label="Message" v-model="formObject.message" 
-      :rules="messageRules" :counter="maxMessageLength" clearable :maxlength="maxMessageLength"/>
+    <v-textarea filled prepend-icon="message" color="white" label="Message" v-model="formObject.message" 
+      :rules="messageRules" :counter="maxMessageLength" clearable/>
   </v-form>
 
   <ToDialog ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog" :selectedWallet="selectedWallet"

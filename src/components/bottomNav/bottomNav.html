@@ -1,15 +1,15 @@
 <section class="bottom-nav">
-  <v-bottom-nav app fixed value="true" :active.sync="bottomnav" color="primary">
-    <v-btn flat dark :to='{name: "home"}'>
+  <v-bottom-navigation app fixed value="true" v-model="bottomnav" background-color="primary">
+    <v-btn dark :to='{name: "home"}'>
       <v-icon class="white--text">fas fa-wallet</v-icon>
     </v-btn>
-    <v-btn flat dark :to='{name: $route.meta.transfer}'>
+    <v-btn dark :to='{name: $route.meta.transfer}'>
       <v-icon class="white--text">swap_horiz</v-icon>
     </v-btn>
-    <v-btn flat dark :to='{name: "investments"}' disabled>
+    <v-btn dark :to='{name: "investments"}'>
       <v-icon class="white--text">fas fa-piggy-bank</v-icon>
     </v-btn>
-  </v-bottom-nav>
+  </v-bottom-navigation>
   <v-fab-transition>
     <v-btn fixed dark fab bottom large class="center" :color="$route.meta.accent ? $route.meta.accent : 'accent'" @click='handleCta'>
       <v-icon v-if="$route.query.tab === 'receive'" :disabled="submitDisabled" color="white">fas fa-qrcode</v-icon>
