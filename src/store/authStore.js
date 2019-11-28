@@ -43,7 +43,7 @@ export default ({
           }, {})
           var newSeed = new Uint8Array(decodeBase64(directLoginData.derivedSeed))
           const userObject = { doubleName: directLoginData.username, seed: newSeed }
-          // window.localStorage.setItem('user', JSON.stringify(userObject))
+          window.localStorage.setItem('user', JSON.stringify(userObject))
           context.dispatch('login',
             userObject
           )
@@ -73,15 +73,14 @@ export default ({
                   console.log(userData)
                   var newSeed = new Uint8Array(decodeBase64(userData.derivedSeed))
                   const userObject = { doubleName: username, seed: newSeed }
-                  // window.localStorage.setItem('user', JSON.stringify(userObject))
+                  window.localStorage.setItem('user', JSON.stringify(userObject))
                   context.dispatch('login',
                     userObject
                   )
                   console.log(`newSeed`, newSeed)
                 }).catch(e => context.commit('setFatalError', 'Could not decrypt message.'))
             } else {
-              // context.commit('setFatalError', 'Got no data from 3bot')
-              // We can't do this because we need to be able to login from the browser. (I think)
+              context.commit('setFatalError', 'Got no data from 3bot')
             }
           }).catch(e => {
             // context.commit('setFatalError', 'Signature failed, please try again.')
