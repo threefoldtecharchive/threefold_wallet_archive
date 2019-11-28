@@ -7,16 +7,22 @@
     &.gft-image{
       &::before {
         background-image: url(https://picsum.photos/id/943/3000/2002);
+        border-radius: $borderradius;
+        -moz-border-radius: 1em;
       }
     }
     &.tft-image{
       &::before {
         background-image: url(https://picsum.photos/id/795/500/180);
+        border-radius: $borderradius;
+        -moz-border-radius: 1em;
       }
     }
     &.gram-image{
       &::before {
         background-image: url(https://picsum.photos/id/413/2666/1500);
+        border-radius: $borderradius;
+        -moz-border-radius: 1em;
       }
     }
     &::before {
@@ -30,6 +36,7 @@
       filter: opacity(0.5);
       background-repeat: no-repeat;
       background-size: cover;
+      -moz-border-radius: 1em;
     }
     .content-inner {
       position: relative;
