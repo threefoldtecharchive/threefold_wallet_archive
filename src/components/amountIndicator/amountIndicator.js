@@ -11,6 +11,10 @@ export default {
     color: {
       type: String
     },
+    align: {
+      type: String,
+      default: 'left'
+    },
     small: {
       type: Boolean,
       default: false

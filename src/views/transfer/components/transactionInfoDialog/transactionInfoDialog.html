@@ -9,7 +9,7 @@
           Transaction info
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-btn icon dark flat @click="closeDialog(false)">
+        <v-btn icon dark text @click="closeDialog(false)">
           <v-icon>
             close
           </v-icon>
@@ -18,33 +18,33 @@
       </v-card-title>
 
       <v-card-text>
-        <v-layout fill-height column>
-          <v-layout justify-space-between fill-height column>
-            <p v-if="selectedTab == 1" class="subtitle mb-0 grey--text">From</p>
-            <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name"
-              v-if="$route.query.tab == 'receive'" />
-            <walletCard no-padding class="my-2" :wallet="selectedWallet" clickable v-else />
-            <v-flex>
-              <p class="subtitle mb-0 grey--text">To</p>
-              <div v-if="!wallets.find(x=>x.address==formObject.to.address)">
-                <p class="title mt-0 text-truncate">{{formObject.to.address}}</p>
-              </div>
-              <walletCard no-padding class="my-2" :wallet="wallets.find(x=>x.address==formObject.to.address)" clickable
-                v-else />
-            </v-flex>
-            <v-flex>
-              <p class="subtitle mb-0 grey--text">Amount</p>
-              <v-layout class="pb-2" justify-space-between row>
-                <span class="title mt-0">{{amount}} {{selectedWallet.currency}}</span>
-                <span class="text-xs-right caption">0.10 fee included</span>
-              </v-layout>
-            </v-flex>
-            <v-flex>
-              <p class="subtitle mb-0 grey--text">Message</p>
-              <p class="title mt-0">{{formObject.message}}</p>
-            </v-flex>
-          </v-layout>
-        </v-layout>
+        <v-col justify="space-between" fill-height>
+          <p v-if="selectedTab == 1" class="subtitle mb-0 grey--text">From</p>
+          <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name"
+            v-if="$route.query.tab == 'receive'" />
+          <walletCard no-padding class="my-2" :wallet="selectedWallet" clickable v-else />
+        </v-col>
+        <v-col>
+          <p class="subtitle mb-0 grey--text">To</p>
+          <div v-if="!wallets.find(x=>x.address==formObject.to.address)">
+            <p class="title mt-0 text-truncate">{{formObject.to.address}}</p>
+          </div>
+          <walletCard no-padding class="my-2" :wallet="wallets.find(x=>x.address==formObject.to.address)" clickable
+            v-else />
+        </v-col>
+        <v-col>
+          <p class="subtitle mb-0 grey--text">Amount</p>
+          <v-col>
+          <v-row class="pb-2" justify="space-between">
+              <span class="title mt-0">{{amount}} {{selectedWallet.currency}}</span>
+              <span class="text-xs-right caption">0.10 fee included</span>
+            </v-row>
+          </v-col>
+        </v-col>
+        <v-col>
+          <p class="subtitle mb-0 grey--text">Message</p>
+          <p class="title mt-0">{{formObject.message}}</p>
+        </v-col>
       </v-card-text>
       <v-card-actions class="pa-0">
         <v-btn @click="closeDialog(true)" dark :color="$route.meta.accent" style="margin-left: 0px; margin-right: 0px;"

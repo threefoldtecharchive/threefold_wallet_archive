@@ -78,15 +78,16 @@ export default ({
                     userObject
                   )
                   console.log(`newSeed`, newSeed)
-                }).catch(e => context.commit('setFatalError', 'Could not decrypt message.'))
+                }).catch(() => context.commit('setFatalError', 'Could not decrypt message.'))
             } else {
               context.commit('setFatalError', 'Got no data from 3bot')
             }
           }).catch(e => {
+            console.log(`e`, e)
             // context.commit('setFatalError', 'Signature failed, please try again.')
             // We can't do this because we need to be able to login from the browser. (I think)
-            console.log("Username was null, redirecting .... ")
-            context.dispatch("generateLoginUrl")  
+            console.log('Username was null, redirecting .... ')
+            context.dispatch('generateLoginUrl')
           })
         }
       }
@@ -98,7 +99,7 @@ export default ({
   },
   mutations: {
     setKeys (state, keys) {
-      // window.localStorage.setItem('tempKeys', JSON.stringify(keys))
+      window.localStorage.setItem('tempKeys', JSON.stringify(keys))
       state.keys = keys
     },
     setState (state, stateHash) {

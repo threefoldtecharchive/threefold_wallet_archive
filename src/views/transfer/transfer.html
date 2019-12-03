@@ -1,9 +1,9 @@
 <section class="transfer fill-height" ref="transfer">
   <v-layout column fill-height>
     <div class="cheat"></div>
-    <div class="text-xs-center my-3 div-toggle-buttons">
-      <v-btn-toggle v-model="selectedTab" dark mandatory class="primary round elevation-0">
-        <v-btn flat v-for="tab in tabs" :key="tab" class="px-5 my-1 mx-1 round" exact :to="{query:{tab: tab}}">{{tab}}</v-btn>
+    <div class="text-center my-3" style="min-height:'100px'">
+      <v-btn-toggle v-model="selectedTab" mandatory class="primary elevation-0">
+        <v-btn text v-for="tab in tabs" dark :key="tab" class="my-1 mx-1 round noborder" exact :to="{query:{tab: tab}}">{{tab}}</v-btn>
       </v-btn-toggle>
     </div>
     <v-card dark class="primary mt-2">
@@ -14,7 +14,7 @@
             <p v-else>
               <v-layout>From
                 <v-spacer />
-                <v-btn text icon v-if="active == 'send'" style="margin: 0px" @click="qrScannerDialog = true">
+              <v-btn text icon v-if="active == 'send'" style="margin: 0px" @click="qrScannerDialog = true">
                   <v-icon>camera</v-icon>
                 </v-btn>
               </v-layout>

@@ -4,23 +4,17 @@
       <div class="spinner">
         <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent"/>
       </div>
-      <v-layout align-center>
         <h1>
           {{($route.meta.title || $route.name) || '3Bot'}}
+          <v-btn class="accent ml-2" dark icon small v-if="$route.name == 'home'" @click="$emit('ctaClicked')">
+            <v-icon>
+              add
+            </v-icon>
+          </v-btn>
         </h1>
-        <v-btn class="accent ml-2" dark icon small v-if="$route.name == 'home'" @click="$emit('ctaClicked')">
-          <v-icon>
-            add
-          </v-icon>
-        </v-btn>
-      </v-layout>
+        
     </v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-fab-transition>
-      <v-btn text small absolute right fab dark @click="informationDialog = true" v-if="$route.meta.info">
-        <v-icon>fas fa-info</v-icon>
-      </v-btn>
-    </v-fab-transition>
   </v-app-bar>
   <InformationDialog :dialog="informationDialog" :closeDialog="closeInformationDialog" v-if="$route.meta.info"></InformationDialog>
 </section>
