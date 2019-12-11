@@ -1,8 +1,8 @@
 <section class="create-wallet">
-  <v-dialog dark v-model="show" fullscreen>
-    <v-card class="primary darken-2" style="height:100%">
+  <v-dialog v-model="show" fullscreen>
+    <v-card class="white" style="height:100%">
       <v-toolbar dark color="primary">
-        <v-toolbar-title class="ml-4 headline text-capitalize">Create wallet</v-toolbar-title>
+        <v-toolbar-title class="ml-4 headline text-capitalize">Create/import wallet</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon flat @click="$emit('ctaClicked'); walletName = null">
           <v-icon :color="$route.meta.accent">
@@ -11,17 +11,20 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        This will soon be available
-        <!-- <v-form @submit.prevent="$emit('ctaClicked', walletName); walletName = null">
-          <v-layout justify-space-between fill-height column>
-            <v-text-field v-model="walletName" box label="Walletname" :color="$route.meta.accent" />
-            <v-flex>
-              <v-layout align-end justify-end row fill-height>
-                <v-btn type="submit" outline round flat :color="$route.meta.accent">Save</v-btn>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-        </v-form> -->
+        <v-row>
+          <v-col cols="12" sm="6" md="3">
+            <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName" class="red--text" label="Wallet name"></v-text-field>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-textarea :error-messages="wordsErrors" @input="wordsErrors = []" v-model="words" name="input-7-1" label="Words (Seed phrase)" value=""
+              hint="Please enter all words lowercased and separted by one space."></v-textarea>
+          </v-col>
+        </v-row>
+
+        <div class="my-2 right">
+          <v-btn color="green" dark @click="addWallet">Import wallet</v-btn>
+        </div>
       </v-card-text>
     </v-card>
   </v-dialog>
