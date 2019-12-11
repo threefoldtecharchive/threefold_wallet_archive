@@ -1,14 +1,16 @@
 import walletSelector from '../../components/walletSelector'
 import historyCard from '../../components/historyCard'
+import walletCard from '../../components/walletCard'
 import { mapGetters } from 'vuex'
 import { groupBy } from 'lodash'
 import moment from 'moment'
 export default {
   name: 'history',
-  components: { walletSelector, historyCard },
+  components: { walletSelector, walletCard, historyCard },
   props: [],
   data () {
     return {
+
     }
   },
   computed: {
@@ -31,10 +33,20 @@ export default {
         return date.toDateString()
       })
       return groupedTransactions
+    },
+    selectedWallet () {
+      let selectedWallet = this.wallets.find(x => x.name === this.$route.params.wallet)
+      return selectedWallet
+      // console.log(`filtered wallets`, wallets)
+      // // return this.wallets.filter(x => x.name = this.$route.params.wallet)
+      // console.log(`route`, this.$route.params.wallet)
+      // console.log(`wallets `, this.wallets )
+      // return "owkay"
     }
   },
   mounted () {
     this.$refs.selector.$children.find(x => x.selected).$el.scrollIntoView({behavior: "auto", block: "center", inline: "center"})
+    console.log(this.wallets)
   },
   methods: {
     selectWallet (wallet) {

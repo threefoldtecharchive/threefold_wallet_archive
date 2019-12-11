@@ -1,42 +1,18 @@
 <section class="history fill-height">
   <v-layout column fill-height>
-    <!-- <div class="cheat elevation-4"></div> -->
-    <walletSelector class="mb-0" ref="selector" no-clip @onWalletSelected='selectWallet' :wallets="computedWallets"
-      :selected="$route.params.wallet" />
-    <!-- <v-subheader class="pt-0 pl-0 subheading">
-      Recent activities
-    </v-subheader> -->
+    <!-- <walletSelector class="mb-0" ref="selector" no-clip @onWalletSelected='selectWallet' :wallets="computedWallets"
+      :selected="$route.params.wallet" /> -->
+      
+      <walletCard  :type="selectedWallet.currency" class=" mb-2 " clickable 
+        :wallet="selectedWallet" :displayAttributes="false" />
+
     <v-flex class="pa-0" style="overflow: visible">
-      <!-- <v-layout column class="mb-3">
-         <v-timeline fill-dot align-top dense class=" pt-0" style="width: 100%;">
-          <v-timeline-item class="white--text pb-3 pr-0" style="border: solid 1px blue" right fill-dot large v-for="(gt, date) in groupedTransactions" :key="date">
-            <template class="pr-0 mr-0" v-slot:icon style="border: solid 1px green">
-              <v-layout column text-xs-center class="px-1"  >
-                <v-flex class="text-uppercase">
-                  {{getDayName(date)}}
-                </v-flex>
-                <v-layout>
-                  <v-flex text-xs-right style="font-size: 9px" class="font-weight-black ">
-                    {{getDay(date)}}
-                  </v-flex>
-                  <v-flex text-xs-left style="font-size: 9px" class="font-weight-black text-uppercase pl-1">
-                    {{getMonth(date)}}
-                  </v-flex>
-                </v-layout>
-              </v-layout>
-            </template>
-            <historyCard style="border: solid 1px red" v-for="(transaction, index) in gt" :key="index" :transaction="transaction"/>
-          </v-timeline-item>
-        </v-timeline>
-
-
-      </v-layout> -->
-      <v-row v-for="(gt, date) in groupedTransactions" :key="date">
-          <p  :color="primary" class="mb-1 ml-4">{{getDayName(date)}} {{getDay(date)}} {{getMonth(date)}}</p>
+      <div v-for="(gt, date) in groupedTransactions" :key="date">
+          <p color="primary" class="mb-1 ml-4">{{getDayName(date)}} {{getDay(date)}} {{getMonth(date)}}</p>
 
           <historyCard v-for="(transaction, index) in gt" :key="index"
             :transaction="transaction" />
-        </v-row>
+      </div>
     </v-flex>
   </v-layout>
 </section>

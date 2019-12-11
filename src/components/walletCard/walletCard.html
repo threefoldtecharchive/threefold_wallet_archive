@@ -18,8 +18,10 @@
                 </v-icon>
               </v-btn>
             </v-flex>
-            <amountIndicator  class="pl-3 pr-2 pt-1 align-self-end" :amount='totalAmount'
-              :valuta='wallet.currency'/>
+            <amountIndicator v-if="displayAttributes"  class="pl-3 pr-2 pt-1 align-self-end" :amount='totalAmount'
+              :valuta='wallet.currency' />
+            <amountIndicator v-else  class="pl-3 pr-2 pt-1 align-self-end" :amount='totalAmount'
+            :valuta='wallet.currency' small />
           </v-layout>
         </v-flex>
         <div v-else>

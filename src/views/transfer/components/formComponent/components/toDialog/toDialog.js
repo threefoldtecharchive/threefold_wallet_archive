@@ -27,8 +27,8 @@ export default {
       selected: 0,
       externAddress: '',
       tabs: [
-        {name:'Intern', value:0}, 
-        {name:'Extern',value:1}
+        {name:'Own wallets', value:0}, 
+        {name:'Others',value:1}
       ],
       valid: false
     }
