@@ -43,7 +43,7 @@ export default {
     handleCTAClick (data) {
       if (this.$route.name === 'home') {
         this.showCreateWalletDialog = !this.showCreateWalletDialog
-        if (data) this.createWallet(data)
+        // if (data) this.createWallet(data)
       }
     }
 
