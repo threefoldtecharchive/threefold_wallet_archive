@@ -1,8 +1,8 @@
 <section class="copydialog">
-  <v-dialog dark v-model="dialog" max-width="500">
+  <v-dialog dark v-model="dialog" fullscreen>
     <v-card class="primary darken-2">
       <v-toolbar dark color="primary" dense>
-        <v-toolbar-title class="text-uppercase">{{data.title}}</v-toolbar-title>
+        <v-toolbar-title class="ml-4 text-capitalize">{{data.title}}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon flat @click="dialog = false">
           <v-icon color="accent">

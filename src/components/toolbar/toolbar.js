@@ -27,6 +27,9 @@ export default {
     onScroll () {
       this.isScrolling = (window.pageYOffset ||
         document.documentElement.scrollTop || 0) > 50
+    },
+    enableQrScannerDialog () {
+      this.$emit("enableQrScannerDialog")
     }
   }
 }

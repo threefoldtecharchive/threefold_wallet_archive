@@ -1,7 +1,7 @@
 
 <section class="investments fill-height">
     <v-layout column fill-height>
-        <div class="cheat"></div>
+        <!-- <div class="cheat"></div> -->
         <div class="content" v-if="wallets.length">
             <walletCard no-padding class="my-2" clickable 
             v-for="(wallet, index) in wallets.filter(x => x.currency === 'gram')" 

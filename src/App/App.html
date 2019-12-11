@@ -1,8 +1,8 @@
 <section class="app">
   <v-app :style="cssProps">
-    <toolbar @ctaClicked='handleCTAClick' />
+    <toolbar @ctaClicked='handleCTAClick' @enableQrScannerDialog/>
     <v-content class="mt-0">
-      <v-container class="pb-0 pt-2 content fill-height" style="overflow: hidden;" justify-start>
+      <v-container class="pb-0 pt-2 px-1 content fill-height" style="overflow: hidden;" justify-start>
         <router-view />
       </v-container>
     </v-content>

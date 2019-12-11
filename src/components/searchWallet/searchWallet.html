@@ -1,9 +1,9 @@
 
 <section class="search-wallet">
-    <v-dialog dark v-model="show" scrollable max-width="500" persistent>
+    <v-dialog dark v-model="show" scrollable fullscreen persistent>
         <v-card class="primary darken-2">
           <v-toolbar dark color="primary">
-            <v-toolbar-title class="headline text-uppercase">Search wallet</v-toolbar-title>
+            <v-toolbar-title class="ml-4 headline text-capitalize">Search wallet</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon flat @click="$emit('close'); walletName = null">
               <v-icon :color="$route.meta.accent">

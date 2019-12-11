@@ -2,6 +2,10 @@ export default {
   name: 'amount-indicator',
   components: {},
   props: {
+    small: {
+      type: Boolean,
+      default: false
+    },
     amount: {
       type: String
     },
@@ -11,10 +15,6 @@ export default {
     color: {
       type: String
     },
-    small: {
-      type: Boolean,
-      default: false
-    }
   },
   data () {
     return {

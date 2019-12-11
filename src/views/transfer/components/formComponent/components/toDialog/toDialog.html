@@ -1,9 +1,10 @@
 
 <section class="to-dialog">
-  <v-dialog v-model="dialog" max-width="500" scrollable persistent>
+  <v-dialog v-model="dialog" fullscreen scrollable persistent>
     <v-card>
+      
       <v-toolbar dark color="primary" dense>
-        <!-- <v-toolbar-title class="text-uppercase"></v-toolbar-title> -->
+        <v-toolbar-title class="ml-4 text-capitalize">Select account</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon flat @click="closeDialog(false)">
           <v-icon :color="$route.meta.accent">
@@ -11,14 +12,22 @@
           </v-icon>
         </v-btn>
         <template v-slot:extension>
-          <div class="text-xs-center" style="margin:auto;">
-            <v-btn-toggle v-model="selected" dark active-class="red" mandatory class="primary round elevation-0">
-              <v-btn flat class="px-5 my-1 mx-1 round" v-for="tab in tabs">{{tab.name}}</v-btn>
-            </v-btn-toggle>
-          </div>
+         
         </template>
       </v-toolbar>
       <v-card-text>
+          <div class="text-xs-center mb-3" style="margin:auto;">
+              <v-btn-toggle v-model="selected" dark active-class="red" mandatory class="primary round elevation-0">
+                <v-btn flat class="px-5 my-1 mx-1 round" v-for="tab in tabs">{{tab.name}}</v-btn>
+              </v-btn-toggle>
+            </div>
+          <!-- <div class="text-xs-center mb-3 div-toggle-buttons">
+              <v-btn-toggle v-model="selectedTab" dark mandatory class="primary round elevation-0">
+                <v-btn flat v-for="tab in tabs" :key="tab" class="px-5  round" exact :to="{query:{tab: tab}}">{{tab.name}}
+                </v-btn>
+              </v-btn-toggle>
+            </div> -->
+
         <div v-show="selected === 0">
           <div class="content" v-if="wallets.length">
             <div>

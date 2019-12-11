@@ -10,7 +10,8 @@ export default {
   data () {
     return {
       outgoing: false,
-      show: false
+      show: false,
+      smallAmount: true
     }
   },
   computed: {

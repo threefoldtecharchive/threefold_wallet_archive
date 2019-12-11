@@ -59,14 +59,14 @@ $borderradius: 20px;
     max-width: 100%;
   }
   .cheat {
-    position: absolute;
-    top: -$borderradius;
-    border-radius: 0 0 $borderradius $borderradius;
-    background: var(--primary-color);
-    height: 95px;
-    width: 100%;
-    z-index: 0;
-    left: 0;
+    // position: absolute;
+    // top: -$borderradius;
+    // border-radius: 0 0 $borderradius $borderradius;
+    // background: var(--primary-color);
+    // height: 95px;
+    // width: 100%;
+    // z-index: 0;
+    // left: 0;
   }
   .scrollable {
     height: 0px;
