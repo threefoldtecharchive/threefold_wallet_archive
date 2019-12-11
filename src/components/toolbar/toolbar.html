@@ -16,7 +16,7 @@
           {{($route.meta.title || $route.name) || '3Bot'}}
         </h1>
         <div class="spinner ml-2">
-          <v-progress-circular indeterminate size="12" :color="$route.meta.accent" />
+          <v-progress-circular v-if="syncing"  indeterminate size="12" :color="$route.meta.accent" />
         </div>
         <v-spacer></v-spacer>
 
