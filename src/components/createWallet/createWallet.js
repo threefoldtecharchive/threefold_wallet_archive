@@ -20,7 +20,9 @@ export default {
     }
   },
   computed: {
-
+    ...mapGetters([
+      'doubleName'
+    ])
   },
   mounted() {
 
@@ -49,8 +51,10 @@ export default {
       }
 
       if(this.walletName && wordCount === 24) {
-        this.importWallet({doubleName: "123", walletName: this.walletName, words: this.words})
-        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"name\": \"" + this.walletName + "\", \"words\": " + this.words + "}");
+        this.importWallet({doubleName: this.doubleName, walletName: this.walletName, words: this.words})
+        if(Print) {
+          Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"words\": " + this.words + "}");
+        }
       }
 
       

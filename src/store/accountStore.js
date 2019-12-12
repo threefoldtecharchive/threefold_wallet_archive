@@ -5,10 +5,13 @@ export default ({
   state: {
     syncing: false,
     accounts: null,
-    intervalIsSet: false
+    intervalIsSet: false,
+    doubleName: false
   },
   actions: {
     login (context, userData) {
+      context.commit('setDoubleName', userData.doubleName);
+
       var tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
         userData.doubleName, {
@@ -94,6 +97,7 @@ export default ({
     }
   },
   getters: {
+    doubleName: (state) => state.doubleName,
     accounts: (state) => state.accounts,
     wallets: (state) => {
       var wallets = []
