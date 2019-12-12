@@ -53,9 +53,10 @@ export default {
 
       if(this.walletName && wordCount === 24) {
         let generatedSeed = await cryptoService.generateSeedFromMnemonic(this.words);
-        this.importWallet({doubleName: this.doubleName, walletName: this.walletName, generatedSeed: generatedSeed})
+        console.log(generatedSeed)
+        this.importWallet({doubleName: this.doubleName, walletName: this.walletName, seed: generatedSeed})
 
-        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"generatedSeed\": " + generatedSeed + "}");
+        // Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"generatedSeed\": " + generatedSeed + "}");
       }
 
       
