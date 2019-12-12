@@ -57,7 +57,7 @@ export default ({
       var tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
         data.doubleName, {
-          seed: new Uint8Array([172, 71, 122, 113, 182, 210, 235, 96, 117, 42, 129, 137, 68, 81, 61, 29, 61, 218, 212, 220, 221, 146, 109, 160, 95, 255, 86, 234, 249, 72, 157, 183]),
+          seed: data.words,
           network: config.tftNetwork
         }
       )
