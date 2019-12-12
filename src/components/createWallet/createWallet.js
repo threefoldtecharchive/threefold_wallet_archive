@@ -69,10 +69,12 @@ export default {
 
         const convertHexstringToEntropy = hexString => new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
-        let obj = {doubleName: this.doubleName, walletName: this.walletName, seed: convertHexstringToEntropy(generatedSeed)}
+        let mySeed = convertHexstringToEntropy(generatedSeed);
+
+        let obj = {doubleName: this.doubleName, walletName: this.walletName, seed: mySeed}
         this.importWallet(obj)
 
-        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"seed\": " + convertHexstringToEntropy(generatedSeed) + "}");
+        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"seed\": " + mySeed + "}");
       }
 
       
