@@ -72,7 +72,7 @@ export default {
         let obj = {doubleName: this.doubleName, walletName: this.walletName, seed: convertHexstringToEntropy(generatedSeed)}
         console.log(obj)
         this.importWallet(obj)
-        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"seed\": " + generatedSeed + "}");
+        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"seed\": " + convertHexstringToEntropy(generatedSeed) + "}");
       }
 
       
