@@ -13,8 +13,7 @@
 
         </v-col>
         <h1 @click="logMe()">
-          <!-- {{($route.meta.title || $route.name) || '3Bot'}} -->
-          Wallets
+          {{($route.meta.title || $route.name) || '3Bot'}}
         </h1>
         <div class="spinner ml-2">
           <v-progress-circular v-if="syncing"  indeterminate size="12" :color="$route.meta.accent" />
@@ -28,6 +27,12 @@
         @click="$emit('ctaClicked')">
         <v-icon>
           add
+        </v-icon>
+      </v-btn>
+      <v-btn small absolute right flat fab dark class="accent" v-if="$route.name == 'history'"
+        @click="$emit('ctaClicked')">
+        <v-icon>
+          fas fa-cog
         </v-icon>
       </v-btn>
       <!-- <v-btn  small absolute right flat fab dark class="accent" v-if="$route.query.tab == 'send'" @click="enableQrScannerDialog">

@@ -1,12 +1,14 @@
 <section class="history fill-height">
-  <v-layout column fill-height>
+  <v-layout column fill-height >
     <!-- <walletSelector class="mb-0" ref="selector" no-clip @onWalletSelected='selectWallet' :wallets="computedWallets"
       :selected="$route.params.wallet" /> -->
       
-      <walletCard  :type="selectedWallet.currency" class=" mb-2 " clickable 
+      <walletCard class="mt-0 mr-1 pa-0"  :type="selectedWallet.currency" clickable 
         :wallet="selectedWallet" :displayAttributes="false" />
 
-    <v-flex class="pa-0" style="overflow: visible">
+        <!-- <v-divider color="primary" class="mt-2"></v-divider> -->
+
+    <v-flex class="pa-0 mt-1" style="overflow: visible">
       <div v-for="(gt, date) in groupedTransactions" :key="date">
           <p color="primary" class="mb-1 ml-4">{{getDayName(date)}} {{getDay(date)}} {{getMonth(date)}}</p>
 

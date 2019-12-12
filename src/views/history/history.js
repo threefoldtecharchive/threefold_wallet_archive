@@ -37,11 +37,6 @@ export default {
     selectedWallet () {
       let selectedWallet = this.wallets.find(x => x.name === this.$route.params.wallet)
       return selectedWallet
-      // console.log(`filtered wallets`, wallets)
-      // // return this.wallets.filter(x => x.name = this.$route.params.wallet)
-      // console.log(`route`, this.$route.params.wallet)
-      // console.log(`wallets `, this.wallets )
-      // return "owkay"
     }
   },
   mounted () {

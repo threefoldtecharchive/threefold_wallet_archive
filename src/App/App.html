@@ -8,6 +8,7 @@
     </v-content>
     <bottomNav/>
     <createWalletDialog :show='showCreateWalletDialog' @ctaClicked='handleCTAClick' />
+    <editWallet :show='showEditWalletDialog' @ctaClicked='handleCTAClick' ></editWallet>
     <v-snackbar :value="!!informationMessage" top :timeout="hideSnackbarTimeout">
       {{ informationMessage }}
     </v-snackbar>
