@@ -57,6 +57,8 @@ export default ({
       }
     },
     importWallet: (context, data) => {
+      console.log(data);
+
       var tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
         data.doubleName, {
