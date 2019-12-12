@@ -34,7 +34,7 @@ export default {
     ...mapActions([
       'importWallet'
     ]),
-    async addWallet() {
+    addWallet() {
       if(!this.walletName) {
         this.walletNameErrors.push("Please enter a name.")
         return
@@ -54,7 +54,7 @@ export default {
       }
 
       if(this.walletName && wordCount === 24) {
-        let generatedSeed = await cryptoService.generateSeedFromMnemonic(this.words);
+        let generatedSeed = cryptoService.generateSeedFromMnemonic(this.words);
 
 
         // let seed = new Uint8Array([172, 71, 122, 113, 182, 210, 235, 96, 117, 42, 129, 137, 68, 81, 61, 29, 61, 218, 212, 220, 221, 146, 109, 160, 95, 255, 86, 234, 249, 72, 157, 183]);
@@ -71,10 +71,19 @@ export default {
 
         const convertHexstringToEntropy = hexString => new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
-        let obj = {doubleName: this.doubleName, walletName: this.walletName, seed: convertHexstringToEntropy(generatedSeed)}
-        console.log(obj)
+        let mySeed = convertHexstringToEntropy(generatedSeed);
+
+        let obj = {doubleName: this.doubleName, walletName: this.walletName, seed: mySeed}
         this.importWallet(obj)
-        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"seed\": " + convertHexstringToEntropy(generatedSeed) + "}");
+
+        var postMsg = {
+          type: "ADD_IMPORT_WALLET",
+          walletName: this.walletName,
+          doubleName: this.doubleName,
+          seed: Array.from(mySeed)
+        }
+
+        Print.postMessage(JSON.stringify(postMsg));
       }
 
       
