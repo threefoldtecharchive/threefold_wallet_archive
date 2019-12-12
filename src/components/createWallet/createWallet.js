@@ -74,7 +74,14 @@ export default {
         let obj = {doubleName: this.doubleName, walletName: this.walletName, seed: mySeed}
         this.importWallet(obj)
 
-        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"seed\": " + mySeed + "}");
+        var postMsg = {
+          type: "ADD_IMPORT_WALLET",
+          walletName: this.walletName,
+          doubleName: this.doubleName,
+          seed: Array.from(mySeed)
+        }
+
+        Print.postMessage(JSON.stringify(postMsg));
       }
 
       
