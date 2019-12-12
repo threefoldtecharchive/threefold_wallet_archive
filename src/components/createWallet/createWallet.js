@@ -59,9 +59,9 @@ export default {
       }
 
       
-      // this.$emit('ctaClicked')
-      // this.walletName = null
-      // this.words = null
+      this.$emit('ctaClicked')
+      this.walletName = null
+      this.words = null
     }
   }
 }
