@@ -54,8 +54,10 @@ export default ({
             userObject
           )
 
-          let users = JSON.parse(localStorage.getItem('users'));
-          for (let user of users) {
+          let importedWallets = JSON.parse(localStorage.getItem('importedWallets'));
+
+          if(importedWallets != null && importedWallets) {
+          for (let user of importedWallets) {
             user.words = new Uint8Array(user.words);
             context.dispatch('importWallet',
               user
@@ -97,12 +99,15 @@ export default ({
                     userObject
                   )
 
-                  let users = JSON.parse(localStorage.getItem('users'));
-                  for (let user of users) {
-                    user.words = new Uint8Array(user.words);
-                    context.dispatch('importWallet',
-                      user
-                    )
+                  let importedWallets = JSON.parse(localStorage.getItem('importedWallets'));
+                  
+                  if(importedWallets != null && importedWallets) {
+                    for (let user of importedWallets) {
+                      user.words = new Uint8Array(user.words);
+                      context.dispatch('importWallet',
+                        user
+                      )
+                    }
                   }
 
                   console.log(`newSeed`, newSeed)
