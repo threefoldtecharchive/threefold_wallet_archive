@@ -12,11 +12,21 @@
       </v-toolbar>
       <v-card-text>
         <v-btn-toggle v-model="selectedTab" dark mandatory class="primary round elevation-0">
-          <v-btn flat v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab" >{{tab}}</v-btn>
+          <v-btn flat v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
         </v-btn-toggle>
 
-        
+
         <v-container v-if="currentTab == 'create'">
+          <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
+            class="red--text" label="Wallet name"></v-text-field>
+
+          <div class="my-2 right">
+            <v-btn color="green" dark @click="addWallet">Import wallet</v-btn>
+          </div>
+          </div>
+        </v-container>
+
+        <v-container v-if="currentTab == 'import'">
           <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
             class="red--text" label="Wallet name"></v-text-field>
 
@@ -27,12 +37,8 @@
           <div class="my-2 right">
             <v-btn color="green" dark @click="addWallet">Import wallet</v-btn>
           </div>
-        </div>
+          </div>
         </v-container>
-
-        <v-container v-if="currentTab == 'import'">
-            importing
-          </v-container>
 
       </v-card-text>
     </v-card>
