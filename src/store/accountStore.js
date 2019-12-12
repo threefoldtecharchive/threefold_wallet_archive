@@ -60,7 +60,7 @@ export default ({
       var tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
         data.doubleName, {
-          seed: data.words,
+          seed: data.seed,
           network: config.tftNetwork
         }
       )

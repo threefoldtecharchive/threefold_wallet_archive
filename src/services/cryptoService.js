@@ -62,5 +62,12 @@ export default ({
   },
   getEdPkInCurve (publicKey) {
     return encodeBase64(sodium.crypto_sign_ed25519_pk_to_curve25519(decodeBase64(publicKey)))
+  },
+  generateMnemonicFromSeed(seed) {
+    return bip39.entropyToMnemonic(seed)
+  },
+
+  generateSeedFromMnemonic(mnemonic) {
+    return bip39.mnemonicToSeed(mnemonic)
   }
 })
