@@ -7,7 +7,7 @@ $borderradius: 20px;
       }
     }
   }
-
+  
   .v-card,
   .v-dialog {
     border-radius: $borderradius;
@@ -46,6 +46,12 @@ $borderradius: 20px;
     .v-expansion-panel__container {
       background: none;
     }
+  }
+  .v-dialog{
+    border-radius: 0px !important;
+  }
+  .v-dialog .v-card {
+    border-radius: 0px !important;
   }
   .v-card__text .wallet-selector {
     overflow: hidden;
