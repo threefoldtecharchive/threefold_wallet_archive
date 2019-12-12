@@ -4,14 +4,14 @@
 
 
       <v-layout align-center>
-        <v-col cols="1" v-if="$route.name != 'home' && $route.name != 'login'">
+        <div cols="1" v-if="$route.name != 'home' && $route.name != 'login'">
           <v-btn flat small fab  flat dark :to='{name: "home"}'>
             <v-icon flatclass="white--text">fas fa-arrow-left</v-icon>
           </v-btn>
-        </v-col>
-        <v-col class="pl-5" v-else cols="1" >
+        </div>
+        <div class="pl-5" v-else cols="1" >
 
-        </v-col>
+        </div>
         <h1 @click="logMe()">
           {{($route.meta.title || $route.name) || '3Bot'}}
         </h1>

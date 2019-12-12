@@ -11,16 +11,13 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-          <v-row>
-              <v-col cols="12" sm="6" md="3">
-                <v-text-field disabled v-model="oldWalletName" class="red--text" label="Old wallet name"></v-text-field>
-              </v-col>
-            </v-row>
-        <v-row>
-          <v-col cols="12" sm="6" md="3">
-            <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="newWalletName" class="red--text" label="New wallet name"></v-text-field>
-          </v-col>
-        </v-row>
+
+        <v-text-field disabled v-model="oldWalletName" class="red--text" label="Old wallet name"></v-text-field>
+
+
+        <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="newWalletName"
+          class="red--text" label="New wallet name"></v-text-field>
+
 
         <div class="my-2 right">
           <v-btn color="green" dark @click="addWallet">Change wallet name</v-btn>
