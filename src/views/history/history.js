@@ -40,7 +40,7 @@ export default {
     }
   },
   mounted () {
-    this.$refs.selector.$children.find(x => x.selected).$el.scrollIntoView({behavior: "auto", block: "center", inline: "center"})
+    // this.$refs.selector.$children.find(x => x.selected).$el.scrollIntoView({behavior: "auto", block: "center", inline: "center"})
     console.log(this.wallets)
   },
   methods: {
