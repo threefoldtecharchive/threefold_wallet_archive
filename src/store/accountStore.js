@@ -5,10 +5,13 @@ export default ({
   state: {
     syncing: false,
     accounts: null,
-    intervalIsSet: false
+    intervalIsSet: false,
+    doubleName: false
   },
   actions: {
     login (context, userData) {
+      context.commit('setDoubleName', userData.doubleName);
+
       var tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
         userData.doubleName, {
@@ -57,25 +60,16 @@ export default ({
       var tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
         data.doubleName, {
-          seed: data.words,
+          seed: data.seed,
           network: config.tftNetwork
         }
       )
 
-      console.log(data.doubleName, data.walletName)
-
       tfAccount2.type = "imported"
 
-      var accounts = context.getters.accounts;
-
-      console.log(accounts)
-      console.log(accounts.length)
+      var accounts = context.getters.accounts
 
       accounts.push(tfAccount2)
-
-      console.log(accounts)
-      console.log(accounts.length)
-
       context.commit('setAccounts', accounts)
 
       context.dispatch('updateAccounts')
@@ -94,6 +88,7 @@ export default ({
     }
   },
   getters: {
+    doubleName: (state) => state.doubleName,
     accounts: (state) => state.accounts,
     wallets: (state) => {
       var wallets = []

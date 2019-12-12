@@ -2,6 +2,7 @@ import {
   mapGetters,
   mapActions
 } from 'vuex'
+import cryptoService from '../../services/cryptoService'
 
 export default {
   name: 'create-wallet',
@@ -20,7 +21,9 @@ export default {
     }
   },
   computed: {
-
+    ...mapGetters([
+      'doubleName'
+    ])
   },
   mounted() {
 
@@ -29,7 +32,7 @@ export default {
     ...mapActions([
       'importWallet'
     ]),
-    addWallet() {
+    async addWallet() {
       if(!this.walletName) {
         this.walletNameErrors.push("Please enter a name.")
         return
@@ -49,8 +52,10 @@ export default {
       }
 
       if(this.walletName && wordCount === 24) {
-        this.importWallet({doubleName: "123", walletName: this.walletName, words: this.words})
-        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"name\": \"" + this.walletName + "\", \"words\": " + this.words + "}");
+        let generatedSeed = await cryptoService.generateSeedFromMnemonic(this.words);
+        console.log(generatedSeed)
+        this.importWallet({doubleName: this.doubleName, walletName: this.walletName, seed: generatedSeed})
+        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"seed\": " + generatedSeed + "}");
       }
 
       
