@@ -68,6 +68,6 @@ export default ({
   },
 
   generateSeedFromMnemonic(mnemonic) {
-    return bip39.mnemonicToSeed(mnemonic)
+    return bip39.mnemonicToEntropy(mnemonic)
   }
 })
