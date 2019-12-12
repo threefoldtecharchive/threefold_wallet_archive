@@ -55,13 +55,13 @@ export default ({
           )
 
           let importedWallets = JSON.parse(localStorage.getItem('importedWallets'));
-
-          if(importedWallets != null && importedWallets) {
-          for (let user of importedWallets) {
-            user.words = new Uint8Array(user.words);
-            context.dispatch('importWallet',
-              user
-            )
+          if (importedWallets != null && importedWallets) {
+            for (let user of importedWallets) {
+              user.words = new Uint8Array(user.words);
+              context.dispatch('importWallet',
+                user
+              )
+            }
           }
 
         } else {
@@ -100,8 +100,8 @@ export default ({
                   )
 
                   let importedWallets = JSON.parse(localStorage.getItem('importedWallets'));
-                  
-                  if(importedWallets != null && importedWallets) {
+
+                  if (importedWallets != null && importedWallets) {
                     for (let user of importedWallets) {
                       user.words = new Uint8Array(user.words);
                       context.dispatch('importWallet',
