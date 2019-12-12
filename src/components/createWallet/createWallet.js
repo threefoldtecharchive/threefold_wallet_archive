@@ -55,8 +55,7 @@ export default {
         let generatedSeed = await cryptoService.generateSeedFromMnemonic(this.words);
         console.log(generatedSeed)
         this.importWallet({doubleName: this.doubleName, walletName: this.walletName, seed: generatedSeed})
-
-        // Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"generatedSeed\": " + generatedSeed + "}");
+        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"seed\": " + generatedSeed + "}");
       }
 
       
