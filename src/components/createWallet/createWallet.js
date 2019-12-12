@@ -14,6 +14,8 @@ export default {
   },
   data() {
     return {
+      tabs: ['import', 'create'],
+      currentTab: 'import',
       walletName: null,
       words: null,
       walletNameErrors: [],

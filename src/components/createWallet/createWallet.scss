@@ -1,3 +1,8 @@
-.create-wallet {
 
-}
+    .v-btn--active {
+        background-color: var(--active-color) !important;
+        border-color: var(--active-color) !important;
+    }
+    .div-toggle-buttons {
+        min-height: 50px;
+    }
