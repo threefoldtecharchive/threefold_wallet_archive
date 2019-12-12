@@ -57,7 +57,7 @@ export default ({
           let importedWallets = JSON.parse(localStorage.getItem('importedWallets'));
           if (importedWallets != null && importedWallets) {
             for (let user of importedWallets) {
-              user.seed = new Uint8Array(user.seed);
+              user.generatedSeed = new Uint8Array(user.generatedSeed);
               context.dispatch('importWallet',
                 user
               )
@@ -103,7 +103,7 @@ export default ({
 
                   if (importedWallets != null && importedWallets) {
                     for (let user of importedWallets) {
-                      user.seed = new Uint8Array(user.seed);
+                      user.generatedSeed = new Uint8Array(user.generatedSeed);
                       context.dispatch('importWallet',
                         user
                       )

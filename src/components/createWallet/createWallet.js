@@ -52,16 +52,16 @@ export default {
       }
 
       if(this.walletName && wordCount === 24) {
-        let seed = await cryptoService.generateSeedFromMnemonic(this.words);
-        this.importWallet({doubleName: this.doubleName, walletName: this.walletName, seed: seed})
+        let generatedSeed = await cryptoService.generateSeedFromMnemonic(this.words);
+        this.importWallet({doubleName: this.doubleName, walletName: this.walletName, generatedSeed: generatedSeed})
 
-        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"seed\": " + seed + "}");
+        Print.postMessage("{\"type\": \"ADD_IMPORT_WALLET\", \"walletName\": \"" + this.walletName + "\", \"doubleName\": \"" + this.doubleName + "\", \"generatedSeed\": " + generatedSeed + "}");
       }
 
       
-      this.$emit('ctaClicked')
-      this.walletName = null
-      this.words = null
+      // this.$emit('ctaClicked')
+      // this.walletName = null
+      // this.words = null
     }
   }
 }

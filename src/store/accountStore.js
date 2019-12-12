@@ -60,25 +60,16 @@ export default ({
       var tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
         data.doubleName, {
-          seed: data.seed,
+          seed: data.generatedSeed,
           network: config.tftNetwork
         }
       )
 
-      console.log(data.doubleName, data.walletName)
-
       tfAccount2.type = "imported"
 
-      var accounts = context.getters.accounts;
-
-      console.log(accounts)
-      console.log(accounts.length)
+      var accounts = context.getters.accounts
 
       accounts.push(tfAccount2)
-
-      console.log(accounts)
-      console.log(accounts.length)
-
       context.commit('setAccounts', accounts)
 
       context.dispatch('updateAccounts')
