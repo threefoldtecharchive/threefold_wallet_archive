@@ -1,24 +1,8 @@
 <section class="bottom-nav">
-  <!-- <v-btn flat dark :to='{name: $route.meta.transfer}'>
-        <v-icon class="white--text">swap_horiz</v-icon>
-      </v-btn> -->
-
     <v-fab-transition>
-      <!-- <v-btn v-if="$route.query.tab === 'receive' || $route.name==='transfer' || $route.name==='transfer investments'" 
-      fixed dark fab bottom class="center" medium :color="$route.meta.accent ? $route.meta.accent : 'accent'"
-        @click='handleCta'>
-        <v-icon v-if="$route.query.tab === 'receive'" :disabled="submitDisabled" color="white">fas fa-qrcode</v-icon>
-        <v-icon v-if="$route.name==='transfer' || $route.name==='transfer investments'" :disabled="submitDisabled"
-          color="white">check</v-icon>
-        <v-icon v-else>swap_horiz</v-icon>
-      </v-btn> -->
-
-      <v-btn v-if="!($route.query.tab === 'receive' || $route.name ==='transfer')"
+      <v-btn v-if="!($route.query.tab === 'receive' || $route.name ==='transfer' || $route.name ==='login' )"
       fixed dark fab bottom right medium :color="$route.meta.accent ? $route.meta.accent : 'accent'"
         @click='handleCta'>
-        <!-- <v-icon v-if="$route.query.tab === 'receive'" :disabled="submitDisabled" color="white">fas fa-qrcode</v-icon>
-        <v-icon v-if="$route.name==='transfer' || $route.name==='transfer investments'" :disabled="submitDisabled"
-          color="white">check</v-icon> -->
         <v-icon>swap_horiz</v-icon>
       </v-btn>
     </v-fab-transition>

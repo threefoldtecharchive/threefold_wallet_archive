@@ -12,7 +12,7 @@
       </v-toolbar>
       <v-card-text>
         <div style="text-align: center;">
-          <v-btn-toggle v-model="selectedTab" dark mandatory class="primary round elevation-0">
+          <v-btn-toggle dark mandatory class="primary round elevation-0">
             <v-btn flat v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
           </v-btn-toggle>
         </div>
@@ -22,7 +22,7 @@
             class="red--text" label="Wallet name"></v-text-field>
 
           <div class="my-2 right">
-            <v-btn color="green" dark @click="addWallet">Import wallet</v-btn>
+            <v-btn color="accent" dark @click="addWallet">Import wallet</v-btn>
           </div>
           </div>
         </v-container>
@@ -36,7 +36,7 @@
           </v-textarea>
 
           <div class="my-2 right">
-            <v-btn color="green" dark @click="addWallet">Import wallet</v-btn>
+            <v-btn color="accent" dark @click="addWallet">Import wallet</v-btn>
           </div>
           </div>
         </v-container>
