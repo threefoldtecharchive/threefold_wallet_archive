@@ -11,10 +11,11 @@
         </v-btn>
       </v-toolbar>
       <v-card-text>
-        <v-btn-toggle v-model="selectedTab" dark mandatory class="primary round elevation-0">
-          <v-btn flat v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
-        </v-btn-toggle>
-
+        <div style="text-align: center;">
+          <v-btn-toggle v-model="selectedTab" dark mandatory class="primary round elevation-0">
+            <v-btn flat v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
+          </v-btn-toggle>
+        </div>
 
         <v-container v-if="currentTab == 'create'">
           <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"

@@ -7,46 +7,67 @@
         </v-btn>
       </v-btn-toggle>
     </div>
-    <v-card class="mt-0">
-      <v-card-text class="pt-1">
-        <div>
-          <div class="text-xs-left">
-            <p class="mb-1" v-if="active == 'receive'">To</p>
-            <p class="mb-1" v-else >
-              <!-- <v-layout>From -->
-              <!-- <v-spacer /> -->
-              <!-- <v-btn text icon v-if="active == 'send'" class="pr-4" @click="qrScannerDialog = true">
+    <!-- <v-card class="mt-0">
+      <v-card-text class="pt-1 pb-2"> -->
+    <div class="mx-2">
+      <div class="text-xs-left">
+        <p class="mb-1" v-if="active == 'receive'">To</p>
+        <p class="mb-1" v-else>
+          <!-- <v-layout>From -->
+          <!-- <v-spacer /> -->
+          <!-- <v-btn text icon v-if="active == 'send'" class="pr-4" @click="qrScannerDialog = true">
                     Scan QR
                     <v-icon class="ml-1">fas fa-qrcode</v-icon> 
                   </v-btn> -->
-              <!-- </v-layout> -->
+          <!-- </v-layout> -->
 
-              <span style="display:inline-block;  width:50%;">From</span>
-              
-              <span style="display:inline-block; width:45%; margin-right: 5%; text-align: right;">
-                  <v-btn small align-end icon v-if="active == 'send'" class="pr-4" @click="qrScannerDialog = true">
-                  Scan QR
-                  <v-icon class="ml-2">fas fa-qrcode</v-icon>
-                </v-btn>
-              
-              </span>
-            
-              <!-- <v-btn text align-end icon v-if="active == 'send'" class="pr-4" @click="qrScannerDialog = true"
+          <span style="display:inline-block;  width:50%;">From</span>
+
+          <span style="display:inline-block; width:45%; margin-right: 5%; text-align: right;">
+            <v-btn small align-end icon v-if="active == 'send'" class="pr-4" @click="qrScannerDialog = true">
+              Scan QR
+              <v-icon class="ml-2">fas fa-qrcode</v-icon>
+            </v-btn>
+
+          </span>
+
+          <!-- <v-btn text align-end icon v-if="active == 'send'" class="pr-4" @click="qrScannerDialog = true"
                 style="border: solid 1px green">
                 Scan QR
                 <v-icon class="ml-1">fas fa-qrcode</v-icon>
               </v-btn> -->
-            </p>
-          </div>
+        </p>
+      </div>
+
+      <walletSelector @onWalletSelected='selectWallet' :wallets="computedWallets" :selected="selectedWallet.name" />
+
+      <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" :investments="investments"
+        :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)" :fee="fee">
+      </FormComponent>
+
+      <v-layout column wrap v-if="$route.query.tab != 'receive'">
+        <v-flex>Fee: {{fee.toFixed(2)}} {{selectedWallet.currency}}</v-flex>
+        <span v-if="(formObject.to.currency && selectedWallet.currency != formObject.to.currency)">
+          <v-flex>Exchange rate: {{exchangeRate}}</v-flex>
+          <v-flex v-if="formObject.amount">Your rate: {{yourExchangeRate}}</v-flex>
+        </span>
+      </v-layout>
+
+    </div>
+    <!-- </v-card-text>
+
+
+    </v-card> -->
+    <div>
+      <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" dark @click="transferConfirmed">
+        <div v-if="$route.query.tab === 'receive'">
+          Generete QR
         </div>
-        <walletSelector @onWalletSelected='selectWallet' :wallets="computedWallets" :selected="selectedWallet.name" />
-
-        <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab"
-          :investments="investments" :wallets="wallets" :selectedWallet="selectedWallet"
-          @formValidation="formValidation($event)" :fee="fee"></FormComponent>
-
-      </v-card-text>
-    </v-card>
+        <div v-if="$route.query.tab === 'send'">
+          Send Tokens
+        </div>
+      </v-btn>
+    </div>
   </v-layout>
 
   <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog"
