@@ -82,6 +82,18 @@ export default {
       if (this.selectedWallet.currency === 'TFT') {
         this.formObject.to.currency = this.selectedWallet.currency
       }
+      console.log(`Debugging: `)
+      console.log(this.selectedWallet)
+
+      console.log(`Debugging: `)
+      console.log({
+        from: this.selectedWallet.address,
+        to: this.formObject.to.address,
+        message: this.formObject.message,
+        amount: this.formObject.amount,
+        currency: this.selectedWallet.currency,
+        type: `${this.selectedWallet.currency}/${this.formObject.to.currency}` })
+
       await this.sendCoins({
         from: this.selectedWallet.address,
         to: this.formObject.to.address,
@@ -90,6 +102,8 @@ export default {
         currency: this.selectedWallet.currency,
         type: `${this.selectedWallet.currency}/${this.formObject.to.currency}`
       })
+
+
       this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
       setTimeout(function () { store.dispatch('updateAccounts') }, 1000)
