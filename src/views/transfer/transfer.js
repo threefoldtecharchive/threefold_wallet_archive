@@ -75,7 +75,7 @@ export default {
       };
 
       window.vueInstance = this;
-      Print.postMessage(postMsg);
+      Print.postMessage(JSON.stringify(postMsg));
     },
     injectQrData(address, amount, message, sender) {
       this.formObject = { to: {address: address}, amount: amount, message: message, sender: sender };
