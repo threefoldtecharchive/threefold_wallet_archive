@@ -3,8 +3,11 @@
     <div ref="card" class="content" :style="clickable ? 'cursor:pointer' : ''" @click="clicked">
       <v-layout class="pa-1 content-inner">
         <v-flex :class="displayAttributes ? 'xs6' : 'xs6'">
-          <v-layout column class="pt-2 pl-2" >
-            <p class="title text-capitalize">{{wallet? wallet.name : 'Wallet name'}}</p>
+          <v-layout column class="pt-2 pl-2">
+            <p>
+              <span class="title text-capitalize">{{wallet? wallet.name : 'Wallet name'}}</span>
+              <span style="font-size: 9px; color: gray;">{{wallet.holder.type === 'imported' ? " imported" : ''}}</span>
+            </p>
             <p v-if="displayAttributes" class="body-1 text-truncate">{{getHumanWalletAddress}}</p>
             <!-- <p v-if="wallet.currency === 'GFT'" class="body-1 text-truncate">{{authenticated}}</p> -->
           </v-layout>
@@ -12,16 +15,17 @@
         <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs6' : ''">
           <v-layout column class="justify-space-between  align-end">
             <v-flex v-if="displayAttributes">
-              <v-btn dark small icon flat @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0"  style="z-index: 1;" :class="$route.meta.accent"  v-show="wallet.currency != 'gram'">
+              <v-btn dark small icon flat @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0"
+                style="z-index: 1;" :class="$route.meta.accent" v-show="wallet.currency != 'gram'">
                 <v-icon size="15">
                   file_copy
                 </v-icon>
               </v-btn>
             </v-flex>
-            <amountIndicator v-if="displayAttributes"  class="pl-3 pr-2 pt-1 align-self-end" :amount='totalAmount'
+            <amountIndicator v-if="displayAttributes" class="pl-3 pr-2 pt-1 align-self-end" :amount='totalAmount'
               :valuta='wallet.currency' />
-            <amountIndicator v-else  class="pl-3 pr-2 pt-1 align-self-end" :amount='totalAmount'
-            :valuta='wallet.currency' small />
+            <amountIndicator v-else class="pl-3 pr-2 pt-1 align-self-end" :amount='totalAmount'
+              :valuta='wallet.currency' small />
           </v-layout>
         </v-flex>
         <div v-else>
