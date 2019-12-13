@@ -43,6 +43,7 @@ export default {
     // }
   },
   mounted () {
+    console.log(this.wallet.holder.type);
     if (this.wallet.currency === 'GFT' || this.wallet.currency == 'gram') {
       this.wallet.isAuthenticated.then(v => {
         this.authenticated = v

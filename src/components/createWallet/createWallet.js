@@ -49,7 +49,11 @@ export default {
 
       Print.postMessage(JSON.stringify(postMsg));
 
-
+      this.$emit('ctaClicked')
+      this.walletName = null
+      this.words = null
+      this.walletNameErrors = []
+      this.wordsErrors = []
     },
     addImportWallet() {
       if(!this.walletName) {
@@ -107,6 +111,8 @@ export default {
       this.$emit('ctaClicked')
       this.walletName = null
       this.words = null
+      this.walletNameErrors = []
+      this.wordsErrors = []
     }
   }
 }
