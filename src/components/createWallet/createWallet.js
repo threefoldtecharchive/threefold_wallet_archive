@@ -32,9 +32,26 @@ export default {
   },
   methods: {
     ...mapActions([
-      'importWallet'
+      'importWallet',
+      'createWallet'
     ]),
-    addWallet() {
+    addCreateWallet() {
+      console.log("Creating wallet... ")
+      console.log('Name: ', this.walletName)
+      // ID: 0 HARDCODED FOR NOW!
+      this.createWallet({ chain: 'tft', walletName: this.walletName, id: '0' })
+
+      var postMsg = {
+        type: "ADD_APP_WALLET",
+        walletName: this.walletName,
+        doubleName: this.doubleName
+      }
+
+      Print.postMessage(JSON.stringify(postMsg));
+
+
+    },
+    addImportWallet() {
       if(!this.walletName) {
         this.walletNameErrors.push("Please enter a name.")
         return

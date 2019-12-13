@@ -69,6 +69,17 @@ export default {
     ...mapActions([
       'sendCoins'
     ]),
+    scanQR() {
+      let postMsg = {
+        type: 'CAMERA'
+      };
+
+      window.vueInstance = this;
+      Print.postMessage(JSON.stringify(postMsg));
+    },
+    injectQrData(address, amount, message, sender) {
+      this.formObject = { to: {address: address}, amount: amount, message: message, sender: sender };
+    },
     transferConfirmed () {
       if (this.active == 'receive') {
         if (this.checkForm()) this.qrDialog = true
@@ -82,6 +93,18 @@ export default {
       if (this.selectedWallet.currency === 'TFT') {
         this.formObject.to.currency = this.selectedWallet.currency
       }
+      console.log(`Debugging: `)
+      console.log(this.selectedWallet)
+
+      console.log(`Debugging: `)
+      console.log({
+        from: this.selectedWallet.address,
+        to: this.formObject.to.address,
+        message: this.formObject.message,
+        amount: this.formObject.amount,
+        currency: this.selectedWallet.currency,
+        type: `${this.selectedWallet.currency}/${this.formObject.to.currency}` })
+
       await this.sendCoins({
         from: this.selectedWallet.address,
         to: this.formObject.to.address,
@@ -90,6 +113,8 @@ export default {
         currency: this.selectedWallet.currency,
         type: `${this.selectedWallet.currency}/${this.formObject.to.currency}`
       })
+
+
       this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
       setTimeout(function () { store.dispatch('updateAccounts') }, 1000)

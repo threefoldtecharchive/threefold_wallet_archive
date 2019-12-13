@@ -30,6 +30,18 @@ export default ({
 
       context.dispatch('createWallet', { chain: 'tft', walletName: 'daily', id: '0' })
       context.dispatch('createWallet', { chain: 'tft', walletName: 'savings', id: '0' })
+
+
+      // Get wallet list with names and create them all.
+
+      let appWallets = JSON.parse(localStorage.getItem('appWallets'));
+
+      if (appWallets != null && appWallets) {
+        for (let appWallet of appWallets) {
+          appWallet.id = 0;
+          context.dispatch('createWallet', appWallet);
+        }
+      }
     },
     updateAccounts (context) {
       context.getters.accounts.forEach(account => {
