@@ -69,6 +69,17 @@ export default {
     ...mapActions([
       'sendCoins'
     ]),
+    scanQR() {
+      let postMsg = {
+        type: 'CAMERA'
+      };
+
+      window.vueInstance = this;
+      Print.postMessage(postMsg);
+    },
+    injectQrData(address, amount, message, sender) {
+      this.formObject = { to: {address: address}, amount: amount, message: message, sender: sender };
+    },
     transferConfirmed () {
       if (this.active == 'receive') {
         if (this.checkForm()) this.qrDialog = true
