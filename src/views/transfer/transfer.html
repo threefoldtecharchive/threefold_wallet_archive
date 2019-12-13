@@ -3,13 +3,13 @@
     <!-- <div class="cheat"></div> -->
     <div class="text-xs-center my-0 div-toggle-buttons">
       <v-btn-toggle v-model="selectedTab"  mandatory class="round elevation-0">
-        <v-btn flat v-for="tab in tabs" :key="tab" class="px-5  round" exact :to="{query:{tab: tab}}">{{tab}}
+        <v-btn flat v-for="tab in tabs" :key="tab" class="px-5 round" exact :to="{query:{tab: tab}}">{{tab}}
         </v-btn>
       </v-btn-toggle>
     </div>
     <!-- <v-card class="mt-0">
       <v-card-text class="pt-1 pb-2"> -->
-    <div class="mx-2">
+    <div class="mx-3">
       <div class="text-xs-left">
         <p class="mb-1" v-if="active == 'receive'">To</p>
         <p class="mb-1" v-else>
@@ -53,21 +53,22 @@
         </span>
       </v-layout>
 
+      <div>
+        <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" dark @click="transferConfirmed">
+          <div v-if="$route.query.tab === 'receive'">
+            Generate QR
+          </div>
+          <div v-if="$route.query.tab === 'send'">
+            Send Tokens
+          </div>
+        </v-btn>
+      </div>
     </div>
     <!-- </v-card-text>
 
 
     </v-card> -->
-    <div>
-      <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" dark @click="transferConfirmed">
-        <div v-if="$route.query.tab === 'receive'">
-          Generete QR
-        </div>
-        <div v-if="$route.query.tab === 'send'">
-          Send Tokens
-        </div>
-      </v-btn>
-    </div>
+    
   </v-layout>
 
   <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog"
