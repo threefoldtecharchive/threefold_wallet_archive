@@ -22,15 +22,29 @@
       </div>
 
       <div>
-      <v-select 
-        @change="selectWallet"
-        :items="computedWallets"
-        item-text="name"
-        v-model="selectedWallet"
-        return-object
-      >
-      </v-select>
-    </div>
+        <v-select @change="selectWallet" :items="computedWallets" v-model="selectedWallet"
+          return-object>
+
+          <template slot="selection" slot-scope="data">
+            <v-flex class="text-capitalize" >
+              {{ data.item.name }}
+            </v-flex>
+            <v-spacer></v-spacer>
+            <v-flex justify-end class="text-xs-right">
+              {{ data.item.totalAmount }} {{data.item.currency}}
+            </v-flex>
+          </template>
+          <template slot="item" slot-scope="data">
+              <v-flex class="text-capitalize" >
+                  {{ data.item.name }}
+                </v-flex>
+                <v-spacer></v-spacer>
+                <v-flex justify-end class="text-xs-right">
+                  {{ data.item.totalAmount }} {{data.item.currency}}
+                </v-flex>
+          </template>
+        </v-select>
+      </div>
 
       <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" :investments="investments"
         :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)" :fee="fee">
@@ -59,7 +73,7 @@
 
 
     </v-card> -->
-    
+
   </v-layout>
 
   <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog"

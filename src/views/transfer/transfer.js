@@ -54,16 +54,17 @@ export default {
     },
     computedWallets () {
       if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'deregister') {
-        console.log(this.wallets)
         return this.wallets.filter(x => x.currency === 'gram')
       } else if (this.$route.name === 'transfer investments') {
         return this.wallets.filter(x => x.currency === 'GFT')
       }
-
       return this.wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')
     },
     fee () {
       return 0.1
+    },
+    walletDisplay (wallet) {
+      console.log(`thx ifvan ` ,wallet)
     }
   },
   methods: {
@@ -143,7 +144,8 @@ export default {
     },
     closeQrDialog () {
       this.qrDialog = false
-    }
+    },
+    text: "item => item.name + ' — ' + item.description"
   },
   watch: {
     '$route.query.tab' () {
