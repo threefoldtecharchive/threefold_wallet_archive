@@ -54,6 +54,7 @@ export default {
     },
     computedWallets () {
       if (this.$route.name === 'transfer investments' && this.$route.query.tab != 'deregister') {
+        console.log(this.wallets)
         return this.wallets.filter(x => x.currency === 'gram')
       } else if (this.$route.name === 'transfer investments') {
         return this.wallets.filter(x => x.currency === 'GFT')
@@ -121,6 +122,8 @@ export default {
       this.$router.push({ name: this.$route.meta.history, params: { wallet: this.selectedWallet.name } })
     },
     selectWallet (wallet) {
+      console.log(this.selectedWallet)
+      console.log(wallet)
       this.selectedWallet = wallet
       this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()

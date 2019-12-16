@@ -21,7 +21,16 @@
         </p>
       </div>
 
-      <walletSelector @onWalletSelected='selectWallet' :wallets="computedWallets" :selected="selectedWallet.name" />
+      <div>
+      <v-select 
+        @change="selectWallet"
+        :items="computedWallets"
+        item-text="name"
+        v-model="selectedWallet"
+        return-object
+      >
+      </v-select>
+    </div>
 
       <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" :investments="investments"
         :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)" :fee="fee">

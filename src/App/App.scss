@@ -126,4 +126,7 @@ $borderradius: 20px;
   .inputNumber input::-webkit-inner-spin-button {
       -webkit-appearance: none;
   }
+  .v-select-list {
+    border-radius: 0;
+  }
 }
