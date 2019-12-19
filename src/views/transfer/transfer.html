@@ -1,4 +1,23 @@
 <section class="transfer fill-height" ref="transfer">
+  <v-dialog v-model="qrReadingError" fullscreen persistent scrollable>
+    <v-card>
+      <v-toolbar dark color="primary">
+        <v-toolbar-title class="text-capitalize">Wrong QR</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon flat @click="qrReadingError = false">
+          <v-icon :color="$route.meta.accent">
+            close
+          </v-icon>
+        </v-btn>
+      </v-toolbar>
+      <v-card-text>
+        <p>There was an error with the QR.</p>
+        <p>Couldn't find the needed data</p>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
+
+
   <v-layout column fill-height>
     <div class="text-xs-center my-0 div-toggle-buttons">
       <v-btn-toggle v-model="selectedTab"  mandatory class="round elevation-0">

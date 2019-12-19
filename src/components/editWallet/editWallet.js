@@ -12,34 +12,34 @@ export default {
       type: Boolean
     }
   },
-  data() {
+  data () {
     return {
       oldWalletName: null,
       newWalletName: null,
-      walletNameErrors: [],
+      walletNameErrors: []
     }
   },
   computed: {
     ...mapGetters([
       'wallets'
     ]),
-    selectedWallet() {
+    selectedWallet () {
       let selectedWallet = this.wallets.find(x => x.name === this.$route.params.wallet)
       return selectedWallet
     }
 
   },
-  mounted() {
-      
+  mounted () {
+
   },
   methods: {
     ...mapActions([
       'importWallet'
     ]),
-    addWallet() {
+    addWallet () {
       if (!this.newWalletName) {
         this.walletNameErrors.push("Please enter a name.")
-        return
+        
       }
 
       //todo rename wallet function
@@ -47,8 +47,7 @@ export default {
   },
   watch: {
     show: function () {
-      if(this.show) {
-        console.log(this.selectedWallet)
+      if (this.show) {
         this.oldWalletName = this.selectedWallet.name
       }
     }

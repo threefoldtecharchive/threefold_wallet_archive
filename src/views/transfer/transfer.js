@@ -21,9 +21,10 @@ export default {
       transactionInfoDialog: false,
       qrScannerDialog: false,
       qrDialog: false,
-      formObject: { to: {address: null}, amount: null, message: null, sender: null },
+      formObject: { to: { address: null }, amount: null, message: null, sender: null },
       selectedTab: 1,
-      selectedWallet: {}
+      selectedWallet: {},
+      qrReadingError: false
     }
   },
   mounted () {
@@ -64,41 +65,41 @@ export default {
       return 0.1
     },
     walletDisplay (wallet) {
-      console.log(`thx ifvan ` ,wallet)
+      console.log(`thx ifvan `, wallet)
     }
   },
   methods: {
     ...mapActions([
       'sendCoins'
     ]),
-    scanQR() {
+    scanQR () {
       let postMsg = {
         type: 'CAMERA'
-      };
+      }
 
-      window.vueInstance = this;
-      Print.postMessage(JSON.stringify(postMsg));
+      window.vueInstance = this
+      Print.postMessage(JSON.stringify(postMsg))
     },
-    injectQrData(address, amount, message, sender) {
-      this.formObject = { to: {address: address}, amount: amount, message: message, sender: sender };
+    injectQrData (address, amount, message, sender) {
+      if (address && amount) {
+        this.formObject = { to: { address: address }, amount: amount, message: message, sender: sender }
+      } else {
+        // SHOW ERROR
+        this.qrReadingError = true
+      }
     },
     transferConfirmed () {
-      if (this.active == 'receive') {
+      if (this.active === 'receive') {
         if (this.checkForm()) this.qrDialog = true
       } else if (this.active == 'send' || this.active == 'register' || this.active == 'deregister') {
         if (this.checkForm()) this.transactionInfoDialog = true
       }
     },
     async send () {
-      console.log(this.selectedWallet.currency, this.formObject.to.currency)
       // This is temporary untill the atomic exchange
       if (this.selectedWallet.currency === 'TFT') {
         this.formObject.to.currency = this.selectedWallet.currency
       }
-      console.log(`Debugging: `)
-      console.log(this.selectedWallet)
-
-      console.log(`Debugging: `)
       console.log({
         from: this.selectedWallet.address,
         to: this.formObject.to.address,
@@ -116,17 +117,14 @@ export default {
         type: `${this.selectedWallet.currency}/${this.formObject.to.currency}`
       })
 
-
-      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
+      this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
       setTimeout(function () { store.dispatch('updateAccounts') }, 1000)
       this.$router.push({ name: this.$route.meta.history, params: { wallet: this.selectedWallet.name } })
     },
     selectWallet (wallet) {
-      console.log(this.selectedWallet)
-      console.log(wallet)
       this.selectedWallet = wallet
-      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
+      this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
     },
     checkForm () {
@@ -149,7 +147,7 @@ export default {
   },
   watch: {
     '$route.query.tab' () {
-      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
+      this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
       this.selectedWallet = this.computedWallets[0]
       this.$forceUpdate()

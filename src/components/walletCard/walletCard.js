@@ -34,7 +34,7 @@ export default {
     getHumanWalletAddress () {
       // return `${this.wallet.name}@${this.account.account_name}`
       return `${this.wallet.name.replace(/\s/g, '')}@${this.wallet.holder.account_name.split(':')[1]}`
-    },
+    }
     // image () {
     //   let currency = this.wallet.currency.toLowerCase()
     //   if (currency == 'gram') return 'gram-image'
@@ -43,7 +43,6 @@ export default {
     // }
   },
   mounted () {
-    console.log(this.wallet.holder.type);
     if (this.wallet.currency === 'GFT' || this.wallet.currency == 'gram') {
       this.wallet.isAuthenticated.then(v => {
         this.authenticated = v

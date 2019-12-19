@@ -13,7 +13,7 @@ export default ({
     loginUrl: null
   },
   actions: {
-    async generateLoginUrl(context) {
+    async generateLoginUrl (context) {
       context.dispatch('clearStorage')
       var state = ''
       var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -30,7 +30,7 @@ export default ({
 
       context.commit('setLoginUrl', `${config.botFrontEnd}?state=${state}&scope=${scope}&appid=${appid}&publickey=${encodeURIComponent(keys.publicKey)}&redirecturl=${encodeURIComponent(config.redirect_url)}`)
     },
-    async checkResponse(context, responseUrl) {
+    async checkResponse (context, responseUrl) {
       if (responseUrl.searchParams.get('error')) {
         context.commit('setFatalError', responseUrl.searchParams.get('error'))
       } else {
@@ -44,7 +44,6 @@ export default ({
             return result
           }, {})
           var newSeed = new Uint8Array(decodeBase64(directLoginData.derivedSeed))
-          console.log(`hi!!!`)
           const userObject = {
             doubleName: directLoginData.username,
             seed: newSeed
@@ -54,16 +53,15 @@ export default ({
             userObject
           )
 
-          let importedWallets = JSON.parse(localStorage.getItem('importedWallets'));
+          let importedWallets = JSON.parse(localStorage.getItem('importedWallets'))
           if (importedWallets != null && importedWallets) {
             for (let user of importedWallets) {
-              user.seed = new Uint8Array(user.seed);
+              user.seed = new Uint8Array(user.seed)
               context.dispatch('importWallet',
                 user
               )
             }
           }
-
         } else {
           botService.getUserData(username).then(async (response) => {
             if (signedHash && context.getters.state !== await cryptoService.validateSignature(signedHash, response.data.publicKey)) {
@@ -78,7 +76,6 @@ export default ({
               var userData = {}
               cryptoService.decrypt(data.ciphertext, data.nonce, keys.privateKey, response.data.publicKey)
                 .then(decrypted => {
-                  console.log(decrypted)
                   if (decrypted) {
                     decrypted = JSON.parse(decrypted)
                     for (var k in decrypted) {
@@ -87,7 +84,6 @@ export default ({
                       }
                     }
                   }
-                  console.log(userData)
                   var newSeed = new Uint8Array(decodeBase64(userData.derivedSeed))
                   const userObject = {
                     doubleName: username,
@@ -99,18 +95,16 @@ export default ({
                     userObject
                   )
 
-                  let importedWallets = JSON.parse(localStorage.getItem('importedWallets'));
+                  let importedWallets = JSON.parse(localStorage.getItem('importedWallets'))
 
                   if (importedWallets != null && importedWallets) {
                     for (let user of importedWallets) {
-                      user.seed = new Uint8Array(user.seed);
+                      user.seed = new Uint8Array(user.seed)
                       context.dispatch('importWallet',
                         user
                       )
                     }
                   }
-
-                  console.log(`newSeed`, newSeed)
                 }).catch(e => context.commit('setFatalError', 'Could not decrypt message.'))
             } else {
               // context.commit('setFatalError', 'Got no data from 3bot')
@@ -119,27 +113,27 @@ export default ({
           }).catch(e => {
             // context.commit('setFatalError', 'Signature failed, please try again.')
             // We can't do this because we need to be able to login from the browser. (I think)
-            console.log("Username was null, redirecting .... ")
-            context.dispatch("generateLoginUrl")
+            console.log('Username was null, redirecting .... ')
+            context.dispatch('generateLoginUrl')
           })
         }
       }
     },
-    clearStorage(context) {
+    clearStorage (context) {
       context.commit('setState', null)
       context.commit('setKeys', null)
     }
   },
   mutations: {
-    setKeys(state, keys) {
-      // window.localStorage.setItem('tempKeys', JSON.stringify(keys))
+    setKeys (state, keys) {
+      window.localStorage.setItem('tempKeys', JSON.stringify(keys))
       state.keys = keys
     },
-    setState(state, stateHash) {
+    setState (state, stateHash) {
       window.localStorage.setItem('state', stateHash)
       state.state = stateHash
     },
-    setLoginUrl(state, url) {
+    setLoginUrl (state, url) {
       state.loginUrl = url
     }
   },

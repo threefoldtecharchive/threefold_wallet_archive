@@ -26,7 +26,8 @@ export default {
   computed: {
     ...mapGetters([
       'informationMessage',
-      'fatalError'
+      'fatalError',
+      'isImportingWallet'
     ]),
     cssProps () {
       return {
@@ -41,7 +42,8 @@ export default {
   methods: {
     ...mapActions([
       'createWallet',
-      'setInformationMessage'
+      'setInformationMessage',
+      'setImportingWallets'
     ]),
     handleCTAClick (data) {
       if (this.$route.name === 'home') {
