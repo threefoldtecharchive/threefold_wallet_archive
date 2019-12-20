@@ -48,7 +48,7 @@ export default ({
         }
         context.dispatch('updateAccounts', () => {
           setTimeout(() => {
-            for (let index = context.getters.wallets.length - 1; index > 1; index--) {
+            for (let index = context.getters.wallets.length - 1; index > 3; index--) {
               const wallet = context.getters.wallets[index]
               if (!wallet.transaction || !wallet.transaction.length) {
                 context.getters.accounts.forEach(account => {
@@ -72,6 +72,7 @@ export default ({
                 return
               }
             }
+            context.commit('setImportingWallets', false)
           }, 3000)
         })
       }
