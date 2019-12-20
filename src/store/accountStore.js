@@ -156,7 +156,6 @@ export default ({
                 return false
               })
             }
-            // })
           })
           wallets.push(...t)
         })
