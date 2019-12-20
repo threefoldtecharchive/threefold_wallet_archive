@@ -72,6 +72,12 @@ export default ({
                 return
               }
             }
+
+            var pstMsg = {
+              type: 'ADD_APP_WALLET'
+            }
+
+            Print.postMessage(JSON.stringify(pstMsg))
             context.commit('setImportingWallets', false)
           }, 3000)
         })
