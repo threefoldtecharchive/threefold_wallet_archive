@@ -30,6 +30,9 @@ export default {
     EventBus.$on('transfer', () => {
       this.transferConfirmed()
     })
+    if(this.$route.params.wallet){
+      this.selectedWallet = this.wallets.find(x => x.name === this.$route.params.wallet)
+    }
     this.$router.replace({ query: { tab: this.tabs[this.tabs.length - 1] } })
     if (!this.selectedWallet.address) this.selectedWallet = this.computedWallets[0]
   },
@@ -151,7 +154,7 @@ export default {
     '$route.query.tab' () {
       this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
-      this.selectedWallet = this.computedWallets[0]
+      
       this.$forceUpdate()
     }
   }
