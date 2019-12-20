@@ -22,7 +22,7 @@
             class="red--text" label="Wallet name"></v-text-field>
 
           <div>
-            <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" dark @click="addCreateWallet">Create wallet</v-btn>
+            <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" @click="addCreateWallet" :disabled="!walletName">Create wallet</v-btn>
           </div>
         </v-container>
 
@@ -35,7 +35,7 @@
           </v-textarea>
 
           <div>
-            <v-btn color="accent" class="mx-0 mt-3" style="width: 100%;" dark @click="addImportWallet">Import wallet</v-btn>
+            <v-btn color="accent" class="mx-0 mt-3" style="width: 100%;" @click="addImportWallet" :disabled="!walletName">Import wallet</v-btn>
           </div>
         </v-container>
 
