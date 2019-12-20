@@ -21,7 +21,7 @@ export default {
       transactionInfoDialog: false,
       qrScannerDialog: false,
       qrDialog: false,
-      formObject: { to: { address: null }, amount: null, message: null, sender: null },
+      formObject: { to: { address: null }, amount: null, message: "", sender: null },
       selectedTab: 1,
       selectedWallet: {},
       qrReadingError: false
@@ -85,6 +85,9 @@ export default {
     },
     injectQrData (address, amount, message, sender) {
       if (address && amount) {
+        if(message == "null"){
+          message = ""
+        }
         this.formObject = { to: { address: address }, amount: amount, message: message, sender: sender }
       } else {
         // SHOW ERROR
