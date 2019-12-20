@@ -72,6 +72,7 @@ export default ({
                 return
               }
             }
+            context.commit('setImportingWallets', false)
           }, 3000)
         })
       }
