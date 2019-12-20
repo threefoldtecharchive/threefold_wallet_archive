@@ -14,9 +14,8 @@ export default {
       'accounts'
     ]),
     isLoggingIn () {
-      var currentUrl = window.location.href
-      var hasQueries = Object.entries(new URL(currentUrl)).length === 0
-      return hasQueries || currentUrl
+      var currentUrl = window.location.search
+      return currentUrl
     }
   },
   mounted () {
