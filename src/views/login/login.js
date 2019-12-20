@@ -30,6 +30,7 @@ export default {
       }
     } else {
       this.checkResponse(new URL(window.location.href))
+      console.log(`router `,this.$router)
     }
   },
   methods: {

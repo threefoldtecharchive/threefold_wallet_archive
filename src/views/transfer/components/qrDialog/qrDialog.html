@@ -15,10 +15,10 @@
         <div class="px-2">
           <v-layout justify-space-between fill-height column px-2>
             <p class="subtitle mb-0 grey--text">To</p>
-            <walletCard no-padding class="my-2" :wallet="selectedWallet" v-if="selectedWallet.address" clickable />
+            <walletCard no-padding class="my-2" :displayAmount="false" :wallet="selectedWallet" v-if="selectedWallet.address" clickable />
             <v-flex>
               <p class="subtitle mb-0 grey--text">Amount</p>
-              <p class="title mt-0">{{formObject.amount}}</p>
+              <p class="title mt-0">{{formObject.amount}} TFT</p>
             </v-flex>
             <v-flex v-if="formObject.message">
               <p class="subtitle mb-0 grey--text">Message</p>

@@ -17,6 +17,11 @@ export default {
       type: Boolean,
       default: true
     }
+    ,
+    'displayAmount': {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
