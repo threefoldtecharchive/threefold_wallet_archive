@@ -30,7 +30,7 @@ export default ({
 
       let appWallets = JSON.parse(localStorage.getItem('appWallets'))
       if (appWallets != null && appWallets) {
-        for (let appWallet of appWallets) {
+        for (let appWallet of appWallets.filter(x => x.doubleName === userData.doubleName)) {
           appWallet.id = 0
           context.dispatch('createWallet', appWallet)
         }

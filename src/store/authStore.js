@@ -55,7 +55,7 @@ export default ({
 
           let importedWallets = JSON.parse(localStorage.getItem('importedWallets'))
           if (importedWallets != null && importedWallets) {
-            for (let user of importedWallets) {
+            for (let user of importedWallets.filter(x => x.doubleName === directLoginData.doubleName)) {
               user.seed = new Uint8Array(user.seed)
               context.dispatch('importWallet',
                 user
@@ -97,7 +97,7 @@ export default ({
 
                   let importedWallets = JSON.parse(localStorage.getItem('importedWallets'))
 
-                  if (importedWallets != null && importedWallets) {
+                  if (importedWallets != null && importedWallets.filter(x => x.doubleName === directLoginData.doubleName)) {
                     for (let user of importedWallets) {
                       user.seed = new Uint8Array(user.seed)
                       context.dispatch('importWallet',
