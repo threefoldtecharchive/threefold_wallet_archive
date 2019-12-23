@@ -78,7 +78,7 @@
       </v-layout>
 
       <div>
-        <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" dark @click="transferConfirmed">
+        <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" @click="transferConfirmed" :disabled="!formObject.amount">
           <div v-if="$route.query.tab === 'receive'">
             Generate QR
           </div>
@@ -88,11 +88,6 @@
         </v-btn>
       </div>
     </div>
-    <!-- </v-card-text>
-
-
-    </v-card> -->
-
   </v-layout>
 
   <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog"

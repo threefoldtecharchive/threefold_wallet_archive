@@ -12,7 +12,7 @@
       </v-toolbar>
       <v-card-text>
         <div style="text-align: center;">
-          <v-btn-toggle dark mandatory class="primary round elevation-0">
+          <v-btn-toggle mandatory class="round elevation-0">
             <v-btn flat v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
           </v-btn-toggle>
         </div>
