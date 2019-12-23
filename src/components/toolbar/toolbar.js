@@ -31,6 +31,11 @@ export default {
     },
     enableQrScannerDialog () {
       this.$emit("enableQrScannerDialog")
+    },
+    seeAdd () {
+      this.$router.push({
+        name: 'addwallet',
+      })
     }
   }
 }

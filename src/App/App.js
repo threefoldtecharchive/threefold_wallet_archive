@@ -1,6 +1,5 @@
 import toolbar from '../components/toolbar'
 import bottomNav from '../components/bottomNav'
-import createWalletDialog from '../components/createWallet'
 import editWallet from '../components/editWallet'
 import copyDialog from '../components/copydialog'
 import { mapActions, mapGetters } from 'vuex'
@@ -10,7 +9,6 @@ export default {
   components: {
     toolbar,
     bottomNav,
-    createWalletDialog,
     copyDialog,
     editWallet
   },

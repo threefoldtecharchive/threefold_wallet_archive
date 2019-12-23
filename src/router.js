@@ -21,6 +21,14 @@ export default new Router({
       }
     }
   }, {
+    path: '/addwallet',
+    name: 'addwallet',
+    meta: {
+      accent: 'accent',
+      title: 'import/create wallet'
+    },
+    component: () => import(/* webpackChunkName: "profile-page" */ './views/createWallet')
+  }, {
     path: '/history/:wallet',
     name: 'history',
     meta: {
