@@ -12,7 +12,7 @@ export default new Router({
     name: 'home',
     component: home,
     meta: {
-      title: 'accounts',
+      title: 'Wallets',
       transfer: 'transfer',
       accent: 'accent',
       info: {
@@ -20,6 +20,14 @@ export default new Router({
         text: 'this is info'
       }
     }
+  }, {
+    path: '/addwallet',
+    name: 'addwallet',
+    meta: {
+      accent: 'accent',
+      title: 'import/create wallet'
+    },
+    component: () => import(/* webpackChunkName: "profile-page" */ './views/createWallet')
   }, {
     path: '/history/:wallet',
     name: 'history',

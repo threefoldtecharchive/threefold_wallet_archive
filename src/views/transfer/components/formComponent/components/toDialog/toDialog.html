@@ -1,6 +1,7 @@
 <section class="to-dialog">
-  <v-dialog v-model="dialog" max-width="500" scrollable persistent>
-    <v-card>
+  <v-dialog v-model="dialog" fullscreen scrollable persistent>
+    <v-card class="no-radius" >
+      
       <v-toolbar dark color="primary" dense>
         <v-toolbar-title class="text-uppercase">Search contact</v-toolbar-title>
         <v-spacer></v-spacer>
@@ -10,14 +11,22 @@
           </v-icon>
         </v-btn>
         <template v-slot:extension>
-          <div style="margin:auto;">
-            <v-btn-toggle v-model="selected" dark mandatory class="primary round elevation-0">
-              <v-btn text class="ma-1 noborder round" v-for="tab in tabs" :key="tab.id">{{tab.name}}</v-btn>
-            </v-btn-toggle>
-          </div>
+         
         </template>
       </v-toolbar>
-      <v-card-text class="pt-2">
+      <v-card-text>
+          <div class="text-xs-center mb-3" style="margin:auto;">
+              <v-btn-toggle v-model="selected" active-class="red" mandatory class="round elevation-0">
+                <v-btn text class="px-3 my-1 mx-1 round" v-for="tab in tabs">{{tab.name}}</v-btn>
+              </v-btn-toggle>
+            </div>
+          <!-- <div class="text-xs-center mb-3 div-toggle-buttons">
+              <v-btn-toggle v-model="selectedTab" dark mandatory class="primary round elevation-0">
+                <v-btn text v-for="tab in tabs" :key="tab" class="px-5  round" exact :to="{query:{tab: tab}}">{{tab.name}}
+                </v-btn>
+              </v-btn-toggle>
+            </div> -->
+
         <div v-show="selected === 0">
           <div class="content" v-if="wallets.length">
             <!-- last filter is needed until transactions between gft and tft are possible  && (x.currency == selectedWallet.currency)-->
@@ -36,14 +45,15 @@
 
         <div v-show="selected === 1">
           <v-form ref="externForm" v-model="valid">
-            <v-text-field filled clearable prepend-icon="person" label="To (Wallet Address)"
+            <v-text-field v-if="selected === 1" clearable prepend-icon="person" label="To (Wallet Address)"
+              v-model='externAddress' :rules="toRules" autofocus/>
+              <v-text-field v-else clearable prepend-icon="person" label="To (Wallet Address)"
               v-model='externAddress' :rules="toRules" />
-        </v-form>
-          <div class="text-center">
+          </v-form>
+          <div class="text-xs-center">
             <div>
-              <v-btn fab class="center" :color="$route.meta.accent" @click="selectWallet({address: externAddress})"
-                :disabled="!valid">
-                <v-icon>check</v-icon>
+              <v-btn style="width: 90%;" :color="$route.meta.accent" @click="selectWallet({address: externAddress})" :disabled="!valid">
+                Use address
               </v-btn>
             </div>
           </div>

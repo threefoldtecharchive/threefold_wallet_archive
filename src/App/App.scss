@@ -1,5 +1,14 @@
 $borderradius: 20px;
 .app {
+  .loading{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--primary-color);
+    z-index: 99;
+  }
   .history-card {
     .v-btn {
       i.v-icon {
@@ -7,7 +16,7 @@ $borderradius: 20px;
       }
     }
   }
-
+  
   .v-card,
   .v-dialog {
     border-radius: $borderradius !important;
@@ -47,6 +56,12 @@ $borderradius: 20px;
       background: none;
     }
   }
+  .v-dialog{
+    border-radius: 0px !important;
+  }
+  .v-dialog .v-card {
+    border-radius: 0px !important;
+  }
   .v-card__text .wallet-selector {
     overflow: hidden;
   }
@@ -59,14 +74,14 @@ $borderradius: 20px;
     max-width: 100%;
   }
   .cheat {
-    position: absolute;
-    top: -$borderradius;
-    border-radius: 0 0 $borderradius $borderradius;
-    background: var(--primary-color);
-    height: 95px;
-    width: 100%;
-    z-index: 0;
-    left: 0;
+    // position: absolute;
+    // top: -$borderradius;
+    // border-radius: 0 0 $borderradius $borderradius;
+    // background: var(--primary-color);
+    // height: 95px;
+    // width: 100%;
+    // z-index: 0;
+    // left: 0;
   }
   .scrollable {
     height: 0px;
@@ -123,5 +138,8 @@ $borderradius: 20px;
   .noborder {
     border: none;
     border-width: 0px!important;
+  }
+  .v-select-list {
+    border-radius: 0;
   }
 }

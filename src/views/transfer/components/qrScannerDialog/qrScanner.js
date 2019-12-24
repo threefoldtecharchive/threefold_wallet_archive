@@ -2,9 +2,9 @@ import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 export default {
   name: 'qr-scanner',
   components: {
-    QrcodeStream, 
-    QrcodeDropZone, 
-    QrcodeCapture, 
+    QrcodeStream,
+    QrcodeDropZone,
+    QrcodeCapture
   },
   props: {
     dialog: {
@@ -30,11 +30,12 @@ export default {
       this.formObject.amount = this.getQueryVar(code, 'amount')
       this.formObject.message = this.getQueryVar(code, 'message')
       this.formObject.sender = this.getQueryVar(code, 'sender')
-      console.log(this.formObject.to.address)
-      console.log(this.formObject.amount)
-      console.log(this.formObject.message)
-      console.log(this.formObject.sender)
-      this.transactionInfoDialog = true
+      if (this.formObject.to && this.formObject.to.address && this.formObject.amount) {
+        this.transactionInfoDialog = true
+      } else {
+        // SHOW ERROR
+
+      }
       this.closeDialog()
     },
     getQueryVar (url, varName) {

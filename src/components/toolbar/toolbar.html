@@ -1,20 +1,24 @@
 <section class="toolbar">
-  <v-app-bar app class="primary white--text" :flat="!isScrolling" v-scroll="onScroll">
-    <v-toolbar-title class="headline text-uppercase pl-2">
-      <div class="spinner">
-        <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent"/>
-      </div>
-        <h1>
-          {{($route.meta.title || $route.name) || '3Bot'}}
-          <v-btn class="accent ml-2" dark icon small v-if="$route.name == 'home'" @click="$emit('ctaClicked')">
+  <v-app-bar class="primary white--text text-capitalize" v-scroll="onScroll">
+      <v-row align-center>
+        <v-col cols="2">
+          <v-btn text small fab dark :to='{name: "home"}' v-if="$route.name != 'home' && $route.name != 'login'">
+            <v-icon flatclass="white--text">fas fa-arrow-left</v-icon>
+          </v-btn>
+        </v-col>
+        <v-col justify-center  class="title  ">
+            {{($route.meta.title || $route.name) || '3Bot'}}
+            <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent" />
+        </v-col>
+        <v-col cols="2" v-if="$route.name == 'home'" @click="seeAdd">
+          <v-btn small text fab dark class="accent" >
             <v-icon>
               add
             </v-icon>
           </v-btn>
-        </h1>
-        
-    </v-toolbar-title>
-    <v-spacer></v-spacer>
+        </v-col>
+      </v-row>
   </v-app-bar>
-  <InformationDialog :dialog="informationDialog" :closeDialog="closeInformationDialog" v-if="$route.meta.info"></InformationDialog>
+  <InformationDialog :dialog="informationDialog" :closeDialog="closeInformationDialog" v-if="$route.meta.info">
+  </InformationDialog>
 </section>

@@ -5,10 +5,13 @@ export default ({
   state: {
     syncing: false,
     accounts: null,
-    intervalIsSet: false
+    intervalIsSet: false,
+    doubleName: false
   },
   actions: {
     login (context, userData) {
+      context.commit('setDoubleName', userData.doubleName)
+
       var tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
         userData.doubleName, {
@@ -17,20 +20,77 @@ export default ({
         }
       )
 
+      tfAccount.type = 'app'
       context.commit('setAccounts', [tfAccount])
-
       context.dispatch('updateAccounts')
+      context.dispatch('createWallet', { chain: 'tft', walletName: 'daily', id: '0' })
+      context.dispatch('createWallet', { chain: 'tft', walletName: 'savings', id: '0' })
 
-      context.dispatch('createWallet', { chain: 'tft', walletName: 'daily' })
-      context.dispatch('createWallet', { chain: 'tft', walletName: 'savings' })
+      // Get wallet list with names and create them all.
 
+      let appWallets = JSON.parse(localStorage.getItem('appWallets'))
+      if (appWallets != null && appWallets) {
+        for (let appWallet of appWallets.filter(x => x.doubleName === userData.doubleName)) {
+          appWallet.id = 0
+          context.dispatch('createWallet', appWallet)
+        }
+      } else if (appWallets == null) {
+        // Loop 20 wallets and check balance
+        context.commit('setImportingWallets', true)
+        for (let index = 3; index <= 20; index++) {
+          const appWallet = {
+            chain: 'tft',
+            id: '0',
+            walletName: `Wallet${index}`,
+            doubleName: userData.doubleName
+          }
+          context.dispatch('createWallet', appWallet)
+        }
+        context.dispatch('updateAccounts', () => {
+          setTimeout(() => {
+            for (let index = context.getters.wallets.length - 1; index > 1; index--) {
+              const wallet = context.getters.wallets[index]
+              if (!wallet.transaction || !wallet.transaction.length) {
+                context.getters.accounts.forEach(account => {
+                  account.wallet_delete(
+                    index,
+                    wallet.name
+                  )
+                })
+              } else {
+                for (let existingWalletIndex = 0; existingWalletIndex < index.length; existingWalletIndex++) {
+                  const newWallet = index[existingWalletIndex]
+                  var postMsg = {
+                    type: 'ADD_APP_WALLET',
+                    walletName: newWallet.name,
+                    doubleName: userData.doubleName
+                  }
+
+                  // Print.postMessage(JSON.stringify(postMsg))
+                }
+                context.commit('setImportingWallets', false)
+                return
+              }
+            }
+
+            var pstMsg = {
+              type: 'ADD_APP_WALLET'
+            }
+
+            // Print.postMessage(JSON.stringify(pstMsg))
+            context.commit('setImportingWallets', false)
+          }, 3000)
+        })
+      }
     },
-    updateAccounts (context) {
-      context.getters.accounts.forEach(account => {
+    updateAccounts (context, callBack) {
+      context.getters.accounts.forEach(function (account) {
+        if (callBack) {
+          callBack()
+        }
         if (account && !context.getters.syncing) {
           context.commit('setSync', true)
-
-          account.update_account(() => {
+          account.update_account(function () {
             context.commit('setSync', false)
           })
         }
@@ -44,11 +104,29 @@ export default ({
       }
     },
     createWallet: (context, data) => {
-      var account = context.getters.accounts.find(x => x.account_name.split(':')[0] === data.chain)
-
+      var account = context.getters.accounts[data.id]
       if (account) {
         account.wallet_new(data.walletName, account.wallet_count, 1)
       }
+    },
+    importWallet: (context, data) => {
+      var tfAccount2 = new tfchain.Account(
+        `tft:${data.doubleName}`,
+        data.doubleName, {
+          seed: data.seed,
+          network: config.tftNetwork
+        }
+      )
+
+      tfAccount2.type = 'imported'
+
+      var accounts = context.getters.accounts
+
+      accounts.push(tfAccount2)
+      context.commit('setAccounts', accounts)
+
+      context.dispatch('updateAccounts')
+      context.dispatch('createWallet', { chain: 'tft', walletName: data.walletName, id: accounts.length - 1 })
     }
   },
   mutations: {
@@ -63,6 +141,7 @@ export default ({
     }
   },
   getters: {
+    doubleName: (state) => state.doubleName,
     accounts: (state) => state.accounts,
     wallets: (state) => {
       var wallets = []

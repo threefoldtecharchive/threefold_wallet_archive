@@ -24,7 +24,9 @@ export default {
       if (this.$route.name === 'transfer' || this.$route.name === 'transfer investments') {
         EventBus.$emit('transfer', true)
       } else {
-        this.$router.push({ name: this.$route.meta.transfer })
+        let wallet = this.$route.params.wallet
+
+        this.$router.push({ name: this.$route.meta.transfer, params: {wallet} })
       }
     }
   }

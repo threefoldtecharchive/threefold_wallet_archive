@@ -21,15 +21,19 @@ export default {
       transactionInfoDialog: false,
       qrScannerDialog: false,
       qrDialog: false,
-      formObject: { to: {address: null}, amount: null, message: null, sender: null },
+      formObject: { to: { address: null }, amount: null, message: "", sender: null },
       selectedTab: 1,
-      selectedWallet: {}
+      selectedWallet: {},
+      qrReadingError: false
     }
   },
   mounted () {
     EventBus.$on('transfer', () => {
       this.transferConfirmed()
     })
+    if(this.$route.params.wallet){
+      this.selectedWallet = this.wallets.find(x => x.name === this.$route.params.wallet)
+    }
     this.$router.replace({ query: { tab: this.tabs[this.tabs.length - 1] } })
     if (!this.selectedWallet.address) this.selectedWallet = this.computedWallets[0]
   },
@@ -58,30 +62,58 @@ export default {
       } else if (this.$route.name === 'transfer investments') {
         return this.wallets.filter(x => x.currency === 'GFT')
       }
-
       return this.wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')
     },
     fee () {
       return 0.1
+    },
+    walletDisplay (wallet) {
+      console.log(`thx ifvan `, wallet)
     }
   },
   methods: {
     ...mapActions([
       'sendCoins'
     ]),
+    scanQR () {
+      let postMsg = {
+        type: 'CAMERA'
+      }
+
+      window.vueInstance = this
+      Print.postMessage(JSON.stringify(postMsg))
+    },
+    injectQrData (address, amount, message, sender) {
+      if (address && amount) {
+        if(message == "null"){
+          message = ""
+        }
+        this.formObject = { to: { address: address }, amount: amount, message: message, sender: sender }
+      } else {
+        // SHOW ERROR
+        this.qrReadingError = true
+      }
+    },
     transferConfirmed () {
-      if (this.active == 'receive') {
+      if (this.active === 'receive') {
         if (this.checkForm()) this.qrDialog = true
       } else if (this.active == 'send' || this.active == 'register' || this.active == 'deregister') {
         if (this.checkForm()) this.transactionInfoDialog = true
       }
     },
     async send () {
-      console.log(this.selectedWallet.currency, this.formObject.to.currency)
       // This is temporary untill the atomic exchange
       if (this.selectedWallet.currency === 'TFT') {
         this.formObject.to.currency = this.selectedWallet.currency
       }
+      console.log({
+        from: this.selectedWallet.address,
+        to: this.formObject.to.address,
+        message: this.formObject.message,
+        amount: this.formObject.amount,
+        currency: this.selectedWallet.currency,
+        type: `${this.selectedWallet.currency}/${this.formObject.to.currency}` })
+
       await this.sendCoins({
         from: this.selectedWallet.address,
         to: this.formObject.to.address,
@@ -90,14 +122,15 @@ export default {
         currency: this.selectedWallet.currency,
         type: `${this.selectedWallet.currency}/${this.formObject.to.currency}`
       })
-      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
+
+      this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
       setTimeout(function () { store.dispatch('updateAccounts') }, 1000)
       this.$router.push({ name: this.$route.meta.history, params: { wallet: this.selectedWallet.name } })
     },
     selectWallet (wallet) {
       this.selectedWallet = wallet
-      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
+      this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
     },
     checkForm () {
@@ -115,13 +148,14 @@ export default {
     },
     closeQrDialog () {
       this.qrDialog = false
-    }
+    },
+    text: "item => item.name + ' — ' + item.description"
   },
   watch: {
     '$route.query.tab' () {
-      this.formObject = { to: {address: null}, amount: null, message: null, sender: null }
+      this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
-      this.selectedWallet = this.computedWallets[0]
+      
       this.$forceUpdate()
     }
   }

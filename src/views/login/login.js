@@ -14,8 +14,8 @@ export default {
       'accounts'
     ]),
     isLoggingIn () {
-      // TODO: Check if we have the correspondig data instead of only checking if we got something
-      return Object.entries(window.location.search).length !== 0
+      var currentUrl = window.location.search
+      return currentUrl
     }
   },
   mounted () {
@@ -32,6 +32,7 @@ export default {
       }
     } else {
       this.checkResponse(new URL(window.location.href))
+      console.log(`router `,this.$router)
     }
   },
   methods: {

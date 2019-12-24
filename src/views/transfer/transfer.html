@@ -1,35 +1,98 @@
 <section class="transfer fill-height" ref="transfer">
-  <v-layout column fill-height>
-    <div class="cheat"></div>
-    <div class="text-center my-3" style="min-height:'100px'">
-      <v-btn-toggle v-model="selectedTab" mandatory class="primary elevation-0">
-        <v-btn text v-for="tab in tabs" dark :key="tab" class="my-1 mx-1 round noborder" exact :to="{query:{tab: tab}}">{{tab}}</v-btn>
-      </v-btn-toggle>
-    </div>
-    <v-card dark class="primary mt-2">
+  <v-dialog v-model="qrReadingError" fullscreen persistent scrollable>
+    <v-card>
+      <v-toolbar dark color="primary">
+        <v-toolbar-title class="text-capitalize">Wrong QR</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon text @click="qrReadingError = false">
+          <v-icon :color="$route.meta.accent">
+            close
+          </v-icon>
+        </v-btn>
+      </v-toolbar>
       <v-card-text>
-        <div>
-          <div class="text-xs-left">
-            <p v-if="active == 'receive'">To</p>
-            <p v-else>
-              <v-layout>From
-                <v-spacer />
-              <v-btn text icon v-if="active == 'send'" style="margin: 0px" @click="qrScannerDialog = true">
-                  <v-icon>camera</v-icon>
-                </v-btn>
-              </v-layout>
-            </p>
-          </div>
-        </div>
-        <walletSelector @onWalletSelected='selectWallet' :wallets="computedWallets" :selected="selectedWallet.name" />
-
-        <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab"
-          :investments="investments" :wallets="wallets" :selectedWallet="selectedWallet"
-          @formValidation="formValidation($event)" :fee="fee"></FormComponent>
-
+        <p>There was an error with the QR.</p>
+        <p>Couldn't find the needed data</p>
       </v-card-text>
     </v-card>
-  </v-layout>
+  </v-dialog>
+
+
+  <v-container>
+    <v-col>
+      <v-row align-center style="text-align: center;" class="text-xs-center div-toggle-buttons">
+        <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
+          <v-btn text v-for="tab in tabs" :key="tab" class="px-5 round" exact :to="{query:{tab: tab}}">{{tab}}
+          </v-btn>
+        </v-btn-toggle>
+      </v-row>
+
+      <v-row v-if="active == 'receive'">
+        <v-col cols="4">To</v-col>
+      </v-row>
+      <v-row v-else>
+        <v-col cols="4">
+          From
+        </v-col>
+        <v-spacer></v-spacer>
+        <v-col class="align-end" cols="8">
+          <v-btn small icon v-if="active == 'send'" @click="scanQR()">
+            Scan QR
+            <v-icon class="ml-2">fas fa-qrcode</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-select @change="selectWallet" :items="computedWallets" v-model="selectedWallet" return-object>
+            <template slot="selection" slot-scope="data">
+              <v-flex class="text-capitalize">
+                {{ data.item.name }}
+              </v-flex>
+              <v-spacer></v-spacer>
+              <v-flex justify-end class="text-xs-right">
+                {{ data.item.totalAmount }} {{data.item.currency}}
+              </v-flex>
+            </template>
+            <template slot="item" slot-scope="data">
+              <v-flex class="text-capitalize">
+                {{ data.item.name }}
+              </v-flex>
+              <v-spacer></v-spacer>
+              <v-flex justify-end class="text-xs-right">
+                {{ data.item.totalAmount }} {{data.item.currency}}
+              </v-flex>
+            </template>
+          </v-select>
+        </v-col>
+      </v-row>
+
+      <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" :investments="investments"
+        :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)" :fee="fee">
+      </FormComponent>
+
+      <v-layout column wrap v-if="$route.query.tab != 'receive'">
+        <v-flex>Fee: {{fee.toFixed(2)}} {{selectedWallet.currency}}</v-flex>
+        <span v-if="(formObject.to.currency && selectedWallet.currency != formObject.to.currency)">
+          <v-flex>Exchange rate: {{exchangeRate}}</v-flex>
+          <v-flex v-if="formObject.amount">Your rate: {{yourExchangeRate}}</v-flex>
+        </span>
+      </v-layout>
+
+      <div>
+        <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" @click="transferConfirmed"
+          :disabled="!formObject.amount">
+          <div v-if="$route.query.tab === 'receive'">
+            Generate QR
+          </div>
+          <div v-if="$route.query.tab === 'send'">
+            Send Tokens
+          </div>
+        </v-btn>
+      </div>
+      </div>
+    </v-col>
+  </v-container>
 
   <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog"
     :selectedTab="selectedTab" :wallets="wallets" :send="send" :selectedWallet="selectedWallet"

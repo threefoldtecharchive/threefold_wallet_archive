@@ -2,7 +2,8 @@ export default({
   state: {
     informationMessage: null,
     fatalError: null,
-    submitDisabled: true
+    submitDisabled: true,
+    isImportingWallet: false
   },
   actions: {
     setInformationMessage (context, message) {
@@ -18,10 +19,14 @@ export default({
     },
     setFatalError: (state, message) => {
       state.fatalError = message
+    },
+    setImportingWallets: (state, isLoading) => {
+      state.isImportingWallet = isLoading
     }
   },
   getters: {
     informationMessage: (state) => state.informationMessage,
-    fatalError: (state) => state.fatalError
+    fatalError: (state) => state.fatalError,
+    isImportingWallet: (state) => state.isImportingWallet
   }
 })

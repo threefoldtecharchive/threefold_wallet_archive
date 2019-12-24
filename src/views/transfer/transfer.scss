@@ -1,13 +1,7 @@
 .transfer {
     .v-btn--active {
         background-color: var(--accent-color) !important;
-        border-color: var(--accent-color) !important;
-    }
-    .v-btn-toggle {
-        position: relative;
-        top: -2px;
-        .v-btn{
-            padding: 0 40px;
-        }
+        color: white;
+        border: none;
     }
 }

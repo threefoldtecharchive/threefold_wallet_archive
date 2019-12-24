@@ -1,6 +1,6 @@
 import toolbar from '../components/toolbar'
 import bottomNav from '../components/bottomNav'
-import createWalletDialog from '../components/createWallet'
+import editWallet from '../components/editWallet'
 import copyDialog from '../components/copydialog'
 import { mapActions, mapGetters } from 'vuex'
 
@@ -9,21 +9,23 @@ export default {
   components: {
     toolbar,
     bottomNav,
-    createWalletDialog,
-    copyDialog
+    copyDialog,
+    editWallet
   },
   mounted () {
   },
   data () {
     return {
       showCreateWalletDialog: false,
+      showEditWalletDialog: false,
       hideSnackbarTimeout: 6000
     }
   },
   computed: {
     ...mapGetters([
       'informationMessage',
-      'fatalError'
+      'fatalError',
+      'isImportingWallet'
     ]),
     cssProps () {
       return {
@@ -38,12 +40,17 @@ export default {
   methods: {
     ...mapActions([
       'createWallet',
-      'setInformationMessage'
+      'setInformationMessage',
+      'setImportingWallets'
     ]),
     handleCTAClick (data) {
       if (this.$route.name === 'home') {
         this.showCreateWalletDialog = !this.showCreateWalletDialog
-        if (data) this.createWallet(data)
+        // if (data) this.createWallet(data)
+      }
+      if (this.$route.name === 'history') {
+        this.showEditWalletDialog = !this.showEditWalletDialog
+        // if (data) this.createWallet(data)
       }
     }
 

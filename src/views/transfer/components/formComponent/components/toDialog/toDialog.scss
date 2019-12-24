@@ -1,19 +1,13 @@
 .to-dialog {
 }
-        .v-btn-toggle {
-            position: relative;
-            top: -8px;
-            .v-btn{
-                padding: 0 40px !important;
-            }
-        }
-        .v-btn--active {
-            background-color: var(--accent-color) !important;
-            border-color: var(--accent-color) !important;
-        }
-        .wallet-card {
-            cursor: pointer;
-        }
-        .remove-margin {
-            margin: 0px !important;
-        }
+.v-btn--active {
+    background-color: var(--active-color) !important;
+    border-color: var(--active-color) !important;
+    color: white !important;
+}
+.wallet-card {
+    cursor: pointer;
+}
+.remove-margin {
+    margin: 0px !important;
+}

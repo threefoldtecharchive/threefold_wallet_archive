@@ -1,29 +1,20 @@
 <section class="history fill-height">
-  <v-col fill-height>
-    <div class="cheat elevation-4"></div>
-    <walletSelector ref="selector" no-clip @onWalletSelected='selectWallet' :wallets="computedWallets" :selected="$route.params.wallet" />
-    <v-subheader class="pt-0 pl-0 subheading">
-      Recent activities
-    </v-subheader>
-    <v-row class="pa-1" style="overflow: visible">
-      <v-col class="mb-3">
-        <v-timeline fill-dot align-top dense class=" pt-0" style="width: 100%;">
-          <v-timeline-item class="white--text pb-3" right fill-dot large v-for="(gt, date) in groupedTransactions" :key="date">
-            <template v-slot:icon>
-              <v-col>
-                <v-row class="text-uppercase" justify="center">
-                  {{getDayName(date)}}
-                </v-row>
-                <v-row style="font-size: 9px" justify="center" class="font-weight-black">
-                    {{getDay(date)}}
-                    {{getMonth(date)}}
-                </v-row>
-              </v-col>
-            </template>
-            <historyCard v-for="(transaction, index) in gt" :key="index" :transaction="transaction"/>
-          </v-timeline-item>
-        </v-timeline>
-      </v-col>
-    </v-row>
-  </v-col>
+  <v-layout column fill-height >
+    <!-- <walletSelector class="mb-0" ref="selector" no-clip @onWalletSelected='selectWallet' :wallets="computedWallets"
+      :selected="$route.params.wallet" /> -->
+      
+      <walletCard class="mt-0 mr-1 pa-0"  :type="selectedWallet.currency" clickable 
+        :wallet="selectedWallet" :displayAttributes="false" />
+
+        <!-- <v-divider color="primary" class="mt-2"></v-divider> -->
+
+    <v-flex class="pa-0 mt-1" style="overflow: visible">
+      <div v-for="(gt, date) in groupedTransactions" :key="date">
+          <p color="primary" class="mb-1 ml-4">{{getDayName(date)}} {{getDay(date)}} {{getMonth(date)}}</p>
+
+          <historyCard v-for="(transaction, index) in gt" :key="index"
+            :transaction="transaction" />
+      </div>
+    </v-flex>
+  </v-layout>
 </section>

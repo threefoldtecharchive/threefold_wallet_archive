@@ -2,7 +2,9 @@
 import botService from '../services/3botService'
 import config from '../../public/config'
 import cryptoService from '../services/cryptoService'
-import { decodeBase64 } from 'tweetnacl-util'
+import {
+  decodeBase64
+} from 'tweetnacl-util'
 
 export default ({
   state: {
@@ -42,11 +44,24 @@ export default ({
             return result
           }, {})
           var newSeed = new Uint8Array(decodeBase64(directLoginData.derivedSeed))
-          const userObject = { doubleName: directLoginData.username, seed: newSeed }
-          window.localStorage.setItem('user', JSON.stringify(userObject))
+          const userObject = {
+            doubleName: directLoginData.username,
+            seed: newSeed
+          }
+          // window.localStorage.setItem('user', JSON.stringify(userObject))
           context.dispatch('login',
             userObject
           )
+
+          let importedWallets = JSON.parse(localStorage.getItem('importedWallets'))
+          if (importedWallets != null && importedWallets) {
+            for (let user of importedWallets.filter(x => x.doubleName === directLoginData.doubleName)) {
+              user.seed = new Uint8Array(user.seed)
+              context.dispatch('importWallet',
+                user
+              )
+            }
+          }
         } else {
           botService.getUserData(username).then(async (response) => {
             if (signedHash && context.getters.state !== await cryptoService.validateSignature(signedHash, response.data.publicKey)) {
@@ -61,7 +76,6 @@ export default ({
               var userData = {}
               cryptoService.decrypt(data.ciphertext, data.nonce, keys.privateKey, response.data.publicKey)
                 .then(decrypted => {
-                  console.log(decrypted)
                   if (decrypted) {
                     decrypted = JSON.parse(decrypted)
                     for (var k in decrypted) {
@@ -70,15 +84,28 @@ export default ({
                       }
                     }
                   }
-                  console.log(userData)
                   var newSeed = new Uint8Array(decodeBase64(userData.derivedSeed))
-                  const userObject = { doubleName: username, seed: newSeed }
-                  window.localStorage.setItem('user', JSON.stringify(userObject))
+                  const userObject = {
+                    doubleName: username,
+                    seed: newSeed
+                  }
+
+                  // window.localStorage.setItem('user', JSON.stringify(userObject))
                   context.dispatch('login',
                     userObject
                   )
-                  console.log(`newSeed`, newSeed)
-                }).catch(() => context.commit('setFatalError', 'Could not decrypt message.'))
+
+                  let importedWallets = JSON.parse(localStorage.getItem('importedWallets'))
+
+                  if (importedWallets != null && importedWallets.filter(x => x.doubleName === directLoginData.doubleName)) {
+                    for (let user of importedWallets) {
+                      user.seed = new Uint8Array(user.seed)
+                      context.dispatch('importWallet',
+                        user
+                      )
+                    }
+                  }
+                }).catch(e => context.commit('setFatalError', 'Could not decrypt message.'))
             } else {
               context.commit('setFatalError', 'Got no data from 3bot')
             }
