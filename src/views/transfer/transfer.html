@@ -16,70 +16,65 @@
       </v-card-text>
     </v-card>
   </v-dialog>
+  <v-col>
+    <v-row align-center class="text-center div-toggle-buttons">
+      <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
+        <v-btn text v-for="tab in tabs" :key="tab" class="px-5 round" exact :to="{query:{tab: tab}}">{{tab}}
+        </v-btn>
+      </v-btn-toggle>
+    </v-row>
 
-
-  <v-container>
-    <v-col>
-      <v-row align-center style="text-align: center;" class="text-xs-center div-toggle-buttons">
-        <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
-          <v-btn text v-for="tab in tabs" :key="tab" class="px-5 round" exact :to="{query:{tab: tab}}">{{tab}}
-          </v-btn>
-        </v-btn-toggle>
-      </v-row>
-
-      <v-row v-if="active == 'receive'">
-        <v-col cols="4">To</v-col>
-      </v-row>
-      <v-row v-else>
-        <v-col cols="4">
-          From
-        </v-col>
-        <v-spacer></v-spacer>
-        <v-col class="align-end" cols="8">
-          <v-btn small icon v-if="active == 'send'" @click="scanQR()">
+    <v-row v-if="active == 'receive'">
+      <v-col cols="4">To</v-col>
+    </v-row>
+    <v-row v-else>
+      <v-col cols="4">
+        From
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="6">
+        <v-row align-end class="align-end">
+          <v-btn small icon @click="scanQR()">
             Scan QR
             <v-icon class="ml-2">fas fa-qrcode</v-icon>
           </v-btn>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-select @change="selectWallet" :items="computedWallets" v-model="selectedWallet" return-object>
-            <template slot="selection" slot-scope="data">
-              <v-flex class="text-capitalize">
-                {{ data.item.name }}
-              </v-flex>
-              <v-spacer></v-spacer>
-              <v-flex justify-end class="text-xs-right">
-                {{ data.item.totalAmount }} {{data.item.currency}}
-              </v-flex>
-            </template>
-            <template slot="item" slot-scope="data">
-              <v-flex class="text-capitalize">
-                {{ data.item.name }}
-              </v-flex>
-              <v-spacer></v-spacer>
-              <v-flex justify-end class="text-xs-right">
-                {{ data.item.totalAmount }} {{data.item.currency}}
-              </v-flex>
-            </template>
-          </v-select>
-        </v-col>
-      </v-row>
+        </v-row>
+      </v-col>
+    </v-row>
 
-      <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" :investments="investments"
-        :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)" :fee="fee">
-      </FormComponent>
 
-      <v-layout column wrap v-if="$route.query.tab != 'receive'">
-        <v-flex>Fee: {{fee.toFixed(2)}} {{selectedWallet.currency}}</v-flex>
-        <span v-if="(formObject.to.currency && selectedWallet.currency != formObject.to.currency)">
-          <v-flex>Exchange rate: {{exchangeRate}}</v-flex>
-          <v-flex v-if="formObject.amount">Your rate: {{yourExchangeRate}}</v-flex>
-        </span>
-      </v-layout>
+    <v-row>
+      <v-col>
+        <v-select @change="selectWallet" :items="computedWallets" v-model="selectedWallet" return-object>
+          <template slot="selection" slot-scope="data">
+            <v-flex class="text-capitalize">
+              {{ data.item.name }}
+            </v-flex>
+            <v-spacer></v-spacer>
+            <v-flex justify-end class="text-xs-right">
+              {{ data.item.totalAmount }} {{data.item.currency}}
+            </v-flex>
+          </template>
+          <template slot="item" slot-scope="data">
+            <v-flex class="text-capitalize">
+              {{ data.item.name }}
+            </v-flex>
+            <v-spacer></v-spacer>
+            <v-flex justify-end class="text-xs-right">
+              {{ data.item.totalAmount }} {{data.item.currency}}
+            </v-flex>
+          </template>
+        </v-select>
+      </v-col>
+    </v-row>
 
-      <div>
+    <FormComponent ref="formComponent" :formObject="formObject" :selectedTab="selectedTab" :investments="investments"
+      :wallets="wallets" :selectedWallet="selectedWallet" @formValidation="formValidation($event)" :fee="fee">
+    </FormComponent>
+
+    <v-row>
+      <v-col>
+        <span v-if="$route.query.tab != 'receive'">Fee: {{fee.toFixed(2)}} {{selectedWallet.currency}}</span>
         <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" @click="transferConfirmed"
           :disabled="!formObject.amount">
           <div v-if="$route.query.tab === 'receive'">
@@ -89,11 +84,9 @@
             Send Tokens
           </div>
         </v-btn>
-      </div>
-      </div>
-    </v-col>
-  </v-container>
-
+      </v-col>
+    </v-row>
+  </v-col>
   <TransactionInfoDialog :dialog="transactionInfoDialog" :closeDialog="closeTransactionInfoDialog"
     :selectedTab="selectedTab" :wallets="wallets" :send="send" :selectedWallet="selectedWallet"
     :selectWallet="selectWallet" :formObject="formObject" v-if="selectedWallet.address" :fee="fee">
