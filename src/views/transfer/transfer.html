@@ -17,7 +17,7 @@
     </v-card>
   </v-dialog>
   <v-col>
-    <v-row align-center class="text-center div-toggle-buttons">
+    <v-row  align="center" class="div-toggle-buttons">
       <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
         <v-btn text v-for="tab in tabs" :key="tab" class="px-5 round" exact :to="{query:{tab: tab}}">{{tab}}
         </v-btn>
