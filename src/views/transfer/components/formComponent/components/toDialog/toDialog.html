@@ -1,24 +1,25 @@
 <section class="to-dialog">
   <v-dialog v-model="dialog" fullscreen scrollable persistent>
-    <v-card class="no-radius" >
-      
+    <v-card class="no-radius">
+
       <v-toolbar dark color="primary" dense>
-        <v-toolbar-title class="text-uppercase">Search contact</v-toolbar-title>
+        <v-toolbar-title class="text-uppercase">
+          Search contact
+        </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn text icon @click="closeDialog(false)">
           <v-icon :color="$route.meta.accent">
             close
           </v-icon>
         </v-btn>
-         
       </v-toolbar>
       <v-card-text>
-          <div class="text-xs-center mb-3" style="margin:auto;">
-              <v-btn-toggle v-model="selected" active-class="red" mandatory class="round elevation-0">
-                <v-btn text class="px-3 my-1 mx-1 round" v-for="tab in tabs">{{tab.name}}</v-btn>
-              </v-btn-toggle>
-            </div>
-          <!-- <div class="text-xs-center mb-3 div-toggle-buttons">
+        <div class="text-xs-center mb-3" style="margin:auto;">
+          <v-btn-toggle v-model="selected" active-class="red" mandatory class="round elevation-0">
+            <v-btn text class="px-3 my-1 mx-1 round" v-for="tab in tabs">{{tab.name}}</v-btn>
+          </v-btn-toggle>
+        </div>
+        <!-- <div class="text-xs-center mb-3 div-toggle-buttons">
               <v-btn-toggle v-model="selectedTab" dark mandatory class="primary round elevation-0">
                 <v-btn text v-for="tab in tabs" :key="tab" class="px-5  round" exact :to="{query:{tab: tab}}">{{tab.name}}
                 </v-btn>
@@ -44,13 +45,14 @@
         <div v-show="selected === 1">
           <v-form ref="externForm" v-model="valid">
             <v-text-field v-if="selected === 1" clearable prepend-icon="person" label="To (Wallet Address)"
-              v-model='externAddress' :rules="toRules" autofocus/>
-              <v-text-field v-else clearable prepend-icon="person" label="To (Wallet Address)"
-              v-model='externAddress' :rules="toRules" />
+              v-model='externAddress' :rules="toRules" autofocus />
+            <v-text-field v-else clearable prepend-icon="person" label="To (Wallet Address)" v-model='externAddress'
+              :rules="toRules" />
           </v-form>
           <div class="text-xs-center">
             <div>
-              <v-btn style="width: 90%;" :color="$route.meta.accent" @click="selectWallet({address: externAddress})" :disabled="!valid">
+              <v-btn style="width: 90%;" :color="$route.meta.accent" @click="selectWallet({address: externAddress})"
+                :disabled="!valid">
                 Use address
               </v-btn>
             </div>

@@ -17,11 +17,13 @@
     </v-card>
   </v-dialog>
   <v-col>
-    <v-row  align="center" class="div-toggle-buttons">
-      <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
-        <v-btn text v-for="tab in tabs" :key="tab" class="px-5 round" exact :to="{query:{tab: tab}}">{{tab}}
-        </v-btn>
-      </v-btn-toggle>
+    <v-row class="div-toggle-buttons align-center">
+      <div style="text-align: center; width: 100%;">
+        <v-btn-toggle dense v-model="selectedTab" mandatory class="">
+          <v-btn text v-for="tab in tabs" :key="tab" class="px-5 round" exact :to="{query:{tab: tab}}">{{tab}}
+          </v-btn>
+        </v-btn-toggle>
+      </div>
     </v-row>
 
     <v-row v-if="active == 'receive'">
@@ -33,7 +35,7 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="6">
-        <v-row align-end class="align-end">
+        <v-row align-end style="text-align:end">
           <v-btn small icon @click="scanQR()">
             Scan QR
             <v-icon class="ml-2">fas fa-qrcode</v-icon>

@@ -1,6 +1,7 @@
-
+.create-wallet{
     .v-btn--active {
-        background-color: var(--active-color) !important;
-        border-color: var(--active-color) !important;
+        background-color: var(--accent-color) !important;
         color: white !important;
+        border: none !important;
     }
+}

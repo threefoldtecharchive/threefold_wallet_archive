@@ -21,7 +21,7 @@ export default {
   mounted () {
     console.log(this.isLoggingIn)
     if (!this.isLoggingIn) {
-      const account = JSON.parse(window.localStorage.getItem('user'))
+      const account = JSON.parse(localStorage.getItem('user'))
       if (account && account.doubleName && account.seed) {
         console.log(`Logging in from storage`)
         account.seed = new Uint8Array(Object.values(account.seed))

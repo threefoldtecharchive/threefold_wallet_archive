@@ -148,8 +148,7 @@ export default {
     },
     closeQrDialog () {
       this.qrDialog = false
-    },
-    text: "item => item.name + ' — ' + item.description"
+    }
   },
   watch: {
     '$route.query.tab' () {

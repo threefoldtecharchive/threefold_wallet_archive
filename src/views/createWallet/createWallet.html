@@ -2,10 +2,10 @@
   <v-layout column fill-height>
     <v-container>
       <div style="text-align: center;">
-      <v-btn-toggle mandatory class="round elevation-0">
-        <v-btn text v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
-      </v-btn-toggle>
-    </div>
+        <v-btn-toggle dense mandatory class="round">
+          <v-btn text v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
+        </v-btn-toggle>
+      </div>
       <v-container v-if="currentTab == 'create'">
         <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
           class="red--text" label="Wallet name"></v-text-field>

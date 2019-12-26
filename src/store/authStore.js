@@ -8,8 +8,8 @@ import {
 
 export default ({
   state: {
-    state: window.localStorage.getItem('state') || null,
-    keys: window.localStorage.getItem('tempKeys') ? JSON.parse(window.localStorage.getItem('tempKeys')) : null,
+    state: localStorage.getItem('state') || null,
+    keys: localStorage.getItem('tempKeys') ? JSON.parse(localStorage.getItem('tempKeys')) : null,
     loginUrl: null
   },
   actions: {
@@ -33,7 +33,7 @@ export default ({
     async checkResponse (context, responseUrl) {
       if (responseUrl.searchParams.get('error')) {
         context.commit('setFatalError', responseUrl.searchParams.get('error'))
-      } else {
+      } else { // this is the iphone path, should be removed. Uses derivedseed straight from URL after hash
         var username = responseUrl.searchParams.get('username')
         var signedHash = responseUrl.searchParams.get('signedhash')
         var directLoginData
@@ -62,8 +62,11 @@ export default ({
               )
             }
           }
-        } else {
+        } else { // this is the Android and normal login path
           botService.getUserData(username).then(async (response) => {
+            console.log(response)
+            console.log(signedHash, response.data.publicKey)
+            console.log( "cr3", await cryptoService.validateSignature(signedHash, response.data.publicKey));
             if (signedHash && context.getters.state !== await cryptoService.validateSignature(signedHash, response.data.publicKey)) {
               context.commit('setFatalError', `Invalid state.`)
             }
@@ -126,11 +129,13 @@ export default ({
   },
   mutations: {
     setKeys (state, keys) {
-      window.localStorage.setItem('tempKeys', JSON.stringify(keys))
+      console.log(`insetKeys`)
+      localStorage.setItem('tempKeys', JSON.stringify(keys))
       state.keys = keys
     },
     setState (state, stateHash) {
-      window.localStorage.setItem('state', stateHash)
+      console.log(`insetState`)
+      localStorage.setItem('state', stateHash)
       state.state = stateHash
     },
     setLoginUrl (state, url) {

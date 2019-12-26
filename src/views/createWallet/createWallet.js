@@ -40,12 +40,17 @@ export default {
       this.createWallet({ chain: 'tft', walletName: this.walletName, id: '0' })
 
       var postMsg = {
-        type: 'ADD_APP_WALLET',
         walletName: this.walletName,
         doubleName: this.doubleName
       }
 
-      Print.postMessage(JSON.stringify(postMsg))
+      postMsg = JSON.stringify(postMsg) 
+
+      // Print.postMessage(JSON.stringify(postMsg))
+
+      window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function(result) {
+
+      });
 
       this.$emit('ctaClicked')
       this.walletName = null
@@ -87,13 +92,17 @@ export default {
         this.importWallet(obj)
 
         var postMsg = {
-          type: 'ADD_IMPORT_WALLET',
           walletName: this.walletName,
           doubleName: this.doubleName,
           seed: Array.from(mySeed)
         }
 
-        Print.postMessage(JSON.stringify(postMsg))
+        postMsg = JSON.stringify(postMsg) 
+        // Print.postMessage(JSON.stringify(postMsg))
+
+        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function(result) {
+
+        });
       }
 
       this.$emit('ctaClicked')
