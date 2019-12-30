@@ -1,34 +1,30 @@
 <section class="create-wallet fill-height">
-  <v-layout column fill-height>
-    <v-container>
-      <div style="text-align: center;">
-        <v-btn-toggle dense mandatory class="round">
-          <v-btn text v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
-        </v-btn-toggle>
+
+    <v-row justify="center">
+      <v-btn-toggle dense mandatory class="round">
+        <v-btn text v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
+      </v-btn-toggle>
+    </v-row>
+    <v-container v-if="currentTab == 'create'">
+      <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
+        class="red--text" label="Wallet name"></v-text-field>
+
+      <div>
+        <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" @click="addCreateWallet" :disabled="!walletName">
+          Create wallet</v-btn>
       </div>
-      <v-container v-if="currentTab == 'create'">
-        <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
-          class="red--text" label="Wallet name"></v-text-field>
-
-        <div>
-          <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" @click="addCreateWallet" :disabled="!walletName">
-            Create wallet</v-btn>
-        </div>
-      </v-container>
-
-      <v-container v-if="currentTab == 'import'">
-        <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
-          class="red--text" label="Wallet name"></v-text-field>
-
-        <v-textarea :error-messages="wordsErrors" @input="wordsErrors = []" v-model="words" name="input-7-1"
-          label="Words (Seed phrase)" value="" hint="Please enter all words lowercased and separted by one space.">
-        </v-textarea>
-
-        <div>
-          <v-btn color="accent" class="mx-0 mt-3" style="width: 100%;" @click="addImportWallet" :disabled="!walletName">
-            Import wallet</v-btn>
-        </div>
-      </v-container>
     </v-container>
-  </v-layout>
+
+    <v-container v-if="currentTab == 'import'">
+      <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
+        class="red--text" label="Wallet name"></v-text-field>
+
+      <v-textarea :error-messages="wordsErrors" @input="wordsErrors = []" v-model="words" name="input-7-1"
+        label="Words (Seed phrase)" value="" hint="Please enter all words lowercased and separted by one space.">
+      </v-textarea>
+
+      <v-btn color="accent" class="mx-0 mt-3" style="width: 100%;" @click="addImportWallet" :disabled="!walletName">
+        Import wallet</v-btn>
+
+    </v-container>
 </section>

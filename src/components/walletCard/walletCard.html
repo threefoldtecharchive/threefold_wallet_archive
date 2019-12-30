@@ -24,12 +24,13 @@
                 </v-icon>
               </v-btn>
             </v-flex>
-            <div v-if="displayAmount">
-              <amountIndicator v-if="displayAttributes" class="pl-3 pr-2 pt-1 align-self-end" :amount='totalAmount'
+            <v-flex class="mr-1" v-if="displayAmount">
+              <amountIndicator v-if="displayAttributes" class="pr-2 pt-1" :amount='totalAmount'
                 :valuta='wallet.currency' />
-              <amountIndicator v-else class="pl-3 pr-2 pt-1 align-self-end" :amount='totalAmount'
+              <amountIndicator v-else class="pl-3 pr-2 pt-1" :amount='totalAmount'
                 :valuta='wallet.currency' small />
-            </div>
+
+          </v-flex>
           </v-layout>
         </v-flex>
         <div v-else>

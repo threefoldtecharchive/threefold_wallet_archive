@@ -17,37 +17,27 @@
     </v-card>
   </v-dialog>
   <v-col>
-    <v-row class="div-toggle-buttons align-center">
-      <div style="text-align: center; width: 100%;">
-        <v-btn-toggle dense v-model="selectedTab" mandatory class="">
-          <v-btn text v-for="tab in tabs" :key="tab" class="px-5 round" exact :to="{query:{tab: tab}}">{{tab}}
-          </v-btn>
-        </v-btn-toggle>
-      </div>
+    <v-row class="div-toggle-buttons" justify="center">
+      <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
+        <v-btn text v-for="tab in tabs" :key="tab" class="px-5 round" exact :to="{query:{tab: tab}}">{{tab}}
+        </v-btn>
+      </v-btn-toggle>
     </v-row>
 
-    <v-row v-if="active == 'receive'">
-      <v-col cols="4">To</v-col>
-    </v-row>
-    <v-row v-else>
-      <v-col cols="4">
-        From
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col cols="6">
-        <v-row align-end style="text-align:end">
-          <v-btn small icon @click="scanQR()">
+    <v-row dense class="pr-2 pt-1" justify="end">
+        <v-btn v-if="active == 'send'" small icon @click="scanQR()">
+          Scan QR
+          <v-icon class="ml-2">fas fa-qrcode</v-icon>
+        </v-btn>
+        <v-btn v-else small icon @click="scanQR()" style="visibility: hidden">
             Scan QR
             <v-icon class="ml-2">fas fa-qrcode</v-icon>
           </v-btn>
-        </v-row>
-      </v-col>
     </v-row>
-
-
-    <v-row>
-      <v-col>
-        <v-select @change="selectWallet" :items="computedWallets" v-model="selectedWallet" return-object>
+    
+    <v-row dense>
+      <v-col dense>
+        <v-select class="mt-1 pt-0" @change="selectWallet" :items="computedWallets" v-model="selectedWallet" return-object>
           <template slot="selection" slot-scope="data">
             <v-flex class="text-capitalize">
               {{ data.item.name }}

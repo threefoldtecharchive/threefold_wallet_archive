@@ -6,7 +6,7 @@
             <v-icon flatclass="white--text">fas fa-arrow-left</v-icon>
           </v-btn>
         </v-col>
-        <v-col justify-center  class="title  ">
+        <v-col dense justify="center"  class="title  ">
             {{($route.meta.title || $route.name) || '3Bot'}}
             <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent" />
         </v-col>
