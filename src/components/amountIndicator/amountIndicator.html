@@ -1,12 +1,13 @@
-
 <section class="amount-indicator">
+
   <v-row justify="end">
-    <div :class="`text-s-right  ${small ? 'font-weight-normal' : ' headline'} ${color}--text`">
-      <span>{{amount}}</span>
-    </div>
-    <div :class="small ? 'ml-1 body-1 font-weight-light' : 'ml-1 font-weight-light'">
-      <span >{{valuta.toLowerCase()}}</span>
-    </div>
+    <span v-if="showTypeCurrency && hasLocked" class="caption mr-1">Available </span>
+    <span :class="`text-s-right subtitle-2 ${color}--text`">{{amount}}</span>
+    <span :class="`ml-1 body-1 font-weight-light`">{{valuta.toLowerCase()}}</span>
+  </v-row>
+  <v-row v-if="locked" justify="end">
+    <span v-if="showTypeCurrency && hasLocked" class="caption mr-1">Locked </span>
+    <span :class="`text-s-right  ${small ? 'font-weight-normal' : ' subtitle-2'} ${color}--text`">{{locked}}</span>
+    <span :class="small ? 'ml-1 body-1 font-weight-light' : 'ml-1 font-weight-light'">{{valuta.toLowerCase()}}</span>
   </v-row>
 </section>
-

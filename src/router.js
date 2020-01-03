@@ -29,13 +29,13 @@ export default new Router({
     },
     component: () => import(/* webpackChunkName: "profile-page" */ './views/createWallet')
   }, {
-    path: '/history/:wallet',
-    name: 'history',
+    path: '/details/:wallet',
+    name: 'details',
     meta: {
       accent: 'accent',
       transfer: 'transfer',
       info: {
-        title: 'one hell of a title',
+        title: 'Details',
         text: 'this is info'
       }
     },

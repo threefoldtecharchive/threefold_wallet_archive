@@ -10,7 +10,8 @@ export default {
   props: [],
   data () {
     return {
-
+      tabs: ['available', 'locked'],
+      selectedTab: 'available'
     }
   },
   computed: {
@@ -23,7 +24,8 @@ export default {
     },
     groupedTransactions () {
       var transactions = this.wallets.find(x => x.name === this.$route.params.wallet).transaction
-      var groupedTransactions = groupBy(transactions, x => {var date
+      var groupedTransactions = groupBy(transactions, x => {                                     
+        var date = null
         if (x.timestamp == null || x.timestamp == '-1') {
           date = new Date()
         } else {
@@ -35,7 +37,7 @@ export default {
       return groupedTransactions
     },
     selectedWallet () {
-      let selectedWallet = this.wallets.find(x => x.name === this.$route.params.wallet)
+      const selectedWallet = this.wallets.find(x => x.name === this.$route.params.wallet)
       return selectedWallet
     }
   },
@@ -66,8 +68,8 @@ export default {
       const options = { weekday: 'short' }
       return new Intl.DateTimeFormat('en-US', options).format(date)
     },
-    parseDate(date) {
-      if (Date.parse(date).getTime() - 60000 * Date.parse(date).getTimezoneOffset() == 0){
+    parseDate (date) {
+      if (Date.parse(date).getTime() - 60000 * Date.parse(date).getTimezoneOffset() == 0) {
         return new Date()
       } else {
         return Date.parse(date)

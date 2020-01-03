@@ -1,8 +1,8 @@
 <section class="create-wallet fill-height">
-
+  <v-col>
     <v-row justify="center">
       <v-btn-toggle dense mandatory class="round">
-        <v-btn text v-for="tab in tabs" :key="tab" class="px-5  round" @click="currentTab=tab">{{tab}}</v-btn>
+        <v-btn text v-for="tab in tabs" :key="tab" class="px-3 my-1 mx-1 round" @click="currentTab=tab">{{tab}}</v-btn>
       </v-btn-toggle>
     </v-row>
     <v-container v-if="currentTab == 'create'">
@@ -27,4 +27,5 @@
         Import wallet</v-btn>
 
     </v-container>
+  </v-col>
 </section>

@@ -48,10 +48,10 @@ export default {
         this.showCreateWalletDialog = !this.showCreateWalletDialog
         // if (data) this.createWallet(data)
       }
-      if (this.$route.name === 'history') {
-        this.showEditWalletDialog = !this.showEditWalletDialog
+      // if (this.$route.name === 'history') {
+        // this.showEditWalletDialog = !this.showEditWalletDialog
         // if (data) this.createWallet(data)
-      }
+      // }
     }
 
   },

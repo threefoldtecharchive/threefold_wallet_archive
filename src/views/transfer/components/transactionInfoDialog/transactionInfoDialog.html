@@ -1,17 +1,15 @@
 <section class="transaction-info-dialog">
   <v-dialog v-model="dialog" fullscreen persistent scrollable>
-    <v-card>
-      <v-toolbar dark color="primary">
-        <v-toolbar-title dark class="ml-4 text-capitalize white--text primary">
-          Transaction info
-        </v-toolbar-title>
+    
+    <v-card class="no-radius">
+      <v-card-title style="background-color:#34495e; color:white" dense>
+        Transaction info
         <v-spacer></v-spacer>
-        <v-btn icon dark text @click="closeDialog(false)">
-          <v-icon>
+        <v-btn text icon @click="closeDialog(false)">
+          <v-icon :color="$route.meta.accent">
             close
           </v-icon>
         </v-btn>
-      </v-toolbar>
       </v-card-title>
 
       <v-card-text>

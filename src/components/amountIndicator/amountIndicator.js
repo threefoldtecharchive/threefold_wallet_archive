@@ -1,3 +1,5 @@
+import { mapGetters } from "vuex"
+
 export default {
   name: 'amount-indicator',
   components: {},
@@ -7,7 +9,11 @@ export default {
       default: false
     },
     amount: {
-      type: String
+      type: String,
+      default: null
+    },
+    locked: {
+      String
     },
     valuta: {
       type: String
@@ -18,7 +24,11 @@ export default {
     align: {
       type: String,
       default: 'left'
-    }
+    },
+    showTypeCurrency: {
+      type: Boolean,
+      default: false
+    } 
   },
   data () {
     return {
@@ -26,12 +36,15 @@ export default {
     }
   },
   computed: {
-
+    ...mapGetters([
+      "hasLocked"
+    ])
   },
   mounted () {
-
+    
   },
   methods: {
+    
 
   }
 }

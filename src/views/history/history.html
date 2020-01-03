@@ -1,19 +1,21 @@
 <section class="history fill-height">
-  <v-layout column fill-height >
-    <!-- <walletSelector class="mb-0" ref="selector" no-clip @onWalletSelected='selectWallet' :wallets="computedWallets"
-      :selected="$route.params.wallet" /> -->
-      
-      <walletCard class="mt-0 mr-1 pa-0"  :type="selectedWallet.currency" clickable 
-        :wallet="selectedWallet" :displayAttributes="false" />
+  <v-layout column fill-height>
 
-        <!-- <v-divider color="primary" class="mt-2"></v-divider> -->
+    <walletCard class="mt-0 pa-0" :type="selectedWallet.currency" clickable :wallet="selectedWallet"
+      :displayAttributes="false" />
+<!-- 
+    <v-row class="div-toggle-buttons" justify="center">
+      <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
+        <v-btn text v-for="tab in tabs" :key="tab" class="px-3 my-1 mx-1 round" exact :to="{query:{tab: tab}}">{{tab}}
+        </v-btn>
+      </v-btn-toggle>
+    </v-row> -->
 
     <v-flex class="pa-0 mt-1" style="overflow: visible">
       <div v-for="(gt, date) in groupedTransactions" :key="date">
-          <p color="primary" class="mb-1 ml-4">{{getDayName(date)}} {{getDay(date)}} {{getMonth(date)}}</p>
+        <p color="primary" class="mb-1 ml-4">{{getDayName(date)}} {{getDay(date)}} {{getMonth(date)}}</p>
 
-          <historyCard v-for="(transaction, index) in gt" :key="index"
-            :transaction="transaction" />
+        <historyCard v-for="(transaction, index) in gt" :key="index" :transaction="transaction" />
       </div>
     </v-flex>
   </v-layout>
