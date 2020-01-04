@@ -22,7 +22,7 @@
         </v-btn>
       </v-toolbar> -->
 
-      <v-card-text class="px-3">
+      <v-card-text class="px-1">
         <v-col>
           <v-row justify="center" class="mb-3">
             <v-btn-toggle v-model="selected" dense mandatory class="round elevation-0">
@@ -30,18 +30,12 @@
             </v-btn-toggle>
           </v-row>
 
-          <v-row justify="center" v-show="selected === 0">
+          <v-row justify="center" class="mx-2" v-show="selected === 0">
             <!-- last filter is needed until transactions between gft and tft are possible  && (x.currency == selectedWallet.currency)-->
-            <div v-if="wallets.length"
-              v-for="(wallet, index) in wallets.filter(x => (x.currency === 'TFT' || x.currency === 'GFT') && (x.currency == selectedWallet.currency))"
-              :key='index'>
-              <v-hover>
-                <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 12 : 2}`">
-                  <walletCard no-padding class="my-2 wallet-card remove-margin" @click="selectWallet(wallet)"
+                  <walletCard style="width: 100%;" v-if="wallets.length"
+                  v-for="(wallet, index) in wallets.filter(x => (x.currency === 'TFT' || x.currency === 'GFT') && (x.currency == selectedWallet.currency))"
+                  :key='index' class="my-2" @click="selectWallet(wallet)"
                     :wallet="wallet" clickable />
-                </v-card>
-              </v-hover>
-            </div>
           </v-row>
 
           <div v-show="selected === 1">

@@ -1,23 +1,23 @@
 /* eslint-disable no-console */
-import botService from "../services/3botService";
-import config from "../../public/config";
-import cryptoService from "../services/cryptoService";
-import { decodeBase64 } from "tweetnacl-util";
+import botService from '../services/3botService';
+import config from '../../public/config';
+import cryptoService from '../services/cryptoService';
+import { decodeBase64 } from 'tweetnacl-util';
 
 export default {
   state: {
-    state: localStorage.getItem("state") || null,
-    keys: localStorage.getItem("tempKeys")
-      ? JSON.parse(localStorage.getItem("tempKeys"))
+    state: localStorage.getItem('state') || null,
+    keys: localStorage.getItem('tempKeys')
+      ? JSON.parse(localStorage.getItem('tempKeys'))
       : null,
     loginUrl: null
   },
   actions: {
-    async generateLoginUrl(context) {
-      context.dispatch("clearStorage");
-      var state = "";
+    async generateLoginUrl (context) {
+      context.dispatch('clearStorage');
+      var state = '';
       var characters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
       var charactersLength = characters.length;
       for (var i = 0; i < 20; i++) {
         state += characters.charAt(
@@ -28,11 +28,11 @@ export default {
       var keys = await cryptoService.generateKeys();
       var appid = config.appId;
       var scope = config.scope;
-      context.commit("setState", state);
-      context.commit("setKeys", keys);
+      context.commit('setState', state);
+      context.commit('setKeys', keys);
 
       context.commit(
-        "setLoginUrl",
+        'setLoginUrl',
         `${
           config.botFrontEnd
         }?state=${state}&scope=${scope}&appid=${appid}&publickey=${encodeURIComponent(
@@ -41,20 +41,20 @@ export default {
       );
     },
     async checkResponse(context, responseUrl) {
-      console.log("testetstests");
-      if (responseUrl.searchParams.get("error")) {
-        context.commit("setFatalError", responseUrl.searchParams.get("error"));
+      console.log('testetstests');
+      if (responseUrl.searchParams.get('error')) {
+        context.commit('setFatalError', responseUrl.searchParams.get('error'));
       } else {
         // this is the iphone path, should be removed. Uses derivedseed straight from URL after hash
-        var username = responseUrl.searchParams.get("username");
-        var signedHash = responseUrl.searchParams.get("signedhash");
+        var username = responseUrl.searchParams.get('username');
+        var signedHash = responseUrl.searchParams.get('signedhash');
         var directLoginData;
         if (window.location.hash) {
           directLoginData = window.location.hash
             .substr(1)
-            .split("&")
+            .split('&')
             .reduce(function(result, item) {
-              var parts = item.split("=");
+              var parts = item.split('=');
               result[parts[0]] = decodeURIComponent(parts[1]);
               return result;
             }, {});
@@ -66,17 +66,17 @@ export default {
             seed: newSeed
           };
           // window.localStorage.setItem('user', JSON.stringify(userObject))
-          context.dispatch("login", userObject);
+          context.dispatch('login', userObject);
 
           let importedWallets = JSON.parse(
-            localStorage.getItem("importedWallets")
+            localStorage.getItem('importedWallets')
           );
           if (importedWallets != null && importedWallets) {
             for (let user of importedWallets.filter(
               x => x.doubleName === directLoginData.doubleName
             )) {
               user.seed = new Uint8Array(user.seed);
-              context.dispatch("importWallet", user);
+              context.dispatch('importWallet', user);
             }
           }
         } else {
@@ -84,11 +84,11 @@ export default {
           botService
             .getUserData(username)
             .then(async response => {
-              console.log("testetstests");
+              console.log('testetstests');
               console.log(response);
               console.log(signedHash, response.data.publicKey);
               console.log(
-                "cr3",
+                'cr3',
                 await cryptoService.validateSignature(
                   signedHash,
                   response.data.publicKey
@@ -102,10 +102,10 @@ export default {
                     response.data.publicKey
                   ))
               ) {
-                context.commit("setFatalError", `Invalid state.`);
+                context.commit('setFatalError', `Invalid state.`);
               }
               // http://localhost:8080/login#username=ivan&derivedSeed=abc123
-              var data = responseUrl.searchParams.get("data");
+              var data = responseUrl.searchParams.get('data');
 
               if (data) {
                 data = JSON.parse(data);
@@ -136,10 +136,10 @@ export default {
                     };
 
                     // window.localStorage.setItem('user', JSON.stringify(userObject))
-                    context.dispatch("login", userObject);
+                    context.dispatch('login', userObject);
 
                     let importedWallets = JSON.parse(
-                      localStorage.getItem("importedWallets")
+                      localStorage.getItem('importedWallets')
                     );
 
                     if (
@@ -150,44 +150,44 @@ export default {
                     ) {
                       for (let user of importedWallets) {
                         user.seed = new Uint8Array(user.seed);
-                        context.dispatch("importWallet", user);
+                        context.dispatch('importWallet', user);
                       }
                     }
                   })
                   .catch(e =>
                     context.commit(
-                      "setFatalError",
-                      "Could not decrypt message."
+                      'setFatalError',
+                      'Could not decrypt message.'
                     )
                   );
               } else {
-                context.commit("setFatalError", "Got no data from 3bot");
+                context.commit('setFatalError', 'Got no data from 3bot');
               }
             })
             .catch(e => {
               console.log(`e`, e);
               // context.commit('setFatalError', 'Signature failed, please try again.')
               // We can't do this because we need to be able to login from the browser. (I think)
-              console.log("Username was null, redirecting .... ");
-              context.dispatch("generateLoginUrl");
+              console.log('Username was null, redirecting .... ');
+              context.dispatch('generateLoginUrl');
             });
         }
       }
     },
     clearStorage(context) {
-      context.commit("setState", null);
-      context.commit("setKeys", null);
+      context.commit('setState', null);
+      context.commit('setKeys', null);
     }
   },
   mutations: {
     setKeys(state, keys) {
       console.log(`insetKeys`);
-      localStorage.setItem("tempKeys", JSON.stringify(keys));
+      localStorage.setItem('tempKeys', JSON.stringify(keys));
       state.keys = keys;
     },
     setState(state, stateHash) {
       console.log(`insetState`);
-      localStorage.setItem("state", stateHash);
+      localStorage.setItem('state', stateHash);
       state.state = stateHash;
     },
     setLoginUrl(state, url) {

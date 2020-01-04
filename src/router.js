@@ -112,6 +112,13 @@ export default new Router({
     },
     component: () => import(/* webpackChunkName: "login-page" */ './views/login')
   }, {
+    path: '/init',
+    name: 'init',
+    meta: {
+      accent: 'accent'
+    },
+    component: () => import(/* webpackChunkName: "init-page" */ './views/init')
+  }, {
     path: '/error',
     name: 'error',
     meta: {

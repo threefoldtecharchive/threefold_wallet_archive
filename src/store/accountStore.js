@@ -1,17 +1,16 @@
-import config from "../../public/config";
-import * as tfchain from "../services/tfchain/api";
-import nbhService from "../services/nbhService";
+import config from '../../public/config'
+import * as tfchain from '../services/tfchain/api'
+import nbhService from '../services/nbhService'
 export default {
   state: {
     syncing: false,
     accounts: null,
     intervalIsSet: false,
-    doubleName: false,
-    hasLocked: true
+    doubleName: false
   },
   actions: {
-    login(context, userData) {
-      context.commit("setDoubleName", userData.doubleName);
+    login (context, userData) {
+      context.commit('setDoubleName', userData.doubleName);
 
       var tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
@@ -22,43 +21,43 @@ export default {
         }
       );
 
-      tfAccount.type = "app";
-      context.commit("setAccounts", [tfAccount]);
-      context.dispatch("updateAccounts");
-      context.dispatch("createWallet", {
-        chain: "tft",
-        walletName: "daily",
-        id: "0"
+      tfAccount.type = 'app';
+      context.commit('setAccounts', [tfAccount]);
+      context.dispatch('updateAccounts');
+      context.dispatch('createWallet', {
+        chain: 'tft',
+        walletName: 'daily',
+        id: '0'
       });
-      context.dispatch("createWallet", {
-        chain: "tft",
-        walletName: "savings",
-        id: "0"
+      context.dispatch('createWallet', {
+        chain: 'tft',
+        walletName: 'savings',
+        id: '0'
       });
 
       // Get wallet list with names and create them all.
 
-      let appWallets = JSON.parse(localStorage.getItem("appWallets"));
+      let appWallets = JSON.parse(localStorage.getItem('appWallets'));
       if (appWallets != null && appWallets) {
         for (let appWallet of appWallets.filter(
           x => x.doubleName === userData.doubleName
         )) {
           appWallet.id = 0;
-          context.dispatch("createWallet", appWallet);
+          context.dispatch('createWallet', appWallet);
         }
       } else if (appWallets == null) {
         // Loop 20 wallets and check balance
-        context.commit("setImportingWallets", true);
+        context.commit('setImportingWallets', true);
         for (let index = 3; index <= 20; index++) {
           const appWallet = {
-            chain: "tft",
-            id: "0",
+            chain: 'tft',
+            id: '0',
             walletName: `Wallet${index}`,
             doubleName: userData.doubleName
           };
-          context.dispatch("createWallet", appWallet);
+          context.dispatch('createWallet', appWallet);
         }
-        context.dispatch("updateAccounts", () => {
+        context.dispatch('updateAccounts', () => {
           setTimeout(() => {
             for (
               let index = context.getters.wallets.length - 1;
@@ -78,24 +77,24 @@ export default {
                 ) {
                   const newWallet = index[existingWalletIndex];
                   var postMsg = {
-                    type: "ADD_APP_WALLET",
+                    type: 'ADD_APP_WALLET',
                     walletName: newWallet.name,
                     doubleName: userData.doubleName
                   };
 
                   // Print.postMessage(JSON.stringify(postMsg))
                 }
-                context.commit("setImportingWallets", false);
+                context.commit('setImportingWallets', false);
                 return;
               }
             }
 
             var pstMsg = {
-              type: "ADD_APP_WALLET"
+              type: 'ADD_APP_WALLET'
             };
 
             // Print.postMessage(JSON.stringify(pstMsg))
-            context.commit("setImportingWallets", false);
+            context.commit('setImportingWallets', false);
           }, 3000);
         });
       }
@@ -106,17 +105,17 @@ export default {
           callBack();
         }
         if (account && !context.getters.syncing) {
-          context.commit("setSync", true);
+          context.commit('setSync', true);
           account.update_account(function() {
-            context.commit("setSync", false);
+            context.commit('setSync', false);
           });
         }
       });
 
       if (!context.getters.intervalIsSet) {
-        context.commit("setIntervalIsSet", true);
+        context.commit('setIntervalIsSet', true);
         setInterval(() => {
-          context.dispatch("updateAccounts");
+          context.dispatch('updateAccounts');
         }, 60000);
       }
     },
@@ -136,16 +135,16 @@ export default {
         }
       );
 
-      tfAccount2.type = "imported";
+      tfAccount2.type = 'imported';
 
       var accounts = context.getters.accounts;
 
       accounts.push(tfAccount2);
-      context.commit("setAccounts", accounts);
+      context.commit('setAccounts', accounts);
 
-      context.dispatch("updateAccounts");
-      context.dispatch("createWallet", {
-        chain: "tft",
+      context.dispatch('updateAccounts');
+      context.dispatch('createWallet', {
+        chain: 'tft',
         walletName: data.walletName,
         id: accounts.length - 1
       });
@@ -218,7 +217,7 @@ export default {
       if (state.accounts) {
         state.accounts.forEach(account => {
           account.wallets.forEach(wallet => {
-            if (wallet.balance.coins_locked) {
+            if (wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) {
               hasLockedTokens = true
             }
           });

@@ -76,23 +76,32 @@ export default {
       'sendCoins'
     ]),
     scanQR () {
-      let postMsg = {
-        type: 'CAMERA'
-      }
 
-      window.vueInstance = this
-      Print.postMessage(JSON.stringify(postMsg))
+      window.vueInstance = this //Don't remove this for flutter app
+      const self = this
+      window.flutter_inappwebview.callHandler('SCAN_QR').then(function (result) {
+        self.onDecode(result)
+      })
+      // Print.postMessage(JSON.stringify(postMsg))
     },
-    injectQrData (address, amount, message, sender) {
-      if (address && amount) {
-        if(message == "null"){
-          message = ""
-        }
-        this.formObject = { to: { address: address }, amount: amount, message: message, sender: sender }
+    onDecode (code) {
+      console.log(code)
+      code = code.replace('tft:', 'tft://')
+
+      this.formObject.to.address = this.getQueryVar(code, 'HOST')
+      this.formObject.amount = this.getQueryVar(code, 'amount')
+      this.formObject.message = this.getQueryVar(code, 'message')
+      this.formObject.sender = this.getQueryVar(code, 'sender')
+    },
+    getQueryVar (url, varName) {
+      var val
+      url = new URL(url)
+      if (varName === 'HOST') {
+        val = url.pathname.replace('//', '')
       } else {
-        // SHOW ERROR
-        this.qrReadingError = true
+        val = url.searchParams.get(varName)
       }
+      return val
     },
     transferConfirmed () {
       if (this.active === 'receive') {

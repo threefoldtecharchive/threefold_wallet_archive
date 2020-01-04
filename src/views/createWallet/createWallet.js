@@ -44,13 +44,14 @@ export default {
         doubleName: this.doubleName
       }
 
-      postMsg = JSON.stringify(postMsg) 
+      postMsg = JSON.stringify(postMsg)
 
       // Print.postMessage(JSON.stringify(postMsg))
 
-      window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function(result) {
-
-      });
+      window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
+        console.log(result)
+        this.$router.push({ name: 'home' })
+      })
 
       this.$emit('ctaClicked')
       this.walletName = null
@@ -100,9 +101,10 @@ export default {
         postMsg = JSON.stringify(postMsg) 
         // Print.postMessage(JSON.stringify(postMsg))
 
-        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function(result) {
-
-        });
+        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
+          console.log(result)
+          this.$router.push({ name: 'home' })
+        })
       }
 
       this.$emit('ctaClicked')

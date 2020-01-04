@@ -7,8 +7,8 @@
             <p>
               <span class="title text-capitalize">{{wallet? wallet.name : 'Wallet name'}}</span>
               <span style="font-size: 9px; color: gray;">{{wallet.holder.type === 'imported' ? " imported" : ''}}</span>
-            
-            <span v-if="displayAttributes" class="body-1 text-truncate">{{getHumanWalletAddress}}</span>
+              <br />
+              <span v-if="displayAttributes" class="body-1 text-truncate">{{getHumanWalletAddress}}</span>
 
             </p>
 
@@ -27,10 +27,10 @@
             <v-flex class="mr-1" v-if="displayAmount">
               <amountIndicator v-if="displayAttributes" class="pr-2 pt-1" :amount='totalAmount'
                 :valuta='wallet.currency' :locked="wallet.totalLocked" :showTypeCurrency="true" />
-              <amountIndicator v-else class="pl-3 pr-2 pt-1" :amount='totalAmount'
-                :valuta='wallet.currency' small :locked="wallet.totalLocked" :showTypeCurrency="true" />
+              <amountIndicator v-else class="pl-3 pr-2 pt-1" :amount='totalAmount' :valuta='wallet.currency' small
+                :locked="wallet.totalLocked" :showTypeCurrency="true" />
 
-          </v-flex>
+            </v-flex>
           </v-layout>
         </v-flex>
         <div v-else>
