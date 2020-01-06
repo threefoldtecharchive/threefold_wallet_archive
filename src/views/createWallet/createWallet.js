@@ -49,7 +49,7 @@ export default {
       // Print.postMessage(JSON.stringify(postMsg))
 
       window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-        console.log(result)
+        console.log(`flutter result`, result)
         this.$router.push({ name: 'home' })
       })
 
@@ -102,7 +102,7 @@ export default {
         // Print.postMessage(JSON.stringify(postMsg))
 
         window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-          console.log(result)
+          console.log(`flutter result`,result)
           this.$router.push({ name: 'home' })
         })
       }
