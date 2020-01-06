@@ -177,6 +177,7 @@ export default {
     wallets: state => {
       var wallets = [];
       if (state.accounts) {
+        window.accounts = state.accounts
         state.accounts.forEach(account => {
           var t = account.wallets.map(wallet => {
             var balance = wallet.balance;
@@ -188,6 +189,16 @@ export default {
               window.completeWallet = wallet;
             }
             // console.log(`complete wallet`,wallet)
+            // balance.transactions.forEach(transaction => {
+            //   console.log(transaction)
+            //   if (transaction.inputs[0] ) {
+            //     if(transaction.inputs[0].lock > 0){
+            //       // console.log(transaction.inputs[0].amount.str())
+            //     }
+                
+            //   }
+            // }
+            // )
             return {
               name: wallet.wallet_name,
               address: wallet.address,

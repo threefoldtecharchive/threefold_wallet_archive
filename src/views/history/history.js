@@ -10,8 +10,8 @@ export default {
   props: [],
   data () {
     return {
-      tabs: ['available', 'locked'],
-      selectedTab: 'available'
+      tabs: ['transactions', 'locked'],
+      currentTab: 'transactions'
     }
   },
   computed: {
@@ -36,9 +36,37 @@ export default {
       })
       return groupedTransactions
     },
+    lockedTransactions () {
+      var transactions = this.wallets.find(x => x.name === this.$route.params.wallet).transaction
+      console.log(transactions)
+    },
     selectedWallet () {
       const selectedWallet = this.wallets.find(x => x.name === this.$route.params.wallet)
       return selectedWallet
+    },
+    renderLockedValue (lockValue, isTimestamp, chainTimestamp) {
+      if (lockValue) {
+        if (isTimestamp) {
+          const lockDate = new Date(lockValue * 1000)
+          const momentLockDate = moment(lockValue)
+          const momentChainDate = moment(chainTimestamp)
+          const formattedDate = moment(lockDate).format('MMMM Do YYYY, HH:mm z')
+          return (
+            <span style={{ marginLeft: 30 }}>
+              {momentLockDate > momentChainDate
+                ? (<span>Locked until {formattedDate}</span>)
+                : (<span>Unlocked since {formattedDate}</span>)
+              }
+            </span>
+          )
+        } else {
+          return (
+            <span style={{ marginLeft: 30 }}>
+              Locked until block {lockValue}
+            </span>
+          )
+        }
+      }
     }
   },
   mounted () {
