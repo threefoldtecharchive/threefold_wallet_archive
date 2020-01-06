@@ -135,7 +135,8 @@ export default {
       this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
       this.$refs.formComponent.$refs.form.reset()
       setTimeout(function () { store.dispatch('updateAccounts') }, 1000)
-      this.$router.push({ name: this.$route.meta.details, params: { wallet: this.selectedWallet.name } })
+      console.log(this.$route)
+      this.$router.push({ name: this.$route.meta.history, params: { wallet: this.selectedWallet.name } })
     },
     selectWallet (wallet) {
       this.selectedWallet = wallet

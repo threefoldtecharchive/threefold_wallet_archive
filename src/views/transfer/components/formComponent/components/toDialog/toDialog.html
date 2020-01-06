@@ -10,17 +10,6 @@
           </v-icon>
         </v-btn>
       </v-card-title>
-      <!-- <v-toolbar dark color="primary" dense>
-        <v-toolbar-title class="text-uppercase">
-          Search contact
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn text icon @click="closeDialog(false)">
-          <v-icon :color="$route.meta.accent">
-            close
-          </v-icon>
-        </v-btn>
-      </v-toolbar> -->
 
       <v-card-text class="px-1">
         <v-col>
@@ -46,7 +35,7 @@
                 :rules="toRules" />
             </v-form>
 
-            <v-row justify="center">
+            <v-row justify="center" class="mt-2">
               <v-btn style="width: 90%;" :color="$route.meta.accent" @click="selectWallet({address: externAddress})"
                 :disabled="!valid">
                 Use address

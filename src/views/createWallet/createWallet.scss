@@ -1,4 +1,7 @@
 .create-wallet{
+    .v-btn-toggle{
+        background-color: transparent;
+    }
     .v-btn--active {
         background-color: var(--accent-color) !important;
         color: white !important;

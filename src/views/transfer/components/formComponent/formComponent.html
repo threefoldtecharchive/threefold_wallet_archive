@@ -16,6 +16,9 @@
       class="inputNumber mb-0" clearable :suffix="selectedWallet.currency">
     </v-text-field>
 
+    <v-text-field label="Message" v-model="formObject.message" :rules="messageRules"
+    :counter="maxMessageLength" clearable :maxlength="maxMessageLength"> </v-text-field>
+
     <ToDialog ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog" :selectedWallet="selectedWallet"
       :wallets="wallets.filter(x => x.address != selectedWallet.address)" :toRules="toRules"></ToDialog>
   </v-form>

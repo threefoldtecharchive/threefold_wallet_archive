@@ -4,7 +4,7 @@ import 'vuetify/src/styles/main.sass'
 Vue.use(Vuetify)
 
 export default new Vuetify({
-  iconfont: 'md',
+  iconfont: 'fa',
   theme: {
     themes: {
       light: {

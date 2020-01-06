@@ -97,7 +97,7 @@ export default new Router({
     meta: {
       accent: 'accent',
       overview: 'home',
-      history: 'history',
+      history: 'details',
       info: {
         title: 'one hell of a title',
         text: 'this is info'
@@ -115,6 +115,7 @@ export default new Router({
     path: '/init',
     name: 'init',
     meta: {
+      title: 'Initialize',
       accent: 'accent'
     },
     component: () => import(/* webpackChunkName: "init-page" */ './views/init')

@@ -2,7 +2,7 @@
   <v-dialog v-model="qrReadingError" fullscreen persistent scrollable>
     <v-card>
       <v-toolbar dark color="primary">
-        <v-toolbar-title class="text-capitalize">Wrong QR</v-toolbar-title>
+        <v-toolbar-title class="text-capitalize"><h2 class="title">Wrong QR</h2></v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon text @click="qrReadingError = false">
           <v-icon :color="$route.meta.accent">
@@ -35,27 +35,25 @@
 
     <v-row dense>
       <v-col dense>
-        <v-select class="mt-1 pt-0" @change="selectWallet" :items="computedWallets" v-model="selectedWallet"
-          return-object>
+        <v-select class="mt-1 pt-0" :label="selectedTab == 1 ? 'From' : 'To'" @change="selectWallet" :items="computedWallets" v-model="selectedWallet"
+          return-object append-icon="fas fa-caret-down">
           <template v-slot:selection="data">
+            <div style="width: 100%; display: flex;">
+            <span class="text-capitalize">{{ data.item.name }}</span>
+            <v-spacer></v-spacer>
+            {{ data.item.totalAmount }} {{data.item.currency}}
+          </div>
+          </template>
+          <template v-slot:item="data">
             <v-row class="text-capitalize">
               <v-col cols="7">
               {{ data.item.name }}
             </v-col>
               <v-spacer></v-spacer>
-              <v-col cols="5" justify-end class="text-xs-right">
+              <v-col cols="5" align="end">
                 {{ data.item.totalAmount }} {{data.item.currency}}
               </v-col>
             </v-row>
-          </template>
-          <template v-slot:item="data">
-            <v-flex class="text-capitalize">
-              {{ data.item.name }}
-            </v-flex>
-            <v-spacer></v-spacer>
-            <v-flex justify-end class="text-xs-right">
-              {{ data.item.totalAmount }} {{data.item.currency}}
-            </v-flex>
           </template>
         </v-select>
       </v-col>
