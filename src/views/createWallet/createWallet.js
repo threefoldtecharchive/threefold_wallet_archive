@@ -50,7 +50,11 @@ export default {
       console.log("before flutter call", postMsg)
       window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
         console.log(`flutter result`, result)
-        this.$router.push({ name: 'home' })
+        if (result) {
+          this.$router.push({ name: 'home' })
+        } else {
+          this.walletNameErrors.push('The wallet name was not valid')
+        }
       })
 
       this.$emit('ctaClicked')
