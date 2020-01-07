@@ -54,13 +54,13 @@ export default {
         postMsg = JSON.stringify(postMsg)
 
         // Print.postMessage(JSON.stringify(postMsg))
-        
+        var self = this
         window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
           console.log(`flutter result`, result)
           if (result) {
-            this.$router.push({ name: 'home' })
+            self.$router.push({ name: 'home' })
           } else {
-            this.walletNameErrors.push('The wallet name was not valid')
+            self.walletNameErrors.push('The wallet name was not valid')
           }
         })
         // let result = true
@@ -118,9 +118,10 @@ export default {
         postMsg = JSON.stringify(postMsg) 
         // Print.postMessage(JSON.stringify(postMsg))
         console.log("before flutter call", postMsg)
+        var self = this
         window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
           console.log(`flutter result`,result)
-          this.$router.push({ name: 'home' })
+          self.$router.push({ name: 'home' })
         })
       }
 
