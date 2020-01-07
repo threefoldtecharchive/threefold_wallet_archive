@@ -1,22 +1,31 @@
 <section class="history fill-height">
-  <v-layout column fill-height>
 
-    <walletCard class="mt-0 pa-0" :type="selectedWallet.currency" clickable :wallet="selectedWallet"
-      :displayAttributes="false" />
-<!-- 
-    <v-row class="div-toggle-buttons" justify="center">
-      <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
-        <v-btn text v-for="tab in tabs" :key="tab" class="px-3 my-1 mx-1 round" exact :to="{query:{tab: tab}}">{{tab}}
-        </v-btn>
+  <walletCard class="mt-0 pa-0" :type="selectedWallet.currency" clickable :wallet="selectedWallet"
+    :displayAttributes="false" />
+  <v-col>
+
+    <v-row class="div-toggle-buttons" v-if="hasLocked" justify="center">
+      <v-btn-toggle dense mandatory class="round">
+        <v-btn text v-for="tab in tabs" :key="tab" class="px-3 my-1 mx-1 round" @click="currentTab=tab">{{tab}}</v-btn>
       </v-btn-toggle>
-    </v-row> -->
+    </v-row>
 
-    <v-flex class="pa-0 mt-1" style="overflow: visible">
-      <div v-for="(gt, date) in groupedTransactions" :key="date">
+    <v-row v-if="currentTab == 'transactions'" class="pa-0 mt-1">
+      <div v-for="(gt, date) in groupedTransactions" :key="date" style="width: 100%;">
         <p color="primary" class="mb-1 ml-4">{{getDayName(date)}} {{getDay(date)}} {{getMonth(date)}}</p>
 
         <historyCard v-for="(transaction, index) in gt" :key="index" :transaction="transaction" />
       </div>
-    </v-flex>
-  </v-layout>
+    </v-row>
+
+    <div v-else class="mt-2">
+      <div v-for="transaction in lockedTransactions">
+        <v-row class="pa-0 mb-0" v-for="(input, index) in transaction.inputs" v-if="input.lock">
+          <div style="width: 100%;">
+            <historyCardLocked :key="index" v-if :transaction="input" :locked="true" :outgoing="false" />
+          </div>
+        </v-row>
+      </div>
+    </div>
+  </v-col>
 </section>

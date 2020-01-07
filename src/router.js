@@ -12,7 +12,7 @@ export default new Router({
     name: 'home',
     component: home,
     meta: {
-      title: 'Wallets',
+      title: 'Wallet',
       transfer: 'transfer',
       accent: 'accent',
       info: {

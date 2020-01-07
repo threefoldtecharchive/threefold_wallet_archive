@@ -1,12 +1,13 @@
 import walletSelector from '../../components/walletSelector'
 import historyCard from '../../components/historyCard'
 import walletCard from '../../components/walletCard'
+import historyCardLocked from '../../components/historyCardLocked'
 import { mapGetters } from 'vuex'
 import { groupBy } from 'lodash'
 import moment from 'moment'
 export default {
   name: 'history',
-  components: { walletSelector, walletCard, historyCard },
+  components: { walletSelector, walletCard, historyCard, historyCardLocked },
   props: [],
   data () {
     return {
@@ -16,7 +17,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'wallets'
+      'wallets',
+      'hasLocked'
     ]),
     computedWallets () {
       if (this.$route.name == 'investments history') return this.wallets.filter(x => x.currency == 'gram')
@@ -24,7 +26,7 @@ export default {
     },
     groupedTransactions () {
       var transactions = this.wallets.find(x => x.name === this.$route.params.wallet).transaction
-      var groupedTransactions = groupBy(transactions, x => {                                     
+      var groupedTransactions = groupBy(transactions, x => {
         var date = null
         if (x.timestamp == null || x.timestamp == '-1') {
           date = new Date()
@@ -38,35 +40,23 @@ export default {
     },
     lockedTransactions () {
       var transactions = this.wallets.find(x => x.name === this.$route.params.wallet).transaction
-      console.log(transactions)
+      // transactions = transactions.filter(x => {
+      //   if (x.inputs && x.inputs.length > 0) {
+      //     // if (x.inputs[0] && x.inputs[0].lock > 0) {
+      //     // console.log(x.inputs)
+      //     return true
+      //   } else {
+      //     return false
+      //   }
+      // })
+      transactions = transactions.filter(x => x.inputs && x.inputs.length > 0)
+      window.locked = transactions
+      console.log(`transactions locked`, transactions)
+      return transactions
     },
     selectedWallet () {
       const selectedWallet = this.wallets.find(x => x.name === this.$route.params.wallet)
       return selectedWallet
-    },
-    renderLockedValue (lockValue, isTimestamp, chainTimestamp) {
-      if (lockValue) {
-        if (isTimestamp) {
-          const lockDate = new Date(lockValue * 1000)
-          const momentLockDate = moment(lockValue)
-          const momentChainDate = moment(chainTimestamp)
-          const formattedDate = moment(lockDate).format('MMMM Do YYYY, HH:mm z')
-          return (
-            <span style={{ marginLeft: 30 }}>
-              {momentLockDate > momentChainDate
-                ? (<span>Locked until {formattedDate}</span>)
-                : (<span>Unlocked since {formattedDate}</span>)
-              }
-            </span>
-          )
-        } else {
-          return (
-            <span style={{ marginLeft: 30 }}>
-              Locked until block {lockValue}
-            </span>
-          )
-        }
-      }
     }
   },
   mounted () {

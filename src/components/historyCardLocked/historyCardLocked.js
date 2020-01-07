@@ -1,5 +1,6 @@
 import amountIndicator from '../amountIndicator'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 
 export default {
   name: 'history-card',
@@ -7,11 +8,14 @@ export default {
   props: {
     'transaction': {
       type: Object
+    },
+    'outgoing': {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      outgoing: false,
       show: false,
       smallAmount: true
     }
@@ -21,14 +25,7 @@ export default {
       wallets: 'wallets'
     }),
     valuta () {
-      let currency
-      if (this.transaction.inputs && this.transaction.inputs.length) {
-        currency = this.transaction.inputs[0].amount.unit
-      } else {
-        currency = this.transaction.outputs[0].amount.unit
-      }
-      
-      return currency
+      return this.transaction.amount.unit
     },
     amountModal () {
       return this.amountHandler(true)
@@ -46,12 +43,13 @@ export default {
       return receiverName
     },
     sender () {
-      if (this.transaction.sender) {
-        let sender = JSON.parse(this.transaction.sender)
-        return `${sender.walletname}@${sender.account.split(':')[1]}`
-      } else if (!this.transaction.confirmed) return 'Pending transaction...'
-      var senderAddress = this.getWalletAddresSender()
-      return senderAddress
+      return this.transaction.senders[0]
+      // if (this.transaction.sender) {
+      //   let sender = JSON.parse(this.transaction.sender)
+      //   return `${sender.walletname}@${sender.account.split(':')[1]}`
+      // } else if (!this.transaction.confirmed) return 'Pending transaction...'
+      // var senderAddress = this.getWalletAddresSender()
+      // return senderAddress
     },
     timeStamp () {
       var date
@@ -71,6 +69,25 @@ export default {
         total += parseFloat(amount)
       })
       return total.toLocaleString('nl-BE', { minimumFractionDigits: 2, useGrouping: false })
+    },
+    lockedValue () {
+      let lockValue = this.transaction.lock
+      let isTimestamp = this.transaction.lock_is_timestamp
+      let chainTimestamp= this.transaction.chainTimestamp
+      if (lockValue) {        
+        if (isTimestamp) {
+          const lockDate = new Date(lockValue * 1000)
+          const momentLockDate = moment(lockValue)
+          const momentChainDate = moment(chainTimestamp)
+          const formattedDate = moment(lockDate).format('MMMM Do YYYY, HH:mm z')
+          if (momentLockDate > momentChainDate) {
+            return 'Unlocked since '.concat(formattedDate)
+          }
+          return 'Locked until '.concat(formattedDate)
+        } else {
+          return 'Locked until block '.concat(lockValue)
+        }
+      }
     }
   },
   mounted () {
@@ -78,26 +95,28 @@ export default {
   },
   methods: {
     getWalletAddresRecipient () {
-      var address = null
-      if (this.transaction.inputs && this.transaction.inputs.length) {
-        var input = this.transaction.inputs.find(x => !x.fee)
-        if (input) address = input.recipient
-      } else {
-        var output = this.transaction.outputs.find(x => !x.fee)
-        if (output) address = output.recipient
-      }
-      return address
+      // var address = null
+      // if (this.transaction.inputs && this.transaction.inputs.length) {
+      //   var input = this.transaction.inputs.find(x => !x.fee)
+      //   if (input) address = input.recipient
+      // } else {
+      //   var output = this.transaction.outputs.find(x => !x.fee)
+      //   if (output) address = output.recipient
+      // }
+      // return address
+      return this.transaction.recipient
     },
     getWalletAddresSender () {
-      var address = null
-      if (this.transaction.outputs && this.transaction.outputs.length) {
-        var output = this.transaction.outputs.find(x => !x.fee)
-        if (output) address = output.senders[0]
-      } else {
-        var input = this.transaction.inputs.find(x => !x.fee)
-        if (input) address = input.senders[0]
-      }
-      return address
+      // var address = null
+      // if (this.transaction.outputs && this.transaction.outputs.length) {
+      //   var output = this.transaction.outputs.find(x => !x.fee)
+      //   if (output) address = output.senders[0]
+      // } else {
+      //   var input = this.transaction.inputs.find(x => !x.fee)
+      //   if (input) address = input.senders[0]
+      // }
+      // return address
+      return this.transaction.senders[0]
     },
     sumTransactionAmount (arr, modal) {
       var total = 0.00

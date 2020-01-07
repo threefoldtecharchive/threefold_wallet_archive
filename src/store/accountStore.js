@@ -177,7 +177,7 @@ export default {
     wallets: state => {
       var wallets = [];
       if (state.accounts) {
-        window.accounts = state.accounts
+        // window.accounts = state.accounts
         state.accounts.forEach(account => {
           var t = account.wallets.map(wallet => {
             var balance = wallet.balance;
@@ -185,9 +185,9 @@ export default {
             var locked = wallet.balance.coins_locked.greater_than(0)
               ? wallet.balance.coins_locked.str({ precision: 3 })
               : null;
-            if (!window.completeWallet) {
-              window.completeWallet = wallet;
-            }
+            // if (!window.completeWallet) {
+            //   window.completeWallet = wallet;
+            // }
             // console.log(`complete wallet`,wallet)
             // balance.transactions.forEach(transaction => {
             //   console.log(transaction)
