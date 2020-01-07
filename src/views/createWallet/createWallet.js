@@ -24,7 +24,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'doubleName'
+      'doubleName',
+      "wallets"
     ])
   },
   mounted () {
@@ -36,32 +37,44 @@ export default {
       'createWallet'
     ]),
     addCreateWallet () {
-      // ID: 0 HARDCODED FOR NOW!
-      this.createWallet({ chain: 'tft', walletName: this.walletName, id: '0' })
-
-      var postMsg = {
-        walletName: this.walletName,
-        doubleName: this.doubleName
-      }
-
-      postMsg = JSON.stringify(postMsg)
-
-      // Print.postMessage(JSON.stringify(postMsg))
-      console.log("before flutter call", postMsg)
-      window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-        console.log(`flutter result`, result)
-        if (result) {
-          this.$router.push({ name: 'home' })
-        } else {
-          this.walletNameErrors.push('The wallet name was not valid')
-        }
-      })
-
-      this.$emit('ctaClicked')
-      this.walletName = null
-      this.words = null
       this.walletNameErrors = []
       this.wordsErrors = []
+
+      let walletNameFound = this.wallets.find(x => x.name == this.walletName.toLowerCase() )
+      console.log(walletNameFound)
+      if (!walletNameFound) {
+        // ID: 0 HARDCODED FOR NOW!
+        this.createWallet({ chain: 'tft', walletName: this.walletName, id: '0' })
+
+        var postMsg = {
+          walletName: this.walletName,
+          doubleName: this.doubleName
+        }
+
+        postMsg = JSON.stringify(postMsg)
+
+        // Print.postMessage(JSON.stringify(postMsg))
+        
+        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
+          console.log(`flutter result`, result)
+          if (result) {
+            this.$router.push({ name: 'home' })
+          } else {
+            this.walletNameErrors.push('The wallet name was not valid')
+          }
+        })
+        // let result = true
+        // if (result) {
+        //   this.$router.push({ name: 'home' })
+        // } else {
+        //   this.walletNameErrors.push('The wallet name was not valid')
+        // }
+        this.$emit('ctaClicked')
+        this.walletName = null
+        this.words = null
+      } else {
+        this.walletNameErrors.push('There is already a wallet with this name')
+      }
     },
     addImportWallet () {
       if (!this.walletName) {
