@@ -1,4 +1,4 @@
-import { mapActions, mapGetters } from "vuex"
+import { mapActions, mapGetters } from 'vuex'
 import { decodeBase64 } from 'tweetnacl-util'
 
 export default {
@@ -22,7 +22,9 @@ export default {
     ...mapActions([
       'login'
     ]),
-    startWallet (doubleName, seed) {
+    startWallet (doubleName, seed, importedWallets, appWallets) {
+      window.localStorage.setItem('appWallets', appWallets)
+      window.localStorage.setItem('importedWallets', importedWallets)
       seed = new Uint8Array(
         decodeBase64(seed)
       )
