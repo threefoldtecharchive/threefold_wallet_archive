@@ -64,17 +64,12 @@ export default {
             console.log(`wallets`, wallets.length)
             for (let index = wallets.length - 1; index > 1; index--) {
               var wallet = wallets[index]
-              console.log(`wallet name`, wallet.name)
-              console.log(`wallet transaction`, wallet.transaction)
-              console.log(`wallets length`, wallets.length)
-              console.log(`wallet transaction`, !wallet.transaction.length)
               if (!wallet.transaction || !wallet.transaction.length) {
-                console.log(`get accounts`)
-                console.log(context.getters.accounts[0])
-                // context.getters.accounts.forEach(account => {
-                //   console.log(`account`, account)
-                //   account.wallet_delete(index, wallet.name)
-                // })
+                context.getters.accounts.forEach(account => {
+                  if (account.type && account.type !== 'imported') {
+                  account.wallet_delete(index, wallet.name)
+                  }
+                })
               } else {
                 console.log('hier komt ie nie')
                 for (
