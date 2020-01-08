@@ -71,13 +71,12 @@ export default {
                   }
                 })
               } else {
-                console.log('hier komt ie nie')
                 for (
                   let existingWalletIndex = 0;
                   existingWalletIndex < index;
                   existingWalletIndex++
                 ) {
-                  const newWallet = index[existingWalletIndex]
+                  const newWallet = wallets[existingWalletIndex]
                   var postMsg = {
                     type: 'ADD_APP_WALLET',
                     walletName: newWallet.name,
