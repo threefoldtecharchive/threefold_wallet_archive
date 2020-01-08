@@ -84,7 +84,6 @@ export default {
           botService
             .getUserData(username)
             .then(async response => {
-              console.log('testetstests');
               console.log(response);
               console.log(signedHash, response.data.publicKey);
               console.log(

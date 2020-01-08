@@ -119,7 +119,7 @@ export default {
         // Print.postMessage(JSON.stringify(postMsg))
         console.log("before flutter call", postMsg)
         var self = this
-        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
+        window.flutter_inappwebview.callHandler('ADD_IMPORT_WALLET', postMsg).then(function (result) {
           console.log(`flutter result`,result)
           self.$router.push({ name: 'home' })
         })
