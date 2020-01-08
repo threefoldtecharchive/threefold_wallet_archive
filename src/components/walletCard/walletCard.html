@@ -2,7 +2,7 @@
   <v-card :class="` min ${(selected && authenticated) ? 'border' : ''}`">
     <div ref="card" class="content" :style="clickable ? 'cursor:pointer' : ''" @click="clicked">
       <v-layout class="pa-1 content-inner">
-        <v-flex :class="displayAttributes ? 'xs4' : 'xs6'">
+        <v-flex :class="displayAttributes ? 'xs6' : 'xs6'">
           <v-layout column class="pt-2 pl-2">
             <p>
               <span class="title text-capitalize">{{wallet? wallet.name : 'Wallet name'}}</span>
@@ -14,7 +14,7 @@
 
           </v-layout>
         </v-flex>
-        <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs8' : ''">
+        <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs6' : ''">
           <v-layout column class="justify-space-between  align-end">
             <v-flex v-if="displayAttributes">
               <v-btn dark small icon text @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0"

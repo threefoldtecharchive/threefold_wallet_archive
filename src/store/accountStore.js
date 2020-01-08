@@ -21,7 +21,7 @@ export default {
         }
       )
 
-      tfAccount.type = 'app'
+      tfAccount.type = 'app'      
       context.commit('setAccounts', [tfAccount])
       context.dispatch('updateAccounts')
       context.dispatch('createWallet', {
@@ -43,6 +43,7 @@ export default {
           x => x.doubleName === userData.doubleName
         )) {
           appWallet.id = 0
+          appWallet.type = 'imported'
           context.dispatch('createWallet', appWallet)
         }
       } else if (appWallets == null) {

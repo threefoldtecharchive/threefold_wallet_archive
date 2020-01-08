@@ -50,7 +50,6 @@ export default {
       //   }
       // })
       transactions = transactions.filter(x => x.inputs && x.inputs.length > 0)
-      window.locked = transactions
       console.log(`transactions locked`, transactions)
       return transactions
     },
