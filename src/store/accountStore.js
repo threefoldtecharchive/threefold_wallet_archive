@@ -21,7 +21,7 @@ export default {
         }
       )
 
-      tfAccount.type = 'app'      
+      tfAccount.type = 'app'
       context.commit('setAccounts', [tfAccount])
       context.dispatch('updateAccounts')
       context.dispatch('createWallet', {
@@ -36,16 +36,14 @@ export default {
       })
 
       // Get wallet list with names and create them all.
+      console.log('Hello ivan starting importing wallets')
 
-      let appWallets = JSON.parse(localStorage.getItem('appWallets'))
+      const appWallets = JSON.parse(localStorage.getItem('appWallets'))
       if (appWallets != null && appWallets) {
-        for (let appWallet of appWallets.filter(
+        for (const appWallet of appWallets.filter(
           x => x.doubleName === userData.doubleName
         )) {
           appWallet.id = 0
-          if(appWallet.seed){
-            appWallet.type = 'imported'
-          }
           context.dispatch('createWallet', appWallet)
         }
       } else if (appWallets == null) {
@@ -62,20 +60,26 @@ export default {
         }
         context.dispatch('updateAccounts', () => {
           setTimeout(() => {
-            for (
-              let index = context.getters.wallets.length - 1;
-              index > 1;
-              index--
-            ) {
-              const wallet = context.getters.wallets[index]
+            var wallets = context.getters.wallets.filter(x => !(x && x.holder && x.holder.type && x.holder.type === 'imported'))
+            console.log(`wallets`, wallets.length)
+            for (let index = wallets.length - 1; index > 1; index--) {
+              var wallet = wallets[index]
+              console.log(`wallet name`, wallet.name)
+              console.log(`wallet transaction`, wallet.transaction)
+              console.log(`wallets length`, wallets.length)
+              console.log(`wallet transaction`, !wallet.transaction.length)
               if (!wallet.transaction || !wallet.transaction.length) {
-                context.getters.accounts.forEach(account => {
-                  account.wallet_delete(index, wallet.name)
-                })
+                console.log(`get accounts`)
+                console.log(context.getters.accounts[0])
+                // context.getters.accounts.forEach(account => {
+                //   console.log(`account`, account)
+                //   account.wallet_delete(index, wallet.name)
+                // })
               } else {
+                console.log('hier komt ie nie')
                 for (
                   let existingWalletIndex = 0;
-                  existingWalletIndex < index.length;
+                  existingWalletIndex < index;
                   existingWalletIndex++
                 ) {
                   const newWallet = index[existingWalletIndex]
@@ -92,6 +96,7 @@ export default {
               }
             }
 
+
             var pstMsg = {
               type: 'ADD_APP_WALLET'
             }
@@ -100,6 +105,20 @@ export default {
             context.commit('setImportingWallets', false)
           }, 3000)
         })
+      }
+
+      const importedWallets = JSON.parse(
+        localStorage.getItem('importedWallets')
+      )
+      console.log('importedWallets from localstorage', importedWallets)
+      if (importedWallets != null && importedWallets) {
+        for (const user of importedWallets.filter(
+          x => x.doubleName === userData.doubleName
+        )) {
+          console.log('loop importedwallets', user)
+          user.seed = new Uint8Array(user.seed)
+          context.dispatch('importWallet', user)
+        }
       }
     },
     updateAccounts (context, callBack) {
@@ -129,6 +148,7 @@ export default {
       }
     },
     importWallet: (context, data) => {
+      console.log('Import Wallet', data)
       var tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
         data.doubleName,

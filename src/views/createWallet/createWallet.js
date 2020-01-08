@@ -8,7 +8,7 @@ export default {
   name: 'create-wallet',
   components: {},
   props: {
-    'show': {
+    show: {
       type: Boolean
     }
   },
@@ -25,7 +25,7 @@ export default {
   computed: {
     ...mapGetters([
       'doubleName',
-      "wallets"
+      'wallets'
     ])
   },
   mounted () {
@@ -40,7 +40,7 @@ export default {
       this.walletNameErrors = []
       this.wordsErrors = []
 
-      let walletNameFound = this.wallets.find(x => x.name == this.walletName.toLowerCase() )
+      const walletNameFound = this.wallets.find(x => x.name == this.walletName.toLowerCase())
       console.log(walletNameFound)
       if (!walletNameFound) {
         // ID: 0 HARDCODED FOR NOW!
@@ -56,7 +56,7 @@ export default {
         // Print.postMessage(JSON.stringify(postMsg))
         var self = this
         window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-          console.log(`flutter result`, result)
+          console.log('flutter result', result)
           if (result) {
             self.$router.push({ name: 'home' })
           } else {
@@ -88,7 +88,7 @@ export default {
       }
 
       this.words = this.words.replace(/[^a-zA-Z ]/g, '').toLowerCase().trim().replace(/\s\s+/g, ' ')
-      let wordCount = this.words.split(' ').length
+      const wordCount = this.words.split(' ').length
 
       if (wordCount !== 24) {
         this.wordsErrors.push("Please make sure you've entered 24 words. [" + wordCount + '/24]')
@@ -96,7 +96,7 @@ export default {
       }
 
       if (this.walletName && wordCount === 24) {
-        let generatedSeed = cryptoService.generateSeedFromMnemonic(this.words)
+        const generatedSeed = cryptoService.generateSeedFromMnemonic(this.words)
 
         // let seed = new Uint8Array([172, 71, 122, 113, 182, 210, 235, 96, 117, 42, 129, 137, 68, 81, 61, 29, 61, 218, 212, 220, 221, 146, 109, 160, 95, 255, 86, 234, 249, 72, 157, 183]);
         // let MnemonicSeed = await cryptoService.generateMnemonicFromSeed(seed);
@@ -104,9 +104,9 @@ export default {
         // const convertHexstringToEntropy = hexString => new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
         const convertHexstringToEntropy = hexString => new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)))
 
-        let mySeed = convertHexstringToEntropy(generatedSeed)
+        const mySeed = convertHexstringToEntropy(generatedSeed)
 
-        let obj = { doubleName: this.doubleName, walletName: this.walletName, seed: mySeed }
+        const obj = { doubleName: this.doubleName, walletName: this.walletName, seed: mySeed }
         this.importWallet(obj)
 
         var postMsg = {
@@ -115,12 +115,12 @@ export default {
           seed: Array.from(mySeed)
         }
 
-        postMsg = JSON.stringify(postMsg) 
+        postMsg = JSON.stringify(postMsg)
         // Print.postMessage(JSON.stringify(postMsg))
-        console.log("before flutter call", postMsg)
+        console.log('before flutter call', postMsg)
         var self = this
-        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-          console.log(`flutter result`,result)
+        window.flutter_inappwebview.callHandler('ADD_IMPORT_WALLET', postMsg).then(function (result) {
+          console.log('flutter result', result)
           self.$router.push({ name: 'home' })
         })
       }

@@ -105,7 +105,7 @@ export default {
               }
               // http://localhost:8080/login#username=ivan&derivedSeed=abc123
               var data = responseUrl.searchParams.get('data');
-
+              console.log(`Data ivan`,data)
               if (data) {
                 data = JSON.parse(data);
                 var keys = context.getters.keys;
@@ -118,6 +118,7 @@ export default {
                     response.data.publicKey
                   )
                   .then(decrypted => {
+                    console.log(`decrypted`, decrypted)
                     if (decrypted) {
                       decrypted = JSON.parse(decrypted);
                       for (var k in decrypted) {
@@ -140,11 +141,12 @@ export default {
                     let importedWallets = JSON.parse(
                       localStorage.getItem('importedWallets')
                     );
+                    console.log(`importedwallets `, importedWallets)
 
                     if (
                       importedWallets != null &&
                       importedWallets.filter(
-                        x => x.doubleName === directLoginData.doubleName
+                        x => x.doubleName === userObject.doubleName
                       )
                     ) {
                       for (let user of importedWallets) {
@@ -160,6 +162,7 @@ export default {
                     )
                   );
               } else {
+                console.log(`Else After data`,data)
                 context.commit('setFatalError', 'Got no data from 3bot');
               }
             })
