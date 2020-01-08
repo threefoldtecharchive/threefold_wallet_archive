@@ -43,7 +43,9 @@ export default {
           x => x.doubleName === userData.doubleName
         )) {
           appWallet.id = 0
-          appWallet.type = 'imported'
+          if(appWallet.seed){
+            appWallet.type = 'imported'
+          }
           context.dispatch('createWallet', appWallet)
         }
       } else if (appWallets == null) {
