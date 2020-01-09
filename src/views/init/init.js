@@ -20,18 +20,21 @@ export default {
   },
   methods: {
     ...mapActions([
-      'login'
+      'login',
+      'loadWallets'
     ]),
     startWallet (doubleName, seed, importedWallets, appWallets) {
-      window.localStorage.setItem('appWallets', appWallets)
-      window.localStorage.setItem('importedWallets', importedWallets)
+      appWallets = JSON.parse(appWallets)
+      importedWallets = JSON.parse(importedWallets)
       seed = new Uint8Array(
         decodeBase64(seed)
       )
+      
       this.login({
         doubleName,
         seed
       })
+      this.loadWallets(appWallets, importedWallets)
     }
   },
   watch: {

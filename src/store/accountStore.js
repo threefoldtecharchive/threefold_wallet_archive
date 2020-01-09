@@ -24,6 +24,27 @@ export default {
       tfAccount.type = 'app'
       context.commit('setAccounts', [tfAccount])
       context.dispatch('updateAccounts')
+
+
+    },
+    loadWallets (appWallets, importedWallets ) {
+      if(!appWallets){
+        appWallets = generateAppWallets()
+      }
+
+      //commit wallets
+
+
+    },
+    generateAppWallets(){
+
+    }
+
+
+
+
+
+
       context.dispatch('createWallet', {
         chain: 'tft',
         walletName: 'daily',
@@ -113,6 +134,10 @@ export default {
         }
       }
     },
+
+
+
+
     updateAccounts (context, callBack) {
       context.getters.accounts.forEach(function (account) {
         if (callBack) {

@@ -19,13 +19,14 @@
     </v-row>
 
     <div v-else class="mt-2">
-      <div v-for="transaction in lockedTransactions">
+      The locked tokens will be displayed here
+      <!-- <div v-for="transaction in lockedTransactions">
         <v-row class="pa-0 mb-0" v-for="(input, index) in transaction.inputs" v-if="input.lock">
           <div style="width: 100%;">
             <historyCardLocked :key="index" v-if :transaction="input" :locked="true" :outgoing="false" />
           </div>
         </v-row>
-      </div>
+      </div> -->
     </div>
   </v-col>
 </section>
