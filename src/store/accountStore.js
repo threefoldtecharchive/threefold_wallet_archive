@@ -36,8 +36,6 @@ export default {
       })
 
       // Get wallet list with names and create them all.
-      console.log('Hello ivan starting importing wallets')
-
       const appWallets = JSON.parse(localStorage.getItem('appWallets'))
       if (appWallets != null && appWallets) {
         for (const appWallet of appWallets.filter(
