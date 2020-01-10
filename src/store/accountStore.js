@@ -152,17 +152,29 @@ export default {
 
       tfAccount2.type = 'imported'
 
+      // console.log(tfAccount2)
+      window.tfAccount2 = tfAccount2
+
       var accounts = context.getters.accounts
 
       accounts.push(tfAccount2)
       context.commit('setAccounts', accounts)
 
       context.dispatch('updateAccounts')
-      context.dispatch('createWallet', {
-        chain: 'tft',
-        walletName: data.walletName,
-        id: accounts.length - 1
-      })
+
+      var account = context.getters.accounts[accounts.length - 1]
+      if (account) {
+        account.wallet_new(data.walletName, 0, 1)
+      }
+
+      // context.dispatch('createWallet', {
+      //   chain: 'tft',
+      //   walletName: data.walletName,
+      //   id: accounts.length - 1
+      // })
+
+      console.log(accounts[1].wallet_count)
+      
     }
   },
   mutations: {
