@@ -102,12 +102,12 @@ export default {
       const importedWallets = JSON.parse(
         localStorage.getItem('importedWallets')
       )
-      // console.log('importedWallets from localstorage', importedWallets)
+      console.log('importedWallets from localstorage', importedWallets)
       if (importedWallets != null && importedWallets) {
         for (const user of importedWallets.filter(
           x => x.doubleName === userData.doubleName
         )) {
-          // console.log('loop importedwallets', user)
+          console.log('loop importedwallets', user)
           user.seed = new Uint8Array(user.seed)
           context.dispatch('importWallet', user)
         }
@@ -140,7 +140,7 @@ export default {
       }
     },
     importWallet: (context, data) => {
-      // console.log('Import Wallet', data)
+      console.log('Import Wallet', data)
       var tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
         data.doubleName,
@@ -173,7 +173,7 @@ export default {
       //   id: accounts.length - 1
       // })
 
-      // console.log(accounts[1].wallet_count)
+      console.log(accounts[1].wallet_count)
       
     }
   },

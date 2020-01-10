@@ -68,7 +68,7 @@ export default {
       return 0.1
     },
     walletDisplay (wallet) {
-      // console.log(`thx ifvan `, wallet)
+      console.log(`thx ifvan `, wallet)
     }
   },
   methods: {
@@ -152,9 +152,8 @@ export default {
     },
     selectWallet (wallet) {
       this.selectedWallet = wallet
-      // this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
-      // this.$refs.formComponent.$refs.form.reset()
-      this.$refs.formComponent.$refs.form.validate()
+      this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
+      this.$refs.formComponent.$refs.form.reset()
     },
     checkForm () {
       return this.$refs.formComponent.$refs.form.validate()

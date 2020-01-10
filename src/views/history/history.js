@@ -50,7 +50,7 @@ export default {
       //   }
       // })
       transactions = transactions.filter(x => x.inputs && x.inputs.length > 0)
-      // console.log(`transactions locked`, transactions)
+      console.log(`transactions locked`, transactions)
       return transactions
     },
     selectedWallet () {
@@ -60,7 +60,7 @@ export default {
   },
   mounted () {
     // this.$refs.selector.$children.find(x => x.selected).$el.scrollIntoView({behavior: "auto", block: "center", inline: "center"})
-    // console.log(this.wallets)
+    console.log(this.wallets)
   },
   methods: {
     selectWallet (wallet) {
