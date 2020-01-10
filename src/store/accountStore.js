@@ -28,23 +28,20 @@ export default {
 
     },
     loadWallets (appWallets, importedWallets ) {
-      if(!appWallets){
+      if(appWallets){
+        this.loadWallets(appWallets)
+      }
+      else{
         appWallets = generateAppWallets()
       }
-
+      if(importedWallets){
+        loadImportedWallets
+      }
       //commit wallets
 
 
     },
     generateAppWallets(){
-
-    }
-
-
-
-
-
-
       context.dispatch('createWallet', {
         chain: 'tft',
         walletName: 'daily',
@@ -55,6 +52,27 @@ export default {
         walletName: 'savings',
         id: '0'
       })
+    },
+    loadAppWallets(appWallets){
+      for (const appWallet of appWallets.filter(
+        x => x.doubleName === userData.doubleName
+      )) {
+        appWallet.id = 0
+        context.dispatch('createWallet', appWallet)
+      }
+    },
+    loadImportedWallets(importedwallets){
+      console.log('importedWallets from localstorage', importedWallets)
+      if (importedWallets != null && importedWallets) {
+        for (const user of importedWallets.filter(
+          x => x.doubleName === userData.doubleName
+        )) {
+          console.log('loop importedwallets', user)
+          user.seed = new Uint8Array(user.seed)
+          context.dispatch('importWallet', user)
+        }
+      }
+    }
 
       // Get wallet list with names and create them all.
       const appWallets = JSON.parse(localStorage.getItem('appWallets'))
@@ -120,19 +138,7 @@ export default {
         })
       }
 
-      const importedWallets = JSON.parse(
-        localStorage.getItem('importedWallets')
-      )
-      console.log('importedWallets from localstorage', importedWallets)
-      if (importedWallets != null && importedWallets) {
-        for (const user of importedWallets.filter(
-          x => x.doubleName === userData.doubleName
-        )) {
-          console.log('loop importedwallets', user)
-          user.seed = new Uint8Array(user.seed)
-          context.dispatch('importWallet', user)
-        }
-      }
+
     },
 
 
