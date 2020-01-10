@@ -76,7 +76,6 @@ export default {
       'sendCoins'
     ]),
     scanQR () {
-
       window.vueInstance = this //Don't remove this for flutter app
       const self = this
       window.flutter_inappwebview.callHandler('SCAN_QR').then(function (result) {
@@ -85,13 +84,25 @@ export default {
       // Print.postMessage(JSON.stringify(postMsg))
     },
     onDecode (code) {
-      console.log(code)
-      code = code.replace('tft:', 'tft://')
+      var url = new URL(code);
 
-      this.formObject.to.address = this.getQueryVar(code, 'HOST')
-      this.formObject.amount = this.getQueryVar(code, 'amount')
-      this.formObject.message = this.getQueryVar(code, 'message')
-      this.formObject.sender = this.getQueryVar(code, 'sender')
+      console.log(url)
+      var tftAddress = url.hostname
+      if (tftAddress == '') {
+        tftAddress = url.pathname.replace('//', '')
+      }
+      this.formObject.to.address = tftAddress
+      this.formObject.amount = url.searchParams.get('amount')
+      this.formObject.message = url.searchParams.get('message')
+      this.formObject.sender = url.searchParams.get('sender')
+
+      // console.log(code)
+      // code = code.replace('tft:', 'tft://')
+
+      // this.formObject.to.address = this.getQueryVar(code, 'HOST')
+      // this.formObject.amount = this.getQueryVar(code, 'amount')
+      // this.formObject.message = this.getQueryVar(code, 'message')
+      // this.formObject.sender = this.getQueryVar(code, 'sender')
     },
     getQueryVar (url, varName) {
       var val
