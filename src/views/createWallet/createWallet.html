@@ -16,6 +16,10 @@
     </v-container>
 
     <v-container v-if="currentTab == 'import'">
+      <v-row class="caption" justify="center">
+        <span>You can use this to import a wallet from the Threefold app</span>
+      </v-row>
+
       <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
         class="red--text" label="Wallet name"></v-text-field>
 
