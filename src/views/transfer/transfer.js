@@ -84,17 +84,18 @@ export default {
       // Print.postMessage(JSON.stringify(postMsg))
     },
     onDecode (code) {
-      var url = new URL(code);
+      var url = new URL(code)
 
-      console.log(url)
+      
       var tftAddress = url.hostname
-      if (tftAddress == '') {
+      
+      if (tftAddress === '') {
         tftAddress = url.pathname.replace('//', '')
       }
       this.formObject.to.address = tftAddress
-      this.formObject.amount = url.searchParams.get('amount')
-      this.formObject.message = url.searchParams.get('message')
-      this.formObject.sender = url.searchParams.get('sender')
+      this.formObject.amount = url.searchParams.get('amount') == null ? '' : url.searchParams.get('amount');
+      this.formObject.message = url.searchParams.get('message') == null ? '' : url.searchParams.get('message');
+      this.formObject.sender = url.searchParams.get('sender') == null ? '' : url.searchParams.get('sender');
 
       // console.log(code)
       // code = code.replace('tft:', 'tft://')
