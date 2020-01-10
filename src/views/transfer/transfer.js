@@ -154,6 +154,7 @@ export default {
       this.selectedWallet = wallet
       // this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
       // this.$refs.formComponent.$refs.form.reset()
+      this.$refs.formComponent.$refs.form.validate()
     },
     checkForm () {
       return this.$refs.formComponent.$refs.form.validate()

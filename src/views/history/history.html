@@ -4,11 +4,11 @@
     :displayAttributes="false" />
   <v-col>
 
-    <!-- <v-row class="div-toggle-buttons" v-if="hasLocked" justify="center">
-      <v-btn-toggle dense mandatory class="round" v-model="selectedTab">
+    <v-row class="div-toggle-buttons" v-if="hasLocked" justify="center">
+      <v-btn-toggle dense mandatory class="round">
         <v-btn text v-for="tab in tabs" :key="tab" class="px-3 my-1 mx-1 round" @click="currentTab=tab">{{tab}}</v-btn>
       </v-btn-toggle>
-    </v-row> -->
+    </v-row>
 
     <v-row v-if="currentTab == 'transactions'" class="pa-0 mt-1">
       <div v-for="(gt, date) in groupedTransactions" :key="date" style="width: 100%;">

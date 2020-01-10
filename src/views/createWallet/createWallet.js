@@ -41,7 +41,7 @@ export default {
       this.wordsErrors = []
 
       const walletNameFound = this.wallets.find(x => x.name == this.walletName.toLowerCase())
-      console.log(walletNameFound)
+      // console.log(walletNameFound)
       if (!walletNameFound) {
         // ID: 0 HARDCODED FOR NOW!
         this.createWallet({ chain: 'tft', walletName: this.walletName, id: '0' })

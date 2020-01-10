@@ -41,7 +41,7 @@ export default {
       );
     },
     async checkResponse(context, responseUrl) {
-      console.log('testetstests');
+      // console.log('testetstests');
       if (responseUrl.searchParams.get('error')) {
         context.commit('setFatalError', responseUrl.searchParams.get('error'));
       } else {
@@ -105,7 +105,7 @@ export default {
               }
               // http://localhost:8080/login#username=ivan&derivedSeed=abc123
               var data = responseUrl.searchParams.get('data');
-              console.log(`Data ivan`,data)
+              // console.log(`Data ivan`,data)
               if (data) {
                 data = JSON.parse(data);
                 var keys = context.getters.keys;
