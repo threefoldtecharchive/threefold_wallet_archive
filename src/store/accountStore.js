@@ -167,14 +167,6 @@ export default {
         account.wallet_new(data.walletName, 0, 1)
       }
 
-      // context.dispatch('createWallet', {
-      //   chain: 'tft',
-      //   walletName: data.walletName,
-      //   id: accounts.length - 1
-      // })
-
-      console.log(accounts[1].wallet_count)
-      
     }
   },
   mutations: {
