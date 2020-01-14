@@ -247,7 +247,7 @@ export default {
       var hasLockedTokens = false
       if (state.accounts) {
         state.accounts.forEach(account => {
-          console.log(account)
+        //   console.log(account)
           account.wallets.forEach(wallet => {
             // if (wallet.balance.coins_locked) {
             //   console.log("there are locked")
