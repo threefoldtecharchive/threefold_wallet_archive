@@ -242,12 +242,21 @@ export default {
     syncing: state => state.syncing,
     intervalIsSet: state => state.intervalIsSet,
     hasLocked: state => {
+      console.log("calculating haslocked")
       var wallets = []
       var hasLockedTokens = false
       if (state.accounts) {
         state.accounts.forEach(account => {
+          console.log(account)
           account.wallets.forEach(wallet => {
+            // if (wallet.balance.coins_locked) {
+            //   console.log("there are locked")
+            //   console.log(account.type)
+            //   console.log(wallet.balance.coins_locked.str())
+            //   console.log(wallet.balance.coins_unlocked.str())
+            // }
             if (wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) {
+              // console.log("haslocked")
               hasLockedTokens = true
             }
           })
