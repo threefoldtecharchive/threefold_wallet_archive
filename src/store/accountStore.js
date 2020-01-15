@@ -27,12 +27,12 @@ export default {
       window.account = tfAccount
 
       //  daily and savings are always generated
-      // await tfAccount.wallet_new(`daily`, tfAccount.wallet_count, 1)
-      // await tfAccount.wallet_new(`savings`, tfAccount.wallet_count, 1)
-      // await tfAccount.update_account()
+      await tfAccount.wallet_new(`daily`, tfAccount.wallet_count, 1)
+      await tfAccount.wallet_new(`savings`, tfAccount.wallet_count, 1)
+      await tfAccount.update_account()
 
-      // await context.dispatch('loadAppWallets', tfAccount)
-      // context.commit('setAccounts', [tfAccount])
+      await context.dispatch('loadAppWallets', tfAccount)
+      context.commit('setAccounts', [tfAccount])
 
       // context.dispatch('loadImportedWallets')
 
@@ -62,8 +62,6 @@ export default {
       await context.dispatch('createFirstWallets', account)
       console.log("after createFirstWallets")
       await account.update_account()
-      console.log(account)
-      console.log("after update_account")
 
       context.dispatch('removeWalletsUntillTransaction', account)
     },
@@ -84,6 +82,7 @@ export default {
       for (let index = wallets.length - 1; index > 1; index--) {
         var wallet = wallets[index]
         if (!wallet.balance || !wallet.balance.transactions || !wallet.balance.transactions.length) {
+          console.log(wallet.wallet_name, 'has no transactions')
           account.wallet_delete(index, wallet.wallet_name)
         } else {
           context.dispatch('saveExistingWalletsToApp', {

@@ -13,11 +13,6 @@ export var debug = function () {
 	else {
 		var argv = tuple ();
 	}
-	var l = null;
-	
-	    l = console.debug;
-	    
-	l (...argv);
 };
 export var info = function () {
 	if (arguments.length) {
@@ -51,11 +46,7 @@ export var warning = function () {
 	else {
 		var argv = tuple ();
 	}
-	var l = null;
 	
-	    l = console.warn;
-	    
-	l (...argv);
 };
 export var error = function () {
 	if (arguments.length) {
@@ -70,11 +61,7 @@ export var error = function () {
 	else {
 		var argv = tuple ();
 	}
-	var l = null;
 	
-	    l = console.error;
-	    
-	l (...argv);
 };
 
 //# sourceMappingURL=tfchain.polyfill.log.map
