@@ -38,7 +38,6 @@ export default {
         let wallet = this.wallets.find(x => x.address == this.getWalletAddresRecipient())
         return `${wallet.name}@${wallet.holder.account_name.split(':')[1]}`
       }
-      if (!this.transaction.confirmed) return 'Pending transaction...'
       var receiverName = this.getWalletAddresRecipient()
       return receiverName
     },

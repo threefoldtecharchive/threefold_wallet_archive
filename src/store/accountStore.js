@@ -139,7 +139,7 @@ export default {
         account.wallet_new(data.walletName, account.wallet_count, 1)
       }
     },
-    importWallet: (context, data) => {
+    importWallet: async (context, data) => {
       console.log('Import Wallet', data)
       var tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
@@ -149,11 +149,10 @@ export default {
           network: config.tftNetwork
         }
       )
+      tfAccount2.wallet_new(data.walletName, 0, 1)
 
       tfAccount2.type = 'imported'
-
-      // console.log(tfAccount2)
-      window.tfAccount2 = tfAccount2
+      await tfAccount2.update_account()
 
       var accounts = context.getters.accounts
 
@@ -162,10 +161,6 @@ export default {
 
       context.dispatch('updateAccounts')
 
-      var account = context.getters.accounts[accounts.length - 1]
-      if (account) {
-        account.wallet_new(data.walletName, 0, 1)
-      }
 
     }
   },
@@ -196,7 +191,10 @@ export default {
     wallets: state => {
       var wallets = []
       if (state.accounts) {
-        // window.accounts = state.accounts
+        if (!window.accounts) {
+          window.accounts = state.accounts
+
+        }
         state.accounts.forEach(account => {
           var t = account.wallets.map(wallet => {
             var balance = wallet.balance
