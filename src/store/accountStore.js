@@ -47,18 +47,21 @@ export default {
 
       if (appWallets != null && appWallets) {
         console.log('Wallets are passed by the app')
-        context.dispatch('restoreWallets', appWallets)
+        context.dispatch('restoreWallets', { appWallets: appWallets, account: account })
       } else {
         await context.dispatch('recoverWallets', account)
       }
+      await account.update_account()
     },
-    async restoreWallets (context, appWallets) {
+    async restoreWallets (context, data) {
+      const appWallets = data.appWallets
+      const account = data.account
+      const doubleName = context.getters.doubleName
       console.log('restoring wallets')
       for (const appWallet of appWallets.filter(
-        x => x.doubleName === userData.doubleName
+        x => x.doubleName === doubleName
       )) {
-        appWallet.id = 0
-        await context.dispatch('createWallet', appWallet)
+        await account.wallet_new(appWallet.walletName, account.wallet_count, 1)
       }
     },
     async recoverWallets (context, account) {
@@ -118,14 +121,14 @@ export default {
         })
       }
     },
-    async loadImportedWallets () {
+    async loadImportedWallets (context) {
       const importedWallets = JSON.parse(
         localStorage.getItem('importedWallets')
       )
       console.log('importedWallets from localstorage', importedWallets)
       if (importedWallets != null && importedWallets) {
         for (const user of importedWallets.filter(
-          x => x.doubleName === userData.doubleName
+          x => x.doubleName === context.getters.doubleName
         )) {
           console.log('loop importedwallets', user)
           user.seed = new Uint8Array(user.seed)
