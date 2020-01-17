@@ -26,7 +26,6 @@ export default {
 
       context.commit('setImportingWallets', true)
 
-      window.account = tfAccount
 
       //  daily and savings are always generated
       await tfAccount.wallet_new(`daily`, tfAccount.wallet_count, 1)
@@ -75,7 +74,6 @@ export default {
     async createFirstWallets (context, account) {
       console.log("createFirstWallets")
       //  create first 20 wallets
-      window.account = account
       for (let index = 3; index <= 20; index++) {
         console.log('walletcount', account.wallet_count)
         await account.wallet_new(`Wallet${index}`, account.wallet_count, 1, false)
