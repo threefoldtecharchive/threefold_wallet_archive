@@ -39,7 +39,6 @@ export default {
       await context.dispatch('loadImportedWallets')
 
       context.commit('setImportingWallets', false)
-      router.push({ name: 'home' })
     },
     async loadAppWallets (context, account) {
       const appWallets = JSON.parse(localStorage.getItem('appWallets'))

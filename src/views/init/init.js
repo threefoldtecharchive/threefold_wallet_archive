@@ -1,6 +1,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import { decodeBase64 } from 'tweetnacl-util'
 import * as tfchain from '../../services/tfchain/api'
+import router from '../../router'
 
 export default {
   name: 'init',
@@ -35,13 +36,7 @@ export default {
         doubleName,
         seed
       })
+      router.push({ name: 'home' })
     }
-  },
-  watch: {
-  //   accounts (val) {
-  //     if (val.length) {
-  //       this.$router.push({ name: 'home' })
-  //     }
-  //   }
   }
 }
