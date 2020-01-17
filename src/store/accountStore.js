@@ -85,16 +85,15 @@ export default {
       const wallets = account.wallets
       for (let index = wallets.length - 1; index > 1; index--) {
         var wallet = wallets[index]
-        if (!wallet.balance || !wallet.balance.transactions || !wallet.balance.transactions.length) {
-          console.log(wallet.wallet_name, 'has no transactions')
-          account.wallet_delete(index, wallet.wallet_name)
-        } else {
+        if (!(!wallet.balance || !wallet.balance.transactions || !wallet.balance.transactions.length)) {
           context.dispatch('saveExistingWalletsToApp', {
             wallets: wallets,
             index: index
           })
           return
         }
+        console.log(wallet.wallet_name, 'has no transactions')
+        account.wallet_delete(index, wallet.wallet_name)
       }
     },
     saveExistingWalletsToApp (context, data) {
