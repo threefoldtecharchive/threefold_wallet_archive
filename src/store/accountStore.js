@@ -47,20 +47,22 @@ export default {
 
       if (appWallets != null && appWallets) {
         console.log('Wallets are passed by the app')
-        context.dispatch('restoreWallets', appWallets)
+        context.dispatch('restoreWallets', { appWallets: appWallets, account: account })
       } else {
         await context.dispatch('recoverWallets', account)
       }
+      await account.update_account()
     },
-    restoreWallets (context, appWallets) {
-      console.log("todo fix restoreWallets")
-      // Todo fix restore
-      // for (const appWallet of appWallets.filter(
-      //   x => x.doubleName === userData.doubleName
-      // )) {
-      //   appWallet.id = 0
-      //   context.dispatch('createWallet', appWallet)
-      // }
+    async restoreWallets (context, data) {
+      const appWallets = data.appWallets
+      const account = data.account
+      const doubleName = context.getters.doubleName
+      console.log('restoring wallets')
+      for (const appWallet of appWallets.filter(
+        x => x.doubleName === doubleName
+      )) {
+        await account.wallet_new(appWallet.walletName, account.wallet_count, 1)
+      }
     },
     async recoverWallets (context, account) {
       await context.dispatch('createFirstWallets', account)
@@ -114,20 +116,19 @@ export default {
           doubleName: context.getters.doubleName
         }
         console.log(`saving wallet to device`,postMsg)
-        // @todo  put this out of comments
-        // window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-        //   console.log("saved wallet to app")
-        // })
+        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
+          console.log("saved wallet to app")
+        })
       }
     },
-    async loadImportedWallets () {
+    async loadImportedWallets (context) {
       const importedWallets = JSON.parse(
         localStorage.getItem('importedWallets')
       )
       console.log('importedWallets from localstorage', importedWallets)
       if (importedWallets != null && importedWallets) {
         for (const user of importedWallets.filter(
-          x => x.doubleName === userData.doubleName
+          x => x.doubleName === context.getters.doubleName
         )) {
           console.log('loop importedwallets', user)
           user.seed = new Uint8Array(user.seed)
@@ -155,10 +156,10 @@ export default {
         }, 60000)
       }
     },
-    createWallet: (context, data) => {
+    createWallet: async (context, data) => {
       var account = context.getters.accounts[data.id]
       if (account) {
-        account.wallet_new(data.walletName, account.wallet_count, 1)
+        await account.wallet_new(data.walletName, account.wallet_count, 1)
       }
     },
     importWallet: async (context, data) => {
@@ -225,13 +226,7 @@ export default {
               totalLocked: locked,
               transaction: balance.transactions,
               holder: account,
-              currency: wallet.balance._chain_type.currency_unit(),
-              isAuthenticated: nbhService
-                .getWalletAuthStatus(wallet.address)
-                .then(status => {
-                  if (status) return status.data.auths[0]
-                  return false
-                })
+              currency: wallet.balance._chain_type.currency_unit()
             }
           })
           wallets.push(...t)
