@@ -83,6 +83,7 @@ export default {
       console.log("removeWalletsUntillTransaction")
       //  Take wallets from acccount and remove them from the last till first untill a transaction is found
       const wallets = account.wallets
+      // @todo for to foreach (pkid)
       for (let index = wallets.length - 1; index > 1; index--) {
         var wallet = wallets[index]
         if (!(!wallet.balance || !wallet.balance.transactions || !wallet.balance.transactions.length)) {
