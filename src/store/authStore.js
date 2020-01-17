@@ -4,6 +4,9 @@ import config from '../../public/config';
 import cryptoService from '../services/cryptoService';
 import { decodeBase64 } from 'tweetnacl-util';
 
+
+//@todo: does the authstore need to exist anymore
+
 export default {
   state: {
     state: localStorage.getItem('state') || null,
@@ -76,7 +79,7 @@ export default {
               x => x.doubleName === directLoginData.doubleName
             )) {
               user.seed = new Uint8Array(user.seed);
-              context.dispatch('importWallet', user);
+              await context.dispatch('importWallet', user);
             }
           }
         } else {
@@ -151,6 +154,7 @@ export default {
                     ) {
                       for (let user of importedWallets) {
                         user.seed = new Uint8Array(user.seed);
+                        // @todo: check if necessary to make await
                         context.dispatch('importWallet', user);
                       }
                     }
