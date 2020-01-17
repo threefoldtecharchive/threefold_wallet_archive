@@ -2,6 +2,7 @@ import {
   mapGetters,
   mapActions
 } from 'vuex'
+import store from '../../store'
 import cryptoService from '../../services/cryptoService'
 
 export default {
@@ -117,15 +118,16 @@ export default {
               doubleName: this.doubleName,
               seed: Array.from(mySeed)
             }
-
-            postMsg = JSON.stringify(postMsg)
             // Print.postMessage(JSON.stringify(postMsg))
             console.log('before flutter call', postMsg)
             var self = this
-            window.flutter_inappwebview.callHandler('ADD_IMPORT_WALLET', postMsg).then(function (result) {
-              console.log('flutter result', result)
-              self.$router.push({ name: 'home' })
-            })
+
+            store.dispatch('addImportedWallet', postMsg)
+
+            // window.flutter_inappwebview.callHandler('ADD_IMPORT_WALLET', postMsg).then(function (result) {
+            //   console.log('flutter result', result)
+            //   self.$router.push({ name: 'home' })
+            // })
           }
         } catch (e) {
           console.log(e.message)

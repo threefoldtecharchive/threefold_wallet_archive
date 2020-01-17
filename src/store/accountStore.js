@@ -12,6 +12,11 @@ export default {
   },
   actions: {
     async login (context, userData) {
+
+      console.log('called')
+      await context.dispatch('setPkidClient', userData.seed)
+      window.localStorage.setItem('importedWallets', await context.dispatch('getPkidWallets'))
+
       context.commit('setDoubleName', userData.doubleName)
 
       var tfAccount = new tfchain.Account(
@@ -83,6 +88,7 @@ export default {
       console.log("removeWalletsUntillTransaction")
       //  Take wallets from acccount and remove them from the last till first untill a transaction is found
       const wallets = account.wallets
+      // @todo for to foreach (pkid)
       for (let index = wallets.length - 1; index > 1; index--) {
         var wallet = wallets[index]
         if (!(!wallet.balance || !wallet.balance.transactions || !wallet.balance.transactions.length)) {
@@ -118,9 +124,8 @@ export default {
       }
     },
     async loadImportedWallets (context) {
-      const importedWallets = JSON.parse(
-        localStorage.getItem('importedWallets')
-      )
+      const importedWallets = await context.dispatch('getPkidWallets')
+
       console.log('importedWallets from localstorage', importedWallets)
       if (importedWallets != null && importedWallets) {
         for (const user of importedWallets.filter(
