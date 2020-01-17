@@ -237,7 +237,6 @@ export default {
     syncing: state => state.syncing,
     intervalIsSet: state => state.intervalIsSet,
     hasLocked: state => {
-      console.log("calculating haslocked")
       var wallets = []
       var hasLockedTokens = false
       if (state.accounts) {
