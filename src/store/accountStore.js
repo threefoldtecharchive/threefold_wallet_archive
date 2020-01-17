@@ -1,6 +1,8 @@
 import config from '../../public/config'
 import * as tfchain from '../services/tfchain/api'
 import nbhService from '../services/nbhService'
+import router from '../router'
+
 export default {
   state: {
     syncing: false,
@@ -30,13 +32,15 @@ export default {
       await tfAccount.wallet_new(`daily`, tfAccount.wallet_count, 1)
       await tfAccount.wallet_new(`savings`, tfAccount.wallet_count, 1)
       await tfAccount.update_account()
-
+      
       await context.dispatch('loadAppWallets', tfAccount)
+      console.log('finished loading appwallets')
       context.commit('setAccounts', [tfAccount])
+      
+      await context.dispatch('loadImportedWallets')
 
-      // context.dispatch('loadImportedWallets')
-
-      // context.commit('setImportingWallets', false)
+      context.commit('setImportingWallets', false)
+      router.push({ name: 'home' })
     },
     async loadAppWallets (context, account) {
       const appWallets = JSON.parse(localStorage.getItem('appWallets'))
@@ -62,6 +66,7 @@ export default {
       await context.dispatch('createFirstWallets', account)
       console.log("after createFirstWallets")
       await account.update_account()
+      console.log("after update account")
 
       context.dispatch('removeWalletsUntillTransaction', account)
     },
@@ -108,13 +113,14 @@ export default {
           walletName: newWallet.wallet_name,
           doubleName: context.getters.doubleName
         }
-        console.log(postMsg)
-        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-          console.log("saved wallet to app")
-        })
+        console.log(`saving wallet to device`,postMsg)
+        // @todo  put this out of comments
+        // window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
+        //   console.log("saved wallet to app")
+        // })
       }
     },
-    loadImportedWallets () {
+    async loadImportedWallets () {
       const importedWallets = JSON.parse(
         localStorage.getItem('importedWallets')
       )
@@ -125,7 +131,7 @@ export default {
         )) {
           console.log('loop importedwallets', user)
           user.seed = new Uint8Array(user.seed)
-          context.dispatch('importWallet', user)
+          await context.dispatch('importWallet', user)
         }
       }
     },
@@ -155,7 +161,7 @@ export default {
         account.wallet_new(data.walletName, account.wallet_count, 1)
       }
     },
-    importWallet: (context, data) => {
+    importWallet: async (context, data) => {
       console.log('Import Wallet', data)
       var tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
@@ -165,11 +171,10 @@ export default {
           network: config.tftNetwork
         }
       )
+      tfAccount2.wallet_new(data.walletName, 0, 1)
 
       tfAccount2.type = 'imported'
-
-      // console.log(tfAccount2)
-      window.tfAccount2 = tfAccount2
+      await tfAccount2.update_account()
 
       var accounts = context.getters.accounts
 
@@ -177,12 +182,6 @@ export default {
       context.commit('setAccounts', accounts)
 
       context.dispatch('updateAccounts')
-
-      var account = context.getters.accounts[accounts.length - 1]
-      if (account) {
-        account.wallet_new(data.walletName, 0, 1)
-      }
-
     }
   },
   mutations: {
@@ -250,12 +249,6 @@ export default {
         state.accounts.forEach(account => {
         //   console.log(account)
           account.wallets.forEach(wallet => {
-            // if (wallet.balance.coins_locked) {
-            //   console.log("there are locked")
-            //   console.log(account.type)
-            //   console.log(wallet.balance.coins_locked.str())
-            //   console.log(wallet.balance.coins_unlocked.str())
-            // }
             if (wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) {
               // console.log("haslocked")
               hasLockedTokens = true
