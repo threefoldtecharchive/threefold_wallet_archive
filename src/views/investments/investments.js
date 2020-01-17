@@ -18,9 +18,9 @@ export default {
 
   },
   methods: {
-    seeHistory (wallet) {
+    seeDetails (wallet) {
       this.$router.push({
-        name: 'investments history',
+        name: 'investments details',
         params: {
           wallet: wallet.name
         }

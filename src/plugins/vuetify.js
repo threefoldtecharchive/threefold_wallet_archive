@@ -4,11 +4,11 @@ import 'vuetify/src/styles/main.sass'
 Vue.use(Vuetify)
 
 export default new Vuetify({
-  iconfont: 'md',
+  iconfont: 'fa',
   theme: {
     themes: {
       light: {
-        primary: '#34495e',
+        primary: '#2d4052',
         accent: '#1abc9c',
         gold: '#dea600',
         error: '#CE796B'

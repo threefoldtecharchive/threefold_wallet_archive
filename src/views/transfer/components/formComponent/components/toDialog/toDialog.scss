@@ -1,9 +1,11 @@
 .to-dialog {
 }
 .v-btn--active {
-    background-color: var(--active-color) !important;
-    border-color: var(--active-color) !important;
+    background-color: var(--accent-color) !important;
+    color: white !important;
+    border: none !important;
 }
+
 .wallet-card {
     cursor: pointer;
 }

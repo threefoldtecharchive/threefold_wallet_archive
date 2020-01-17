@@ -17,6 +17,11 @@ export default {
       type: Boolean,
       default: true
     }
+    ,
+    'displayAmount': {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -34,13 +39,13 @@ export default {
     getHumanWalletAddress () {
       // return `${this.wallet.name}@${this.account.account_name}`
       return `${this.wallet.name.replace(/\s/g, '')}@${this.wallet.holder.account_name.split(':')[1]}`
-    },
-    image () {
-      let currency = this.wallet.currency.toLowerCase()
-      if (currency == 'gram') return 'gram-image'
-      if (currency == 'gft') return 'gft-image'
-      if (currency == 'tft') return 'tft-image'
     }
+    // image () {
+    //   let currency = this.wallet.currency.toLowerCase()
+    //   if (currency == 'gram') return 'gram-image'
+    //   if (currency == 'gft') return 'gft-image'
+    //   if (currency == 'tft') return 'tft-image'
+    // }
   },
   mounted () {
     if (this.wallet.currency === 'GFT' || this.wallet.currency == 'gram') {

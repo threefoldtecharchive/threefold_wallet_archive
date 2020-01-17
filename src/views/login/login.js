@@ -14,23 +14,25 @@ export default {
       'accounts'
     ]),
     isLoggingIn () {
-      var currentUrl = window.location.href
-      var hasQueries = Object.entries(new URL(currentUrl)).length === 0
-      return hasQueries || currentUrl
+      var currentUrl = window.location.search
+      return currentUrl
     }
   },
   mounted () {
     console.log(this.isLoggingIn)
     if (!this.isLoggingIn) {
-      const account = JSON.parse(window.localStorage.getItem('user'))
+      const account = JSON.parse(localStorage.getItem('user'))
       if (account && account.doubleName && account.seed) {
+        console.log(`Logging in from storage`)
         account.seed = new Uint8Array(Object.values(account.seed))
         this.login(account)
       } else {
+        console.log(`Generating url`)
         this.generateLoginUrl()
       }
     } else {
       this.checkResponse(new URL(window.location.href))
+      console.log(`router `,this.$router)
     }
   },
   methods: {
@@ -48,7 +50,7 @@ export default {
     },
     loginUrl (val) {
       if (val) {
-        // window.location.href = val
+        window.location.href = val
       }
     }
   }

@@ -4,13 +4,16 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'history-card',
   components: { amountIndicator },
-  props: [
-    'transaction'
-  ],
+  props: {
+    'transaction': {
+      type: Object
+    }
+  },
   data () {
     return {
       outgoing: false,
-      show: false
+      show: false,
+      smallAmount: true
     }
   },
   computed: {
@@ -24,7 +27,7 @@ export default {
       } else {
         currency = this.transaction.outputs[0].amount.unit
       }
-
+      
       return currency
     },
     amountModal () {

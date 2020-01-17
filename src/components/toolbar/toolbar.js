@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import InformationDialog from '../informationDialog'
 export default {
   components: {
@@ -14,7 +14,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'syncing'
+      'syncing',
+      'accounts'
     ])
   },
   mounted () {
@@ -27,6 +28,14 @@ export default {
     onScroll () {
       this.isScrolling = (window.pageYOffset ||
         document.documentElement.scrollTop || 0) > 50
+    },
+    enableQrScannerDialog () {
+      this.$emit("enableQrScannerDialog")
+    },
+    seeAdd () {
+      this.$router.push({
+        name: 'addwallet',
+      })
     }
   }
 }

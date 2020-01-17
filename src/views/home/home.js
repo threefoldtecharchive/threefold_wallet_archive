@@ -15,12 +15,11 @@ export default {
     ])
   },
   mounted () {
-
   },
   methods: {
-    seeHistory (wallet) {
+    seeDetails (wallet) {
       this.$router.push({
-        name: 'history',
+        name: 'details',
         params: {
           wallet: wallet.name
         }

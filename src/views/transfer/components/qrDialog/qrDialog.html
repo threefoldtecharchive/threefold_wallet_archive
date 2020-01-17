@@ -1,37 +1,39 @@
-
 <section class="qr-dialog">
-  <v-dialog v-model="dialog" max-width="400" persistent scrollable>
-    <v-card>
-      <v-toolbar dark color="primary">
-        <v-toolbar-title class="text-uppercase">Show QR to the sender</v-toolbar-title>
+  <v-dialog v-model="dialog" fullscreen persistent scrollable>
+
+    <v-card class="no-radius">
+      <v-card-title style="background-color:#34495e; color:white" dense>
+        Show QR to sender
         <v-spacer></v-spacer>
-        <v-btn icon @click="closeDialog(false)">
+        <v-btn text icon @click="closeDialog(false)">
           <v-icon :color="$route.meta.accent">
             close
           </v-icon>
         </v-btn>
-      </v-toolbar>
-      <v-card-text>
+      </v-card-title>
+      <v-card-text class="pt-2">
         <div class="px-2">
           <v-layout justify-space-between fill-height column px-2>
             <p class="subtitle mb-0 grey--text">To</p>
-            <walletCard no-padding class="my-2" :wallet="selectedWallet" v-if="selectedWallet.address" clickable :displayAttributes="false"/>
+            <walletCard no-padding class="my-2" :displayAmount="false" :wallet="selectedWallet"
+              v-if="selectedWallet.address" clickable />
             <v-flex>
               <p class="subtitle mb-0 grey--text">Amount</p>
-              <p class="title mt-0">{{formObject.amount}}</p>
+              <p class="title mt-0">{{formObject.amount}} TFT</p>
             </v-flex>
             <v-flex v-if="formObject.message">
               <p class="subtitle mb-0 grey--text">Message</p>
               <p class="title mt-0">{{formObject.message}}</p>
             </v-flex>
           </v-layout>
-          <div class="text-xs-center">
+          <v-row justify="center">
+
             <qrcode :value="qrText" v-if="selectedTab == 0" class="round"
               :options="{ color: { darklight: '#fff',  dark: $vuetify.theme.primary}  }" />
+            </v-row>
           </div>
-        </div>
+
       </v-card-text>
     </v-card>
   </v-dialog>
 </section>
-

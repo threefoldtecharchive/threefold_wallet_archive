@@ -1,26 +1,21 @@
 <section class="transaction-info-dialog">
-  <v-dialog v-model="dialog" max-width="500" persistent scrollable>
-    <v-card>
-      <v-card-title dark class="primary py-2">
-        <v-toolbar-title dark class="text-uppercase white--text primary">
-          <v-icon dark>
-            info
-          </v-icon>
-          Transaction info
-        </v-toolbar-title>
+  <v-dialog v-model="dialog" fullscreen persistent scrollable>
+    
+    <v-card class="no-radius">
+      <v-card-title style="background-color:#34495e; color:white" dense>
+        Transaction info
         <v-spacer></v-spacer>
-        <v-btn icon dark flat @click="closeDialog(false)">
-          <v-icon>
+        <v-btn text icon @click="closeDialog(false)">
+          <v-icon :color="$route.meta.accent">
             close
           </v-icon>
         </v-btn>
-        </v-toolbar>
       </v-card-title>
 
       <v-card-text>
         <v-layout fill-height column>
           <v-layout justify-space-between fill-height column>
-            <p v-if="selectedTab == 1" class="subtitle mb-0 grey--text">From</p>
+            <p v-if="selectedTab == 1" class="subtitle mb-0 mt-2 grey--text">From</p>
             <walletSelector @onWalletSelected='selectWallet' :wallets="wallets" :selected="selectedWallet.name"
               v-if="$route.query.tab == 'receive'" />
             <walletCard no-padding class="my-2" :wallet="selectedWallet" clickable v-else />
@@ -34,7 +29,7 @@
             </v-flex>
             <v-flex>
               <p class="subtitle mb-0 grey--text">Amount</p>
-              <v-layout class="pb-2" justify-space-between row>
+              <v-layout class="pb-2" justify-space-between>
                 <span class="title mt-0">{{amount}} {{selectedWallet.currency}}</span>
                 <span class="text-xs-right caption">0.10 fee included</span>
               </v-layout>
@@ -45,13 +40,12 @@
             </v-flex>
           </v-layout>
         </v-layout>
-      </v-card-text>
-      <v-card-actions class="pa-0">
         <v-btn @click="closeDialog(true)" dark :color="$route.meta.accent" style="margin-left: 0px; margin-right: 0px;"
           block>
           Confirm
         </v-btn>
-      </v-card-actions>
+      </v-card-text>
+
     </v-card>
   </v-dialog>
 </section>

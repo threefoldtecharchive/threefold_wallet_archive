@@ -1,9 +1,18 @@
 .transfer {
+    .v-btn-toggle{
+        background-color: transparent;
+    }
     .v-btn--active {
-        background-color: var(--active-color) !important;
-        border-color: var(--active-color) !important;
+        background-color: var(--accent-color) !important;
+        color: white !important;
+        border: none;
     }
-    .div-toggle-buttons {
-        min-height: 50px;
+    input{
+        // display: none;
+        background-color: green;
     }
+
+}
+.v-select__selections > input[type=text] {
+    display: none;
 }

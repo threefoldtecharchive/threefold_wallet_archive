@@ -1,0 +1,10 @@
+.create-wallet{
+    .v-btn-toggle{
+        background-color: transparent !important;
+    }
+    .v-btn--active {
+        background-color: var(--accent-color) !important;
+        color: white !important;
+        border: none !important;
+    }
+}

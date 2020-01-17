@@ -1,25 +1,36 @@
 <section class="wallet-card">
-  <v-card :class="`min ${(selected && authenticated) ? 'border' : ''}`">
-    <div ref="card" class="content" :class="image" :style="clickable ? 'cursor:pointer' : ''" @click="clicked">
-      <v-layout class="pa-1 content-inner white--text">
-        <v-flex :class="clickable ? 'xs8' : 'xs12'">
-          <v-layout column class="py-3 pl-2" >
-            <p class="title text-uppercase">{{wallet? wallet.name : 'Wallet name'}}</p>
-            <p class="body-1 text-truncate">{{getHumanWalletAddress}}</p>
-            <p v-if="wallet.currency === 'GFT'" class="body-1 text-truncate">{{authenticated}}</p>
+  <v-card :class="` min ${(selected && authenticated) ? 'border' : ''}`">
+    <div ref="card" class="content" :style="clickable ? 'cursor:pointer' : ''" @click="clicked">
+      <v-layout class="pa-1 content-inner">
+        <v-flex :class="displayAttributes ? 'xs6' : 'xs6'">
+          <v-layout column class="pt-2 pl-2">
+            <p>
+              <span class="title text-capitalize">{{wallet? wallet.name : 'Wallet name'}}</span>
+              <span style="font-size: 9px; color: gray;">{{wallet.holder.type === 'imported' ? " imported" : ''}}</span>
+              <br />
+              <span v-if="displayAttributes" class="body-1 text-truncate">{{getHumanWalletAddress}}</span>
+
+            </p>
+
           </v-layout>
         </v-flex>
-        <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs4' : ''">
-          <v-layout column class="justify-space-between fill-height align-end" v-if="displayAttributes">
-            <v-flex>
-              <v-btn text dark small icon @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0" :class="$route.meta.accent"  v-show="wallet.currency != 'gram'">
+        <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs6' : ''">
+          <v-layout column class="justify-space-between  align-end">
+            <v-flex v-if="displayAttributes">
+              <v-btn dark small icon text @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0"
+                style="z-index: 1;" :class="$route.meta.accent" v-show="wallet.currency != 'gram'">
                 <v-icon size="15">
                   file_copy
                 </v-icon>
               </v-btn>
             </v-flex>
-            <amountIndicator small class="pl-3 pr-2 pt-1 align-self-end badge-bottom" :class="$route.meta.accent" :amount='totalAmount'
-              :valuta='wallet.currency'/>
+            <v-flex class="mr-1" v-if="displayAmount">
+              <amountIndicator v-if="displayAttributes" class="pr-2 pt-1" :amount='totalAmount'
+                :valuta='wallet.currency' :locked="wallet.totalLocked" :showTypeCurrency="true" />
+              <amountIndicator v-else class="pl-3 pr-2 pt-1" :amount='totalAmount' :valuta='wallet.currency' small
+                :locked="wallet.totalLocked" :showTypeCurrency="true" />
+
+            </v-flex>
           </v-layout>
         </v-flex>
         <div v-else>

@@ -12,7 +12,7 @@ export default new Router({
     name: 'home',
     component: home,
     meta: {
-      title: 'accounts',
+      title: 'Wallet',
       transfer: 'transfer',
       accent: 'accent',
       info: {
@@ -21,13 +21,21 @@ export default new Router({
       }
     }
   }, {
-    path: '/history/:wallet',
-    name: 'history',
+    path: '/addwallet',
+    name: 'addwallet',
+    meta: {
+      accent: 'accent',
+      title: 'import/create wallet'
+    },
+    component: () => import(/* webpackChunkName: "profile-page" */ './views/createWallet')
+  }, {
+    path: '/details/:wallet',
+    name: 'details',
     meta: {
       accent: 'accent',
       transfer: 'transfer',
       info: {
-        title: 'one hell of a title',
+        title: 'Details',
         text: 'this is info'
       }
     },
@@ -89,7 +97,7 @@ export default new Router({
     meta: {
       accent: 'accent',
       overview: 'home',
-      history: 'history',
+      history: 'details',
       info: {
         title: 'one hell of a title',
         text: 'this is info'
@@ -103,6 +111,14 @@ export default new Router({
       accent: 'accent'
     },
     component: () => import(/* webpackChunkName: "login-page" */ './views/login')
+  }, {
+    path: '/init',
+    name: 'init',
+    meta: {
+      title: 'Initialize',
+      accent: 'accent'
+    },
+    component: () => import(/* webpackChunkName: "init-page" */ './views/init')
   }, {
     path: '/error',
     name: 'error',
