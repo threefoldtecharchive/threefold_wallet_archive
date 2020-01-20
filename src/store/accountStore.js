@@ -1,6 +1,8 @@
 import config from '../../public/config'
 import * as tfchain from '../services/tfchain/api'
 import nbhService from '../services/nbhService'
+import router from '../router'
+
 export default {
   state: {
     syncing: false,
@@ -9,7 +11,7 @@ export default {
     doubleName: false
   },
   actions: {
-    login (context, userData) {
+    async login (context, userData) {
       context.commit('setDoubleName', userData.doubleName)
 
       var tfAccount = new tfchain.Account(
@@ -20,96 +22,112 @@ export default {
           network: config.tftNetwork
         }
       )
-
       tfAccount.type = 'app'
+
+      context.commit('setImportingWallets', true)
+
+
+      //  daily and savings are always generated
+      await tfAccount.wallet_new(`daily`, tfAccount.wallet_count, 1)
+      await tfAccount.wallet_new(`savings`, tfAccount.wallet_count, 1)
+      await tfAccount.update_account()
+      
+      await context.dispatch('loadAppWallets', tfAccount)
+      console.log('finished loading appwallets')
       context.commit('setAccounts', [tfAccount])
-      context.dispatch('updateAccounts')
-      context.dispatch('createWallet', {
-        chain: 'tft',
-        walletName: 'daily',
-        id: '0'
-      })
-      context.dispatch('createWallet', {
-        chain: 'tft',
-        walletName: 'savings',
-        id: '0'
-      })
+      
+      await context.dispatch('loadImportedWallets')
 
-      // Get wallet list with names and create them all.
+      context.commit('setImportingWallets', false)
+    },
+    async loadAppWallets (context, account) {
       const appWallets = JSON.parse(localStorage.getItem('appWallets'))
+
       if (appWallets != null && appWallets) {
-        for (const appWallet of appWallets.filter(
-          x => x.doubleName === userData.doubleName
-        )) {
-          appWallet.id = 0
-          context.dispatch('createWallet', appWallet)
-        }
-      } else if (appWallets == null) {
-        // Loop 20 wallets and check balance
-        context.commit('setImportingWallets', true)
-        for (let index = 3; index <= 20; index++) {
-          const appWallet = {
-            chain: 'tft',
-            id: '0',
-            walletName: `Wallet${index}`,
-            doubleName: userData.doubleName
-          }
-          context.dispatch('createWallet', appWallet)
-        }
-        context.dispatch('updateAccounts', () => {
-          setTimeout(() => {
-            var wallets = context.getters.wallets.filter(x => !(x && x.holder && x.holder.type && x.holder.type === 'imported'))
-            console.log(`wallets`, wallets.length)
-            for (let index = wallets.length - 1; index > 1; index--) {
-              var wallet = wallets[index]
-              if (!wallet.transaction || !wallet.transaction.length) {
-                context.getters.accounts.forEach(account => {
-                  if (account.type && account.type !== 'imported') {
-                  account.wallet_delete(index, wallet.name)
-                  }
-                })
-              } else {
-                for (
-                  let existingWalletIndex = 0;
-                  existingWalletIndex < index;
-                  existingWalletIndex++
-                ) {
-                  const newWallet = wallets[existingWalletIndex]
-                  var postMsg = {
-                    type: 'ADD_APP_WALLET',
-                    walletName: newWallet.name,
-                    doubleName: userData.doubleName
-                  }
-
-                  // Print.postMessage(JSON.stringify(postMsg))
-                }
-                context.commit('setImportingWallets', false)
-                return
-              }
-            }
-
-
-            var pstMsg = {
-              type: 'ADD_APP_WALLET'
-            }
-
-            // Print.postMessage(JSON.stringify(pstMsg))
-            context.commit('setImportingWallets', false)
-          }, 3000)
-        })
+        console.log('Wallets are passed by the app')
+        context.dispatch('restoreWallets', { appWallets: appWallets, account: account })
+      } else {
+        await context.dispatch('recoverWallets', account)
       }
+      await account.update_account()
+    },
+    async restoreWallets (context, data) {
+      const appWallets = data.appWallets
+      const account = data.account
+      const doubleName = context.getters.doubleName
+      console.log('restoring wallets')
+      for (const appWallet of appWallets.filter(
+        x => x.doubleName === doubleName
+      )) {
+        await account.wallet_new(appWallet.walletName, account.wallet_count, 1)
+      }
+    },
+    async recoverWallets (context, account) {
+      await context.dispatch('createFirstWallets', account)
+      console.log("after createFirstWallets")
+      await account.update_account()
+      console.log("after update account")
 
+      await context.dispatch('removeWalletsUntillTransaction', account)
+    },
+    async createFirstWallets (context, account) {
+      console.log("createFirstWallets")
+      //  create first 20 wallets
+      for (let index = 3; index <= 20; index++) {
+        console.log('walletcount', account.wallet_count)
+        await account.wallet_new(`Wallet${index}`, account.wallet_count, 1, false)
+        console.log(`account ${index} created`)
+      }
+    },
+    async removeWalletsUntillTransaction (context, account) {
+      console.log("removeWalletsUntillTransaction")
+      //  Take wallets from acccount and remove them from the last till first untill a transaction is found
+      const wallets = account.wallets
+      // @todo for to foreach (pkid)
+      for (let index = wallets.length - 1; index > 1; index--) {
+        var wallet = wallets[index]
+        if (!(!wallet.balance || !wallet.balance.transactions || !wallet.balance.transactions.length)) {
+          await context.dispatch('saveExistingWalletsToApp', {
+            wallets: wallets,
+            index: index
+          })
+          return
+        }
+        console.log(wallet.wallet_name, 'has no transactions')
+        account.wallet_delete(index, wallet.wallet_name)
+      }
+    },
+    async saveExistingWalletsToApp (context, data) {
+      const wallets = data.wallets
+      let index = data.index
+      console.log('saveExistingWalletsToApp')
+      console.log(`wallets length `,wallets.length)
+      console.log(`index `,index)
+
+      for (index; index > 1; index--) {
+        console.log("insavetoapp")
+        const newWallet = wallets[index]
+        var postMsg = {
+          walletName: newWallet.wallet_name,
+          doubleName: context.getters.doubleName
+        }
+        postMsg = JSON.stringify(postMsg)
+        console.log(`saving wallet to device`,postMsg)
+        await window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg)
+      }
+    },
+    async loadImportedWallets (context) {
       const importedWallets = JSON.parse(
         localStorage.getItem('importedWallets')
       )
       console.log('importedWallets from localstorage', importedWallets)
       if (importedWallets != null && importedWallets) {
         for (const user of importedWallets.filter(
-          x => x.doubleName === userData.doubleName
+          x => x.doubleName === context.getters.doubleName
         )) {
           console.log('loop importedwallets', user)
           user.seed = new Uint8Array(user.seed)
-          context.dispatch('importWallet', user)
+          await context.dispatch('importWallet', user)
         }
       }
     },
@@ -133,10 +151,10 @@ export default {
         }, 60000)
       }
     },
-    createWallet: (context, data) => {
+    createWallet: async (context, data) => {
       var account = context.getters.accounts[data.id]
       if (account) {
-        account.wallet_new(data.walletName, account.wallet_count, 1)
+        await account.wallet_new(data.walletName, account.wallet_count, 1)
       }
     },
     importWallet: async (context, data) => {
@@ -160,8 +178,6 @@ export default {
       context.commit('setAccounts', accounts)
 
       context.dispatch('updateAccounts')
-
-
     }
   },
   mutations: {
@@ -191,10 +207,6 @@ export default {
     wallets: state => {
       var wallets = []
       if (state.accounts) {
-        if (!window.accounts) {
-          window.accounts = state.accounts
-
-        }
         state.accounts.forEach(account => {
           var t = account.wallets.map(wallet => {
             var balance = wallet.balance
@@ -202,20 +214,6 @@ export default {
             var locked = wallet.balance.coins_locked.greater_than(0)
               ? wallet.balance.coins_locked.str({ precision: 3 })
               : null
-            // if (!window.completeWallet) {
-            //   window.completeWallet = wallet;
-            // }
-            // console.log(`complete wallet`,wallet)
-            // balance.transactions.forEach(transaction => {
-            //   console.log(transaction)
-            //   if (transaction.inputs[0] ) {
-            //     if(transaction.inputs[0].lock > 0){
-            //       // console.log(transaction.inputs[0].amount.str())
-            //     }
-
-            //   }
-            // }
-            // )
             return {
               name: wallet.wallet_name,
               address: wallet.address,
@@ -223,13 +221,7 @@ export default {
               totalLocked: locked,
               transaction: balance.transactions,
               holder: account,
-              currency: wallet.balance._chain_type.currency_unit(),
-              isAuthenticated: nbhService
-                .getWalletAuthStatus(wallet.address)
-                .then(status => {
-                  if (status) return status.data.auths[0]
-                  return false
-                })
+              currency: wallet.balance._chain_type.currency_unit()
             }
           })
           wallets.push(...t)
@@ -246,12 +238,6 @@ export default {
         state.accounts.forEach(account => {
         //   console.log(account)
           account.wallets.forEach(wallet => {
-            // if (wallet.balance.coins_locked) {
-            //   console.log("there are locked")
-            //   console.log(account.type)
-            //   console.log(wallet.balance.coins_locked.str())
-            //   console.log(wallet.balance.coins_unlocked.str())
-            // }
             if (wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) {
               // console.log("haslocked")
               hasLockedTokens = true

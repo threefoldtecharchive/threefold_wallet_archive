@@ -9,3 +9,4 @@ export default({
   redirect_url: '/login',
   scope: JSON.stringify({ doubleName: true, derivedSeed: true })
 })
+  

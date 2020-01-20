@@ -46,8 +46,7 @@ export default {
         currency: wallet.currency, 
         holder: wallet.holder, 
         name: wallet.name, 
-        totalAmount: wallet.totalAmount,
-        isAuthenticated: wallet.isAuthenticated
+        totalAmount: wallet.totalAmount
       })
       this.$refs.externForm.reset()
       setTimeout(() => {
