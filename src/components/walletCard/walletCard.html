@@ -5,7 +5,7 @@
         <v-flex :class="displayAttributes ? 'xs6' : 'xs6'">
           <v-layout column class="pt-2 pl-2">
             <p>
-              <span class="title text-capitalize">{{wallet? wallet.name : 'Wallet name'}}</span>
+              <span class="title text-capitalize">{{wallet ? wallet.name : 'Wallet name'}}</span>
               <span style="font-size: 9px; color: gray;">{{wallet.holder.type === 'imported' ? " imported" : ''}}</span>
               <br />
               <span v-if="displayAttributes" class="body-1 text-truncate">{{getHumanWalletAddress}}</span>

@@ -8,7 +8,8 @@ export default {
     syncing: false,
     accounts: null,
     intervalIsSet: false,
-    doubleName: false
+    doubleName: false,
+    wallets: []
   },
   actions: {
     async login (context, userData) {
@@ -42,6 +43,8 @@ export default {
       context.commit('setAccounts', [tfAccount])
       
       await context.dispatch('loadImportedWallets')
+
+      await context.dispatch('updateAccounts')
 
       context.commit('setImportingWallets', false)
     },
@@ -137,18 +140,37 @@ export default {
         }
       }
     },
-    updateAccounts (context, callBack) {
-      context.getters.accounts.forEach(function (account) {
-        if (callBack) {
-          callBack()
-        }
-        if (account && !context.getters.syncing) {
-          context.commit('setSync', true)
-          account.update_account(function () {
-            context.commit('setSync', false)
-          })
-        }
+    async updateAccounts (context) {
+      await context.getters.accounts.forEach(async account => {
+        if (!(account && !context.getters.syncing)) { return }
+        context.commit('setSync', true)
+        await account.update_account()
+        context.commit('setSync', false)
       })
+
+      let wallets = []
+      context.getters.accounts.forEach(account => {
+        const t = account.wallets.map(wallet => {
+          const balance = wallet.balance
+          const unlocked = wallet.balance.coins_unlocked.str({ precision: 3 })
+          const locked = wallet.balance.coins_locked.greater_than(0)
+            ? wallet.balance.coins_locked.str({ precision: 3 })
+            : null
+          return {
+            name: wallet.wallet_name,
+            address: wallet.address,
+            totalAmount: unlocked,
+            totalLocked: locked,
+            transaction: balance.transactions,
+            holder: account,
+            currency: wallet.balance._chain_type.currency_unit()
+          }
+        })
+        wallets.push(...t)
+      })
+      context.commit('setWallets',  wallets)
+
+
 
       if (!context.getters.intervalIsSet) {
         context.commit('setIntervalIsSet', true)
@@ -205,36 +227,15 @@ export default {
     updateAddressBook: (state, transactions) => {},
     setLocked: (state, hasLocked) => {
       state.hasLocked = hasLocked
+    },
+    setWallets: (state, wallets) =>{
+      state.wallets = wallets
     }
   },
   getters: {
     doubleName: state => state.doubleName,
     accounts: state => state.accounts,
-    wallets: state => {
-      var wallets = []
-      if (state.accounts) {
-        state.accounts.forEach(account => {
-          var t = account.wallets.map(wallet => {
-            var balance = wallet.balance
-            var unlocked = wallet.balance.coins_unlocked.str({ precision: 3 })
-            var locked = wallet.balance.coins_locked.greater_than(0)
-              ? wallet.balance.coins_locked.str({ precision: 3 })
-              : null
-            return {
-              name: wallet.wallet_name,
-              address: wallet.address,
-              totalAmount: unlocked,
-              totalLocked: locked,
-              transaction: balance.transactions,
-              holder: account,
-              currency: wallet.balance._chain_type.currency_unit()
-            }
-          })
-          wallets.push(...t)
-        })
-        return wallets
-      }
-    },
+    wallets: state => state.wallets,
     syncing: state => state.syncing,
     intervalIsSet: state => state.intervalIsSet,
     hasLocked: state => {
