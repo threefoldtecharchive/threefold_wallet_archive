@@ -115,7 +115,7 @@ export default {
 
           if (continueImport) {
             var postMsg = {
-              refrenceUuid: uuidv4(),
+              referenceUuid: uuidv4(),
               walletName: this.walletName,
               doubleName: this.doubleName,
               seed: Array.from(mySeed)
