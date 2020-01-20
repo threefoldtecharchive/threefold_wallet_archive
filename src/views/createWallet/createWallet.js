@@ -4,6 +4,7 @@ import {
 } from 'vuex'
 import store from '../../store'
 import cryptoService from '../../services/cryptoService'
+import uuidv4 from 'uuid/v4'
 
 export default {
   name: 'create-wallet',
@@ -92,13 +93,13 @@ export default {
       const wordCount = this.words.split(' ').length
 
       if (wordCount !== 24) {
-        this.wordsErrors.push("Please make sure you've entered 24 words. [" + wordCount + '/24]')
+        this.wordsErrors.push('Please make sure you\'ve entered 24 words. [' + wordCount + '/24]')
         return
       }
 
       if (this.walletName && wordCount === 24) {
         var that = this
-        try{
+        try {
           const generatedSeed = cryptoService.generateSeedFromMnemonic(this.words)
           // let seed = new Uint8Array([172, 71, 122, 113, 182, 210, 235, 96, 117, 42, 129, 137, 68, 81, 61, 29, 61, 218, 212, 220, 221, 146, 109, 160, 95, 255, 86, 234, 249, 72, 157, 183]);
           // let MnemonicSeed = await cryptoService.generateMnemonicFromSeed(seed);
@@ -114,6 +115,7 @@ export default {
 
           if (continueImport) {
             var postMsg = {
+              refrenceUuid: uuidv4(),
               walletName: this.walletName,
               doubleName: this.doubleName,
               seed: Array.from(mySeed)
@@ -131,7 +133,7 @@ export default {
           }
         } catch (e) {
           console.log(e.message)
-          that.wordsErrors.push("Something went wrong: " + e.message)
+          that.wordsErrors.push('Something went wrong: ' + e.message)
           return
         }
       }

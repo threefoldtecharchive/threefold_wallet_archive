@@ -38,6 +38,13 @@ export default ({
       const wallets = await context.dispatch('getPkidWallets')
       await context.dispatch('setPkidWallets', [...wallets, postMessage])
     },
+    async removePkidWallet (context, wallet){
+      const wallets = await context.dispatch('getPkidWallets')
+
+      wallets.filter((val) => val.refrenceUuid !== wallet.refrenceUuid)
+
+      await context.dispatch('setPkidWallets', wallets)
+    },
     getPkidUser (context, pk) {
       const client = context.getters.client
       client.getDoc(pk, 'user')

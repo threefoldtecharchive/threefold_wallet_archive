@@ -141,9 +141,7 @@ export default {
                     // window.localStorage.setItem('user', JSON.stringify(userObject))
                     context.dispatch('login', userObject);
 
-                    let importedWallets = JSON.parse(
-                      localStorage.getItem('importedWallets')
-                    );
+                    let importedWallets = localStorage.getItem('importedWallets')
                     console.log(`importedwallets `, importedWallets)
 
                     if (

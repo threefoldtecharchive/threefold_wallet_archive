@@ -62,6 +62,9 @@ export default {
         callback: () => { this.setInformationMessage(`Address has been copied to clipboard (${this.wallet.address.substring(0, 8)}...).`) }
       })
     },
+    async removeWallet () {
+      console.log(await this.$store.dispatch('removePkidWallet',this.wallet ))
+    },
     clicked () {
       if (this.clickable && this.authenticated) this.$emit('click', this.wallet)
     }
