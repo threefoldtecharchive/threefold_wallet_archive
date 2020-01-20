@@ -27,6 +27,8 @@ export default {
       'login'
     ]),
     async startWallet (doubleName, seed, importedWallets, appWallets) {
+      console.log(`appwallets`,appWallets)
+      console.log(`imported`,importedWallets)
       window.localStorage.setItem('appWallets', appWallets)
       window.localStorage.setItem('importedWallets', importedWallets)
       seed = new Uint8Array(
