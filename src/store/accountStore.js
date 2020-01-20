@@ -68,7 +68,7 @@ export default {
       await account.update_account()
       console.log("after update account")
 
-      context.dispatch('removeWalletsUntillTransaction', account)
+      await context.dispatch('removeWalletsUntillTransaction', account)
     },
     async createFirstWallets (context, account) {
       console.log("createFirstWallets")
@@ -79,7 +79,7 @@ export default {
         console.log(`account ${index} created`)
       }
     },
-    removeWalletsUntillTransaction (context, account) {
+    async removeWalletsUntillTransaction (context, account) {
       console.log("removeWalletsUntillTransaction")
       //  Take wallets from acccount and remove them from the last till first untill a transaction is found
       const wallets = account.wallets
@@ -87,7 +87,7 @@ export default {
       for (let index = wallets.length - 1; index > 1; index--) {
         var wallet = wallets[index]
         if (!(!wallet.balance || !wallet.balance.transactions || !wallet.balance.transactions.length)) {
-          context.dispatch('saveExistingWalletsToApp', {
+          await context.dispatch('saveExistingWalletsToApp', {
             wallets: wallets,
             index: index
           })
@@ -97,10 +97,10 @@ export default {
         account.wallet_delete(index, wallet.wallet_name)
       }
     },
-    saveExistingWalletsToApp (context, data) {
+    async saveExistingWalletsToApp (context, data) {
       const wallets = data.wallets
       let index = data.index
-      console.log("saveExistingWalletsToApp")
+      console.log('saveExistingWalletsToApp')
       console.log(`wallets length `,wallets.length)
       console.log(`index `,index)
 
@@ -108,14 +108,12 @@ export default {
         console.log("insavetoapp")
         const newWallet = wallets[index]
         var postMsg = {
-          type: 'ADD_APP_WALLET',
           walletName: newWallet.wallet_name,
           doubleName: context.getters.doubleName
         }
+        postMsg = JSON.stringify(postMsg)
         console.log(`saving wallet to device`,postMsg)
-        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-          console.log("saved wallet to app")
-        })
+        await window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg)
       }
     },
     async loadImportedWallets (context) {
