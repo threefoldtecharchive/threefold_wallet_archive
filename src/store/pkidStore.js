@@ -24,7 +24,7 @@ export default ({
         if (data.status === 404) {
           return null
         }
-
+        // @todo: handel this situation
         throw new Error()
       }
       return data.data
