@@ -21,7 +21,11 @@
     <div v-else class="mt-2">
       <div v-for="transaction in lockedTransactions">
         <div v-if="transaction.inputs && transaction.inputs.length > 0">
-          <v-row class="pa-0 mb-0" v-for="(input, index) in transaction.inputs" v-if="input.lock">
+          <v-row 
+            class="pa-0 mb-0" 
+            v-for="(input, index) in transaction.inputs" 
+            v-if="input.lock"
+          >
             <div style="width: 100%;">
               <historyCardLocked :key="index" v-if :transaction="input" :locked="true" :outgoing="false" />
             </div>
@@ -29,7 +33,11 @@
         </div>
 
         <div v-if="transaction.outputs && transaction.outputs.length > 0">
-          <v-row class="pa-0 mb-0" v-for="(output, index) in transaction.outputs" v-if="output.lock && !(output.description && output.description == 'fee')">
+          <v-row 
+            class="pa-0 mb-0" 
+            v-for="(output, index) in transaction.outputs" 
+            v-if="output.lock && !(output.description && output.description === 'fee') "
+          >
             <div style="width: 100%;">
               <historyCardLocked :key="index" v-if :transaction="output" :locked="true" :outgoing="true" />
             </div>
