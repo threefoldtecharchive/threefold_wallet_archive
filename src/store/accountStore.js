@@ -14,7 +14,6 @@ export default {
   actions: {
     async login (context, userData) {
 
-      console.log('called')
       await context.dispatch('setPkidClient', userData.seed)
       window.localStorage.setItem('importedWallets', await context.dispatch('getPkidWallets'))
 
@@ -32,19 +31,19 @@ export default {
 
       context.commit('setImportingWallets', true)
 
-
       //  daily and savings are always generated
       await tfAccount.wallet_new(`daily`, tfAccount.wallet_count, 1)
       await tfAccount.wallet_new(`savings`, tfAccount.wallet_count, 1)
       await tfAccount.update_account()
-      
+
       await context.dispatch('loadAppWallets', tfAccount)
-      console.log('finished loading appwallets')
       context.commit('setAccounts', [tfAccount])
-      
+
       await context.dispatch('loadImportedWallets')
 
       await context.dispatch('updateAccounts')
+
+      await context.dispatch('updatePkidWallets')
 
       context.commit('setImportingWallets', false)
     },
@@ -52,7 +51,6 @@ export default {
       const appWallets = JSON.parse(localStorage.getItem('appWallets'))
 
       if (appWallets != null && appWallets) {
-        console.log('Wallets are passed by the app')
         context.dispatch('restoreWallets', { appWallets: appWallets, account: account })
       } else {
         await context.dispatch('recoverWallets', account)
@@ -63,7 +61,6 @@ export default {
       const appWallets = data.appWallets
       const account = data.account
       const doubleName = context.getters.doubleName
-      console.log('restoring wallets')
       for (const appWallet of appWallets.filter(
         x => x.doubleName === doubleName
       )) {
@@ -72,23 +69,17 @@ export default {
     },
     async recoverWallets (context, account) {
       await context.dispatch('createFirstWallets', account)
-      console.log("after createFirstWallets")
       await account.update_account()
-      console.log("after update account")
 
       context.dispatch('removeWalletsUntillTransaction', account)
     },
     async createFirstWallets (context, account) {
-      console.log("createFirstWallets")
       //  create first 20 wallets
       for (let index = 3; index <= 20; index++) {
-        console.log('walletcount', account.wallet_count)
         await account.wallet_new(`Wallet${index}`, account.wallet_count, 1, false)
-        console.log(`account ${index} created`)
       }
     },
     removeWalletsUntillTransaction (context, account) {
-      console.log("removeWalletsUntillTransaction")
       //  Take wallets from acccount and remove them from the last till first untill a transaction is found
       const wallets = account.wallets
       // @todo for to foreach (pkid)
@@ -101,52 +92,36 @@ export default {
           })
           return
         }
-        console.log(wallet.wallet_name, 'has no transactions')
         account.wallet_delete(index, wallet.wallet_name)
       }
     },
     saveExistingWalletsToApp (context, data) {
       const wallets = data.wallets
       let index = data.index
-      console.log("saveExistingWalletsToApp")
-      console.log(`wallets length `,wallets.length)
-      console.log(`index `,index)
 
       for (index; index > 1; index--) {
-        console.log("insavetoapp")
         const newWallet = wallets[index]
         var postMsg = {
           type: 'ADD_APP_WALLET',
           walletName: newWallet.wallet_name,
           doubleName: context.getters.doubleName
         }
-        console.log(`saving wallet to device`,postMsg)
         window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-          console.log("saved wallet to app")
         })
       }
     },
     async loadImportedWallets (context) {
-      const importedWallets = await context.dispatch('getPkidWallets')
+      const importedWallets = await context.dispatch('getPkidImportedAccounts')
 
-      console.log('importedWallets from localstorage', importedWallets)
-      if (importedWallets != null && importedWallets) {
-        for (const user of importedWallets.filter(
-          x => x.doubleName === context.getters.doubleName
-        )) {
-          console.log('loop importedwallets', user)
-          user.seed = new Uint8Array(user.seed)
-          await context.dispatch('importWallet', user)
-        }
+      for (const wallet of importedWallets) {
+        wallet.seed = new Uint8Array(wallet.seed)
+        await context.dispatch('importWallet', wallet)
       }
     },
     async updateAccounts (context) {
-      await context.getters.accounts.forEach(async account => {
-        if (!(account && !context.getters.syncing)) { return }
-        context.commit('setSync', true)
+      for (const account of context.getters.accounts) {
         await account.update_account()
-        context.commit('setSync', false)
-      })
+      }
 
       let wallets = []
       context.getters.accounts.forEach(account => {
@@ -168,9 +143,8 @@ export default {
         })
         wallets.push(...t)
       })
-      context.commit('setWallets',  wallets)
-
-
+      context.commit('setWallets', wallets)
+      context.dispatch('updatePkidWallets')
 
       if (!context.getters.intervalIsSet) {
         context.commit('setIntervalIsSet', true)
@@ -186,8 +160,7 @@ export default {
       }
     },
     importWallet: async (context, data) => {
-      console.log('Import Wallet', data)
-      var tfAccount2 = new tfchain.Account(
+      let tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
         data.doubleName,
         {
@@ -200,7 +173,7 @@ export default {
       tfAccount2.type = 'imported'
       await tfAccount2.update_account()
 
-      var accounts = context.getters.accounts
+      let accounts = context.getters.accounts
 
       accounts.push(tfAccount2)
       context.commit('setAccounts', accounts)
@@ -228,7 +201,7 @@ export default {
     setLocked: (state, hasLocked) => {
       state.hasLocked = hasLocked
     },
-    setWallets: (state, wallets) =>{
+    setWallets: (state, wallets) => {
       state.wallets = wallets
     }
   },
@@ -243,10 +216,8 @@ export default {
       var hasLockedTokens = false
       if (state.accounts) {
         state.accounts.forEach(account => {
-        //   console.log(account)
           account.wallets.forEach(wallet => {
             if (wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) {
-              // console.log("haslocked")
               hasLockedTokens = true
             }
           })

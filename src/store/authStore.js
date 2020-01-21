@@ -44,7 +44,6 @@ export default {
       );
     },
     async checkResponse(context, responseUrl) {
-      console.log('testetstests');
       if (responseUrl.searchParams.get('error')) {
         context.commit('setFatalError', responseUrl.searchParams.get('error'));
       } else {
@@ -68,8 +67,7 @@ export default {
             doubleName: directLoginData.username,
             seed: newSeed
           };
-          // window.localStorage.setItem('user', JSON.stringify(userObject))
-          context.dispatch('login', userObject);
+          await context.dispatch('login', userObject);
 
           let importedWallets = JSON.parse(
             localStorage.getItem('importedWallets')
@@ -87,15 +85,6 @@ export default {
           botService
             .getUserData(username)
             .then(async response => {
-              console.log(response);
-              console.log(signedHash, response.data.publicKey);
-              console.log(
-                'cr3',
-                await cryptoService.validateSignature(
-                  signedHash,
-                  response.data.publicKey
-                )
-              );
               if (
                 signedHash &&
                 context.getters.state !==
@@ -108,20 +97,18 @@ export default {
               }
               // http://localhost:8080/login#username=ivan&derivedSeed=abc123
               var data = responseUrl.searchParams.get('data');
-              console.log(`Data ivan`,data)
               if (data) {
                 data = JSON.parse(data);
                 var keys = context.getters.keys;
                 var userData = {};
-                cryptoService
+                await cryptoService
                   .decrypt(
                     data.ciphertext,
                     data.nonce,
                     keys.privateKey,
                     response.data.publicKey
                   )
-                  .then(decrypted => {
-                    console.log(`decrypted`, decrypted)
+                  .then( async decrypted => {
                     if (decrypted) {
                       decrypted = JSON.parse(decrypted);
                       for (var k in decrypted) {
@@ -138,24 +125,7 @@ export default {
                       seed: newSeed
                     };
 
-                    // window.localStorage.setItem('user', JSON.stringify(userObject))
-                    context.dispatch('login', userObject);
-
-                    let importedWallets = localStorage.getItem('importedWallets')
-                    console.log(`importedwallets `, importedWallets)
-
-                    if (
-                      importedWallets != null &&
-                      importedWallets.filter(
-                        x => x.doubleName === userObject.doubleName
-                      )
-                    ) {
-                      for (let user of importedWallets) {
-                        user.seed = new Uint8Array(user.seed);
-                        // @todo: check if necessary to make await
-                        context.dispatch('importWallet', user);
-                      }
-                    }
+                    await context.dispatch('login', userObject);
                   })
                   .catch(e =>
                     context.commit(
@@ -164,15 +134,12 @@ export default {
                     )
                   );
               } else {
-                console.log(`Else After data`,data)
                 context.commit('setFatalError', 'Got no data from 3bot');
               }
             })
             .catch(e => {
-              console.log(`e`, e);
               // context.commit('setFatalError', 'Signature failed, please try again.')
               // We can't do this because we need to be able to login from the browser. (I think)
-              console.log('Username was null, redirecting .... ');
               context.dispatch('generateLoginUrl');
             });
         }
@@ -185,12 +152,10 @@ export default {
   },
   mutations: {
     setKeys(state, keys) {
-      console.log(`insetKeys`);
       localStorage.setItem('tempKeys', JSON.stringify(keys));
       state.keys = keys;
     },
     setState(state, stateHash) {
-      console.log(`insetState`);
       localStorage.setItem('state', stateHash);
       state.state = stateHash;
     },

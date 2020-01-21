@@ -78,7 +78,7 @@ export default {
         this.walletNameErrors.push('There is already a wallet with this name')
       }
     },
-    addImportWallet () {
+    async addImportWallet () {
       if (!this.walletName) {
         this.walletNameErrors.push('Please enter a name.')
         return
@@ -111,7 +111,7 @@ export default {
 
           const obj = { doubleName: this.doubleName, walletName: this.walletName, seed: mySeed }
 
-          let continueImport = this.importWallet(obj)
+          let continueImport = await this.importWallet(obj)
 
           if (continueImport) {
             var postMsg = {
@@ -120,16 +120,14 @@ export default {
               doubleName: this.doubleName,
               seed: Array.from(mySeed)
             }
+            console.log(postMsg)
             // Print.postMessage(JSON.stringify(postMsg))
             console.log('before flutter call', postMsg)
             var self = this
 
-            store.dispatch('addImportedWallet', postMsg)
-
-            // window.flutter_inappwebview.callHandler('ADD_IMPORT_WALLET', postMsg).then(function (result) {
-            //   console.log('flutter result', result)
-            //   self.$router.push({ name: 'home' })
-            // })
+            window.flutter_inappwebview.callHandler('ADD_IMPORT_WALLET', postMsg).then(function (result) {
+              self.$router.push({ name: 'home' })
+            })
           }
         } catch (e) {
           console.log(e.message)

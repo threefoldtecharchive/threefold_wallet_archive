@@ -1,3 +1,5 @@
+import uuidv4 from 'uuid/v4'
+
 const pkidUrl = 'http://localhost:8080'
 
 import Pkid from '@jimber/pkid'
@@ -19,7 +21,6 @@ export default ({
     async getPkidWallets (context) {
       const client = context.getters.client
       const data = await client.getDoc(client.keyPair.publicKey, 'wallets')
-      console.log(data);
       if (!data.success) {
         if (data.status === 404) {
           return null
@@ -30,15 +31,56 @@ export default ({
       return data.data
     },
     setPkidWallets (context, wallets) {
-      console.log('wallets')
-      console.log(wallets)
       context.getters.client.setDoc('wallets', wallets, true)
     },
+    setPkidImportedAccounts (context, accounts) {
+      context.getters.client.setDoc('imported_accounts', accounts, true)
+    },
+    async getPkidImportedAccounts (context) {
+      const client = context.getters.client
+      const data = await client.getDoc(client.keyPair.publicKey, 'imported_accounts')
+      if (!data.success) {
+        if (data.status === 404) {
+          return null
+        }
+        // @todo: handel this situation
+        throw new Error()
+      }
+      return data.data
+    },
     async addImportedWallet (context, postMessage) {
-      const wallets = await context.dispatch('getPkidWallets')
-      await context.dispatch('setPkidWallets', [...wallets, postMessage])
+      const wallets = await context.dispatch('getPkidImportedAccounts')
+      await context.dispatch('setPkidImportedWallets', [...wallets, postMessage])
+    },
+    async updatePkidWallets(context) {
+
+      const accounts = context.getters.accounts
+
+      const appAccount = accounts[0]
+
+      const appWallets = appAccount.wallets.map(wallet => {
+        return {
+          walletName: wallet.wallet_name,
+          doubleName: appAccount.doubleName,
+          index: wallet.address_count
+        }
+      })
+      await context.dispatch('setPkidWallets', appWallets)
+
+      const importedAccounts = accounts.filter(account => account.type === 'imported')
+
+      const mappedImportedAccounts = importedAccounts.map(account => {
+        return {
+          walletName: account.wallet.wallet_name,
+          doubleName: account.password,
+          seed: Array.from(account.seed)
+        }
+      })
+
+      await context.dispatch('setPkidImportedAccounts', mappedImportedAccounts)
     },
     async removePkidWallet (context, wallet){
+      // will be moved to update pkidwallets
       const wallets = await context.dispatch('getPkidWallets')
 
       wallets.filter((val) => val.refrenceUuid !== wallet.refrenceUuid)
