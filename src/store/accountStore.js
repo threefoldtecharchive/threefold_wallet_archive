@@ -158,6 +158,7 @@ export default {
       if (account) {
         await account.wallet_new(data.walletName, account.wallet_count, 1)
       }
+      context.dispatch('updateAccounts')
     },
     importWallet: async (context, data) => {
       let tfAccount2 = new tfchain.Account(

@@ -52,7 +52,7 @@ export default ({
       const wallets = await context.dispatch('getPkidImportedAccounts')
       await context.dispatch('setPkidImportedWallets', [...wallets, postMessage])
     },
-    async updatePkidWallets(context) {
+    async updatePkidWallets (context) {
 
       const accounts = context.getters.accounts
 
@@ -79,13 +79,12 @@ export default ({
 
       await context.dispatch('setPkidImportedAccounts', mappedImportedAccounts)
     },
-    async removePkidWallet (context, wallet){
-      // will be moved to update pkidwallets
-      const wallets = await context.dispatch('getPkidWallets')
+    async removePkidWallet (context, wallet) {
 
-      wallets.filter((val) => val.refrenceUuid !== wallet.refrenceUuid)
+      const accounts = context.getters.accounts.filter(account => account !== wallet.holder)
 
-      await context.dispatch('setPkidWallets', wallets)
+      context.commit('setAccounts', accounts)
+      context.dispatch('updateAccounts')
     },
     getPkidUser (context, pk) {
       const client = context.getters.client
