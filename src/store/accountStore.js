@@ -23,60 +23,6 @@ export default {
         }
       )
       tfAccount.type = 'app'
-<<<<<<< HEAD
-      context.commit('setAccounts', [tfAccount])
-      context.dispatch('updateAccounts')
-
-
-    },
-    loadWallets (appWallets, importedWallets ) {
-      if(appWallets){
-        this.loadWallets(appWallets)
-      }
-      else{
-        appWallets = generateAppWallets()
-      }
-      if(importedWallets){
-        loadImportedWallets
-      }
-      //commit wallets
-
-
-    },
-    generateAppWallets(){
-      context.dispatch('createWallet', {
-        chain: 'tft',
-        walletName: 'daily',
-        id: '0'
-      })
-      context.dispatch('createWallet', {
-        chain: 'tft',
-        walletName: 'savings',
-        id: '0'
-      })
-    },
-    loadAppWallets(appWallets){
-      for (const appWallet of appWallets.filter(
-        x => x.doubleName === userData.doubleName
-      )) {
-        appWallet.id = 0
-        context.dispatch('createWallet', appWallet)
-      }
-    },
-    loadImportedWallets(importedwallets){
-      console.log('importedWallets from localstorage', importedWallets)
-      if (importedWallets != null && importedWallets) {
-        for (const user of importedWallets.filter(
-          x => x.doubleName === userData.doubleName
-        )) {
-          console.log('loop importedwallets', user)
-          user.seed = new Uint8Array(user.seed)
-          context.dispatch('importWallet', user)
-        }
-      }
-    }
-=======
->>>>>>> master
 
       context.commit('setImportingWallets', true)
 
@@ -121,9 +67,6 @@ export default {
       await account.update_account()
       console.log("after update account")
 
-<<<<<<< HEAD
-
-=======
       await context.dispatch('removeWalletsUntillTransaction', account)
     },
     async createFirstWallets (context, account) {
@@ -169,7 +112,7 @@ export default {
         }
         postMsg = JSON.stringify(postMsg)
         console.log(`saving wallet to device`,postMsg)
-        await window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg)
+        // await window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg)
       }
     },
     async loadImportedWallets (context) {
@@ -186,7 +129,6 @@ export default {
           await context.dispatch('importWallet', user)
         }
       }
->>>>>>> master
     },
 
 
@@ -257,10 +199,7 @@ export default {
     setAccounts: (state, accounts) => {
       state.accounts = accounts
     },
-    updateAddressBook: (state, transactions) => {},
-    setLocked: (state, hasLocked) => {
-      state.hasLocked = hasLocked
-    }
+    updateAddressBook: (state, transactions) => {}
   },
   getters: {
     doubleName: state => state.doubleName,
