@@ -91,8 +91,7 @@ export default {
         currency: wallet.currency,
         address: wallet.address,
         holder: wallet.holder,
-        totalAmount: wallet.totalAmount,
-        isAuthenticated: wallet.isAuthenticated
+        totalAmount: wallet.totalAmount
       }
     }
   }

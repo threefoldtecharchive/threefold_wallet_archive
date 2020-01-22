@@ -40,17 +40,7 @@ export default {
     },
     lockedTransactions () {
       var transactions = this.wallets.find(x => x.name === this.$route.params.wallet).transaction
-      // transactions = transactions.filter(x => {
-      //   if (x.inputs && x.inputs.length > 0) {
-      //     // if (x.inputs[0] && x.inputs[0].lock > 0) {
-      //     // console.log(x.inputs)
-      //     return true
-      //   } else {
-      //     return false
-      //   }
-      // })
-      transactions = transactions.filter(x => x.inputs && x.inputs.length > 0)
-      console.log(`transactions locked`, transactions)
+      // transactions = transactions.filter((x => x.inputs && x.inputs.length > 0) || (x => x.outputs && x.outputs.length > 0))
       return transactions
     },
     selectedWallet () {
@@ -60,7 +50,6 @@ export default {
   },
   mounted () {
     // this.$refs.selector.$children.find(x => x.selected).$el.scrollIntoView({behavior: "auto", block: "center", inline: "center"})
-    console.log(this.wallets)
   },
   methods: {
     selectWallet (wallet) {

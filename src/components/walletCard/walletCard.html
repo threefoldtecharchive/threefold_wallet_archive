@@ -26,9 +26,9 @@
             </v-flex>
             <v-flex class="mr-1" v-if="displayAmount">
               <amountIndicator v-if="displayAttributes" class="pr-2 pt-1" :amount='totalAmount'
-                :valuta='wallet.currency' :locked="wallet.totalLocked" :showTypeCurrency="true" />
+                :valuta='wallet.currency' :locked="wallet.totalLocked" :unconfirmed="wallet.totalUnconfirmed" />
               <amountIndicator v-else class="pl-3 pr-2 pt-1" :amount='totalAmount' :valuta='wallet.currency' small
-                :locked="wallet.totalLocked" :showTypeCurrency="true" />
+                :locked="wallet.totalLocked" :unconfirmed="wallet.totalUnconfirmed" />
 
             </v-flex>
           </v-layout>

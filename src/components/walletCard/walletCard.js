@@ -48,11 +48,8 @@ export default {
     // }
   },
   mounted () {
-    if (this.wallet.currency === 'GFT' || this.wallet.currency == 'gram') {
-      this.wallet.isAuthenticated.then(v => {
-        this.authenticated = v
-      })
-    }
+
+    
   },
   methods: {
     ...mapActions([

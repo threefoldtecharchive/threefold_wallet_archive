@@ -25,10 +25,8 @@ export default {
       type: String,
       default: 'left'
     },
-    showTypeCurrency: {
-      type: Boolean,
-      default: false
-    } 
+    unconfirmed: {
+    }
   },
   data () {
     return {
@@ -37,7 +35,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      "hasLocked"
+      "hasLockedOrUnconfirmed"
     ])
   },
   mounted () {
