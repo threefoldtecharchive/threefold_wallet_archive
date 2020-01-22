@@ -35,7 +35,6 @@ export default {
       await context.dispatch('loadAppWallets', tfAccount)
       console.log('finished loading appwallets')
       context.commit('setAccounts', [tfAccount])
-      
       await context.dispatch('loadImportedWallets')
 
       context.commit('setImportingWallets', false)
@@ -211,6 +210,7 @@ export default {
           var t = account.wallets.map(wallet => {
             var balance = wallet.balance
             var unlocked = wallet.balance.coins_unlocked.str({ precision: 3 })
+            var unconfirmed = balance.unconfirmed_coins_total.str({ precision: 3 })
             var locked = wallet.balance.coins_locked.greater_than(0)
               ? wallet.balance.coins_locked.str({ precision: 3 })
               : null
@@ -218,6 +218,7 @@ export default {
               name: wallet.wallet_name,
               address: wallet.address,
               totalAmount: unlocked,
+              totalUnconfirmed: unconfirmed,
               totalLocked: locked,
               transaction: balance.transactions,
               holder: account,
@@ -231,21 +232,22 @@ export default {
     },
     syncing: state => state.syncing,
     intervalIsSet: state => state.intervalIsSet,
-    hasLocked: state => {
+    hasLockedOrUnconfirmed: state => {
       var wallets = []
-      var hasLockedTokens = false
+      var hasLockedOrUnconfirmed = false
       if (state.accounts) {
         state.accounts.forEach(account => {
         //   console.log(account)
           account.wallets.forEach(wallet => {
-            if (wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) {
+            if ((wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) || 
+            (wallet.balance.unconfirmed_coins_total && wallet.balance.unconfirmed_coins_total.greater_than(0))) {
               // console.log("haslocked")
-              hasLockedTokens = true
+              hasLockedOrUnconfirmed = true
             }
           })
         })
       }
-      return hasLockedTokens
+      return hasLockedOrUnconfirmed
     }
   }
 }
