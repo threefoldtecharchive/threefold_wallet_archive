@@ -36,13 +36,15 @@ export default {
       'importWallet',
       'createWallet'
     ]),
+    walletNameFound () {
+      return this.wallets.find(x => x.name.toLowerCase() == this.walletName.toLowerCase())
+    },
     addCreateWallet () {
       this.walletNameErrors = []
       this.wordsErrors = []
+      this.walletName = this.walletName.trim()
 
-      const walletNameFound = this.wallets.find(x => x.name == this.walletName.toLowerCase())
-      console.log(walletNameFound)
-      if (!walletNameFound) {
+      if (!this.walletNameFound()) {
         // ID: 0 HARDCODED FOR NOW!
         this.createWallet({ chain: 'tft', walletName: this.walletName, id: '0' })
 
@@ -77,8 +79,13 @@ export default {
       }
     },
     addImportWallet () {
+      this.walletName = this.walletName.trim()
       if (!this.walletName) {
         this.walletNameErrors.push('Please enter a name.')
+        return
+      }
+      if (this.walletNameFound()) {
+        this.walletNameErrors.push('There is already a wallet with this name')
         return
       }
 

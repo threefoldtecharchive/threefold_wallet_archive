@@ -130,10 +130,6 @@ export default {
         }
       }
     },
-
-
-
-
     updateAccounts (context, callBack) {
       context.getters.accounts.forEach(function (account) {
         if (callBack) {
