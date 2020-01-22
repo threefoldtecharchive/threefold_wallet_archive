@@ -12,13 +12,7 @@ export default {
     wallets: []
   },
   actions: {
-    async login (context, userData) {
-
-      await context.dispatch('setPkidClient', userData.seed)
-      window.localStorage.setItem('importedWallets', await context.dispatch('getPkidWallets'))
-
-      context.commit('setDoubleName', userData.doubleName)
-
+    generateTfAccount: async function (context,userData) {
       var tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
         userData.doubleName,
@@ -34,16 +28,33 @@ export default {
       //  daily and savings are always generated
       await tfAccount.wallet_new(`daily`, tfAccount.wallet_count, 1)
       await tfAccount.wallet_new(`savings`, tfAccount.wallet_count, 1)
-      await tfAccount.update_account()
 
-      await context.dispatch('loadAppWallets', tfAccount)
+      const appWallets = await context.dispatch('getPkidWallets')
+
+      if (appWallets === null) {
+        context.dispatch('loadAppWallets', tfAccount)
+      }
+
+      for (const wallet of appWallets || []) {
+        if (wallet.walletName === `daily` || wallet.walletName === `savings`) {
+          continue
+        }
+        await tfAccount.wallet_new(wallet.walletName, wallet.index, 1)
+      }
+
+      await tfAccount.update_account()
       context.commit('setAccounts', [tfAccount])
+    }, async login (context, userData) {
+
+      await context.dispatch('setPkidClient', userData.seed)
+
+      context.commit('setDoubleName', userData.doubleName)
+
+      await context.dispatch('generateTfAccount', userData)
 
       await context.dispatch('loadImportedWallets')
 
       await context.dispatch('updateAccounts')
-
-      await context.dispatch('updatePkidWallets')
 
       context.commit('setImportingWallets', false)
     },
@@ -111,7 +122,13 @@ export default {
       }
     },
     async loadImportedWallets (context) {
-      const importedWallets = await context.dispatch('getPkidImportedAccounts')
+      let importedWallets = await context.dispatch('getPkidImportedAccounts')
+
+      if(null === importedWallets){
+        importedWallets = JSON.parse(
+          localStorage.getItem('importedWallets')
+        )
+      }
 
       for (const wallet of importedWallets) {
         wallet.seed = new Uint8Array(wallet.seed)

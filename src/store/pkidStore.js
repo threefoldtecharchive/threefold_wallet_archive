@@ -57,12 +57,11 @@ export default ({
       const accounts = context.getters.accounts
 
       const appAccount = accounts[0]
-
       const appWallets = appAccount.wallets.map(wallet => {
         return {
           walletName: wallet.wallet_name,
           doubleName: appAccount.doubleName,
-          index: wallet.address_count
+          index: wallet.wallet_index
         }
       })
       await context.dispatch('setPkidWallets', appWallets)
