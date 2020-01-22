@@ -1,6 +1,5 @@
 import uuidv4 from 'uuid/v4'
-
-const pkidUrl = 'http://localhost:8080'
+import config from '../../public/config'
 
 import Pkid from '@jimber/pkid'
 import sodium from 'libsodium-wrappers'
@@ -15,7 +14,7 @@ export default ({
       await sodium.ready
       const keyPair = sodium.crypto_sign_seed_keypair(payload)
 
-      const client = new Pkid(pkidUrl, keyPair)
+      const client = new Pkid(config.pkidUrl, keyPair)
       context.commit('setPkidClient', client)
     },
     async getPkidWallets (context) {

@@ -7,5 +7,7 @@ export default({
   botFrontEnd: 'https://login.staging.jimber.org/',
   botBackend: 'https://login.staging.jimber.org',
   redirect_url: '/login',
-  scope: JSON.stringify({derivedSeed: true})
+  scope: JSON.stringify({derivedSeed: true}),
+  pkidUrl: 'https://pkid.staging.jimber.org'
 })
+

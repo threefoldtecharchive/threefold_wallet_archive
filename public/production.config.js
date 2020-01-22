@@ -7,5 +7,7 @@ export default({
   botFrontEnd: 'https://login.threefold.me/',
   botBackend: 'https://login.threefold.me',
   redirect_url: '/login',
-  scope: JSON.stringify({derivedSeed: true})
+  scope: JSON.stringify({derivedSeed: true}),
+  pkidUrl: 'https://pkid.jimber.org'
+
 })
