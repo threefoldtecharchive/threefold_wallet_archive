@@ -128,7 +128,7 @@ export default {
         )
       }
 
-      for (const wallet of importedWallets) {
+      for (const wallet of importedWallets || []) {
         wallet.seed = new Uint8Array(wallet.seed)
         await context.dispatch('importWallet', wallet)
       }
