@@ -717,9 +717,10 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
-"@jimber/pkid@JimberSoftware/pkid-node-client#feature/encryption":
-  version "1.0.2"
-  resolved "https://codeload.github.com/JimberSoftware/pkid-node-client/tar.gz/c9f6d5e88103106783ad3d01440fecbaffe75e32"
+"@jimber/pkid@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@jimber/pkid/-/pkid-1.0.4.tgz#aefbb02ef14b2a562ce813eccb24dde7462d9b74"
+  integrity sha512-A60gh/HSqNgbFWEaDamWSfrciBLC9FrYxrcCDmS515fu7XmIUHSmNNEyCO7QG+gYJ5hECcV47AblILYR6L2ZEg==
   dependencies:
     axios "^0.19.0"
     libsodium-wrappers "^0.7.6"
