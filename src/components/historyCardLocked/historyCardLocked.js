@@ -72,14 +72,13 @@ export default {
     lockedValue () {
       let lockValue = this.transaction.lock
       let isTimestamp = this.transaction.lock_is_timestamp
-      let chainTimestamp= this.transaction.chainTimestamp
       if (lockValue) {        
         if (isTimestamp) {
           const lockDate = new Date(lockValue * 1000)
-          const momentLockDate = moment(lockValue)
-          const momentChainDate = moment(chainTimestamp)
+          const momentLockDate = moment(lockDate)
           const formattedDate = moment(lockDate).format('MMMM Do YYYY, HH:mm z')
-          if (momentLockDate > momentChainDate) {
+          const momentChainDate = moment()
+          if (momentLockDate < momentChainDate) {
             return 'Unlocked since '.concat(formattedDate)
           }
           return 'Locked until '.concat(formattedDate)

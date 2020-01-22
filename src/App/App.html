@@ -1,14 +1,14 @@
 <section class="app">
   <v-app :style="cssProps">
-    <div class="loading white--text" v-if="isImportingWallet">
-      <v-layout row align-center class="fill-height" justify-center>
-        <v-layout column align-center justify-center>
+    <div class="loading white--text" v-if="isImportingWallet" align="center">
+      <v-row align="center" class="fill-height" justify="center">
+        <v-col align="center" justify="center">
           <v-progress-circular size="100" width="10" indeterminate></v-progress-circular>
           <h2 class="mt-5">
             Importing wallets...
           </h2>
-        </v-layout>
-      </v-layout>
+        </v-col>
+      </v-row>
     </div>
     <toolbar @ctaClicked='handleCTAClick' @enableQrScannerDialog/>
     <v-content class="mt-0">

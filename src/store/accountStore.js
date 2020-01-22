@@ -51,7 +51,6 @@ export default {
       context.commit('setDoubleName', userData.doubleName)
 
       await context.dispatch('generateTfAccount', userData)
-
       await context.dispatch('loadImportedWallets')
 
       await context.dispatch('updateAccounts')
@@ -82,7 +81,7 @@ export default {
       await context.dispatch('createFirstWallets', account)
       await account.update_account()
 
-      context.dispatch('removeWalletsUntillTransaction', account)
+      await context.dispatch('removeWalletsUntillTransaction', account)
     },
     async createFirstWallets (context, account) {
       //  create first 20 wallets
@@ -90,14 +89,14 @@ export default {
         await account.wallet_new(`Wallet${index}`, account.wallet_count, 1, false)
       }
     },
-    removeWalletsUntillTransaction (context, account) {
+    async removeWalletsUntillTransaction (context, account) {
       //  Take wallets from acccount and remove them from the last till first untill a transaction is found
       const wallets = account.wallets
       // @todo for to foreach (pkid)
       for (let index = wallets.length - 1; index > 1; index--) {
         var wallet = wallets[index]
         if (!(!wallet.balance || !wallet.balance.transactions || !wallet.balance.transactions.length)) {
-          context.dispatch('saveExistingWalletsToApp', {
+          await context.dispatch('saveExistingWalletsToApp', {
             wallets: wallets,
             index: index
           })
@@ -106,19 +105,18 @@ export default {
         account.wallet_delete(index, wallet.wallet_name)
       }
     },
-    saveExistingWalletsToApp (context, data) {
+    async saveExistingWalletsToApp (context, data) {
       const wallets = data.wallets
       let index = data.index
 
       for (index; index > 1; index--) {
         const newWallet = wallets[index]
         var postMsg = {
-          type: 'ADD_APP_WALLET',
           walletName: newWallet.wallet_name,
           doubleName: context.getters.doubleName
         }
-        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-        })
+
+        postMsg = JSON.stringify(postMsg)
       }
     },
     async loadImportedWallets (context) {
@@ -216,9 +214,6 @@ export default {
       state.accounts = accounts
     },
     updateAddressBook: (state, transactions) => {},
-    setLocked: (state, hasLocked) => {
-      state.hasLocked = hasLocked
-    },
     setWallets: (state, wallets) => {
       state.wallets = wallets
     }
@@ -229,19 +224,21 @@ export default {
     wallets: state => state.wallets,
     syncing: state => state.syncing,
     intervalIsSet: state => state.intervalIsSet,
-    hasLocked: state => {
+    hasLockedOrUnconfirmed: state => {
       var wallets = []
-      var hasLockedTokens = false
+      var hasLockedOrUnconfirmed = false
       if (state.accounts) {
         state.accounts.forEach(account => {
           account.wallets.forEach(wallet => {
-            if (wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) {
-              hasLockedTokens = true
+            if ((wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) || 
+            (wallet.balance.unconfirmed_coins_total && wallet.balance.unconfirmed_coins_total.greater_than(0))) {
+              // console.log("haslocked")
+              hasLockedOrUnconfirmed = true
             }
           })
         })
       }
-      return hasLockedTokens
+      return hasLockedOrUnconfirmed
     }
   }
 }
