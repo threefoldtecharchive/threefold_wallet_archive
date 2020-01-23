@@ -127,11 +127,14 @@ export default {
 
                     await context.dispatch('login', userObject);
                   })
-                  .catch(e =>
-                    context.commit(
-                      'setFatalError',
-                      'Could not decrypt message.'
-                    )
+                  .catch(e => {
+                    context.commit('setImportingWallets', false)
+                    console.log(e)
+                      return context.commit(
+                        'setFatalError',
+                        e.message
+                      )
+                    }
                   );
               } else {
                 context.commit('setFatalError', 'Got no data from 3bot');
