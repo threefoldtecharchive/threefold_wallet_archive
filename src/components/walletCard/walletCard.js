@@ -63,7 +63,7 @@ export default {
       })
     },
     async removeWallet () {
-      console.log(await this.$store.dispatch('removePkidWallet',this.wallet ))
+      await this.$store.dispatch('removePkidWallet',this.wallet )
     },
     clicked () {
       if (this.clickable && this.authenticated) this.$emit('click', this.wallet)
