@@ -1,7 +1,5 @@
 import config from '../../public/config'
 import * as tfchain from '../services/tfchain/api'
-import nbhService from '../services/nbhService'
-import router from '../router'
 
 export default {
   state: {
@@ -12,7 +10,7 @@ export default {
     wallets: []
   },
   actions: {
-    generateTfAccount: async function (context,userData) {
+    generateTfAccount: async function (context, userData) {
       var tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
         userData.doubleName,
@@ -26,8 +24,8 @@ export default {
       context.commit('setImportingWallets', true)
 
       //  daily and savings are always generated
-      await tfAccount.wallet_new(`daily`, tfAccount.wallet_count, 1)
-      await tfAccount.wallet_new(`savings`, tfAccount.wallet_count, 1)
+      await tfAccount.wallet_new('daily', tfAccount.wallet_count, 1)
+      await tfAccount.wallet_new('savings', tfAccount.wallet_count, 1)
 
       const appWallets = await context.dispatch('getPkidWallets')
 
@@ -36,7 +34,7 @@ export default {
       }
 
       for (const wallet of appWallets || []) {
-        if (wallet.walletName === `daily` || wallet.walletName === `savings`) {
+        if (wallet.walletName === 'daily' || wallet.walletName === 'savings') {
           continue
         }
         await tfAccount.wallet_new(wallet.walletName, wallet.index, 1)
@@ -44,8 +42,8 @@ export default {
 
       await tfAccount.update_account()
       context.commit('setAccounts', [tfAccount])
-    }, async login (context, userData) {
-
+    },
+    async login (context, userData) {
       await context.dispatch('setPkidClient', userData.seed)
 
       context.commit('setDoubleName', userData.doubleName)
@@ -58,10 +56,13 @@ export default {
       context.commit('setImportingWallets', false)
     },
     async loadAppWallets (context, account) {
-      const appWallets = JSON.parse(localStorage.getItem('appWallets'))
+      const appWallets = JSON.parse(window.localStorage.getItem('appWallets'))
 
       if (appWallets != null && appWallets) {
-        context.dispatch('restoreWallets', { appWallets: appWallets, account: account })
+        context.dispatch('restoreWallets', {
+          appWallets: appWallets,
+          account: account
+        })
       } else {
         await context.dispatch('recoverWallets', account)
       }
@@ -86,7 +87,12 @@ export default {
     async createFirstWallets (context, account) {
       //  create first 20 wallets
       for (let index = 3; index <= 20; index++) {
-        await account.wallet_new(`Wallet${index}`, account.wallet_count, 1, false)
+        await account.wallet_new(
+          `Wallet${index}`,
+          account.wallet_count,
+          1,
+          false
+        )
       }
     },
     async removeWalletsUntillTransaction (context, account) {
@@ -95,7 +101,13 @@ export default {
       // @todo for to foreach (pkid)
       for (let index = wallets.length - 1; index > 1; index--) {
         var wallet = wallets[index]
-        if (!(!wallet.balance || !wallet.balance.transactions || !wallet.balance.transactions.length)) {
+        if (
+          !(
+            !wallet.balance ||
+            !wallet.balance.transactions ||
+            !wallet.balance.transactions.length
+          )
+        ) {
           await context.dispatch('saveExistingWalletsToApp', {
             wallets: wallets,
             index: index
@@ -122,9 +134,9 @@ export default {
     async loadImportedWallets (context) {
       let importedWallets = await context.dispatch('getPkidImportedAccounts')
 
-      if(null === importedWallets){
+      if (importedWallets === null) {
         importedWallets = JSON.parse(
-          localStorage.getItem('importedWallets')
+          window.localStorage.getItem('importedWallets')
         )
       }
 
@@ -138,7 +150,7 @@ export default {
         await account.update_account()
       }
 
-      let wallets = []
+      const wallets = []
       context.getters.accounts.forEach(account => {
         const t = account.wallets.map(wallet => {
           const balance = wallet.balance
@@ -178,7 +190,7 @@ export default {
       context.dispatch('updateAccounts')
     },
     importWallet: async (context, data) => {
-      let tfAccount2 = new tfchain.Account(
+      const tfAccount2 = new tfchain.Account(
         `tft:${data.doubleName}`,
         data.doubleName,
         {
@@ -191,7 +203,7 @@ export default {
       tfAccount2.type = 'imported'
       await tfAccount2.update_account()
 
-      let accounts = context.getters.accounts
+      const accounts = context.getters.accounts
 
       accounts.push(tfAccount2)
       context.commit('setAccounts', accounts)
@@ -215,6 +227,7 @@ export default {
     setAccounts: (state, accounts) => {
       state.accounts = accounts
     },
+    // eslint-disable-next-line no-unused-vars
     updateAddressBook: (state, transactions) => {},
     setWallets: (state, wallets) => {
       state.wallets = wallets
@@ -227,13 +240,16 @@ export default {
     syncing: state => state.syncing,
     intervalIsSet: state => state.intervalIsSet,
     hasLockedOrUnconfirmed: state => {
-      var wallets = []
       var hasLockedOrUnconfirmed = false
       if (state.accounts) {
         state.accounts.forEach(account => {
           account.wallets.forEach(wallet => {
-            if ((wallet.balance.coins_locked && wallet.balance.coins_locked.greater_than(0)) || 
-            (wallet.balance.unconfirmed_coins_total && wallet.balance.unconfirmed_coins_total.greater_than(0))) {
+            if (
+              (wallet.balance.coins_locked &&
+                wallet.balance.coins_locked.greater_than(0)) ||
+              (wallet.balance.unconfirmed_coins_total &&
+                wallet.balance.unconfirmed_coins_total.greater_than(0))
+            ) {
               // console.log("haslocked")
               hasLockedOrUnconfirmed = true
             }
