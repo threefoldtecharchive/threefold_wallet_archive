@@ -11,6 +11,8 @@ stages:
 
 Build:
   stage: build
+  only:
+    - development
   dependencies: []
   tags:
     - builder
@@ -25,6 +27,8 @@ Deployment:
     GIT_STRATEGY: none
     GIT_CHECKOUT: "false"
   stage: deploy
+  only:
+    - development
   dependencies: []
   tags:
     - staging
