@@ -5,7 +5,7 @@
         <v-flex :class="displayAttributes ? 'xs6' : 'xs6'">
           <v-layout column class="pt-2 pl-2">
             <p>
-              <span class="title text-capitalize">{{wallet? wallet.name : 'Wallet name'}}</span>
+              <span class="title text-capitalize">{{wallet ? wallet.name : 'Wallet name'}}</span>
               <span style="font-size: 9px; color: gray;">{{wallet.holder.type === 'imported' ? " imported" : ''}}</span>
               <br />
               <span v-if="displayAttributes" class="body-1 text-truncate">{{getHumanWalletAddress}}</span>
@@ -16,11 +16,20 @@
         </v-flex>
         <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs6' : ''">
           <v-layout column class="justify-space-between  align-end">
-            <v-flex v-if="displayAttributes">
+            <v-flex v-if="displayAttributes" class="badge-top accent">
               <v-btn dark small icon text @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0"
                 style="z-index: 1;" :class="$route.meta.accent" v-show="wallet.currency != 'gram'">
                 <v-icon size="15">
                   file_copy
+                </v-icon>
+              </v-btn>
+              <v-btn dark small icon text
+                     @click.stop="removeWallet"
+                     class="px-3 align-self-end badge-top ma-0 error"
+                     style="z-index: 1;"
+                     v-if="wallet.holder.type === 'imported'">
+                <v-icon size="13">
+                  fa-trash
                 </v-icon>
               </v-btn>
             </v-flex>

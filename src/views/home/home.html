@@ -1,16 +1,27 @@
 <section class="home fill-height">
     <v-layout column fill-height>
-        <!-- <div class="cheat"></div> -->
         <div class="content" v-if="wallets.length">
-            <walletCard  no-padding class="my-2" clickable v-for="(wallet, index) in wallets.filter(x => x.currency === 'GFT' || x.currency === 'TFT')" :key='index' :wallet="wallet" @click="seeDetails(wallet)"/>
+            <walletCard no-padding
+                        class="my-2"
+                        clickable
+                        v-for="(wallet, index) in wallets"
+                        :key='index'
+                        :wallet="wallet"
+                        @click="seeDetails(wallet)"
+            />
         </div>
         <div v-if="!wallets.length" class='fill-height'>
-            <v-layout justify-center align-center fill-height column>
+            <v-layout
+                    justify-center
+                    align-center
+                    fill-height
+                    column
+            >
                 <v-progress-circular
-                    :size="70"
-                    :width="10"
-                    :color="$route.meta.accent"
-                    indeterminate
+                        :size="70"
+                        :width="10"
+                        :color="$route.meta.accent"
+                        indeterminate
                 />
                 <p class="pt-3">
                     Loading wallets...

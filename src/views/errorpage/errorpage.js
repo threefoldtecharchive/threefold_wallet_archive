@@ -1,3 +1,14 @@
+const mapError = error => {
+  switch (error) {
+    case 'CancelledByUser':
+      return 'Your login attempt was cancelled.'
+    case 'Could not decrypt message.':
+      return 'Something went wrong with decrypting'
+    default:
+      return error
+  }
+}
+
 export default {
   name: 'errorpage',
   components: {},
@@ -7,20 +18,11 @@ export default {
       errorMsg: ''
     }
   },
-  computed: {
-
-  },
+  computed: {},
   mounted () {
-
     var url = new URL(window.location.href)
     const error = url.searchParams.get('msg')
-    if (error === 'CancelledByUser') {
-        this.errorMsg = `Your login attempt was cancelled.`
-    } else if( error === `Could not decrypt message.`) {
-      this.errorMsg = `Could not decrypt message.`
-    }
+    this.errorMsg = mapError(error)
   },
-  methods: {
-
-  }
+  methods: {}
 }
