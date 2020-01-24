@@ -44,15 +44,20 @@ export default {
       context.commit('setAccounts', [tfAccount])
     },
     async login (context, userData) {
-      await context.dispatch('setPkidClient', userData.seed)
+      try {
+        await context.dispatch('setPkidClient', userData.seed)
 
-      context.commit('setDoubleName', userData.doubleName)
+        context.commit('setDoubleName', userData.doubleName)
+        await context.dispatch('generateTfAccount', userData)
+        await context.dispatch('loadImportedWallets')
 
-      await context.dispatch('generateTfAccount', userData)
-      await context.dispatch('loadImportedWallets')
-
-      await context.dispatch('updateAccounts')
-
+        await context.dispatch('updateAccounts')
+      } catch (error) {
+        context.commit('setFatalError', 'The wallet is currently not available')
+        context.commit('setImportingWallets', false)
+        // have to throw error because else the default init flow will redirect to /login 
+        throw error
+      }
       context.commit('setImportingWallets', false)
     },
     async loadAppWallets (context, account) {
