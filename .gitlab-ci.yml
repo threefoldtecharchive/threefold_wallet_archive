@@ -1,7 +1,7 @@
 .staging_deploy_script: &staging_deploy_script
     - echo "Deploying image with tag $DOCKER_IMAGE_TAG -- https://hub.docker.com/r/jimber/wallet"
     - docker pull jimber/wallet:staging
-    - docker rm -f 3bot_wallet
+    - docker rm -f 3bot_wallet; true
     - docker run -d -it --network=jimber_proxy_net --name 3bot_wallet jimber/wallet:$DOCKER_IMAGE_TAG
 #caching modules
 cache:
