@@ -1,0 +1,36 @@
+#caching modules
+cache:
+  paths:
+    - node_modules/
+    - .yarn
+
+#steps gitlab will take
+stages:
+  - build
+  - deploy
+
+Build:
+  stage: build
+  dependencies: []
+  tags:
+    - builder
+  script:
+    - cp public/staging.config.js public/config.js
+    - docker build -t jimber/wallet:staging .
+    - echo "$DOCKER_PW" | docker login -u $DOCKER_USER --password-stdin
+    - docker push jimber/wallet:staging
+
+Deployment:
+  variables:
+    GIT_STRATEGY: none
+    GIT_CHECKOUT: "false"
+  stage: deploy
+  dependencies: []
+  tags:
+    - staging
+  script:
+    - docker pull jimber/wallet:staging
+    - docker rm -f 3bot_wallet
+    - docker run -d -it --network=jimber_proxy_net --name 3bot_wallet jimber/wallet:staging
+  rules:
+    - when: manual
