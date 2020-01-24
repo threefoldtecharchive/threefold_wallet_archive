@@ -9,7 +9,7 @@ stages:
   - build
   - deploy
 
-Staging_Build:
+staging_build:
   stage: build
   only:
     - development
@@ -22,7 +22,7 @@ Staging_Build:
     - echo "$DOCKER_PW" | docker login -u $DOCKER_USER --password-stdin
     - docker push jimber/wallet:staging
 
-Staging_Deployment:
+staging_deployment:
   variables:
     GIT_STRATEGY: none
     GIT_CHECKOUT: "false"
