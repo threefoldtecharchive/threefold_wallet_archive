@@ -1,10 +1,8 @@
-import uuidv4 from 'uuid/v4'
 import config from '../../public/config'
-
 import Pkid from '@jimber/pkid'
 import sodium from 'libsodium-wrappers'
 
-export default ({
+export default {
   state: {
     client: null
   },
@@ -25,7 +23,7 @@ export default ({
           return null
         }
         // @todo: handel this situation
-        throw new Error()
+        throw Error('something is wrong with Pkid connection')
       }
       return data.data
     },
@@ -37,7 +35,10 @@ export default ({
     },
     async getPkidImportedAccounts (context) {
       const client = context.getters.client
-      const data = await client.getDoc(client.keyPair.publicKey, 'imported_accounts')
+      const data = await client.getDoc(
+        client.keyPair.publicKey,
+        'imported_accounts'
+      )
       if (!data.success) {
         if (data.status === 404) {
           return null
@@ -49,10 +50,12 @@ export default ({
     },
     async addImportedWallet (context, postMessage) {
       const wallets = await context.dispatch('getPkidImportedAccounts')
-      await context.dispatch('setPkidImportedWallets', [...wallets, postMessage])
+      await context.dispatch('setPkidImportedWallets', [
+        ...wallets,
+        postMessage
+      ])
     },
     async updatePkidWallets (context) {
-
       const accounts = context.getters.accounts
 
       const appAccount = accounts[0]
@@ -65,7 +68,9 @@ export default ({
       })
       await context.dispatch('setPkidWallets', appWallets)
 
-      const importedAccounts = accounts.filter(account => account.type === 'imported')
+      const importedAccounts = accounts.filter(
+        account => account.type === 'imported'
+      )
 
       const mappedImportedAccounts = importedAccounts.map(account => {
         return {
@@ -78,8 +83,9 @@ export default ({
       await context.dispatch('setPkidImportedAccounts', mappedImportedAccounts)
     },
     async removePkidWallet (context, wallet) {
-
-      const accounts = context.getters.accounts.filter(account => account !== wallet.holder)
+      const accounts = context.getters.accounts.filter(
+        account => account !== wallet.holder
+      )
 
       context.commit('setAccounts', accounts)
       context.dispatch('updateAccounts')
@@ -99,6 +105,6 @@ export default ({
     }
   },
   getters: {
-    client: (state) => state.client
+    client: state => state.client
   }
-})
+}
