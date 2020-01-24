@@ -22,7 +22,6 @@ export default {
         if (data.status === 404) {
           return null
         }
-        // @todo: handel this situation
         throw Error('something is wrong with Pkid connection')
       }
       return data.data
