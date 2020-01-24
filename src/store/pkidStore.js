@@ -1,33 +1,100 @@
-const pkid = require('@jimber/pkid')
-const pkidUrl = 'https://pkid.staging.jimber.org'
-const { sign } = require('tweetnacl')
-export default({
+import config from '../../public/config'
+import Pkid from '@jimber/pkid'
+import sodium from 'libsodium-wrappers'
+
+export default {
   state: {
     client: null
   },
   actions: {
-    setPkidClient (context, payload) {
-      let keyPair = sign.keyPair.fromSeed(payload)
-      context.commit('setPkidClient', new pkid(pkidUrl, keyPair.publicKey, keyPair.secretKey))
-      context.dispatch('setPkidWallets', ['hello'])
-      setTimeout(() => {
-        context.dispatch('getPkidWallets', keyPair.publicKey)
-      }, 1500)
+    async setPkidClient (context, payload) {
+      // const keyPair = await generateKeypair(payload)
+      await sodium.ready
+      const keyPair = sodium.crypto_sign_seed_keypair(payload)
+
+      const client = new Pkid(config.pkidUrl, keyPair)
+      context.commit('setPkidClient', client)
     },
-    async getPkidWallets (context, pk) {
-      let client = context.getters.client
-      let res = await client.getDoc(pk, 'wallets')
+    async getPkidWallets (context) {
+      const client = context.getters.client
+      const data = await client.getDoc(client.keyPair.publicKey, 'wallets')
+      if (!data.success) {
+        if (data.status === 404) {
+          return null
+        }
+        throw Error('something is wrong with Pkid connection')
+      }
+      return data.data
     },
-    async setPkidWallets (context, wallets) {
-      let client = context.getters.client
-      let res = await client.setDoc('wallets', wallets)
+    setPkidWallets (context, wallets) {
+      context.getters.client.setDoc('wallets', wallets, true)
+    },
+    setPkidImportedAccounts (context, accounts) {
+      context.getters.client.setDoc('imported_accounts', accounts, true)
+    },
+    async getPkidImportedAccounts (context) {
+      const client = context.getters.client
+      const data = await client.getDoc(
+        client.keyPair.publicKey,
+        'imported_accounts'
+      )
+      if (!data.success) {
+        if (data.status === 404) {
+          return null
+        }
+        // @todo: handel this situation
+        throw new Error()
+      }
+      return data.data
+    },
+    async addImportedWallet (context, postMessage) {
+      const wallets = await context.dispatch('getPkidImportedAccounts')
+      await context.dispatch('setPkidImportedWallets', [
+        ...wallets,
+        postMessage
+      ])
+    },
+    async updatePkidWallets (context) {
+      const accounts = context.getters.accounts
+
+      const appAccount = accounts[0]
+      const appWallets = appAccount.wallets.map(wallet => {
+        return {
+          walletName: wallet.wallet_name,
+          doubleName: appAccount.doubleName,
+          index: wallet.wallet_index
+        }
+      })
+      await context.dispatch('setPkidWallets', appWallets)
+
+      const importedAccounts = accounts.filter(
+        account => account.type === 'imported'
+      )
+
+      const mappedImportedAccounts = importedAccounts.map(account => {
+        return {
+          walletName: account.wallet.wallet_name,
+          doubleName: account.password,
+          seed: Array.from(account.seed)
+        }
+      })
+
+      await context.dispatch('setPkidImportedAccounts', mappedImportedAccounts)
+    },
+    async removePkidWallet (context, wallet) {
+      const accounts = context.getters.accounts.filter(
+        account => account !== wallet.holder
+      )
+
+      context.commit('setAccounts', accounts)
+      context.dispatch('updateAccounts')
     },
     getPkidUser (context, pk) {
-      let client = context.getters.client
+      const client = context.getters.client
       client.getDoc(pk, 'user')
     },
     setPkidUser (context, user) {
-      let client = context.getters.client
+      const client = context.getters.client
       client.setDoc('user', user)
     }
   },
@@ -37,6 +104,6 @@ export default({
     }
   },
   getters: {
-    client: (state) => state.client
+    client: state => state.client
   }
-})
+}
