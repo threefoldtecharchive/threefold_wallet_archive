@@ -220,7 +220,8 @@ export default {
               transaction: balance.transactions,
               holder: account,
               currency: wallet.balance._chain_type.currency_unit(),
-              walletIndex: wallet.wallet_index
+              walletIndex: wallet.wallet_index,
+              startIndex: wallet.start_index
             }
           })
           wallets.push(...t)
