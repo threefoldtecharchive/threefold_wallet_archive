@@ -1,3 +1,8 @@
+.staging_deploy_script: &staging_deploy_script
+    - echo "Deploying image with tag $DOCKER_IMAGE_TAG -- https://hub.docker.com/r/jimber/wallet"
+    - docker pull jimber/wallet:staging
+    - docker rm -f 3bot_wallet
+    - docker run -d -it --network=jimber_proxy_net --name 3bot_wallet jimber/wallet:$DOCKER_IMAGE_TAG
 #caching modules
 cache:
   paths:
@@ -11,9 +16,11 @@ stages:
 
 staging_build:
   stage: build
+  dependencies: []
+  variables: 
+    DOCKER_IMAGE_TAG: staging
   only:
     - development
-  dependencies: []
   tags:
     - builder
   script:
@@ -27,14 +34,24 @@ staging_deployment:
     GIT_STRATEGY: none
     GIT_CHECKOUT: "false"
   stage: deploy
-  only:
-    - development
   dependencies: []
   tags:
     - staging
   script:
-    - docker pull jimber/wallet:staging
-    - docker rm -f 3bot_wallet
-    - docker run -d -it --network=jimber_proxy_net --name 3bot_wallet jimber/wallet:staging
-  rules:
-    - when: manual
+    - *staging_deploy_script
+  only:
+    - development
+  when: manual
+
+test_deployment:
+  variables:
+    GIT_STRATEGY: none
+    GIT_CHECKOUT: "false"
+  stage: deploy
+  only:
+    - development_testing
+  dependencies: []
+  tags:
+    - staging
+  script:
+    - *staging_deploy_script
