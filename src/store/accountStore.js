@@ -219,7 +219,8 @@ export default {
               totalLocked: locked,
               transaction: balance.transactions,
               holder: account,
-              currency: wallet.balance._chain_type.currency_unit()
+              currency: wallet.balance._chain_type.currency_unit(),
+              walletIndex: wallet.wallet_index
             }
           })
           wallets.push(...t)
