@@ -44,6 +44,7 @@ export default {
         )
 
         await this.updateAccounts()
+        this.$router.push({ name: 'home' })
       } catch (err) {
         const error =
           typeof err.__str__ === 'function' ? err.__str__() : err.toString()
