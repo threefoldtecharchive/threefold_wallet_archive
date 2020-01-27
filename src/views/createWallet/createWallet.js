@@ -111,9 +111,7 @@ export default {
             console.log('before flutter call', postMsg)
             var self = this
 
-            window.flutter_inappwebview.callHandler('ADD_IMPORT_WALLET', postMsg).then(function (result) {
-              self.$router.push({ name: 'home' })
-            })
+            this.$router.push({ name: 'home' })
           }
         } catch (e) {
           console.log(e.message)
