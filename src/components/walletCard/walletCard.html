@@ -23,15 +23,7 @@
                   file_copy
                 </v-icon>
               </v-btn>
-              <v-btn dark small icon text
-                     @click.stop="removeWallet"
-                     class="px-3 align-self-end badge-top ma-0 error"
-                     style="z-index: 1;"
-                     v-if="wallet.holder.type === 'imported'">
-                <v-icon size="13">
-                  fa-trash
-                </v-icon>
-              </v-btn>
+
             </v-flex>
             <v-flex class="mr-1" v-if="displayAmount">
               <amountIndicator v-if="displayAttributes" class="pr-2 pt-1" :amount='totalAmount'
