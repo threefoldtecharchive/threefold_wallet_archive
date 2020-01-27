@@ -110,9 +110,8 @@ export default {
             // Print.postMessage(JSON.stringify(postMsg))
             console.log('before flutter call', postMsg)
             var self = this
-
-            this.$router.push({ name: 'home' })
           }
+          this.$router.push({ name: 'home' })
         } catch (e) {
           console.log(e.message)
           that.wordsErrors.push('Something went wrong: ' + e.message)
