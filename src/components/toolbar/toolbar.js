@@ -34,7 +34,15 @@ export default {
     },
     seeAdd () {
       this.$router.push({
-        name: 'addwallet',
+        name: 'addwallet'
+      })
+    },
+    seeWalletInfo () {
+      this.$router.push({
+        name: 'walletinfo',
+        params: {
+          wallet: this.$route.params.wallet
+        }
       })
     }
   }

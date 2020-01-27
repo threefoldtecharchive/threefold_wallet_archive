@@ -23,20 +23,16 @@ export default {
 
       context.commit('setImportingWallets', true)
 
-      //  daily and savings are always generated
-      await tfAccount.wallet_new('daily', tfAccount.wallet_count, 1)
-      await tfAccount.wallet_new('savings', tfAccount.wallet_count, 1)
-
       const appWallets = await context.dispatch('getPkidWallets')
 
       if (appWallets === null) {
         context.dispatch('loadAppWallets', tfAccount)
+        //  daily and savings are always generated
+        await tfAccount.wallet_new('daily', tfAccount.wallet_count, 1)
+        await tfAccount.wallet_new('savings', tfAccount.wallet_count, 1)
       }
 
       for (const wallet of appWallets || []) {
-        if (wallet.walletName === 'daily' || wallet.walletName === 'savings') {
-          continue
-        }
         await tfAccount.wallet_new(wallet.walletName, wallet.index, 1)
       }
 
@@ -55,7 +51,7 @@ export default {
       } catch (error) {
         context.commit('setFatalError', 'The wallet is currently not available')
         context.commit('setImportingWallets', false)
-        // have to throw error because else the default init flow will redirect to /login 
+        // have to throw error because else the default init flow will redirect to /login
         throw error
       }
       context.commit('setImportingWallets', false)
@@ -172,7 +168,9 @@ export default {
             unconfirmed: unconfirmed,
             transaction: balance.transactions,
             holder: account,
-            currency: wallet.balance._chain_type.currency_unit()
+            currency: wallet.balance._chain_type.currency_unit(),
+            walletIndex: wallet.wallet_index,
+            startIndex: wallet.start_index
           }
         })
         wallets.push(...t)

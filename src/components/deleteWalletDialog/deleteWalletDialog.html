@@ -1,0 +1,16 @@
+<v-dialog v-model="dialog" persistent max-width="290">
+  <template v-slot:activator="{ on }">
+    <v-btn text class="px-0" style="color: #C62828;" v-on="on">
+      <v-icon small class="danger mr-1">fas fa-trash</v-icon> Delete wallet
+    </v-btn>
+  </template>
+  <v-card>
+    <v-card-title class="headline">Are you sure?</v-card-title>
+    <v-card-text>Are you sure you want to delete the wallet? This action can not be reversed.</v-card-text>
+    <v-card-actions>
+      <v-spacer></v-spacer>
+      <v-btn color="green darken-1" text @click="dialog = false">Cancel</v-btn>
+      <v-btn color="green darken-1" text @click="deleteWallet">Yes</v-btn>
+    </v-card-actions>
+  </v-card>
+</v-dialog>
