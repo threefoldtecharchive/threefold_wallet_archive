@@ -80,6 +80,26 @@ export default {
       } else {
         return Date.parse(date)
       }
+    },
+    isStillLocked (transaction) {
+      // return true
+      let lockValue = transaction.lock
+      let isTimestamp = transaction.lock_is_timestamp
+      if (lockValue) { 
+        if (isTimestamp) {
+          const lockDate = new Date(lockValue * 1000)
+          const momentLockDate = moment(lockDate)
+          const momentChainDate = moment()
+          if (momentLockDate < momentChainDate) {
+            return false
+          }
+          return true
+        } 
+        if(lockValue <= this.selectedWallet.holder.chain_info.chain_height){
+          return false
+        }
+        return true
+      }
     }
   }
 }
