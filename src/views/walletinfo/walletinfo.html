@@ -1,21 +1,17 @@
 <section class="home fill-height">
     <v-col fill-height>
-        <v-text-field v-model="wallet.name" :error-messages="walletNameErrors"
-            @input="walletNameErrors = []" class="red--text" label="Wallet name"></v-text-field>
+        <v-text-field v-model="wallet.name" :error-messages="walletNameErrors" @input="walletNameErrors = []"
+            class="red--text" label="Wallet name"></v-text-field>
 
-        <v-textarea v-if="wallet.holder.type === 'imported'" v-model="seed" label="Seed phrase"
-            disabled>
+        <v-textarea v-if="wallet.holder.type === 'imported'" v-model="seed" label="Seed phrase" disabled>
         </v-textarea>
 
-        <v-btn class="accent mb-1" @click="changeName()"  style="width: 100%;">
-            Change wallet name 
+        <v-btn class="accent mb-1" @click="changeName()" style="width: 100%;">
+            Change wallet name
         </v-btn>
         <br />
-        <v-btn text class="px-0" style="color: #C62828;">
-            <v-icon small class="danger mr-1">fas fa-trash</v-icon> Delete wallet
-        </v-btn>
-    
-  
+        <deleteWalletDialog v-bind:wallet=wallet v-if="wallet.holder.type === 'imported'" />
+
     </v-col>
 
 </section>

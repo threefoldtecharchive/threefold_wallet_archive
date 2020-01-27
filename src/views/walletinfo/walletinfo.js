@@ -1,9 +1,10 @@
 import { mapGetters, mapActions } from 'vuex'
 import cryptoService from '../../services/cryptoService'
+import deleteWalletDialog from '../../components/deleteWalletDialog'
 
 export default {
   name: 'walletinfo',
-  components: {},
+  components: { deleteWalletDialog },
   props: [],
   data () {
     return {
