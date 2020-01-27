@@ -23,20 +23,16 @@ export default {
 
       context.commit('setImportingWallets', true)
 
-      //  daily and savings are always generated
-      await tfAccount.wallet_new('daily', tfAccount.wallet_count, 1)
-      await tfAccount.wallet_new('savings', tfAccount.wallet_count, 1)
-
       const appWallets = await context.dispatch('getPkidWallets')
 
       if (appWallets === null) {
         context.dispatch('loadAppWallets', tfAccount)
+        //  daily and savings are always generated
+        await tfAccount.wallet_new('daily', tfAccount.wallet_count, 1)
+        await tfAccount.wallet_new('savings', tfAccount.wallet_count, 1)
       }
 
       for (const wallet of appWallets || []) {
-        if (wallet.walletName === 'daily' || wallet.walletName === 'savings') {
-          continue
-        }
         await tfAccount.wallet_new(wallet.walletName, wallet.index, 1)
       }
 

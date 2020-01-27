@@ -1,9 +1,9 @@
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import cryptoService from '../../services/cryptoService'
 
 export default {
   name: 'walletinfo',
-  components: { },
+  components: {},
   props: [],
   data () {
     return {
@@ -12,14 +12,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'wallets',
-      'accounts'
-    ]),
+    ...mapGetters(['wallets', 'accounts']),
     seed () {
       let seed = this.wallet.holder.seed
       seed = cryptoService.generateMnemonicFromSeed(seed)
-      console.log(`hello`,seed)
+      console.log(`hello`, seed)
       return seed
     }
   },
@@ -29,7 +26,8 @@ export default {
     window.wallets = this.wallets
   },
   methods: {
-    changeName () {
+    ...mapActions(['updateAccounts']),
+    async changeName (context) {
       console.log(`in change name`)
       console.log(`wallet_index`, this.wallet.walletIndex)
       console.log(`wallet_name`, this.wallet.name)
@@ -37,10 +35,17 @@ export default {
       console.log(`address_count`, this.wallet.address.length)
 
       try {
-        this.wallet.holder.wallet_update(this.wallet.walletIndex, this.wallet.name, this.wallet.startIndex, this.wallet.address.length)
-      }
-      catch (err) {
-        const error = typeof err.__str__ === 'function' ? err.__str__() : err.toString()
+        this.wallet.holder.wallet_update(
+          this.wallet.walletIndex,
+          this.wallet.name,
+          this.wallet.startIndex,
+          1
+        )
+
+        await this.updateAccounts()
+      } catch (err) {
+        const error =
+          typeof err.__str__ === 'function' ? err.__str__() : err.toString()
         console.log(error)
       }
     }
