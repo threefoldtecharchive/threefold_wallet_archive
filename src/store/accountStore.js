@@ -55,7 +55,7 @@ export default {
       } catch (error) {
         context.commit('setFatalError', 'The wallet is currently not available')
         context.commit('setImportingWallets', false)
-        // have to throw error because else the default init flow will redirect to /login 
+        // have to throw error because else the default init flow will redirect to /login
         throw error
       }
       context.commit('setImportingWallets', false)
@@ -172,7 +172,9 @@ export default {
             unconfirmed: unconfirmed,
             transaction: balance.transactions,
             holder: account,
-            currency: wallet.balance._chain_type.currency_unit()
+            currency: wallet.balance._chain_type.currency_unit(),
+            walletIndex: wallet.wallet_index,
+            startIndex: wallet.start_index
           }
         })
         wallets.push(...t)

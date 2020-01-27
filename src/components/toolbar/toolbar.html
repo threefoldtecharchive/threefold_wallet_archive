@@ -10,10 +10,23 @@
           <h2 class="title">{{($route.meta.title || $route.name) || '3Bot'}}</h2>
         <!-- <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent" /> -->
       </v-col>
-      <v-col cols="2" v-if="$route.name == 'home'" @click="seeAdd">
-        <v-btn x-small text fab dark class="accent">
+      <v-col cols="2" >
+        <v-btn 
+        x-small text fab dark 
+        class="accent"
+        v-if="$route.name == 'home'" 
+        @click="seeAdd">
           <v-icon>
             add
+          </v-icon>
+        </v-btn>
+
+        <v-btn x-small text fab dark 
+        class="accent"
+        v-if="$route.name == 'details'" 
+        @click="seeWalletInfo">
+          <v-icon>
+            fas fa-cog
           </v-icon>
         </v-btn>
       </v-col>
