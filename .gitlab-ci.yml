@@ -11,8 +11,17 @@ cache:
 
 #steps gitlab will take
 stages:
+  - test
   - build
   - deploy
+
+test:
+  stage: test
+  tags:
+    - builder
+  script:
+    - docker build -t wallet-test -f Dockerfile.test .
+    - docker run --rm wallet-test
 
 staging_build:
   stage: build
