@@ -1,0 +1,57 @@
+.staging_deploy_script: &staging_deploy_script
+    - echo "Deploying image with tag $DOCKER_IMAGE_TAG -- https://hub.docker.com/r/jimber/wallet"
+    - docker pull jimber/wallet:staging
+    - docker rm -f 3bot_wallet; true
+    - docker run -d -it --network=jimber_proxy_net --name 3bot_wallet jimber/wallet:$DOCKER_IMAGE_TAG
+#caching modules
+cache:
+  paths:
+    - node_modules/
+    - .yarn
+
+#steps gitlab will take
+stages:
+  - build
+  - deploy
+
+staging_build:
+  stage: build
+  dependencies: []
+  variables: 
+    DOCKER_IMAGE_TAG: staging
+  only:
+    - development
+  tags:
+    - builder
+  script:
+    - cp public/staging.config.js public/config.js
+    - docker build -t jimber/wallet:staging .
+    - echo "$DOCKER_PW" | docker login -u $DOCKER_USER --password-stdin
+    - docker push jimber/wallet:staging
+
+staging_deployment:
+  variables:
+    GIT_STRATEGY: none
+    GIT_CHECKOUT: "false"
+  stage: deploy
+  dependencies: []
+  tags:
+    - staging
+  script:
+    - *staging_deploy_script
+  only:
+    - development
+  when: manual
+
+test_deployment:
+  variables:
+    GIT_STRATEGY: none
+    GIT_CHECKOUT: "false"
+  stage: deploy
+  only:
+    - development_testing
+  dependencies: []
+  tags:
+    - staging
+  script:
+    - *staging_deploy_script

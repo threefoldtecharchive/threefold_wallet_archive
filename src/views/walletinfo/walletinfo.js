@@ -1,6 +1,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import cryptoService from '../../services/cryptoService'
 import deleteWalletDialog from '../../components/deleteWalletDialog'
+import { canRemoveWallet, canShowSeed } from '../../services/walletManagmentService'
 
 export default {
   name: 'walletinfo',
@@ -43,13 +44,19 @@ export default {
           1
         )
 
-        await this.updateAccounts()
+        this.updateAccounts()
         this.$router.push({ name: 'home' })
       } catch (err) {
         const error =
           typeof err.__str__ === 'function' ? err.__str__() : err.toString()
         console.log(error)
       }
+    },
+    isDeletableWallet () {
+      return canRemoveWallet(this.wallet)
+    },
+    canShowSeed () {
+      return canShowSeed(this.wallet)
     }
   }
 }
