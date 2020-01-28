@@ -5,6 +5,7 @@ import {
 import store from '../../store'
 import cryptoService from '../../services/cryptoService'
 import uuidv4 from 'uuid/v4'
+import { importedSeedFound } from '../../services/walletManagmentService'
 
 export default {
   name: 'create-wallet',
@@ -95,22 +96,17 @@ export default {
 
           const mySeed = convertHexstringToEntropy(generatedSeed)
 
+          const foundWallet = importedSeedFound(mySeed)
+
+          if (foundWallet) {
+            this.wordsErrors.push(`This seed is already imported under the name "${foundWallet.name}"`)
+            return
+          }
+
           const obj = { doubleName: this.doubleName, walletName: this.walletName, seed: mySeed }
 
-          let continueImport = await this.importWallet(obj)
+          await this.importWallet(obj)
 
-          if (continueImport) {
-            var postMsg = {
-              referenceUuid: uuidv4(),
-              walletName: this.walletName,
-              doubleName: this.doubleName,
-              seed: Array.from(mySeed)
-            }
-            console.log(postMsg)
-            // Print.postMessage(JSON.stringify(postMsg))
-            console.log('before flutter call', postMsg)
-            var self = this
-          }
           this.$router.push({ name: 'home' })
         } catch (e) {
           console.log(e.message)
