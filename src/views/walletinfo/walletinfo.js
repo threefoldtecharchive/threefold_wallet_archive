@@ -44,7 +44,7 @@ export default {
           1
         )
 
-        await this.updateAccounts()
+        this.updateAccounts()
         this.$router.push({ name: 'home' })
       } catch (err) {
         const error =
