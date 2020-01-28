@@ -10,8 +10,8 @@ export default {
     wallets: []
   },
   actions: {
-    generateTfAccount: async function (context, userData) {
-      var tfAccount = new tfchain.Account(
+    async generateTfAccount(context, userData) {
+      let tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
         userData.doubleName,
         {
@@ -24,12 +24,13 @@ export default {
       context.commit('setImportingWallets', true)
 
       const appWallets = await context.dispatch('getPkidWallets')
-
+      console.log("appwallets from pkid", appWallets)
       if (appWallets === null) {
-        context.dispatch('loadAppWallets', tfAccount)
-        //  daily and savings are always generated
+        console.log("creating daily")
         await tfAccount.wallet_new('daily', tfAccount.wallet_count, 1)
+        console.log("creating savings")
         await tfAccount.wallet_new('savings', tfAccount.wallet_count, 1)
+        await context.dispatch('loadAppWallets', tfAccount)
       }
 
       for (const wallet of appWallets || []) {
@@ -38,13 +39,17 @@ export default {
 
       await tfAccount.update_account()
       context.commit('setAccounts', [tfAccount])
+      console.log('end of generate tfaccount')
+
     },
     async login (context, userData) {
       try {
         await context.dispatch('setPkidClient', userData.seed)
 
         context.commit('setDoubleName', userData.doubleName)
+        console.log('before generate tfaccount')
         await context.dispatch('generateTfAccount', userData)
+        console.log('afger generate tfaccount')
         await context.dispatch('loadImportedWallets')
 
         await context.dispatch('updateAccounts')
@@ -88,6 +93,7 @@ export default {
     async createFirstWallets (context, account) {
       //  create first 20 wallets
       for (let index = 3; index <= 20; index++) {
+        console.log(`creating wallet${index}`)
         await account.wallet_new(
           `Wallet${index}`,
           account.wallet_count,
@@ -115,6 +121,7 @@ export default {
           })
           return
         }
+        console.log(`removing wallet`,wallet.wallet_name)
         account.wallet_delete(index, wallet.wallet_name)
       }
     },
