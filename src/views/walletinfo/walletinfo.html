@@ -1,6 +1,6 @@
 <section class="home fill-height">
     <v-col fill-height>
-        <v-text-field v-model="wallet.name" :error-messages="walletNameErrors" @input="walletNameErrors = []"
+        <v-text-field v-model="walletName" :error-messages="walletNameErrors" @input="walletNameErrors = []"
             class="red--text" label="Wallet name"></v-text-field>
 
         <v-textarea v-if="canShowSeed()" v-model="seed" label="Seed phrase" disabled>

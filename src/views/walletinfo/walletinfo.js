@@ -10,11 +10,15 @@ export default {
   data () {
     return {
       wallet: null,
+      walletName: null,
       walletNameErrors: []
     }
   },
   computed: {
-    ...mapGetters(['wallets', 'accounts']),
+    ...mapGetters([
+      'wallets',
+     'accounts'
+    ]),
     seed () {
       let seed = this.wallet.holder.seed
       seed = cryptoService.generateMnemonicFromSeed(seed)
@@ -24,8 +28,7 @@ export default {
   },
   beforeMount () {
     this.wallet = this.wallets.find(x => x.name === this.$route.params.wallet)
-    window.accounts = this.accounts
-    window.wallets = this.wallets
+    this.walletName = this.wallet.name
   },
   methods: {
     ...mapActions(['updateAccounts']),
@@ -35,28 +38,39 @@ export default {
       console.log(`wallet_name`, this.wallet.name)
       console.log(`start_index`, this.wallet.startIndex)
       console.log(`address_count`, this.wallet.address.length)
+      if (!this.walletNameFound()) {
+        console.log('not found')
+        try {
+          this.wallet.holder.wallet_update(
+            this.wallet.walletIndex,
+            this.walletName,
+            this.wallet.startIndex,
+            1
+          )
 
-      try {
-        this.wallet.holder.wallet_update(
-          this.wallet.walletIndex,
-          this.wallet.name,
-          this.wallet.startIndex,
-          1
-        )
+          this.updateAccounts()
+          this.$router.push({ name: 'home' })
+        } catch (err) {
+          const error =
+            typeof err.__str__ === 'function' ? err.__str__() : err.toString()
+          console.log(error)
+        }
+    }else{
+      this.walletNameErrors.push('There is already a wallet with this name')
+    } 
 
-        this.updateAccounts()
-        this.$router.push({ name: 'home' })
-      } catch (err) {
-        const error =
-          typeof err.__str__ === 'function' ? err.__str__() : err.toString()
-        console.log(error)
-      }
     },
     isDeletableWallet () {
       return canRemoveWallet(this.wallet)
     },
     canShowSeed () {
       return canShowSeed(this.wallet)
+    },
+    walletNameFound () {
+      console.log(`wallet name found`)
+      console.log(`walletname`, this.walletName)
+      console.log(`wallets`, this.wallets)
+      return this.wallets.find(x => x.name.toLowerCase() == this.walletName.toLowerCase())
     }
   }
 }
