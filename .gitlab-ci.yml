@@ -29,7 +29,7 @@ staging_build:
   variables:
     DOCKER_IMAGE_TAG: staging
   only:
-    - ^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$
+    - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
   tags:
     - builder
   script:
@@ -49,7 +49,7 @@ staging_deployment:
   script:
     - *staging_deploy_script
   only:
-    - ^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$
+    - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
 
 test_deployment:
   variables:
