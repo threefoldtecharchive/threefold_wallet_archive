@@ -157,13 +157,13 @@ export default {
           const locked = wallet.balance.coins_locked.greater_than(0)
             ? wallet.balance.coins_locked.str({ precision: 3 })
             : null
-          const unconfirmed = wallet.balance.unconfirmed_coins_total
+          const unconfirmed = wallet.balance.unconfirmed_coins_total.str({ precision: 3 })
           return {
             name: wallet.wallet_name,
             address: wallet.address,
             totalAmount: unlocked,
             totalLocked: locked,
-            unconfirmed: unconfirmed,
+            totalUnconfirmed: unconfirmed,
             transaction: balance.transactions,
             holder: account,
             currency: wallet.balance._chain_type.currency_unit(),
