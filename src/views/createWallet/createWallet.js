@@ -47,6 +47,11 @@ export default {
       this.wordsErrors = []
       this.walletName = this.walletName.trim()
 
+      if (this.walletName.length > 15) {
+        this.walletNameErrors.push('The length of the name should not exceed 15 characters.')
+        return
+      }
+
       if (!this.walletNameFound()) {
         // ID: 0 HARDCODED FOR NOW!
         this.createWallet({ chain: 'tft', walletName: this.walletName, id: '0' })
@@ -64,6 +69,10 @@ export default {
       this.walletName = this.walletName.trim()
       if (!this.walletName) {
         this.walletNameErrors.push('Please enter a name.')
+        return
+      }
+      if (this.walletName.length > 15) {
+        this.walletNameErrors.push('The length of the name should not exceed 15 characters.')
         return
       }
       if (this.walletNameFound()) {
