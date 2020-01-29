@@ -26,10 +26,10 @@ test:
 staging_build:
   stage: build
   dependencies: []
-  variables: 
+  variables:
     DOCKER_IMAGE_TAG: staging
   only:
-    - development
+    - ^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$
   tags:
     - builder
   script:
@@ -49,8 +49,7 @@ staging_deployment:
   script:
     - *staging_deploy_script
   only:
-    - development
-  when: manual
+    - ^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$
 
 test_deployment:
   variables:
