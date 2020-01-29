@@ -38,6 +38,11 @@ export default {
       console.log(`wallet_name`, this.wallet.name)
       console.log(`start_index`, this.wallet.startIndex)
       console.log(`address_count`, this.wallet.address.length)
+      this.walletName = this.walletName.trim()
+      if (this.walletName.length > 15) {
+        this.walletNameErrors.push('The length of the name should not exceed 15 characters.')
+        return
+      }
       if (!this.walletNameFound()) {
         console.log('not found')
         try {
