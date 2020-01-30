@@ -1,1 +1,0 @@
-goldchainc wallet send transaction "$(goldchainc wallet sign "$(goldchainc wallet authcoin authaddresses --auth $1)")"
