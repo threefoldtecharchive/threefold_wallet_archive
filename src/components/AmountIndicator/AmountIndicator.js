@@ -1,5 +1,5 @@
 export default {
-  name: 'amount-indicator',
+  name: "amount-indicator",
   components: {},
   props: {
     small: {
@@ -17,21 +17,13 @@ export default {
     },
     align: {
       type: String,
-      default: 'left'
+      default: "left"
     }
   },
-  data () {
-    return { 
-
-    }
+  data() {
+    return {};
   },
-  computed: { 
-
-  },
-  mounted() { 
-    
-  },
-  methods: { 
-    
-  }
-}
+  computed: {},
+  mounted() {},
+  methods: {}
+};

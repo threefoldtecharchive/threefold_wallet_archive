@@ -1,29 +1,27 @@
 export default {
   state: {
-    wallets: [],
+    wallets: []
   },
   actions: {
-    createWallet: (context) => {
-
+    createWallet: context => {
       // @todo: generate account
       const wallet = {
-        name: '',
-        account: '',
-        transactions: [
-        ]
-      }
-      context.commit('addWallet', wallet)
+        name: "",
+        account: "",
+        transactions: []
+      };
+      context.commit("addWallet", wallet);
     }
   },
   mutations: {
     addWallet: (state, wallet) => {
-      state.wallets = [...state.wallets, wallet]
+      state.wallets = [...state.wallets, wallet];
     },
     removeWallet: (state, wallet) => {
-      state.wallets = state.wallets.filter(item => item !== wallet)
-    },
+      state.wallets = state.wallets.filter(item => item !== wallet);
+    }
   },
   getters: {
     wallets: state => state.wallets
   }
-}
+};

@@ -12,7 +12,7 @@ const routes = [
     meta: {
       title: "Wallet",
       transfer: "transfer",
-      accent: "accent",
+      accent: "accent"
     }
     // }, {
     //   path: '/addwallet',

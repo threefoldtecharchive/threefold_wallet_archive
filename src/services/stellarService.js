@@ -16,7 +16,7 @@ export const test = async () => {
   account.balances.forEach(function(balance) {
     console.log("Type:", balance.asset_type, ", Balance:", balance.balance);
   });
-  console.log(account)
+  console.log(account);
 };
 
 export const generateAccount = async pair => {

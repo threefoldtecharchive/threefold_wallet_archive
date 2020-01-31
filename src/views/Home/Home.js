@@ -1,29 +1,24 @@
-import WalletCard from '../../components/WalletCard'
-import { mapGetters } from 'vuex'
+import WalletCard from "../../components/WalletCard";
+import { mapGetters } from "vuex";
 export default {
-  name: 'Home',
+  name: "Home",
   components: { WalletCard },
   props: [],
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
   computed: {
-    ...mapGetters([
-      'wallets'
-    ])
+    ...mapGetters(["wallets"])
   },
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    seeDetails (wallet) {
+    seeDetails(wallet) {
       this.$router.push({
-        name: 'details',
+        name: "details",
         params: {
           wallet: wallet.name
         }
-      })
+      });
     }
   }
-}
+};

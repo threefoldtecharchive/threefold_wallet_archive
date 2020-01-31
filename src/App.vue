@@ -33,7 +33,11 @@
       </v-btn>
     </v-app-bar>
     <v-content class="mt-0">
-      <v-container class="pb-0 pt-2 px-1 content fill-height" style="overflow: hidden;" justify-start>
+      <v-container
+        class="pb-0 pt-2 px-1 content fill-height"
+        style="overflow: hidden;"
+        justify-start
+      >
         <router-view />
       </v-container>
     </v-content>
@@ -41,15 +45,12 @@
 </template>
 
 <script>
-import { test  } from "./services/stellarService";
+import { test } from "./services/stellarService";
 export default {
   name: "App",
 
-  components: {
-  },
+  components: {},
 
-  mounted: () => (
-   test()
-  )
+  mounted: () => test()
 };
 </script>

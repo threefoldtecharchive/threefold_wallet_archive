@@ -1,44 +1,43 @@
-import AmountIndicator from '../AmountIndicator'
-import { mapGetters, mapActions } from 'vuex'
+import AmountIndicator from "../AmountIndicator";
+import { mapGetters, mapActions } from "vuex";
 export default {
-  name: 'wallet-card',
+  name: "wallet-card",
   components: { AmountIndicator },
   props: {
-    'wallet': {
+    wallet: {
       type: Object
     },
-    'clickable': {
+    clickable: {
       type: Boolean
     },
-    'selected': {
+    selected: {
       type: Boolean
     },
-    'displayAttributes': {
+    displayAttributes: {
       type: Boolean,
       default: true
-    }
-    ,
-    'displayAmount': {
+    },
+    displayAmount: {
       type: Boolean,
       default: true
     }
   },
-  data () {
+  data() {
     return {
-      amount: '---',
+      amount: "---",
       authenticated: true
-    }
+    };
   },
   computed: {
-    ...mapGetters([
-      'accounts'
-    ]),
-    totalAmount () {
-      return Number(this.wallet.totalAmount.replace(/,/g, '')).toFixed(2)
+    ...mapGetters(["accounts"]),
+    totalAmount() {
+      return Number(this.wallet.totalAmount.replace(/,/g, "")).toFixed(2);
     },
-    getHumanWalletAddress () {
+    getHumanWalletAddress() {
       // return `${this.wallet.name}@${this.account.account_name}`
-      return `${this.wallet.name.replace(/\s/g, '')}@${this.wallet.holder.account_name.split(':')[1]}`
+      return `${this.wallet.name.replace(/\s/g, "")}@${
+        this.wallet.holder.account_name.split(":")[1]
+      }`;
     }
     // image () {
     //   let currency = this.wallet.currency.toLowerCase()
@@ -47,26 +46,29 @@ export default {
     //   if (currency == 'tft') return 'tft-image'
     // }
   },
-  mounted () {
-
-    
-  },
+  mounted() {},
   methods: {
-    ...mapActions([
-      'setInformationMessage'
-    ]),
-    copyAddress () {
-      this.$root.$emit('copy', {
-        title: 'Copy wallet address to clipboard',
+    ...mapActions(["setInformationMessage"]),
+    copyAddress() {
+      this.$root.$emit("copy", {
+        title: "Copy wallet address to clipboard",
         toCopy: this.wallet.address,
-        callback: () => { this.setInformationMessage(`Address has been copied to clipboard (${this.wallet.address.substring(0, 8)}...).`) }
-      })
+        callback: () => {
+          this.setInformationMessage(
+            `Address has been copied to clipboard (${this.wallet.address.substring(
+              0,
+              8
+            )}...).`
+          );
+        }
+      });
     },
-    async removeWallet () {
-      await this.$store.dispatch('removePkidWallet',this.wallet )
+    async removeWallet() {
+      await this.$store.dispatch("removePkidWallet", this.wallet);
     },
-    clicked () {
-      if (this.clickable && this.authenticated) this.$emit('click', this.wallet)
+    clicked() {
+      if (this.clickable && this.authenticated)
+        this.$emit("click", this.wallet);
     }
   }
-}
+};
