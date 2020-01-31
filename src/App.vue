@@ -32,25 +32,24 @@
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
-
-    <v-content>
-      <HelloWorld />
+    <v-content class="mt-0">
+      <v-container class="pb-0 pt-2 px-1 content fill-height" style="overflow: hidden;" justify-start>
+        <router-view />
+      </v-container>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
-
+import { test  } from "./services/stellarService";
 export default {
   name: "App",
 
   components: {
-    HelloWorld
   },
 
-  data: () => ({
-    //
-  })
+  mounted: () => (
+   test()
+  )
 };
 </script>

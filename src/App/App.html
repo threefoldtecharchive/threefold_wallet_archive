@@ -1,0 +1,26 @@
+<section class="app">
+  <v-app :style="cssProps">
+    <div class="loading white--text" v-if="isImportingWallet" align="center">
+      <v-row align="center" class="fill-height" justify="center">
+        <v-col align="center" justify="center">
+          <v-progress-circular size="100" width="10" indeterminate></v-progress-circular>
+          <h2 class="mt-5">
+            Importing wallets...
+          </h2>
+        </v-col>
+      </v-row>
+    </div>
+    <toolbar @ctaClicked='handleCTAClick' @enableQrScannerDialog/>
+    <v-content class="mt-0">
+      <v-container class="pb-0 pt-2 px-1 content fill-height" style="overflow: hidden;" justify-start>
+        <router-view />
+      </v-container>
+    </v-content>
+    <bottomNav/>
+    <!-- <editWallet :show='showEditWalletDialog' @ctaClicked='handleCTAClick' ></editWallet> -->
+    <v-snackbar :value="!!informationMessage" top :timeout="hideSnackbarTimeout">
+      {{ informationMessage }}
+    </v-snackbar>
+    <copyDialog/>
+  </v-app>
+</section>
