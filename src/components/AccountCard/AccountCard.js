@@ -28,16 +28,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      "accounts",
-      "threeBotName"
-    ]),
+    ...mapGetters(["accounts", "threeBotName"]),
     getHumanWalletAddress() {
       return `${this.account.name.replace(/\s/g, "")}@${this.threeBotName}`;
     }
   },
   mounted() {
-    console.log(this.account)
+    console.log(this.account);
   },
   methods: {
     ...mapActions(["setInformationMessage"]),

@@ -3,12 +3,19 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
+import sodium from "libsodium-wrappers";
 
-Vue.config.productionTip = false;
+async function startVueApp() {
+  Vue.config.productionTip = false;
 
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
-}).$mount("#app");
+  await sodium.ready;
+
+  new Vue({
+    router,
+    store,
+    vuetify,
+    render: h => h(App)
+  }).$mount("#app");
+}
+
+startVueApp();

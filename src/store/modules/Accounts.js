@@ -1,8 +1,8 @@
 import { generateAccount } from "../../services/stellarService";
+import { mapAccount } from "../../services/AccountService";
 
 export default {
   state: {
-    threeBotName: null,
     accounts: []
   },
   actions: {
@@ -10,24 +10,19 @@ export default {
       const accountResponse = await generateAccount(obj.seed, obj.index);
       console.log(accountResponse);
 
-      let account = {
-        name: obj.name,
-        tags: [obj.type],
-        id: accountResponse.id,
-        balances: accountResponse.balances,
-        transactions: await accountResponse.transactions(),
+      let account = await mapAccount({
+        accountResponse: accountResponse,
+        name: obj,
+        tags: ["app"],
         index: obj.index
-      };
+      });
       console.log(account);
       // @TODO make this dynamic in login
-      context.commit("setThreebotName", "tobias.3bot")
+      context.commit("setThreebotName", "tobias.3bot");
       context.commit("addAccount", account);
     }
   },
   mutations: {
-    setThreebotName: (state, threeBotName) => {
-      state.threeBotName = threeBotName
-    },
     addAccount: (state, account) => {
       state.accounts = [...state.accounts, account];
     },
@@ -36,7 +31,6 @@ export default {
     }
   },
   getters: {
-    threeBotName: state => state.threeBotName,
     accounts: state => state.accounts
   }
 };

@@ -26,7 +26,7 @@ export default {
   computed: {
     hasMultipleBalances() {
       // @Todo detect locked and unconfirmed
-      return false
+      return false;
     }
   },
   mounted() {},
