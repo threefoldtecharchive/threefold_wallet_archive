@@ -8,7 +8,6 @@ export default {
   actions: {
     createAccount: async (context, obj) => {
       const accountResponse = await generateAccount(obj.seed, obj.index);
-      console.log(accountResponse);
 
       let account = {
         name: obj.name,
@@ -18,7 +17,6 @@ export default {
         transactions: await accountResponse.transactions(),
         index: obj.index
       };
-      console.log(account);
       // @TODO make this dynamic in login
       context.commit("setThreebotName", "tobias.3bot")
       context.commit("addAccount", account);

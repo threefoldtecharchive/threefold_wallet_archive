@@ -11,18 +11,19 @@ const routes = [
     component: Home,
     meta: {
       title: "Wallet",
+      transfer: 'transfer',
       accent: "accent",
       tags: ["showTransferButton"]
     }
-    // }, {
-    //   path: '/addwallet',
-    //   name: 'addwallet',
-    //   meta: {
-    //     accent: 'accent',
-    //     title: 'import/create wallet'
-    //   },
-    //   component: () => import(/* webpackChunkName: "profile-page" */ './views/createWallet')
-    // }, {
+  }, //{
+    // path: '/addwallet',
+    // name: 'addwallet',
+    // meta: {
+    //   accent: 'accent',
+    //   title: 'import/create wallet'
+    // },
+    // component: () => import(/* webpackChunkName: "profile-page" */ '../views/createWallet')
+    // }//, {
     //   path: '/details/:wallet',
     //   name: 'details',
     //   meta: {
@@ -139,7 +140,7 @@ const routes = [
     //   meta: {
     //     accent: 'accent'
     //   }
-  }
+  // }
 ];
 
 const router = new VueRouter({

@@ -18,7 +18,7 @@
           <v-layout column class="justify-space-between  align-end">
             <v-flex v-if="displayAttributes" class="badge-top accent">
               <v-btn dark small icon text @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0"
-                style="z-index: 1;" :class="$route.meta.accent" v-show="account.currency != 'gram'">
+                style="z-index: 1;" :class="$route.meta.accent">
                 <v-icon size="15">
                   file_copy
                 </v-icon>
