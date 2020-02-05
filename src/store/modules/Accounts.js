@@ -2,6 +2,7 @@ import { generateAccount } from "../../services/stellarService";
 
 export default {
   state: {
+    threeBotName: null,
     accounts: []
   },
   actions: {
@@ -18,10 +19,15 @@ export default {
         index: obj.index
       };
       console.log(account);
+      // @TODO make this dynamic in login
+      context.commit("setThreebotName", "tobias.3bot")
       context.commit("addAccount", account);
     }
   },
   mutations: {
+    setThreebotName: (state, threeBotName) => {
+      state.threeBotName = threeBotName
+    },
     addAccount: (state, account) => {
       state.accounts = [...state.accounts, account];
     },
@@ -30,6 +36,7 @@ export default {
     }
   },
   getters: {
+    threeBotName: state => state.threeBotName,
     accounts: state => state.accounts
   }
 };

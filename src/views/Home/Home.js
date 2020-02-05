@@ -1,10 +1,10 @@
 import { mapGetters, mapActions } from "vuex";
 import { decodeBase64 } from "tweetnacl-util";
-import WalletCard from "../../components/WalletCard";
+import AccountCard from "../../components/AccountCard";
 
 export default {
   name: "Home",
-  components: { WalletCard },
+  components: { AccountCard },
   props: [],
   data() {
     return {};

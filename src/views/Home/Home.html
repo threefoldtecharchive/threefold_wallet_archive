@@ -1,12 +1,12 @@
 <section class="home fill-height">
     <v-layout column fill-height>
         <div class="content" v-if="accounts.length">
-            <WalletCard no-padding
+            <AccountCard no-padding
                         class="my-2"
                         clickable
                         v-for="(account, index) in accounts"
                         :key='index'
-                        :wallet="account"
+                        :account="account"
                         @click="seeDetails(account)"
             />
         </div>

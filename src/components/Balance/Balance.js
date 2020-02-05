@@ -6,8 +6,8 @@ export default {
       type: Boolean,
       default: false
     },
-    balance: {
-      type: Object
+    balances: {
+      type: Array
     },
     valuta: {
       type: String
@@ -23,7 +23,12 @@ export default {
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    hasMultipleBalances() {
+      // @Todo detect locked and unconfirmed
+      return false
+    }
+  },
   mounted() {},
   methods: {}
 };

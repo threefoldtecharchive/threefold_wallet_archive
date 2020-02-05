@@ -1,25 +1,9 @@
 @import '../../App/App.scss';
-.wallet-card {
+.account-card {
   .content {
     height: 100%;
-    // background: var(--primary-color);
     overflow: hidden;
-    // box-shadow: inset 0px 0px 0px 4px var(--active-color);
-    // &.gft-image{
-    //   &::before {
-    //     background-image: url(https://picsum.photos/id/943/3000/2002);
-    //   }
-    // }
-    // &.tft-image{
-    //   &::before {
-    //     background-image: url(https://picsum.photos/id/795/500/180);
-    //   }
-    // }
-    // &.gram-image{
-    //   &::before {
-    //     background-image: url(https://picsum.photos/id/413/2666/1500);
-    //   }
-    // }
+
     &::before {
       content: "";
       position: absolute;
@@ -27,10 +11,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      // background-image: url(https://picsum.photos/id/791/500/180);
       filter: opacity(0.5);
-      // background-repeat: no-repeat;
-      // background-size: cover;
     }
     .content-inner {
       position: relative;
