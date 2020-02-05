@@ -7,12 +7,12 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "home",
     component: Home,
     meta: {
       title: "Wallet",
-      transfer: "transfer",
-      accent: "accent"
+      accent: "accent",
+      tags: ["showTransferButton"]
     }
     // }, {
     //   path: '/addwallet',

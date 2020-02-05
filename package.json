@@ -10,6 +10,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "clipboard-copy": "^3.1.0",
     "core-js": "^3.4.4",
     "stellar-sdk": "^3.3.0",
     "tweetnacl-util": "^0.15.1",
