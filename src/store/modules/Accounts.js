@@ -1,14 +1,23 @@
+import { generateAccount } from "../../services/stellarService";
+
 export default {
   state: {
     accounts: []
   },
   actions: {
-    createAccount: context => {
-      // @todo: generate account
-      const account = {
-        seed: "",
-        tags: ["app"]
+    createAccount: async (context, obj) => {
+      const accountResponse = await generateAccount(obj.seed, obj.index);
+      console.log(accountResponse);
+
+      let account = {
+        name: obj.name,
+        tags: [obj.type],
+        id: accountResponse.id,
+        balances: accountResponse.balances,
+        transactions: await accountResponse.transactions(),
+        index: obj.index
       };
+      console.log(account);
       context.commit("addAccount", account);
     }
   },

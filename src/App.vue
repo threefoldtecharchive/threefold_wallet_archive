@@ -45,12 +45,9 @@
 </template>
 
 <script>
-import { test } from "./services/stellarService";
 export default {
   name: "App",
 
-  components: {},
-
-  mounted: () => test()
+  components: {}
 };
 </script>

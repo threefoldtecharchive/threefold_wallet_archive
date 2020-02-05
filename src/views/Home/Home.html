@@ -1,16 +1,16 @@
 <section class="home fill-height">
     <v-layout column fill-height>
-        <div class="content" v-if="wallets.length">
+        <div class="content" v-if="accounts.length">
             <WalletCard no-padding
                         class="my-2"
                         clickable
-                        v-for="(wallet, index) in wallets"
+                        v-for="(account, index) in accounts"
                         :key='index'
-                        :wallet="wallet"
-                        @click="seeDetails(wallet)"
+                        :wallet="account"
+                        @click="seeDetails(account)"
             />
         </div>
-        <div v-if="!wallets.length" class='fill-height'>
+        <div v-if="!accounts.length" class='fill-height'>
             <v-layout
                     justify-center
                     align-center

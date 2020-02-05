@@ -1,6 +1,19 @@
 import StellarSdk from "stellar-sdk";
 import { decodeBase64 } from "tweetnacl-util";
 
+export const generateAccount = async (seed, index) => {
+  const server = new StellarSdk.Server("https://horizon-testnet.stellar.org");
+
+  console.log(`take in account index`, index);
+  // @TODO take in account the index
+  // @TODO align imported and created wallet seed type
+  const pair = StellarSdk.Keypair.fromRawEd25519Seed(seed);
+
+  const account = await server.loadAccount(pair.publicKey());
+
+  return account;
+};
+
 export const test = async () => {
   const server = new StellarSdk.Server("https://horizon-testnet.stellar.org");
   let seed = "dZS/ZkLaiUPSw2e2ZC8iU0QbpbVsKypey7qWPxNIdUw=";
@@ -19,12 +32,10 @@ export const test = async () => {
   console.log(account);
 };
 
-export const generateAccount = async pair => {
+export const fundAccount = async publicKey => {
   try {
     const response = await fetch(
-      `https://friendbot.stellar.org?addr=${encodeURIComponent(
-        pair.publicKey()
-      )}`
+      `https://friendbot.stellar.org?addr=${encodeURIComponent(publicKey)}`
     );
     const responseJSON = await response.json();
     console.log("SUCCESS! You have a new account :)\n", responseJSON);
