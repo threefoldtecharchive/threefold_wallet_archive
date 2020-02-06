@@ -14,7 +14,7 @@ export default {
       for (const pkidAccount of pkidAccounts) {
         const account = await fetchAccount({
           index: pkidAccount.index,
-          name: pkidAccount.name,
+          name: pkidAccount.walletName,
           tags: ["app"],
           seed: seedPhrase
         });
