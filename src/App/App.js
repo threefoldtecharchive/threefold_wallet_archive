@@ -1,6 +1,5 @@
 import toolbar from "../components/toolbar";
 import bottomNav from "../components/bottomNav";
-import editWallet from "../components/editWallet";
 import copyDialog from "../components/copydialog";
 import { mapActions, mapGetters } from "vuex";
 
@@ -9,8 +8,7 @@ export default {
   components: {
     toolbar,
     bottomNav,
-    copyDialog,
-    editWallet
+    copyDialog
   },
   mounted() {},
   data() {
@@ -21,7 +19,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["informationMessage", "fatalError", "isImportingWallet"]),
+    ...mapGetters([
+      "informationMessage",
+      "fatalError",
+      "isImportingWallet"
+    ]),
     cssProps() {
       return {
         "--primary-color": this.$vuetify.theme.themes.light.primary,
@@ -37,17 +39,7 @@ export default {
       "createWallet",
       "setInformationMessage",
       "setImportingWallets"
-    ]),
-    handleCTAClick(data) {
-      if (this.$route.name === "home") {
-        this.showCreateWalletDialog = !this.showCreateWalletDialog;
-        // if (data) this.createWallet(data)
-      }
-      // if (this.$route.name === 'history') {
-      // this.showEditWalletDialog = !this.showEditWalletDialog
-      // if (data) this.createWallet(data)
-      // }
-    }
+    ])
   },
   watch: {
     informationMessage(val) {

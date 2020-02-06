@@ -34,17 +34,16 @@ export default {
     }
   },
   mounted() {
-    console.log(this.account);
   },
   methods: {
     ...mapActions(["setInformationMessage"]),
     copyAddress() {
       this.$root.$emit("copy", {
         title: "Copy wallet address to clipboard",
-        toCopy: this.wallet.address,
+        toCopy: this.account.id,
         callback: () => {
           this.setInformationMessage(
-            `Address has been copied to clipboard (${this.wallet.address.substring(
+            `Address has been copied to clipboard (${this.account.id.substring(
               0,
               8
             )}...).`

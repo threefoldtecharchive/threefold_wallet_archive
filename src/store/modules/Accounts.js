@@ -8,7 +8,6 @@ export default {
   actions: {
     createAccount: async (context, obj) => {
       const accountResponse = await generateAccount(obj.seed, obj.index);
-      console.log(accountResponse);
 
       let account = await mapAccount({
         accountResponse: accountResponse,
