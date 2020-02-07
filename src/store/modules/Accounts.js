@@ -6,16 +6,15 @@ export default {
     accounts: []
   },
   actions: {
-    createAccount: async (context, obj) => {
-      const accountResponse = await generateAccount(obj.seed, obj.index);
+    createAccount: async (context, { seed, name, index }) => {
+      const accountResponse = await generateAccount(seed, index);
 
       let account = await mapAccount({
         accountResponse: accountResponse,
-        name: obj,
+        name: name,
         tags: ["app"],
-        index: obj.index
+        index: index
       });
-      console.log(account);
       // @TODO make this dynamic in login
       context.commit("setThreebotName", "tobias.3bot");
       context.commit("addAccount", account);

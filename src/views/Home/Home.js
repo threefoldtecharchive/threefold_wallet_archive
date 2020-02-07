@@ -1,5 +1,4 @@
-import { mapGetters, mapActions } from "vuex";
-import { decodeBase64 } from "tweetnacl-util";
+import { mapActions, mapGetters } from "vuex";
 import AccountCard from "../../components/AccountCard";
 
 export default {
@@ -10,21 +9,12 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["accounts"])
+    ...mapGetters(["accounts", "isLoadingWallets"])
   },
-  mounted() {
-    let seed = "dZS/ZkLaiUPSw2e2ZC8iU0QbpbVsKypey7qWPxNIdUw=";
-    seed = new Uint8Array(decodeBase64(seed));
-    this.createAccount({
-      seed: seed,
-      index: 0,
-      name: "test",
-      type: "app"
-    });
-  },
+  mounted() {},
   methods: {
     ...mapActions(["createAccount"]),
-    seeDetails(wallet) {
+    seeDetails: wallet => {
       this.$router.push({
         name: "details",
         params: {

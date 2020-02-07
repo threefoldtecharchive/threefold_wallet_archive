@@ -1,33 +1,32 @@
 <section class="home fill-height">
-    <v-layout column fill-height>
-        <div class="content" v-if="accounts.length">
-            <AccountCard no-padding
-                        class="my-2"
-                        clickable
-                        v-for="(account, index) in accounts"
-                        :key='index'
-                        :account="account"
-                        @click="seeDetails(account)"
+  <v-layout column fill-height>
+    <div class="content">
+      <v-container>
+        <v-row dense>
+          <v-col cols="12">
+            <AccountCard
+                    clickable
+                    v-for="(account, index) in accounts"
+                    :key="index"
+                    :account="account"
+                    @click="seeDetails(account)"
             />
-        </div>
-        <div v-if="!accounts.length" class='fill-height'>
-            <v-layout
-                    justify-center
-                    align-center
-                    fill-height
-                    column
-            >
-                <v-progress-circular
-                        :size="70"
-                        :width="10"
-                        :color="$route.meta.accent"
-                        indeterminate
-                />
-                <p class="pt-3">
-                    Loading wallets...
-                </p>
-            </v-layout>
-        </div>
-    </v-layout>
-
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+    <div v-if="isLoadingWallets" class="fill-height">
+      <v-layout justify-center align-center fill-height column>
+        <v-progress-circular
+          :size="70"
+          :width="10"
+          :color="$route.meta.accent"
+          indeterminate
+        />
+        <p class="pt-3">
+          Loading wallets...
+        </p>
+      </v-layout>
+    </div>
+  </v-layout>
 </section>
