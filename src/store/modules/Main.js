@@ -7,7 +7,8 @@ export default {
     threeBotName: null,
     isLoadingWallets: true,
     isMigratingAccount: false,
-    position: 0
+    position: 0,
+    initialized: false
   },
   actions: {
     initializeSingleAccount: async function(
@@ -29,26 +30,28 @@ export default {
       context.commit("addAccount", account);
     },
     initializePkidAppAccounts: async (context, seed) => {
-      const pkidAccounts = await context.dispatch("getPkidAppAccounts")
-      const seedPhrase = entropyToMnemonic(seed)
+      const pkidAccounts = await context.dispatch("getPkidAppAccounts");
+      const seedPhrase = entropyToMnemonic(seed);
       const type = "app";
       return pkidAccounts.map(pkidAccount => {
-        pkidAccount.position = pkidAccount.position ? pkidAccount.position : pkidAccount.index
-        context.commit("incrementPosition")
+        pkidAccount.position = pkidAccount.position
+          ? pkidAccount.position
+          : pkidAccount.index;
+        context.commit("incrementPosition");
         context.dispatch("initializeSingleAccount", {
           pkidAccount,
           seedPhrase,
           type
-        })
-      })
+        });
+      });
     },
     initializeImportedPkidAccounts: async context => {
       const pkidImportedAccounts = await context.dispatch(
         "getPkidImportedAccounts"
-      )
+      );
       return pkidImportedAccounts.map(pkidImportedAccount => {
-        const seedPhrase = entropyToMnemonic(pkidImportedAccount.seed)
-        const type = "imported"
+        const seedPhrase = entropyToMnemonic(pkidImportedAccount.seed);
+        const type = "imported";
         pkidImportedAccount.position = pkidImportedAccount.position
           ? pkidImportedAccount.position
           : context.getters.position;
@@ -57,20 +60,21 @@ export default {
           pkidAccount: pkidImportedAccount,
           seedPhrase,
           type
-        })
-      })
+        });
+      });
     },
     initialize: async (context, params) => {
-      await context.dispatch("setPkidClient", params.seed)
-      context.commit("setThreebotName", params.doubleName)
+      context.state.initialized = true;
+      await context.dispatch("setPkidClient", params.seed);
+      context.commit("setThreebotName", params.doubleName);
 
       const op1 = await context.dispatch(
         "initializePkidAppAccounts",
         params.seed
       );
       const op2 = await context.dispatch("initializeImportedPkidAccounts");
-      await Promise.all([...op1, ...op2])
-      context.commit("stopLoadingWallets")
+      await Promise.all([...op1, ...op2]);
+      context.commit("stopLoadingWallets");
     }
   },
   mutations: {
@@ -94,6 +98,7 @@ export default {
     threeBotName: state => state.threeBotName,
     isLoadingWallets: state => state.isLoadingWallets,
     isMigratingAccount: state => state.isMigratingAccount,
-    position: state => state.position
+    position: state => state.position,
+    initialized: state => state.initialized
   }
 };

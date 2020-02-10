@@ -2,7 +2,9 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home";
 import Init from "@/views/Init";
-import createWallet from "@/views/createWallet"
+import createWallet from "@/views/createWallet";
+import Details from "@/views/Details";
+import store from "../store";
 
 Vue.use(VueRouter);
 
@@ -12,8 +14,8 @@ const routes = [
     name: "home",
     component: Home,
     meta: {
-      title: "Wallet",
-      transfer: 'transfer',
+      title: "wallet",
+      transfer: "transfer",
       accent: "accent",
       tags: ["showTransferButton"]
     }
@@ -22,19 +24,38 @@ const routes = [
     path: "/init",
     name: "init",
     meta: {
-      title: "Initialize",
+      title: "initialize",
       accent: "accent"
     },
     component: Init
-  }, {
-    path: '/addwallet',
-    name: 'addwallet',
+  },
+  {
+    path: "/addwallet",
+    name: "addwallet",
     meta: {
-      accent: 'accent',
-      title: 'import/create wallet'
+      accent: "accent",
+      title: "import/create wallet"
     },
     component: createWallet
-  }, //{
+  },
+  {
+    path: "/details/:account",
+    name: "details",
+    meta: {
+      title: "details",
+      accent: "accent"
+    },
+    component: Details
+  }
+  // }, {
+  //   path: '/addwallet',
+  //   name: 'addwallet',
+  //   meta: {
+  //     accent: 'accent',
+  //     title: 'import/create wallet'
+  //   },
+  //   component: () => import(/* webpackChunkName: "profile-page" */ './views/createWallet')
+  // }, {
   //   path: '/details/:wallet',
   //   name: 'details',
   //   meta: {
@@ -158,6 +179,16 @@ const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  if (!store.getters.initialized && to.name !== "error" && to.name !== "init") {
+    next({
+      name: "init"
+    });
+    return;
+  }
+  next();
 });
 
 export default router;
