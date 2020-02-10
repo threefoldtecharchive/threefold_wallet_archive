@@ -3,7 +3,7 @@
     <v-row justify="end">
       <span v-if="hasMultipleBalances" class="caption mr-1">Available </span>
       <span :class="`text-s-right ${hasMultipleBalances ? 'subtitle-2' : 'title' } ${color}--text`">{{balance.balance | formatBalance}}</span>
-      <span :class="`ml-1 body-1 font-weight-light`">{{balance.asset_code}}TFT</span>
+      <span :class="`ml-1 body-1 font-weight-light`">{{balance.asset_code}}</span>
     </v-row>
     <!-- @Todo locked and unconfirmed tokens? -->
     <!-- <v-row v-if="unconfirmed > 0" justify="end">

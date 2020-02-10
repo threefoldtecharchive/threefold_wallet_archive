@@ -12,7 +12,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@jimber/pkid": "^1.0.4",
-    "@jimber/stellar-crypto": "^0.0.5",
+    "@jimber/stellar-crypto": "^0.0.7",
     "bip39": "latest",
     "clipboard-copy": "^3.1.0",
     "core-js": "^3.4.4",

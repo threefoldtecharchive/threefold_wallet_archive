@@ -1,5 +1,8 @@
 import { keypairFromAccount } from "@jimber/stellar-crypto/dist/service/cryptoService";
-import { loadAcount } from "@jimber/stellar-crypto/dist/service/stellarService";
+import {
+  loadAcount,
+  generateAccount
+} from "@jimber/stellar-crypto/dist/service/stellarService";
 import { mnemonicToEntropy } from "bip39";
 
 export const mapAccount = async ({
@@ -20,16 +23,18 @@ export const mapAccount = async ({
   seed
 });
 
-export const fetchAccount = async ({
-  seedPhrase,
-  index,
-  name,
-  tags,
-  position
-}) => {
-  const keyPair = keypairFromAccount(seedPhrase, index);
-  const accountResponse = await loadAcount(keyPair);
-  return await mapAccount({
+export const fetchAccount = async ({ seed, index, name, tags, position }) => {
+  const keyPair = keypairFromAccount(seed, index);
+  let accountResponse;
+  try {
+    accountResponse = await loadAcount(keyPair);
+  } catch (e) {
+    if (e.message !== "Not Found") {
+      throw Error("Something went wrong while fetching account");
+    }
+    accountResponse = await generateAndFetchAccount(keyPair);
+  }
+  return mapAccount({
     accountResponse,
     index,
     tags,
@@ -38,3 +43,11 @@ export const fetchAccount = async ({
     seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex')
   });
 };
+async function generateAndFetchAccount(keyPair) {
+  try {
+    await generateAccount(keyPair);
+    return await loadAcount(keyPair);
+  } catch (e) {
+    throw Error("Something went wrong while generating account");
+  }
+}
