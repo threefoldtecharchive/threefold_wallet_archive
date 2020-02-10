@@ -9,7 +9,15 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["accounts", "isLoadingWallets"])
+    ...mapGetters([
+      "accounts", 
+      "isLoadingWallets"
+    ]),
+    sortedAccounts(){
+      const sortedAccounts = [...this.accounts];
+      sortedAccounts.sort( (account, otherAccount) => account.postition > otherAccount.postition)
+      return sortedAccounts
+    }
   },
   mounted() {},
   methods: {

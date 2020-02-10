@@ -4,7 +4,7 @@
             <AccountCard
                     class="px-1 mb-2"
                     clickable
-                    v-for="(account, index) in accounts"
+                    v-for="(account, index) in sortedAccounts"
                     :key="index"
                     :account="account"
                     @click="seeDetails(account)"
