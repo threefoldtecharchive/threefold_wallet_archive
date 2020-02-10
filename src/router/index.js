@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "@/views/Home";
 import Init from "@/views/Init";
+import createWallet from "@/views/createWallet"
 
 Vue.use(VueRouter);
 
@@ -18,23 +19,22 @@ const routes = [
     }
   },
   {
-    path: "/Init",
+    path: "/init",
     name: "init",
     meta: {
       title: "Initialize",
       accent: "accent"
     },
     component: Init
-  }
-  // }, {
-  //   path: '/addwallet',
-  //   name: 'addwallet',
-  //   meta: {
-  //     accent: 'accent',
-  //     title: 'import/create wallet'
-  //   },
-  //   component: () => import(/* webpackChunkName: "profile-page" */ './views/createWallet')
-  // }, {
+  }, {
+    path: '/addwallet',
+    name: 'addwallet',
+    meta: {
+      accent: 'accent',
+      title: 'import/create wallet'
+    },
+    component: createWallet
+  }, //{
   //   path: '/details/:wallet',
   //   name: 'details',
   //   meta: {

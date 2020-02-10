@@ -3,7 +3,6 @@ import {
   mapActions
 } from 'vuex'
 import cryptoService from '../../services/cryptoService'
-import { importedSeedFound } from '../../services/walletManagmentService'
 
 export default {
   name: 'create-wallet',

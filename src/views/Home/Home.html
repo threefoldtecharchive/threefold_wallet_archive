@@ -1,19 +1,14 @@
 <section class="home fill-height">
   <v-layout column fill-height>
     <div class="content">
-      <v-container>
-        <v-row dense>
-          <v-col cols="12">
             <AccountCard
+                    class="px-1 mb-2"
                     clickable
                     v-for="(account, index) in accounts"
                     :key="index"
                     :account="account"
                     @click="seeDetails(account)"
             />
-          </v-col>
-        </v-row>
-      </v-container>
     </div>
     <div v-if="isLoadingWallets" class="fill-height">
       <v-layout justify-center align-center fill-height column>

@@ -13,7 +13,6 @@ export default {
   },
   mounted() {},
   methods: {
-    ...mapActions(["createAccount"]),
     seeDetails: wallet => {
       this.$router.push({
         name: "details",

@@ -6,51 +6,71 @@ export default {
   state: {
     threeBotName: null,
     isLoadingWallets: true,
-    isMigratingAccount: false
+    isMigratingAccount: false,
+    position: 0
   },
   actions: {
-    initialiseSingleAppAccount: async function(
+    initializeSingleAccount: async function(
       context,
-      { pkidAccount, seed, seedPhrase }
+      { pkidAccount, seedPhrase, type }
     ) {
+      const index = pkidAccount.index ? pkidAccount.index : 0;
       if (!pkidAccount.stellar) {
-        await convertTfAccount(entropyToMnemonic(seed), 1, pkidAccount.index);
+        await convertTfAccount(seedPhrase, 1, index);
       }
       const account = await fetchAccount({
-        index: pkidAccount.index,
+        index: index,
         name: pkidAccount.walletName,
-        tags: ["app"],
+        tags: [type],
         seed: seedPhrase,
+        // @TODO calculate position properly
         position: pkidAccount.position
-          ? pkidAccount.position
-          : pkidAccount.index
       });
       context.commit("addAccount", account);
     },
     initializePkidAppAccounts: async (context, seed) => {
-      const pkidAccounts = await context.dispatch("getPkidAppAccounts");
-
-      const seedPhrase = entropyToMnemonic(seed);
-
-      await Promise.all(
-        pkidAccounts.map(pkidAccount =>
-          context.dispatch("initialiseSingleAppAccount", {
-            pkidAccount,
-            seed,
-            seedPhrase
-          })
-        )
-      );
+      const pkidAccounts = await context.dispatch("getPkidAppAccounts")
+      const seedPhrase = entropyToMnemonic(seed)
+      const type = "app";
+      return pkidAccounts.map(pkidAccount => {
+        pkidAccount.position = pkidAccount.position ? pkidAccount.position : pkidAccount.index
+        context.commit("incrementPosition")
+        context.dispatch("initializeSingleAccount", {
+          pkidAccount,
+          seedPhrase,
+          type
+        })
+      })
+    },
+    initializeImportedPkidAccounts: async context => {
+      const pkidImportedAccounts = await context.dispatch(
+        "getPkidImportedAccounts"
+      )
+      return pkidImportedAccounts.map(pkidImportedAccount => {
+        const seedPhrase = entropyToMnemonic(pkidImportedAccount.seed)
+        const type = "imported"
+        pkidImportedAccount.position = pkidImportedAccount.position
+          ? pkidImportedAccount.position
+          : context.getters.position;
+        context.commit("incrementPosition");
+        return context.dispatch("initializeSingleAccount", {
+          pkidAccount: pkidImportedAccount,
+          seedPhrase,
+          type
+        })
+      })
     },
     initialize: async (context, params) => {
-      console.log("initialize");
-      await context.dispatch("setPkidClient", params.seed);
-      context.commit("setThreebotName", params.doubleName);
+      await context.dispatch("setPkidClient", params.seed)
+      context.commit("setThreebotName", params.doubleName)
 
-      await context.dispatch("initializePkidAppAccounts", params.seed);
-      console.log(context.getters.accounts);
-      // await context.dispatch("initializeImportedPkidAccounts");
-      await context.commit("stopLoadingWallets");
+      const op1 = await context.dispatch(
+        "initializePkidAppAccounts",
+        params.seed
+      );
+      const op2 = await context.dispatch("initializeImportedPkidAccounts");
+      await Promise.all([...op1, ...op2])
+      context.commit("stopLoadingWallets")
     }
   },
   mutations: {
@@ -65,11 +85,15 @@ export default {
     },
     stopMigratingAccount: state => {
       state.isMigratingAccount = false;
+    },
+    incrementPosition: state => {
+      state.position++;
     }
   },
   getters: {
     threeBotName: state => state.threeBotName,
     isLoadingWallets: state => state.isLoadingWallets,
-    isMigratingAccount: state => state.isMigratingAccount
+    isMigratingAccount: state => state.isMigratingAccount,
+    position: state => state.position
   }
 };

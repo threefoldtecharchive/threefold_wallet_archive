@@ -8,7 +8,7 @@ export const mapAccount = async ({ accountResponse, name, tags, index, position}
   balances: accountResponse.balances,
   transactions: await accountResponse.transactions(),
   index: index,
-  postion: position
+  position: position
 });
 
 export const fetchAccount = async ({ seed, index, name, tags, position }) => {
