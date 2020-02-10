@@ -12,7 +12,10 @@ export default {
     },
     removeAccount: (state, account) => {
       state.accounts = state.accounts.filter(item => item !== account);
-    }
+    },
+    setAccounts: (state, accounts) => {
+      state.accounts = accounts;
+    },
   },
   getters: {
     accounts: state => state.accounts
