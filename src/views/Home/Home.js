@@ -15,7 +15,7 @@ export default {
     ]),
     sortedAccounts(){
       const sortedAccounts = [...this.accounts];
-      sortedAccounts.sort( (account, otherAccount) => account.postition > otherAccount.postition)
+      sortedAccounts.sort( (account, otherAccount) => account.position - otherAccount.position)
       return sortedAccounts
     }
   },
