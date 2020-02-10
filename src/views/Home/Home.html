@@ -1,7 +1,12 @@
 <section class="home fill-height">
   <v-layout column fill-height>
     <div class="content">
-      <draggable v-model="accounts" group="accounts" @start="drag=true" @end="drag=false">
+      <draggable
+        v-model="accounts"
+        group="accounts"
+        @start="drag=true"
+        @end="drag=false"
+      >
         <AccountCard
           class="px-1 mb-2"
           clickable
@@ -11,6 +16,9 @@
           @click="seeDetails(account)"
         />
       </draggable>
+      <button @click.stop="getPkidImportedAccounts">get</button>
+      <br />
+      <button @click.stop="saveToPkid">save</button>
     </div>
     <div v-if="isLoadingWallets" class="fill-height">
       <v-layout justify-center align-center fill-height column>

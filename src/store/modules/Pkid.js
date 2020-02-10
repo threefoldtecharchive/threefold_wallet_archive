@@ -7,6 +7,32 @@ export default {
     client: null
   },
   actions: {
+    async saveToPkid({ getters, dispatch }) {
+      const appAccounts = getters.accounts
+        .filter(account => account.tags.includes("app"))
+        .map(account => ({
+          walletName: account.name,
+          position: account.position,
+          index: account.index,
+          stellar: true
+        }));
+      const appPromise = dispatch("setPkidAppAccounts", appAccounts);
+      const importedAccounts = getters.accounts
+        .filter(account => account.tags.includes("imported"))
+        .map(account => ({
+          walletName: account.name,
+          seed: account.seed,
+          stellar: true,
+        account
+        }));
+      const importedPromise = dispatch("setPkidImportedAccounts", importedAccounts);
+      await Promise.all([appPromise, importedPromise])
+      console.log('saved to pkid')
+    },
+    async setPkidAppAccounts({ getters }, accounts) {
+      // wallets key for historic reasons
+      await getters.client.setDoc("wallets", accounts, true);
+    },
     async setPkidClient(context, seed) {
       // const keyPair = await generateKeypair(payload)
       await sodium.ready;
@@ -20,7 +46,6 @@ export default {
     async getPkidAppAccounts(context) {
       const client = context.getters.client;
       const data = await client.getDoc(client.keyPair.publicKey, "wallets");
-      console.log("data", data);
       if (!data.success) {
         if (404 == data.status) {
           return null;
@@ -28,9 +53,6 @@ export default {
         throw Error("something is wrong with Pkid connection");
       }
       return data.data;
-    },
-    setPkidAccounts(context, accounts) {
-      context.getters.client.setDoc("wallets", accounts, true);
     },
     setPkidImportedAccounts(context, accounts) {
       context.getters.client.setDoc("imported_accounts", accounts, true);
@@ -41,6 +63,8 @@ export default {
         client.keyPair.publicKey,
         "imported_accounts"
       );
+      console.log("data", data);
+
       if (!data.success) {
         if (data.status === 404) {
           return null;

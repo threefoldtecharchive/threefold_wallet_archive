@@ -23,7 +23,7 @@ export default {
         index: index,
         name: pkidAccount.walletName,
         tags: [type],
-        seed: seedPhrase,
+        seedPhrase,
         // @TODO calculate position properly
         position: pkidAccount.position
       });

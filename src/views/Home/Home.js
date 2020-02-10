@@ -1,4 +1,4 @@
-import { mapGetters } from "vuex";
+import {mapActions, mapGetters} from 'vuex';
 import AccountCard from "../../components/AccountCard";
 import draggable from "vuedraggable";
 import store from "../../store";
@@ -30,6 +30,7 @@ export default {
   },
   mounted() {},
   methods: {
+    ...mapActions(['saveToPkid', 'getPkidImportedAccounts']),
     seeDetails: account => {
       this.$router.push({
         name: "details",

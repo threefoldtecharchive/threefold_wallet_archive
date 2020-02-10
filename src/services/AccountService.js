@@ -1,24 +1,40 @@
 import { keypairFromAccount } from "@jimber/stellar-crypto/dist/service/cryptoService";
 import { loadAcount } from "@jimber/stellar-crypto/dist/service/stellarService";
+import { mnemonicToEntropy } from "bip39";
 
-export const mapAccount = async ({ accountResponse, name, tags, index, position}) => ({
+export const mapAccount = async ({
+  accountResponse,
+  name,
+  tags,
+  index,
+  position,
+  seed
+}) => ({
   name: name,
   tags: tags,
   id: accountResponse.id,
   balances: accountResponse.balances,
   transactions: await accountResponse.transactions(),
-  index: index,
-  position: position
+  index,
+  position,
+  seed
 });
 
-export const fetchAccount = async ({ seed, index, name, tags, position }) => {
-  const keyPair = keypairFromAccount(seed, index);
+export const fetchAccount = async ({
+  seedPhrase,
+  index,
+  name,
+  tags,
+  position
+}) => {
+  const keyPair = keypairFromAccount(seedPhrase, index);
   const accountResponse = await loadAcount(keyPair);
   return await mapAccount({
     accountResponse,
-    index: index,
-    tags: tags,
-    name: name,
-    position: position
+    index,
+    tags,
+    name,
+    position,
+    seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex')
   });
 };
