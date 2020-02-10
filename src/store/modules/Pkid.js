@@ -22,8 +22,7 @@ export default {
         .map(account => ({
           walletName: account.name,
           seed: account.seed,
-          stellar: true,
-        account
+          stellar: true
         }));
       const importedPromise = dispatch("setPkidImportedAccounts", importedAccounts);
       await Promise.all([appPromise, importedPromise])
