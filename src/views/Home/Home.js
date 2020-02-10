@@ -1,4 +1,4 @@
-import {mapActions, mapGetters} from 'vuex';
+import { mapGetters } from "vuex";
 import AccountCard from "../../components/AccountCard";
 import draggable from "vuedraggable";
 import store from "../../store";
@@ -16,21 +16,21 @@ export default {
       get() {
         const sortedAccounts = [...store.getters.accounts];
         sortedAccounts.sort(
-            (account, otherAccount) => account.position - otherAccount.position
+          (account, otherAccount) => account.position - otherAccount.position
         );
         return sortedAccounts;
       },
       set(value) {
         value.map((account, index) => {
-          account.position = index
+          account.position = index;
         });
         store.commit("setAccounts", value);
+        store.dispatch("saveToPkid");
       }
     }
   },
   mounted() {},
   methods: {
-    ...mapActions(['saveToPkid', 'getPkidImportedAccounts']),
     seeDetails: account => {
       this.$router.push({
         name: "details",

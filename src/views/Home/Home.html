@@ -16,9 +16,6 @@
           @click="seeDetails(account)"
         />
       </draggable>
-      <button @click.stop="getPkidImportedAccounts">get</button>
-      <br />
-      <button @click.stop="saveToPkid">save</button>
     </div>
     <div v-if="isLoadingWallets" class="fill-height">
       <v-layout justify-center align-center fill-height column>

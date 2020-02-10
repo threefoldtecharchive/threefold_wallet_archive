@@ -17,6 +17,7 @@ export default {
     ) {
       const index = pkidAccount.index ? pkidAccount.index : 0;
       if (!pkidAccount.stellar) {
+
         await convertTfAccount(seedPhrase, 1, index);
       }
       const account = await fetchAccount({
@@ -74,6 +75,7 @@ export default {
       );
       const op2 = await context.dispatch("initializeImportedPkidAccounts");
       await Promise.all([...op1, ...op2]);
+      await context.dispatch('saveToPkid');
       context.commit("stopLoadingWallets");
     }
   },
