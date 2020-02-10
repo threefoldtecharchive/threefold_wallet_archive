@@ -1,5 +1,7 @@
 import Balance from "../Balance";
 import { mapGetters, mapActions } from "vuex";
+import router from '../../router';
+
 export default {
   name: "account-card",
   components: { Balance },
@@ -53,7 +55,12 @@ export default {
     },
     clicked() {
       if (this.clickable) {
-        this.$emit("click", this.account);
+        router.push({
+          name: "details",
+          params: {
+            account: this.account.name
+          }
+        });
       }
     }
   }

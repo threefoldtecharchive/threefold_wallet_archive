@@ -9,23 +9,22 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters([
-      "accounts", 
-      "isLoadingWallets"
-    ]),
-    sortedAccounts(){
+    ...mapGetters(["accounts", "isLoadingWallets"]),
+    sortedAccounts() {
       const sortedAccounts = [...this.accounts];
-      sortedAccounts.sort( (account, otherAccount) => account.position - otherAccount.position)
-      return sortedAccounts
+      sortedAccounts.sort(
+        (account, otherAccount) => account.position - otherAccount.position
+      );
+      return sortedAccounts;
     }
   },
   mounted() {},
   methods: {
-    seeDetails: wallet => {
+    seeDetails: account => {
       this.$router.push({
         name: "details",
         params: {
-          wallet: wallet.name
+          account: account.name
         }
       });
     }
