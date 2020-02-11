@@ -18,7 +18,6 @@ export default {
     ) {
       const index = pkidAccount.index ? pkidAccount.index : 0;
       if (!pkidAccount.stellar) {
-        console.log('seedPhrase',seedPhrase);
         await convertTfAccount(seedPhrase, 1, index);
       }
       const account = await fetchAccount({
@@ -38,11 +37,6 @@ export default {
           ? pkidAccount.position
           : pkidAccount.index;
         context.commit("incrementPosition");
-        console.log("initializeSingleAccount", {
-          pkidAccount,
-          seedPhrase,
-          type
-        });
         context.dispatch("initializeSingleAccount", {
           pkidAccount,
           seedPhrase,
@@ -61,7 +55,6 @@ export default {
           ? pkidImportedAccount.position
           : context.getters.position;
         context.commit("incrementPosition");
-        console.log('pkidImportedAccount',pkidImportedAccount);
         return context.dispatch("initializeSingleAccount", {
           pkidAccount: pkidImportedAccount,
           seedPhrase,
@@ -75,7 +68,6 @@ export default {
       context.commit("setThreebotName", doubleName)
 
       const seedPhrase = entropyToMnemonic(seed)
-      console.log("settingapp seed", seedPhrase)
       context.commit("setAppSeedPhrase", seedPhrase)
 
       const op1 = await context.dispatch(

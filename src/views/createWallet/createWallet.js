@@ -76,9 +76,7 @@ export default {
         this.wordsErrors.push(seedValidation.message)
         return
       }
-
       const seedPhrase =  seedValidation.seedPhrase
-      console.log(`adding account`, this.walletName, seedPhrase)
       this.generateImportedAccount({
         seedPhrase, 
         walletName: this.walletName

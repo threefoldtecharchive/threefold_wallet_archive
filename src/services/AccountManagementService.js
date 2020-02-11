@@ -21,8 +21,6 @@ export const importedSeedFound = (seed, accounts) => {
 }
 
 export const isValidWalletName = (walletName, accounts) => {
-  console.log(walletName)
-  console.log(accounts)
   if (!walletName) {
     return {
       success: false,

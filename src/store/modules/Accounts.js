@@ -23,12 +23,9 @@ export default {
         seedPhrase,
         position: position
       });
-      console.log(`generated account`,account)
       context.commit("addAccount", account);
     },
     generateImportedAccount: async (context, {seedPhrase, walletName}) => {
-      console.log(`walletname `, walletName)
-      console.log(`seedPhrase genimported`,seedPhrase)
       const position = context.state.accounts.length
       const account = await fetchAccount({
         index: 0,
@@ -37,7 +34,6 @@ export default {
         seedPhrase,
         position: position
       });
-      console.log(`imported account`,account)
       context.commit("addAccount", account);
     }
   },
