@@ -22,7 +22,6 @@ export default {
         .map(account => ({
           walletName: account.name,
           seed: account.seed,
-          stellar: true
         }));
       const importedPromise = dispatch("setPkidImportedAccounts", importedAccounts);
       await Promise.all([appPromise, importedPromise])
@@ -45,6 +44,8 @@ export default {
     async getPkidAppAccounts(context) {
       const client = context.getters.client;
       const data = await client.getDoc(client.keyPair.publicKey, "wallets");
+      console.log("app data", data);
+
       if (!data.success) {
         if (404 == data.status) {
           return null;

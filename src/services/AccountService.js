@@ -23,8 +23,8 @@ export const mapAccount = async ({
   seed
 });
 
-export const fetchAccount = async ({ seed, index, name, tags, position }) => {
-  const keyPair = keypairFromAccount(seed, index);
+export const fetchAccount = async ({ seedPhrase, index, name, tags, position }) => {
+  const keyPair = keypairFromAccount(seedPhrase, index);
   let accountResponse;
   try {
     accountResponse = await loadAcount(keyPair);

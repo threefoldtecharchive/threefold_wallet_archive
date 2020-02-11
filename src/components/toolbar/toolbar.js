@@ -1,4 +1,5 @@
 import { mapGetters } from 'vuex'
+import router from '../../router';
 export default {
   components: {
   },
@@ -6,7 +7,7 @@ export default {
   props: [],
   data () {
     return {
-      isScrolling: false
+      isScrolling: false,
     }
   },
   computed: {
@@ -22,6 +23,13 @@ export default {
     onScroll () {
       this.isScrolling = (window.pageYOffset ||
         document.documentElement.scrollTop || 0) > 50
+    },
+    devClick() {
+      this.devClicks++;
+      if (this.devClicks >= 5 ){
+        this.devClicks = 0;
+        router.push({name: 'devView'});
+      }
     },
     // enableQrScannerDialog () {
     //   this.$emit("enableQrScannerDialog")

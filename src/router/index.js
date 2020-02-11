@@ -4,6 +4,7 @@ import Home from "@/views/Home";
 import Init from "@/views/Init";
 import createWallet from "@/views/createWallet";
 import Details from "@/views/Details";
+import DevView from "@/views/DevView";
 import store from "../store";
 
 Vue.use(VueRouter);
@@ -28,6 +29,15 @@ const routes = [
       accent: "accent"
     },
     component: Init
+  },
+  {
+    path: "/devview",
+    name: "devview",
+    meta: {
+      title: "devview",
+      accent: "accent"
+    },
+    component: DevView
   },
   {
     path: "/addwallet",

@@ -7,7 +7,7 @@
         </v-btn>
       </v-col>
       <v-col >
-          <h2 class="title">{{($route.meta.title || $route.name) || '3Bot'}}</h2>
+          <h2 class="title" @click="devClick">{{($route.meta.title || $route.name) || '3Bot'}}</h2>
         <!-- <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent" /> -->
       </v-col>
       <v-col cols="2" >
