@@ -20,12 +20,27 @@ export default {
         index: nextAppAcountIndex,
         name: walletName,
         tags: ["app"],
-        seed: seedPhrase,
+        seedPhrase,
         position: position
       });
-      console.log(account)
+      console.log(`generated account`,account)
       context.commit("addAccount", account);
-    }},
+    },
+    generateImportedAccount: async (context, {seedPhrase, walletName}) => {
+      console.log(`walletname `, walletName)
+      console.log(`seedPhrase genimported`,seedPhrase)
+      const position = context.state.accounts.length
+      const account = await fetchAccount({
+        index: 0,
+        name: walletName,
+        tags: ["imported"],
+        seedPhrase,
+        position: position
+      });
+      console.log(`imported account`,account)
+      context.commit("addAccount", account);
+    }
+  },
   mutations: {
     addAccount: (state, account) => {
       state.accounts = [...state.accounts, account];
