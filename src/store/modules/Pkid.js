@@ -13,9 +13,12 @@ export default {
         .map(account => ({
           walletName: account.name,
           position: account.position,
-          index: account.index,
-          stellar: true
+          index: account.index
         }));
+      if (appAccounts.length <= 0 ){
+        console.log('not saved to pkid due to no accounts ');
+        return
+      }
       const appPromise = dispatch("setPkidAppAccounts", appAccounts);
       const importedAccounts = getters.accounts
         .filter(account => account.tags.includes("imported"))
