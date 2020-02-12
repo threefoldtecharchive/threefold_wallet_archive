@@ -13,11 +13,12 @@ export default {
         .map(account => ({
           walletName: account.name,
           position: account.position,
-          index: account.index
+          index: account.index,
+          stellar: true
         }));
-      if (appAccounts.length <= 0 ){
-        console.log('not saved to pkid due to no accounts ');
-        return
+      if (appAccounts.length <= 0) {
+        console.log("not saved to pkid due to no accounts ");
+        return;
       }
       const appPromise = dispatch("setPkidAppAccounts", appAccounts);
       const importedAccounts = getters.accounts
@@ -25,10 +26,14 @@ export default {
         .map(account => ({
           walletName: account.name,
           seed: account.seed,
+          stellar: true
         }));
-      const importedPromise = dispatch("setPkidImportedAccounts", importedAccounts);
-      await Promise.all([appPromise, importedPromise])
-      console.log('saved to pkid')
+      const importedPromise = dispatch(
+        "setPkidImportedAccounts",
+        importedAccounts
+      );
+      await Promise.all([appPromise, importedPromise]);
+      console.log("saved to pkid");
     },
     async setPkidAppAccounts({ getters }, accounts) {
       // wallets key for historic reasons
