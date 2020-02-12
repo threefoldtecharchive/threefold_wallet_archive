@@ -1,6 +1,7 @@
 import { fetchAccount } from "../../services/AccountService";
 import { entropyToMnemonic } from "bip39";
 import { convertTfAccount } from "@jimber/stellar-crypto";
+import StellarSdk from "stellar-sdk"
 
 export default {
   state: {
@@ -9,7 +10,8 @@ export default {
     isLoadingWallets: true,
     isMigratingAccount: false,
     position: 0,
-    initialized: false
+    initialized: false,
+    fee: StellarSdk.BASE_FEE
   },
   actions: {
     initializeSingleAccount: async function(
@@ -106,6 +108,7 @@ export default {
     isLoadingWallets: state => state.isLoadingWallets,
     isMigratingAccount: state => state.isMigratingAccount,
     position: state => state.position,
-    initialized: state => state.initialized
+    initialized: state => state.initialized,
+    fee: state => state.fee
   }
 };

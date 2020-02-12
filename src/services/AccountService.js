@@ -11,7 +11,8 @@ export const mapAccount = async ({
   tags,
   index,
   position,
-  seed
+  seed,
+  keyPair
 }) => ({
   name: name,
   tags: tags,
@@ -20,7 +21,8 @@ export const mapAccount = async ({
   transactions: await accountResponse.transactions(),
   index,
   position,
-  seed
+  seed,
+  keyPair
 });
 
 export const fetchAccount = async ({ seedPhrase, index, name, tags, position }) => {
@@ -40,7 +42,8 @@ export const fetchAccount = async ({ seedPhrase, index, name, tags, position }) 
     tags,
     name,
     position,
-    seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex')
+    seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex'),
+    keyPair
   });
 };
 async function generateAndFetchAccount(keyPair) {
