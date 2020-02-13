@@ -1,7 +1,7 @@
 import toolbar from '../components/toolbar';
 import bottomNav from '../components/bottomNav';
 import copyDialog from '../components/copydialog';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'app',
@@ -10,8 +10,8 @@ export default {
     bottomNav,
     copyDialog,
   },
-  mounted() {},
-  data() {
+  mounted () {},
+  data () {
     return {
       showCreateWalletDialog: false,
       showEditWalletDialog: false,
@@ -19,8 +19,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['informationMessage', 'fatalError', 'isImportingWallet']),
-    cssProps() {
+    ...mapGetters([
+      'informationMessage',
+      'fatalError',
+      'isImportingWallet',
+      'devClicks',
+    ]),
+    cssProps () {
       return {
         '--primary-color': this.$vuetify.theme.themes.light.primary,
         '--accent-color': this.$vuetify.theme.themes.light.accent,
@@ -36,21 +41,33 @@ export default {
       'setInformationMessage',
       'setImportingWallets',
     ]),
+    ...mapMutations(['resetDevClicks']),
   },
   watch: {
-    informationMessage(val) {
+    informationMessage (val) {
       if (val) {
         setTimeout(() => {
           this.setInformationMessage('');
         }, this.hideSnackbarTimeout);
       }
     },
-    fatalError(val) {
+    fatalError (val) {
       console.error(`ERROR`, val);
       this.$router.push({
         name: 'error',
         query: { msg: val },
       });
+    },
+    devClicks (val) {
+      if (val < 5) {
+        return;
+      }
+      this.$router.push({
+        name: 'devview',
+      });
+    },
+    $route (to, from) {
+      this.resetDevClicks();
     },
   },
 };

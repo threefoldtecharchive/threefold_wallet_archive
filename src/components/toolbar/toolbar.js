@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import router from '../../router';
 export default {
   components: {},
@@ -7,29 +7,18 @@ export default {
   data() {
     return {
       isScrolling: false,
-      devClicks: 0,
     };
   },
   computed: {
-    ...mapGetters(['syncing', 'accounts']),
+    ...mapGetters(['syncing', 'accounts', 'devClicks']),
   },
   mounted() {},
   methods: {
+    ...mapMutations(['addDevClick']),
     onScroll() {
       this.isScrolling =
         (window.pageYOffset || document.documentElement.scrollTop || 0) > 50;
     },
-    devClick() {
-      this.devClicks++;
-      console.log(this.devClicks);
-      if (this.devClicks >= 5) {
-        this.devClicks = 0;
-        router.push({ name: 'devView' });
-      }
-    },
-    // enableQrScannerDialog () {
-    //   this.$emit("enableQrScannerDialog")
-    // },
     seeAdd() {
       this.$router.push({
         name: 'addwallet',
