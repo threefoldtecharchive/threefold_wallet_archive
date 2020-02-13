@@ -14,7 +14,12 @@
         <div class="px-2">
           <v-layout justify-space-between fill-height column px-2>
             <p class="subtitle mb-0 grey--text">To</p>
-            <AccountCard no-padding class="my-2" :displayAmount="false" :account="selectedAccount"/>
+            <AccountCard
+              no-padding
+              class="my-2"
+              :displayAmount="false"
+              :account="selectedAccount"
+            />
             <v-flex>
               <p class="subtitle mb-0 grey--text">Amount</p>
               <p class="title mt-0">{{formObject.amount}} TFT</p>
