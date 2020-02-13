@@ -7,9 +7,9 @@
         >{{balance.balance | formatBalance}}
       </span>
       <span :class="`ml-1 body-1 font-weight-light text-uppercase`">
-        {{balance.asset_code || ((balance.asset_type === 'native') ? 'xlm' : balance.asset_type)}}
-      </span
-      >
+        {{balance.asset_code || ((balance.asset_type === 'native') ? 'xlm' :
+        balance.asset_type)}}
+      </span>
     </v-row>
     <!-- @Todo locked and unconfirmed tokens? -->
     <!-- <v-row v-if="unconfirmed > 0" justify="end">

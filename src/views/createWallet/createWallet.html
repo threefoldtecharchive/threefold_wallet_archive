@@ -2,16 +2,35 @@
   <v-col>
     <v-row justify="center">
       <v-btn-toggle dense mandatory class="round">
-        <v-btn text v-for="tab in tabs" :key="tab" class="px-3 my-1 mx-1 round" @click="currentTab=tab">{{tab}}</v-btn>
+        <v-btn
+          text
+          v-for="tab in tabs"
+          :key="tab"
+          class="px-3 my-1 mx-1 round"
+          @click="currentTab=tab"
+          >{{tab}}</v-btn
+        >
       </v-btn-toggle>
     </v-row>
     <v-container v-if="currentTab == 'create'">
-      <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
-        class="red--text" label="Wallet name"></v-text-field>
+      <v-text-field
+        :error-messages="walletNameErrors"
+        @input="walletNameErrors = []"
+        v-model="walletName"
+        class="red--text"
+        label="Wallet name"
+      ></v-text-field>
 
       <div>
-        <v-btn class="mx-0 mt-3" style="width: 100%;" color="accent" @click="createNewWallet" :disabled="!walletName">
-          Create wallet</v-btn>
+        <v-btn
+          class="mx-0 mt-3"
+          style="width: 100%;"
+          color="accent"
+          @click="createNewWallet"
+          :disabled="!walletName"
+        >
+          Create wallet</v-btn
+        >
       </div>
     </v-container>
 
@@ -21,17 +40,29 @@
       </v-row>
 
       <v-row>
-        <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
-          class="red--text" label="Wallet name"></v-text-field>
+        <v-text-field
+          :error-messages="walletNameErrors"
+          @input="walletNameErrors = []"
+          v-model="walletName"
+          class="red--text"
+          label="Wallet name"
+        ></v-text-field>
       </v-row>
       <v-row>
-        <v-textarea :error-messages="wordsErrors" @input="wordsErrors = []" v-model="words" name="input-7-1"
-          label="Words (Seed phrase)" value="" hint="Please enter all words lowercased and separted by one space.">
+        <v-textarea
+          :error-messages="wordsErrors"
+          @input="wordsErrors = []"
+          v-model="words"
+          name="input-7-1"
+          label="Words (Seed phrase)"
+          value=""
+          hint="Please enter all words lowercased and separted by one space."
+        >
         </v-textarea>
       </v-row>
 
       <v-row dense class="mt-2 warning">
-        <v-col cols='1' >
+        <v-col cols="1">
           <v-icon small>fas fa-exclamation-triangle</v-icon>
         </v-col>
         <v-col class="body-2">
@@ -40,10 +71,16 @@
       </v-row>
 
       <v-row>
-      <v-btn color="accent" class="mt-3" style="width: 100%;"  @click="importNewWallet" :disabled="!walletName">
-        Import wallet</v-btn>
+        <v-btn
+          color="accent"
+          class="mt-3"
+          style="width: 100%;"
+          @click="importNewWallet"
+          :disabled="!walletName"
+        >
+          Import wallet</v-btn
+        >
       </v-row>
-
     </v-container>
   </v-col>
 </section>

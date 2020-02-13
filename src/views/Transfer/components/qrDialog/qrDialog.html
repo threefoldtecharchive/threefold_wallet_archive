@@ -1,6 +1,5 @@
 <section class="qr-dialog">
   <v-dialog v-model="dialog" fullscreen persistent scrollable>
-
     <v-card class="no-radius">
       <v-card-title style="background-color:#34495e; color:white" dense>
         Show QR to sender
@@ -26,12 +25,14 @@
             </v-flex>
           </v-layout>
           <v-row justify="center">
-
-            <qrcode :value="qrText" v-if="selectedTab == 0" class="round"
-              :options="{ color: { darklight: '#fff',  dark: $vuetify.theme.primary}  }" />
-            </v-row>
-          </div>
-
+            <qrcode
+              :value="qrText"
+              v-if="selectedTab == 0"
+              class="round"
+              :options="{ color: { darklight: '#fff',  dark: $vuetify.theme.primary}  }"
+            />
+          </v-row>
+        </div>
       </v-card-text>
     </v-card>
   </v-dialog>

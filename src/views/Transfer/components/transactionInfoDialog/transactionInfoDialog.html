@@ -1,6 +1,5 @@
 <section class="transaction-info-dialog">
   <v-dialog v-model="dialog" fullscreen persistent scrollable>
-
     <v-card class="no-radius">
       <v-card-title style="background-color:#34495e; color:white" dense>
         Transaction info
@@ -16,12 +15,19 @@
         <v-layout fill-height column>
           <!-- {{selectedAccount}} -->
           <v-layout justify-space-between fill-height column>
-              <p class="subtitle mb-0 mt-2 grey--text">From</p>
-              <accountCard no-padding class="my-2" :account="selectedAccount" />
-            
-              <p class="subtitle mb-0 grey--text">To</p>
-              <accountCard v-if="toAccountIsOwn" no-padding class="my-2" :account="toAccountIsOwn" />
-              <p v-else class="title mt-0 text-truncate">{{formObject.to.address}}</p>
+            <p class="subtitle mb-0 mt-2 grey--text">From</p>
+            <accountCard no-padding class="my-2" :account="selectedAccount" />
+
+            <p class="subtitle mb-0 grey--text">To</p>
+            <accountCard
+              v-if="toAccountIsOwn"
+              no-padding
+              class="my-2"
+              :account="toAccountIsOwn"
+            />
+            <p v-else class="title mt-0 text-truncate">
+              {{formObject.to.address}}
+            </p>
 
               <p class="subtitle mb-0 grey--text">Amount</p>
               <v-layout class="pb-2" justify-space-between>
@@ -29,16 +35,20 @@
                 <span class="text-xs-right caption">{{fee}} fee included</span>
               </v-layout>
 
-              <p class="subtitle mb-0 grey--text">Message</p>
-              <p class="title mt-0">{{formObject.message}}</p>
+            <p class="subtitle mb-0 grey--text">Message</p>
+            <p class="title mt-0">{{formObject.message}}</p>
           </v-layout>
         </v-layout>
-        <v-btn @click="closeDialog(true)" dark :color="$route.meta.accent" style="margin-left: 0px; margin-right: 0px;"
-          block>
+        <v-btn
+          @click="closeDialog(true)"
+          dark
+          :color="$route.meta.accent"
+          style="margin-left: 0px; margin-right: 0px;"
+          block
+        >
           Confirm
         </v-btn>
       </v-card-text>
-
     </v-card>
   </v-dialog>
 </section>
