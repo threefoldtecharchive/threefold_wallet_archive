@@ -1,9 +1,9 @@
-import { keypairFromAccount } from "@jimber/stellar-crypto/dist/service/cryptoService";
+import { keypairFromAccount } from '@jimber/stellar-crypto/dist/service/cryptoService';
 import {
   loadAcount,
-  generateAccount
-} from "@jimber/stellar-crypto/dist/service/stellarService";
-import { mnemonicToEntropy } from "bip39";
+  generateAccount,
+} from '@jimber/stellar-crypto/dist/service/stellarService';
+import { mnemonicToEntropy } from 'bip39';
 
 export const mapAccount = async ({
   accountResponse,
@@ -12,7 +12,7 @@ export const mapAccount = async ({
   index,
   position,
   seed,
-  keyPair
+  keyPair,
 }) => ({
   name: name,
   tags: tags,
@@ -22,17 +22,23 @@ export const mapAccount = async ({
   index,
   position,
   seed,
-  keyPair
+  keyPair,
 });
 
-export const fetchAccount = async ({ seedPhrase, index, name, tags, position }) => {
+export const fetchAccount = async ({
+  seedPhrase,
+  index,
+  name,
+  tags,
+  position,
+}) => {
   const keyPair = keypairFromAccount(seedPhrase, index);
   let accountResponse;
   try {
     accountResponse = await loadAcount(keyPair);
   } catch (e) {
-    if (e.message !== "Not Found") {
-      throw Error("Something went wrong while fetching account");
+    if (e.message !== 'Not Found') {
+      throw Error('Something went wrong while fetching account');
     }
     accountResponse = await generateAndFetchAccount(keyPair);
   }
@@ -43,7 +49,7 @@ export const fetchAccount = async ({ seedPhrase, index, name, tags, position }) 
     name,
     position,
     seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex'),
-    keyPair
+    keyPair,
   });
 };
 async function generateAndFetchAccount(keyPair) {
@@ -51,6 +57,6 @@ async function generateAndFetchAccount(keyPair) {
     await generateAccount(keyPair);
     return await loadAcount(keyPair);
   } catch (e) {
-    throw Error("Something went wrong while generating account");
+    throw Error('Something went wrong while generating account');
   }
 }

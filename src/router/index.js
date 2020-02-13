@@ -1,63 +1,64 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "@/views/Home";
-import Init from "@/views/Init";
-import createWallet from "@/views/createWallet";
-import Details from "@/views/Details";
-import Transfer from "@/views/Transfer";
-import DevView from "@/views/DevView";
-import store from "../store";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '@/views/Home';
+import Init from '@/views/Init';
+import createWallet from '@/views/createWallet';
+import Details from '@/views/Details';
+import Transfer from '@/views/Transfer';
+import DevView from '@/views/DevView';
+import store from '../store';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "home",
+    path: '/',
+    name: 'home',
     component: Home,
     meta: {
-      title: "wallet",
-      transfer: "transfer",
-      accent: "accent",
-      tags: ["showTransferButton"]
-    }
+      title: 'wallet',
+      transfer: 'transfer',
+      accent: 'accent',
+      tags: ['showTransferButton'],
+    },
   },
   {
-    path: "/init",
-    name: "init",
+    path: '/init',
+    name: 'init',
     meta: {
-      title: "initialize",
-      accent: "accent"
+      title: 'initialize',
+      accent: 'accent',
     },
-    component: Init
+    component: Init,
   },
   {
-    path: "/devview",
-    name: "devview",
+    path: '/devview',
+    name: 'devview',
     meta: {
-      title: "devview",
-      accent: "accent"
+      title: 'devview',
+      accent: 'accent',
     },
-    component: DevView
+    component: DevView,
   },
   {
-    path: "/addwallet",
-    name: "addwallet",
+    path: '/addwallet',
+    name: 'addwallet',
     meta: {
-      accent: "accent",
-      title: "import/create wallet"
+      accent: 'accent',
+      title: 'import/create wallet',
     },
-    component: createWallet
+    component: createWallet,
   },
   {
-    path: "/details/:account",
-    name: "details",
+    path: '/details/:account',
+    name: 'details',
     meta: {
-      title: "details",
-      accent: "accent"
+      title: 'details',
+      accent: 'accent',
     },
-    component: Details
-  },  {
+    component: Details,
+  },
+  {
     path: '/transfer',
     name: 'transfer',
     meta: {
@@ -65,8 +66,8 @@ const routes = [
       overview: 'home',
       history: 'details',
     },
-    component: Transfer
-  }//, {
+    component: Transfer,
+  }, //, {
   //   path: '/walletinfo/:wallet',
   //   name: 'walletinfo',
 
@@ -138,15 +139,15 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
-  if (!store.getters.initialized && to.name !== "error" && to.name !== "init") {
+  if (!store.getters.initialized && to.name !== 'error' && to.name !== 'init') {
     next({
-      name: "init"
+      name: 'init',
     });
     return;
   }

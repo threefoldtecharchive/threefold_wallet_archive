@@ -1,60 +1,56 @@
-import toolbar from "../components/toolbar";
-import bottomNav from "../components/bottomNav";
-import copyDialog from "../components/copydialog";
-import { mapActions, mapGetters } from "vuex";
+import toolbar from '../components/toolbar';
+import bottomNav from '../components/bottomNav';
+import copyDialog from '../components/copydialog';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     toolbar,
     bottomNav,
-    copyDialog
+    copyDialog,
   },
   mounted() {},
   data() {
     return {
       showCreateWalletDialog: false,
       showEditWalletDialog: false,
-      hideSnackbarTimeout: 6000
+      hideSnackbarTimeout: 6000,
     };
   },
   computed: {
-    ...mapGetters([
-      "informationMessage",
-      "fatalError",
-      "isImportingWallet"
-    ]),
+    ...mapGetters(['informationMessage', 'fatalError', 'isImportingWallet']),
     cssProps() {
       return {
-        "--primary-color": this.$vuetify.theme.themes.light.primary,
-        "--accent-color": this.$vuetify.theme.themes.light.accent,
-        "--error-color": this.$vuetify.theme.themes.light.error,
-        "--gold-color": this.$vuetify.theme.themes.light.gold,
-        "--active-color": this.$vuetify.theme[this.$route.meta.accent]
+        '--primary-color': this.$vuetify.theme.themes.light.primary,
+        '--accent-color': this.$vuetify.theme.themes.light.accent,
+        '--error-color': this.$vuetify.theme.themes.light.error,
+        '--gold-color': this.$vuetify.theme.themes.light.gold,
+        '--active-color': this.$vuetify.theme[this.$route.meta.accent],
       };
-    }
+    },
   },
   methods: {
     ...mapActions([
-      "createWallet",
-      "setInformationMessage",
-      "setImportingWallets"
-    ])
+      'createWallet',
+      'setInformationMessage',
+      'setImportingWallets',
+    ]),
   },
   watch: {
     informationMessage(val) {
       if (val) {
         setTimeout(() => {
-          this.setInformationMessage("");
+          this.setInformationMessage('');
         }, this.hideSnackbarTimeout);
       }
     },
     fatalError(val) {
       console.error(`ERROR`, val);
       this.$router.push({
-        name: "error",
-        query: { msg: val }
+        name: 'error',
+        query: { msg: val },
       });
-    }
-  }
+    },
+  },
 };

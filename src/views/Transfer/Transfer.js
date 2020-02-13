@@ -1,8 +1,8 @@
-import FormComponent from './components/formComponent'
+import FormComponent from './components/formComponent';
 // import QrDialog from './components/qrDialog'
-import TransactionInfoDialog from './components/transactionInfoDialog'
-import { mapGetters, mapActions } from 'vuex'
-import doTransaction from '../../services/TransactionService'
+import TransactionInfoDialog from './components/transactionInfoDialog';
+import { mapGetters, mapActions } from 'vuex';
+import doTransaction from '../../services/TransactionService';
 
 export default {
   name: 'transfer',
@@ -12,116 +12,136 @@ export default {
     // QrScannerDialog,
     // QrDialog
   },
-  data () {
+  data() {
     return {
       tabs: ['receive', 'send'],
       transactionInfoDialog: false,
       qrScannerDialog: false,
       qrDialog: false,
-      formObject: { to: { address: null }, amount: null, message: "", sender: null },
+      formObject: {
+        to: { address: null },
+        amount: null,
+        message: '',
+        sender: null,
+      },
       selectedTab: 1,
       selectedAccount: {},
-      qrReadingError: false
-    }
+      qrReadingError: false,
+    };
   },
-  mounted () {
-    if(this.$route.params.wallet){
-      this.selectedAccount = this.wallets.find(x => x.name === this.$route.params.wallet)
+  mounted() {
+    if (this.$route.params.wallet) {
+      this.selectedAccount = this.wallets.find(
+        x => x.name === this.$route.params.wallet
+      );
     }
-    this.$router.replace({ query: { tab: this.tabs[this.tabs.length - 1] } })
-    if (!this.selectedAccount.address) this.selectedAccount = this.accounts[0]
+    this.$router.replace({ query: { tab: this.tabs[this.tabs.length - 1] } });
+    if (!this.selectedAccount.address) this.selectedAccount = this.accounts[0];
   },
   computed: {
-    ...mapGetters([
-      'accounts',
-      'fee'
-    ]),
-    active () {
-      return this.$route.query.tab
+    ...mapGetters(['accounts', 'fee']),
+    active() {
+      return this.$route.query.tab;
     },
   },
   methods: {
-    ...mapActions([
-      'sendCoins',
-      'updateAccounts'
-    ]),
-    scanQR () {
-      window.vueInstance = this //Don't remove this for flutter app
-      const self = this
-      window.flutter_inappwebview.callHandler('SCAN_QR').then(function (result) {
-        self.onDecode(result)
-      })
+    ...mapActions(['sendCoins', 'updateAccounts']),
+    scanQR() {
+      window.vueInstance = this; //Don't remove this for flutter app
+      const self = this;
+      window.flutter_inappwebview.callHandler('SCAN_QR').then(function(result) {
+        self.onDecode(result);
+      });
     },
-    onDecode (code) {
-      var url = new URL(code)
-      var tftAddress = url.hostname
-      
-      if (tftAddress === '') {
-        tftAddress = url.pathname.replace('//', '')
-      }
-      this.formObject.to.address = tftAddress
-      this.formObject.amount = url.searchParams.get('amount') == 'null' ? '' : url.searchParams.get('amount');
-      this.formObject.message = url.searchParams.get('message') == 'null' ? '' : url.searchParams.get('message');
-      this.formObject.sender = url.searchParams.get('sender') == 'null' ? '' : url.searchParams.get('sender');
+    onDecode(code) {
+      var url = new URL(code);
+      var tftAddress = url.hostname;
 
-    },
-    getQueryVar (url, varName) {
-      var val
-      url = new URL(url)
-      if (varName === 'HOST') {
-        val = url.pathname.replace('//', '')
-      } else {
-        val = url.searchParams.get(varName)
+      if (tftAddress === '') {
+        tftAddress = url.pathname.replace('//', '');
       }
-      return val
+      this.formObject.to.address = tftAddress;
+      this.formObject.amount =
+        url.searchParams.get('amount') == 'null'
+          ? ''
+          : url.searchParams.get('amount');
+      this.formObject.message =
+        url.searchParams.get('message') == 'null'
+          ? ''
+          : url.searchParams.get('message');
+      this.formObject.sender =
+        url.searchParams.get('sender') == 'null'
+          ? ''
+          : url.searchParams.get('sender');
     },
-    transferConfirmed () {
-      if (!this.checkForm()){
-        console.log("form not valid")
-        return
+    getQueryVar(url, varName) {
+      var val;
+      url = new URL(url);
+      if (varName === 'HOST') {
+        val = url.pathname.replace('//', '');
+      } else {
+        val = url.searchParams.get(varName);
+      }
+      return val;
+    },
+    transferConfirmed() {
+      if (!this.checkForm()) {
+        console.log('form not valid');
+        return;
       }
       if (this.active === 'receive') {
-         this.qrDialog = true
+        this.qrDialog = true;
       } else if (this.active == 'send') {
-        this.transactionInfoDialog = true
+        this.transactionInfoDialog = true;
       }
     },
-    async send () {
+    async send() {
       const transactiondata = {
         sourceKeyPair: this.selectedAccount.keyPair,
         destination: this.formObject.to.address,
         message: this.formObject.message,
-        amount: this.formObject.amount
-      }
+        amount: this.formObject.amount,
+      };
 
-      console.log(transactiondata)      
-      await doTransaction(transactiondata)
+      console.log(transactiondata);
+      await doTransaction(transactiondata);
 
-      this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
-      this.$refs.formComponent.$refs.form.reset()
-      
-      
-      this.$router.push({ name: this.$route.meta.history, params: { wallet: this.selectedAccount.name } })
+      this.formObject = {
+        to: { address: null },
+        amount: null,
+        message: null,
+        sender: null,
+      };
+      this.$refs.formComponent.$refs.form.reset();
+
+      this.$router.push({
+        name: this.$route.meta.history,
+        params: { wallet: this.selectedAccount.name },
+      });
     },
-    selectAccount (account) {
-      this.selectedAccount = account
-      this.formObject = { to: { address: null }, amount: null, message: null, sender: null }
-      this.$refs.formComponent.$refs.form.reset()
+    selectAccount(account) {
+      this.selectedAccount = account;
+      this.formObject = {
+        to: { address: null },
+        amount: null,
+        message: null,
+        sender: null,
+      };
+      this.$refs.formComponent.$refs.form.reset();
     },
-    checkForm () {
-      return this.$refs.formComponent.$refs.form.validate()
+    checkForm() {
+      return this.$refs.formComponent.$refs.form.validate();
     },
-    closeTransactionInfoDialog (save) {
-      if (save) this.send()
-      this.transactionInfoDialog = false
+    closeTransactionInfoDialog(save) {
+      if (save) this.send();
+      this.transactionInfoDialog = false;
     },
-    closeQrScannerDialog () {
-      this.qrScannerDialog = false
+    closeQrScannerDialog() {
+      this.qrScannerDialog = false;
     },
-    closeQrDialog () {
-      this.qrDialog = false
-    }
+    closeQrDialog() {
+      this.qrDialog = false;
+    },
   },
-  watch: {
-  }
-}
+  watch: {},
+};

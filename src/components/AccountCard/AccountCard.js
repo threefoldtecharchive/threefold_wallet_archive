@@ -1,47 +1,46 @@
-import Balance from "../Balance";
-import { mapGetters, mapActions } from "vuex";
+import Balance from '../Balance';
+import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
 
 export default {
-  name: "account-card",
+  name: 'account-card',
   components: { Balance },
   props: {
     account: {
-      type: Object
+      type: Object,
     },
     clickable: {
-      type: Boolean
+      type: Boolean,
     },
     selected: {
-      type: Boolean
+      type: Boolean,
     },
     displayAttributes: {
       type: Boolean,
-      default: true
+      default: true,
     },
     displayAmount: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
-      amount: "---"
+      amount: '---',
     };
   },
   computed: {
-    ...mapGetters(["accounts", "threeBotName"]),
+    ...mapGetters(['accounts', 'threeBotName']),
     getHumanWalletAddress() {
-      return `${this.account.name.replace(/\s/g, "")}@${this.threeBotName}`;
-    }
+      return `${this.account.name.replace(/\s/g, '')}@${this.threeBotName}`;
+    },
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
-    ...mapActions(["setInformationMessage"]),
+    ...mapActions(['setInformationMessage']),
     copyAddress() {
-      this.$root.$emit("copy", {
-        title: "Copy wallet address to clipboard",
+      this.$root.$emit('copy', {
+        title: 'Copy wallet address to clipboard',
         toCopy: this.account.id,
         callback: () => {
           this.setInformationMessage(
@@ -50,18 +49,18 @@ export default {
               8
             )}...).`
           );
-        }
+        },
       });
     },
     clicked() {
       if (this.clickable) {
         router.push({
-          name: "details",
+          name: 'details',
           params: {
-            account: this.account.name
-          }
+            account: this.account.name,
+          },
         });
       }
-    }
-  }
+    },
+  },
 };

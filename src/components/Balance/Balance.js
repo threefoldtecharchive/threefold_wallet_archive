@@ -1,24 +1,24 @@
 export default {
-  name: "amount-indicator",
+  name: 'amount-indicator',
   components: {},
   props: {
     small: {
       type: Boolean,
-      default: false
+      default: false,
     },
     balances: {
-      type: Array
+      type: Array,
     },
     valuta: {
-      type: String
+      type: String,
     },
     color: {
-      type: String
+      type: String,
     },
     align: {
       type: String,
-      default: "left"
-    }
+      default: 'left',
+    },
   },
   data() {
     return {};
@@ -27,8 +27,8 @@ export default {
     hasMultipleBalances() {
       // @Todo detect locked and unconfirmed
       return false;
-    }
+    },
   },
   mounted() {},
-  methods: {}
+  methods: {},
 };

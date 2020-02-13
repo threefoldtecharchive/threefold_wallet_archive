@@ -1,53 +1,47 @@
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
 import router from '../../router';
 export default {
-  components: {
-  },
+  components: {},
   name: 'toolbar',
   props: [],
-  data () {
+  data() {
     return {
       isScrolling: false,
-      devClicks :0
-    }
+      devClicks: 0,
+    };
   },
   computed: {
-    ...mapGetters([
-      'syncing',
-      'accounts'
-    ])
+    ...mapGetters(['syncing', 'accounts']),
   },
-  mounted () {
-
-  },
+  mounted() {},
   methods: {
-    onScroll () {
-      this.isScrolling = (window.pageYOffset ||
-        document.documentElement.scrollTop || 0) > 50
+    onScroll() {
+      this.isScrolling =
+        (window.pageYOffset || document.documentElement.scrollTop || 0) > 50;
     },
     devClick() {
       this.devClicks++;
       console.log(this.devClicks);
-      if (this.devClicks >= 5 ){
+      if (this.devClicks >= 5) {
         this.devClicks = 0;
-        router.push({name: 'devView'});
+        router.push({ name: 'devView' });
       }
     },
     // enableQrScannerDialog () {
     //   this.$emit("enableQrScannerDialog")
     // },
-    seeAdd () {
+    seeAdd() {
       this.$router.push({
-        name: 'addwallet'
-      })
+        name: 'addwallet',
+      });
     },
-    seeWalletInfo () {
+    seeWalletInfo() {
       this.$router.push({
         name: 'walletinfo',
         params: {
-          account: this.$route.params.account
-        }
-      })
-    }
-  }
-}
+          account: this.$route.params.account,
+        },
+      });
+    },
+  },
+};

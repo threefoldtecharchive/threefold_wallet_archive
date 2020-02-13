@@ -1,50 +1,48 @@
-import accountCard from '../../../../components/AccountCard'
-import { mapGetters } from 'vuex'
+import accountCard from '../../../../components/AccountCard';
+import { mapGetters } from 'vuex';
 export default {
   name: 'transaction-info-dialog',
   components: { accountCard },
   props: {
     dialog: {
-      type:Boolean
+      type: Boolean,
     },
     closeDialog: {
-      type: Function
+      type: Function,
     },
     send: {
-      type: Function
+      type: Function,
     },
     selectWallet: {
-      type: Function
+      type: Function,
     },
     accounts: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     selectedAccount: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     formObject: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
-    ...mapGetters([
-      "fee"
-    ]),
-    amount () {
+    ...mapGetters(['fee']),
+    amount() {
       if (this.$route.query.tab == 'receive') {
-        return Number(this.formObject.amount).toFixed(2)
+        return Number(this.formObject.amount).toFixed(2);
       }
 
-      return (Number(this.formObject.amount) + Number(this.fee)).toFixed(2)
+      return (Number(this.formObject.amount) + Number(this.fee)).toFixed(2);
     },
     toAccountIsOwn() {
-      return this.accounts.find(x=>x.id.toLowerCase()==this.formObject.to.address.toLowerCase())
-
-    }
-  }
-}
+      return this.accounts.find(
+        x => x.id.toLowerCase() == this.formObject.to.address.toLowerCase()
+      );
+    },
+  },
+};

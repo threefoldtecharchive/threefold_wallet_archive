@@ -1,81 +1,85 @@
-import { mnemonicToEntropy } from "bip39";
+import { mnemonicToEntropy } from 'bip39';
 
 export const isImportedWallet = wallet => {
-  const holder = wallet.holder
+  const holder = wallet.holder;
   if (holder.type !== 'imported') {
-    return false
+    return false;
   }
-  return true
-}
+  return true;
+};
 export const canRemoveWallet = wallet => {
-  return isImportedWallet(wallet)
-}
+  return isImportedWallet(wallet);
+};
 export const canShowSeed = wallet => {
-  return isImportedWallet(wallet)
-}
+  return isImportedWallet(wallet);
+};
 export const walletNameFound = (name, accounts) => {
-  return accounts.find(x => x.name === name)
-}
+  return accounts.find(x => x.name === name);
+};
 export const importedSeedFound = (seed, accounts) => {
-  return accounts.find(x => x.toString() === seed.toString())
-}
+  return accounts.find(x => x.toString() === seed.toString());
+};
 
 export const isValidWalletName = (walletName, accounts) => {
   if (!walletName) {
     return {
       success: false,
-      message: "Please enter a name."
-    }
+      message: 'Please enter a name.',
+    };
   }
   if (walletName.length > 15) {
     return {
       success: false,
-      message: "The length of the name should not exceed 15 characters."
-    }
+      message: 'The length of the name should not exceed 15 characters.',
+    };
   }
-  if (accounts.find(x => x.name.toLowerCase() == walletName.toLowerCase())){
+  if (accounts.find(x => x.name.toLowerCase() == walletName.toLowerCase())) {
     return {
       success: false,
-      message: "There is already a wallet with this name"
-    }
+      message: 'There is already a wallet with this name',
+    };
   }
   return {
     success: true,
-    message: "The name is successfully validated"
-  }
-}
+    message: 'The name is successfully validated',
+  };
+};
 
 export const validateAndGenerateSeed = (seedPhrase, accounts) => {
-  seedPhrase = seedPhrase.replace(/[^a-zA-Z ]/g, '').toLowerCase().trim().replace(/\s\s+/g, ' ')
-  const wordCount = seedPhrase.split(' ').length
+  seedPhrase = seedPhrase
+    .replace(/[^a-zA-Z ]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/\s\s+/g, ' ');
+  const wordCount = seedPhrase.split(' ').length;
 
   if (wordCount !== 24) {
     return {
       success: false,
-      message: 'Please make sure you\'ve entered 24 words. [' + wordCount + '/24]'
-    }
+      message:
+        "Please make sure you've entered 24 words. [" + wordCount + '/24]',
+    };
   }
 
-  let seed = null
+  let seed = null;
 
   try {
-    seed = Buffer.from(mnemonicToEntropy(seedPhrase), 'hex')
-  }
-  catch (e) {
+    seed = Buffer.from(mnemonicToEntropy(seedPhrase), 'hex');
+  } catch (e) {
     return {
       success: false,
-      message: `Failed to convert phrase to a seed: ${e.message}`
-    }
+      message: `Failed to convert phrase to a seed: ${e.message}`,
+    };
   }
-  const foundWallet = importedSeedFound(seed,accounts)
-  if (foundWallet){
+  const foundWallet = importedSeedFound(seed, accounts);
+  if (foundWallet) {
     return {
       success: false,
-      message: `This seed is already imported under the name "${foundWallet.name}"`
-    }
+      message: `This seed is already imported under the name "${foundWallet.name}"`,
+    };
   }
   return {
     success: true,
-    seedPhrase
-  }
-}
+    seedPhrase,
+  };
+};

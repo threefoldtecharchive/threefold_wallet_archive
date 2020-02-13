@@ -1,17 +1,17 @@
-import {mapActions, mapGetters} from 'vuex';
-import AccountCard from "../../components/AccountCard";
-import draggable from "vuedraggable";
-import store from "../../store";
+import { mapActions, mapGetters } from 'vuex';
+import AccountCard from '../../components/AccountCard';
+import draggable from 'vuedraggable';
+import store from '../../store';
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: { AccountCard, draggable },
   props: [],
   data() {
     return {};
   },
   computed: {
-    ...mapGetters(["isLoadingWallets"]),
+    ...mapGetters(['isLoadingWallets']),
     accounts: {
       get() {
         const sortedAccounts = [...store.getters.accounts];
@@ -24,21 +24,21 @@ export default {
         value.map((account, index) => {
           account.position = index;
         });
-        store.commit("setAccounts", value);
-        store.dispatch("syncAccounts");
-      }
-    }
+        store.commit('setAccounts', value);
+        store.dispatch('syncAccounts');
+      },
+    },
   },
   mounted() {},
   methods: {
     ...mapActions(['syncAccounts']),
     seeDetails: account => {
       this.$router.push({
-        name: "details",
+        name: 'details',
         params: {
-          account: account.name
-        }
+          account: account.name,
+        },
       });
-    }
-  }
+    },
+  },
 };

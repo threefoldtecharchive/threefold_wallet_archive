@@ -1,7 +1,7 @@
-import { fetchAccount } from "../../services/AccountService";
-import { entropyToMnemonic } from "bip39";
-import { convertTfAccount } from "@jimber/stellar-crypto";
-import StellarSdk from "stellar-sdk"
+import { fetchAccount } from '../../services/AccountService';
+import { entropyToMnemonic } from 'bip39';
+import { convertTfAccount } from '@jimber/stellar-crypto';
+import StellarSdk from 'stellar-sdk';
 
 export default {
   state: {
@@ -11,7 +11,7 @@ export default {
     isMigratingAccount: false,
     position: 0,
     initialized: false,
-    fee: StellarSdk.BASE_FEE
+    fee: StellarSdk.BASE_FEE,
   },
   actions: {
     initializeSingleAccount: async function(
@@ -27,67 +27,67 @@ export default {
         name: pkidAccount.walletName,
         tags: [type],
         seedPhrase,
-        position: pkidAccount.position
+        position: pkidAccount.position,
       });
-      context.commit("addAccount", account);
+      context.commit('addAccount', account);
     },
     initializePkidAppAccounts: async (context, seedPhrase) => {
-      const pkidAccounts = await context.dispatch("getPkidAppAccounts");
-      const type = "app";
+      const pkidAccounts = await context.dispatch('getPkidAppAccounts');
+      const type = 'app';
       return pkidAccounts.map(pkidAccount => {
         pkidAccount.position = pkidAccount.position
           ? pkidAccount.position
           : pkidAccount.index;
-        context.commit("incrementPosition");
-        context.dispatch("initializeSingleAccount", {
+        context.commit('incrementPosition');
+        context.dispatch('initializeSingleAccount', {
           pkidAccount,
           seedPhrase,
-          type
+          type,
         });
       });
     },
     initializeImportedPkidAccounts: async context => {
       const pkidImportedAccounts = await context.dispatch(
-        "getPkidImportedAccounts"
+        'getPkidImportedAccounts'
       );
       return pkidImportedAccounts.map(pkidImportedAccount => {
         const seedPhrase = entropyToMnemonic(pkidImportedAccount.seed);
-        const type = "imported";
+        const type = 'imported';
         pkidImportedAccount.position = pkidImportedAccount.position
           ? pkidImportedAccount.position
           : context.getters.position;
-        context.commit("incrementPosition");
-        return context.dispatch("initializeSingleAccount", {
+        context.commit('incrementPosition');
+        return context.dispatch('initializeSingleAccount', {
           pkidAccount: pkidImportedAccount,
           seedPhrase,
-          type
+          type,
         });
       });
     },
-    initialize: async (context, {seed,doubleName}) => {
+    initialize: async (context, { seed, doubleName }) => {
       context.state.initialized = true;
-      await context.dispatch("setPkidClient", seed)
-      context.commit("setThreebotName", doubleName)
+      await context.dispatch('setPkidClient', seed);
+      context.commit('setThreebotName', doubleName);
 
-      const seedPhrase = entropyToMnemonic(seed)
-      context.commit("setAppSeedPhrase", seedPhrase)
+      const seedPhrase = entropyToMnemonic(seed);
+      context.commit('setAppSeedPhrase', seedPhrase);
 
       const op1 = await context.dispatch(
-        "initializePkidAppAccounts",
+        'initializePkidAppAccounts',
         seedPhrase
       );
-      const op2 = await context.dispatch("initializeImportedPkidAccounts");
+      const op2 = await context.dispatch('initializeImportedPkidAccounts');
       await Promise.all([...op1, ...op2]);
       await context.dispatch('saveToPkid');
-      context.commit("stopLoadingWallets");
-    }
+      context.commit('stopLoadingWallets');
+    },
   },
   mutations: {
     setThreebotName: (state, threeBotName) => {
       state.threeBotName = threeBotName;
     },
     setAppSeedPhrase: (state, seedPhrase) => {
-      state.appSeedPhrase = seedPhrase
+      state.appSeedPhrase = seedPhrase;
     },
     stopLoadingWallets: state => {
       state.isLoadingWallets = false;
@@ -100,7 +100,7 @@ export default {
     },
     incrementPosition: state => {
       state.position++;
-    }
+    },
   },
   getters: {
     threeBotName: state => state.threeBotName,
@@ -109,6 +109,6 @@ export default {
     isMigratingAccount: state => state.isMigratingAccount,
     position: state => state.position,
     initialized: state => state.initialized,
-    fee: state => state.fee
-  }
+    fee: state => state.fee,
+  },
 };

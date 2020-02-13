@@ -1,88 +1,87 @@
+import { mapGetters, mapActions } from 'vuex';
 import {
-  mapGetters,
-  mapActions
-} from 'vuex'
-import { isValidWalletName, validateAndGenerateSeed } from "@/services/AccountManagementService";
+  isValidWalletName,
+  validateAndGenerateSeed,
+} from '@/services/AccountManagementService';
 
 export default {
   name: 'create-wallet',
   components: {},
   props: {
     show: {
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
-  data () {
+  data() {
     return {
       tabs: ['import', 'create'],
       currentTab: 'import',
       walletName: null,
       words: null,
       walletNameErrors: [],
-      wordsErrors: []
-    }
+      wordsErrors: [],
+    };
   },
   computed: {
-    ...mapGetters([
-      'accounts'
-    ])
+    ...mapGetters(['accounts']),
   },
-  mounted () {
-
-  },
+  mounted() {},
   methods: {
-    ...mapActions([
-      'generateAppAccount',
-      'generateImportedAccount'
-    ]),    
-    clearForm(){
-      this.$router.push({ name: 'home' })
-      this.clearErrors()
-      this.walletName = null
-      this.words = null
+    ...mapActions(['generateAppAccount', 'generateImportedAccount']),
+    clearForm() {
+      this.$router.push({ name: 'home' });
+      this.clearErrors();
+      this.walletName = null;
+      this.words = null;
     },
-    clearErrors(){
-      this.walletNameErrors = []
-      this.wordsErrors = []
+    clearErrors() {
+      this.walletNameErrors = [];
+      this.wordsErrors = [];
     },
-    createNewWallet () {
-      this.clearErrors()
+    createNewWallet() {
+      this.clearErrors();
 
       // Todo add removing of spaces in between words
-      this.walletName = this.walletName.trim()
+      this.walletName = this.walletName.trim();
 
-      const walletValidation = isValidWalletName(this.walletName, this.accounts)
-      if(!walletValidation.success){
-        this.walletNameErrors.push(walletValidation.message)
-        return
+      const walletValidation = isValidWalletName(
+        this.walletName,
+        this.accounts
+      );
+      if (!walletValidation.success) {
+        this.walletNameErrors.push(walletValidation.message);
+        return;
       }
-      this.generateAppAccount(this.walletName)
-      this.clearForm()
+      this.generateAppAccount(this.walletName);
+      this.clearForm();
     },
 
-    async importNewWallet () {
-      this.clearErrors()
+    async importNewWallet() {
+      this.clearErrors();
 
       // Todo add removing of spaces in between words
-      this.walletName = this.walletName.trim()
+      this.walletName = this.walletName.trim();
 
-      const walletValidation = isValidWalletName(this.walletName, this.accounts)
-      if(!walletValidation.success){
-        this.walletNameErrors.push(walletValidation.message)
-        return
+      const walletValidation = isValidWalletName(
+        this.walletName,
+        this.accounts
+      );
+      if (!walletValidation.success) {
+        this.walletNameErrors.push(walletValidation.message);
+        return;
       }
-      const seedValidation = validateAndGenerateSeed(this.words, this.accounts)
-      if(!seedValidation.success){
-        this.wordsErrors.push(seedValidation.message)
-        return
+      const seedValidation = validateAndGenerateSeed(this.words, this.accounts);
+      if (!seedValidation.success) {
+        this.wordsErrors.push(seedValidation.message);
+        return;
       }
-      const seedPhrase =  seedValidation.seedPhrase
+      const seedPhrase = seedValidation.seedPhrase;
       this.generateImportedAccount({
-        seedPhrase, 
-        walletName: this.walletName
-      })
+        seedPhrase,
+        walletName: this.walletName,
+      });
 
-      this.clearForm()
-    }
-  }
-}
+      this.clearForm();
+    },
+  },
+};
