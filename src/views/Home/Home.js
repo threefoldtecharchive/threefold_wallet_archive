@@ -1,4 +1,4 @@
-import { mapGetters } from "vuex";
+import {mapActions, mapGetters} from 'vuex';
 import AccountCard from "../../components/AccountCard";
 import draggable from "vuedraggable";
 import store from "../../store";
@@ -25,12 +25,13 @@ export default {
           account.position = index;
         });
         store.commit("setAccounts", value);
-        store.dispatch("saveToPkid");
+        store.dispatch("syncAccounts");
       }
     }
   },
   mounted() {},
   methods: {
+    ...mapActions(['syncAccounts']),
     seeDetails: account => {
       this.$router.push({
         name: "details",

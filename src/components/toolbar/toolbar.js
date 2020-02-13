@@ -8,6 +8,7 @@ export default {
   data () {
     return {
       isScrolling: false,
+      devClicks :0
     }
   },
   computed: {
@@ -26,6 +27,7 @@ export default {
     },
     devClick() {
       this.devClicks++;
+      console.log(this.devClicks);
       if (this.devClicks >= 5 ){
         this.devClicks = 0;
         router.push({name: 'devView'});
