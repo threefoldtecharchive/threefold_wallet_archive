@@ -7,7 +7,7 @@
         <v-spacer></v-spacer>
         <v-btn text icon @click="closeDialog(false)">
           <v-icon :color="$route.meta.accent">
-            close
+            fas fa-times
           </v-icon>
         </v-btn>
       </v-card-title>
@@ -15,8 +15,7 @@
         <div class="px-2">
           <v-layout justify-space-between fill-height column px-2>
             <p class="subtitle mb-0 grey--text">To</p>
-            <walletCard no-padding class="my-2" :displayAmount="false" :wallet="selectedWallet"
-              v-if="selectedWallet.address" clickable />
+            <AccountCard no-padding class="my-2" :displayAmount="false" :account="selectedAccount"/>
             <v-flex>
               <p class="subtitle mb-0 grey--text">Amount</p>
               <p class="title mt-0">{{formObject.amount}} TFT</p>

@@ -70,7 +70,7 @@
   <!-- <QrScannerDialog :dialog="qrScannerDialog" :closeDialog="closeQrScannerDialog" :selectedTab="selectedTab"
     :formObject="formObject"></QrScannerDialog>
   -->
-  <!-- <QrDialog :dialog="qrDialog" :closeDialog="closeQrDialog" :formObject="formObject" :selectedAccount="selectedAccount"
-    :selectedTab="selectedTab"></QrDialog> -->
+  <QrDialog v-if="qrDialog" :dialog="qrDialog" :closeDialog="closeQrDialog" :formObject="formObject" :selectedAccount="selectedAccount"
+    :selectedTab="selectedTab"></QrDialog>
 
 </section>
