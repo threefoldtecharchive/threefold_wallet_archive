@@ -35,7 +35,7 @@
     >
     </v-text-field>
 
-    <!-- <ToDialog ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog" :selectedWallet="selectedWallet"
-      :wallets="wallets.filter(x => x.address != selectedWallet.address)" :toRules="toRules"></ToDialog> -->
+    <ToDialog v-if="toDialog" ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog" :selectedAccount="selectedAccount"
+      :accounts="accounts" :toRules="toRules"></ToDialog>
   </v-form>
 </section>

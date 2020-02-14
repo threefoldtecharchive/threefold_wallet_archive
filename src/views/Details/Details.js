@@ -10,7 +10,7 @@ export default {
     return { account: null };
   },
   computed: {},
-  mounted() {
+  beforeMount(){
     const account = store.getters.accounts.find(
       x => x.name === this.$route.params.account
     );

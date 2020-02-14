@@ -1,11 +1,9 @@
-// import ToDialog from './toDialog'
-// import accountSelector from '../../../../components/accountSelector'
+import ToDialog from '../toDialog'
 
 export default {
   name: 'form-component',
   components: {
-    // ToDialog,
-    // accountSelector
+    ToDialog
   },
   props: {
     formObject: {
@@ -19,7 +17,7 @@ export default {
       type: Array,
       default: () => [],
     },
-    selectedWallet: {
+    selectedAccount: {
       type: Object,
       default: () => {},
     },

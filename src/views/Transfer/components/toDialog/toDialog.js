@@ -12,13 +12,13 @@ export default {
     closeDialog: {
       type: Function,
     },
-    wallets: {
+    accounts: {
       type: Array,
     },
     toRules: {
       type: Array,
     },
-    selectedWallet: {
+    selectedAccount: {
       type: Object,
     },
   },
@@ -33,16 +33,22 @@ export default {
       valid: false,
     };
   },
-  computed: {},
+  computed: {
+    computedAccounts() {
+      console.log('hello')
+      return this.accounts.filter(x => x.name != this.selectedAccount.name)
+    }
+  },
   mounted() {},
   methods: {
-    selectWallet(wallet) {
+    selectAccount(account) {
+      console.log('in select account')
       this.closeDialog(true, {
-        address: wallet.address,
-        currency: wallet.currency,
-        holder: wallet.holder,
-        name: wallet.name,
-        totalAmount: wallet.totalAmount,
+        address: account.address,
+        currency: account.currency,
+        holder: account.holder,
+        name: account.name,
+        totalAmount: account.totalAmount,
       });
       this.$refs.externForm.reset();
       setTimeout(() => {

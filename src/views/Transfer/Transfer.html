@@ -62,14 +62,13 @@
       :selectedTab="selectedTab"
       :accounts="accounts"
       :selectedAccount="selectedAccount"
-      :fee="fee"
     >
     </FormComponent>
 
     <v-row>
       <v-col>
         <span v-if="$route.query.tab != 'receive'"
-          >Fee: {{fee.toFixed(2)}} {{selectedAccount.currency}}</span
+          >Fee: {{fee | formatBalance}} {{selectedAccount.currency}}</span
         >
         <v-btn
           class="mx-0 mt-3"

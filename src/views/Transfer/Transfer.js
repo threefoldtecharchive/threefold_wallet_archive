@@ -2,7 +2,7 @@ import FormComponent from './components/formComponent';
 import QrDialog from './components/qrDialog';
 import TransactionInfoDialog from './components/transactionInfoDialog';
 import { mapGetters, mapActions } from 'vuex';
-import doTransaction from '../../services/TransactionService';
+import {doTransaction} from '../../services/TransactionService';
 
 export default {
   name: 'transfer',
