@@ -5,9 +5,11 @@ import sodium from 'libsodium-wrappers';
 export default {
   state: {
     client: null,
+    pkidApp: null,
+    pkidImported: null,
   },
   actions: {
-    async saveToPkid({ getters, dispatch }) {
+    async saveToPkid ({ getters, dispatch }) {
       const appAccounts = getters.accounts
         .filter(account => account.tags.includes('app'))
         .map(account => ({
@@ -35,11 +37,11 @@ export default {
       await Promise.all([appPromise, importedPromise]);
       console.log('saved to pkid');
     },
-    async setPkidAppAccounts({ getters }, accounts) {
+    async setPkidAppAccounts ({ getters }, accounts) {
       // wallets key for historic reasons
       await getters.client.setDoc('wallets', accounts, true);
     },
-    async setPkidClient(context, seed) {
+    async setPkidClient (context, seed) {
       // const keyPair = await generateKeypair(payload)
       await sodium.ready;
 
@@ -49,7 +51,7 @@ export default {
       console.log('client: ', client);
       context.commit('setPkidClient', client);
     },
-    async getPkidAppAccounts(context) {
+    async getPkidAppAccounts (context) {
       const client = context.getters.client;
       const data = await client.getDoc(client.keyPair.publicKey, 'wallets');
       console.log('app data', data);
@@ -60,12 +62,14 @@ export default {
         }
         throw Error('something is wrong with Pkid connection');
       }
+      context.commit('setPkidApp', data);
+
       return data.data;
     },
-    setPkidImportedAccounts(context, accounts) {
+    setPkidImportedAccounts (context, accounts) {
       context.getters.client.setDoc('imported_accounts', accounts, true);
     },
-    async getPkidImportedAccounts(context) {
+    async getPkidImportedAccounts (context) {
       const client = context.getters.client;
       const data = await client.getDoc(
         client.keyPair.publicKey,
@@ -80,25 +84,34 @@ export default {
         // @todo: handel this situation
         throw new Error();
       }
+      context.commit('setPkidImported', data);
       return data.data;
     },
-    async addImportedWallet(context, postMessage) {
+    async addImportedWallet (context, postMessage) {
       const wallets = await context.dispatch('getPkidImportedAccounts');
       await context.dispatch('setPkidImportedWallets', [
         ...wallets,
         postMessage,
       ]);
     },
-    async updatePkidAccounts(context) {
+    async updatePkidAccounts (context) {
       // @todo
     },
   },
   mutations: {
-    setPkidClient(state, payload) {
+    setPkidClient (state, payload) {
       state.client = payload;
+    },
+    setPkidApp (state, pkidApp) {
+      state.pkidApp = pkidApp;
+    },
+    setPkidImported (state, pkidImported) {
+      state.pkidImported = pkidImported;
     },
   },
   getters: {
     client: state => state.client,
+    pkidApp: state => state.pkidApp,
+    pkidImported: state => state.pkidImported,
   },
 };

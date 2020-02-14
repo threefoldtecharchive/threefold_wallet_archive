@@ -1,6 +1,11 @@
-$borderradius: 20px;
+$borderradius: 6px;
+
+.theme--light.v-application {
+  background-color: #f5f5f5 !important;
+}
+
 .app {
-  .loading{
+  .loading {
     position: fixed;
     top: 0;
     left: 0;
@@ -16,10 +21,9 @@ $borderradius: 20px;
       }
     }
   }
-  
+
   .v-card,
   .v-dialog {
-    border-radius: $borderradius !important;
     overflow: hidden;
     .badge-top {
       border-radius: 0 $borderradius;
@@ -56,7 +60,7 @@ $borderradius: 20px;
       background: none;
     }
   }
-  .v-dialog{
+  .v-dialog {
     border-radius: 0px !important;
   }
   .v-dialog .v-card {
@@ -128,16 +132,16 @@ $borderradius: 20px;
       }
     }
   }
-  .inputNumber input[type=number] {
-    -moz-appearance:textfield;
+  .inputNumber input[type='number'] {
+    -moz-appearance: textfield;
   }
   .inputNumber input::-webkit-outer-spin-button,
   .inputNumber input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
+    -webkit-appearance: none;
   }
   .noborder {
     border: none;
-    border-width: 0px!important;
+    border-width: 0px !important;
   }
   .v-select-list {
     border-radius: 0;

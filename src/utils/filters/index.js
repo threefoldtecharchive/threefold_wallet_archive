@@ -1,7 +1,7 @@
 import { formatBalance } from './formatBalance';
 
 export default {
-  install(Vue) {
+  install (Vue) {
     Vue.filter('formatBalance', formatBalance);
   },
 };

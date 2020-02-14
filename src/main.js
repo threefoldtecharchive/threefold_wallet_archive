@@ -6,6 +6,7 @@ import vuetify from './plugins/vuetify';
 import sodium from 'libsodium-wrappers';
 import filters from './utils/filters';
 import '@fortawesome/fontawesome-free/css/all.css';
+import global from './components/global';
 
 async function startVueApp() {
   Vue.config.productionTip = false;
@@ -13,6 +14,7 @@ async function startVueApp() {
   await sodium.ready;
 
   Vue.use(filters);
+  Vue.use(global);
 
   new Vue({
     filters,

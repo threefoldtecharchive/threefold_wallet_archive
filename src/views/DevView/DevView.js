@@ -1,15 +1,31 @@
-import { mapActions } from 'vuex';
-import { decodeBase64 } from 'tweetnacl-util';
+import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
 
 export default {
   name: 'DevView',
   components: {},
   props: [],
-  data() {
+  data () {
     return {};
   },
-  computed: {},
-  mounted() {},
-  methods: {},
+  computed: {
+    ...mapGetters([
+      'accounts',
+      'pkidApp',
+      'pkidImported',
+      'appSeedPhrase',
+      'threeBotName',
+    ]),
+  },
+  mounted () {},
+  methods: {
+    ...mapActions(['generateAppAccount']),
+    createWallet () {
+      this.generateAppAccount(
+        `dev wallet #${Math.random()
+          .toString(36)
+          .substr(2, 5)}`
+      );
+    },
+  },
 };

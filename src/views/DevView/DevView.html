@@ -1,3 +1,56 @@
-<section class="init">
-  <v-container fill-height> </v-container>
-</section>
+<div class="fill-height">
+  <v-tabs grow background-color="indigo" dark>
+    <v-tab>
+      Data
+    </v-tab>
+    <v-tab-item>
+      <v-card>
+        <p class="display-1 text--primary">
+          main data
+        </p>
+        <v-card-text>
+          <ul>
+            <li>
+              appSeedPhrase : <br>{{appSeedPhrase}}
+            </li>
+            <li>
+              threeBotName = {{threeBotName}}
+            </li>
+          </ul>
+
+        </v-card-text>
+      </v-card>
+      <v-card>
+        <rawDisplayer title="accounts data" :value="accounts" />
+      </v-card>
+      <v-card flat tile>
+        <rawDisplayer title="pkid app accounts data" :value="pkidApp" />
+      </v-card>
+      <v-card flat tile>
+        <rawDisplayer title="pkid imported accounts data" :value="pkidImported" />
+      </v-card>
+    </v-tab-item>
+    <v-tab>
+      Actions
+    </v-tab>
+    <v-tab-item>
+      <v-card>
+        <v-card-text>
+          <p class="display-1 text--primary">
+            app wallet creation
+          </p>
+          <p>create app wallet <small>(with index)</small></p>
+          <div class="text--primary">
+            <v-text-field disabled label="index (not yet implemented, auto index will be used)" type="number">
+            </v-text-field>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn dark text color="deep-purple" @click='createWallet'>
+            create Wallet
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-tab-item>
+  </v-tabs>
+</div>

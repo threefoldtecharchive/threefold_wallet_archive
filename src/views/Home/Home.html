@@ -1,31 +1,14 @@
 <section class="home fill-height">
-  <v-layout column fill-height>
+  <v-layout column fill-height pa-4>
     <div class="content">
-      <draggable
-        v-model="accounts"
-        group="accounts"
-        @start="drag=true"
-        @end="drag=false"
-        :options="{delay:400}"
-      >
-        <AccountCard
-          class="px-1 mb-2"
-          clickable
-          v-for="(account, index) in accounts"
-          :key="index"
-          :account="account"
-          @click="seeDetails(account)"
-        />
+      <draggable v-model="accounts" group="accounts" @start="drag=true" @end="drag=false" :options="{delay:400}">
+        <AccountCard class="px-1 mb-4" clickable v-for="(account, index) in accounts" :key="index" :account="account"
+          @click="seeDetails(account)" />
       </draggable>
     </div>
     <div v-if="isLoadingWallets" class="fill-height">
       <v-layout justify-center align-center fill-height column>
-        <v-progress-circular
-          :size="70"
-          :width="10"
-          :color="$route.meta.accent"
-          indeterminate
-        />
+        <v-progress-circular :size="70" :width="10" :color="$route.meta.accent" indeterminate />
         <p class="pt-3">
           Loading wallets...
         </p>
