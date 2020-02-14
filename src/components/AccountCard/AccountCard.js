@@ -24,26 +24,25 @@ export default {
       default: true,
     },
   },
-  data() {
+  data () {
     return {
       amount: '---',
     };
   },
   computed: {
     ...mapGetters(['accounts', 'threeBotName']),
-    getHumanWalletAddress() {
+    getHumanWalletAddress () {
       return `${this.account.name.replace(/\s/g, '')}@${this.threeBotName}`;
     },
   },
-  mounted() {},
+  mounted () {},
   methods: {
-    ...mapActions(['setInformationMessage']),
-    copyAddress() {
+    copyAddress () {
       this.$root.$emit('copy', {
         title: 'Copy wallet address to clipboard',
         toCopy: this.account.id,
         callback: () => {
-          this.setInformationMessage(
+          this.$flashMessage.info(
             `Address has been copied to clipboard (${this.account.id.substring(
               0,
               8
@@ -52,7 +51,7 @@ export default {
         },
       });
     },
-    clicked() {
+    clicked () {
       if (this.clickable) {
         router.push({
           name: 'details',
