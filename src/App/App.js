@@ -1,7 +1,6 @@
 import toolbar from '../components/toolbar';
 import bottomNav from '../components/bottomNav';
 import copyDialog from '../components/copydialog';
-import FlashMessage from '../components/FlashMessage';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
@@ -10,7 +9,6 @@ export default {
     toolbar,
     bottomNav,
     copyDialog,
-    FlashMessage,
   },
   mounted () {},
   data () {

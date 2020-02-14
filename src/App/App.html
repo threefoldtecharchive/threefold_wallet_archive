@@ -19,10 +19,6 @@
     </v-content>
     <bottomNav />
     <!-- <editWallet :show='showEditWalletDialog' @ctaClicked='handleCTAClick' ></editWallet> -->
-    <v-snackbar :value="!!informationMessage" top :timeout="hideSnackbarTimeout">
-      {{ informationMessage }}
-    </v-snackbar>
-    <FlashMessage />
     <copyDialog />
   </v-app>
 </section>
