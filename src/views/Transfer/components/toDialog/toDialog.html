@@ -32,9 +32,8 @@
               v-for="(account, index) in computedAccounts"
               :key="index"
               class="my-2"
-              @click="selectAccount(account)"
+              @click.native="useAccount(account)"
               :account="account"
-              clickable
             />
           </v-row>
 
@@ -43,7 +42,7 @@
               <v-text-field
                 v-if="selected === 1"
                 clearable
-                prepend-icon="person"
+                prepend-icon="fas fa-user"
                 label="To (Wallet Address)"
                 v-model="externAddress"
                 :rules="toRules"
@@ -52,7 +51,7 @@
               <v-text-field
                 v-else
                 clearable
-                prepend-icon="person"
+                prepend-icon="fas fa-user"
                 label="To (Wallet Address)"
                 v-model="externAddress"
                 :rules="toRules"

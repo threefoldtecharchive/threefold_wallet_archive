@@ -35,26 +35,25 @@ export default {
   },
   computed: {
     computedAccounts() {
-      console.log('hello')
       return this.accounts.filter(x => x.name != this.selectedAccount.name)
     }
   },
   mounted() {},
   methods: {
-    selectAccount(account) {
-      console.log('in select account')
+    selectAccount() {
       this.closeDialog(true, {
-        address: account.address,
-        currency: account.currency,
-        holder: account.holder,
-        name: account.name,
-        totalAmount: account.totalAmount,
+        address: this.externAddress,
       });
       this.$refs.externForm.reset();
       setTimeout(() => {
         this.selected = 0;
       }, 1000);
     },
+    useAccount (account) {
+      this.closeDialog(true, {
+        address: account.id
+      })
+    }
   },
   watch: {
     selected() {
