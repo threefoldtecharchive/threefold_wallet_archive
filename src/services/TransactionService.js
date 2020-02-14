@@ -64,3 +64,31 @@ export const doTransaction = ({
       // server.submitTransaction(transaction);
     });
 };
+
+export const mapTransaction = async (rawTransaction) => {
+  const operationsObj = await rawTransaction.operations()
+  const operations = operationsObj.records
+  // @Todo will there be more than one operation for our usecase?
+  // Hardcoded for now 
+  const operation = operations[0]
+
+  const mappedTransaction = {
+    successful: operation.successful,
+    from: operation.from,
+    to: operation.to,
+    amount: operation.amount,
+    asset_type: operation.asset_type,
+    created_at: operation.created_at,
+    type: operation.type
+  }
+  return mappedTransaction
+}
+
+export const fetchTransactions = async (id) => {
+  const server = new StellarSdk.Server(config.serverUrl)
+  const transactionObj = await server.transactions().forAccount(id).call()
+  const rawTransactions = transactionObj.records
+
+  const mappedTransactions = await Promise.all( rawTransactions.map(t => mapTransaction(t)))
+  return mappedTransactions
+}

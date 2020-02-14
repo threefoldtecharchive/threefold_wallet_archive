@@ -18,7 +18,6 @@ export const mapAccount = async ({
   tags: tags,
   id: accountResponse.id,
   balances: accountResponse.balances,
-  transactions: await accountResponse.transactions(),
   index,
   position,
   seed,
