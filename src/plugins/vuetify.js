@@ -4,6 +4,7 @@ import Vuetify, {
   VBtn,
   VIcon,
   VProgressCircular,
+  VDivider,
 } from 'vuetify/lib';
 import VuetifyToast from 'vuetify-toast-snackbar';
 
@@ -13,6 +14,7 @@ Vue.use(Vuetify, {
     VBtn,
     VIcon,
     VProgressCircular,
+    VDivider,
   },
 });
 

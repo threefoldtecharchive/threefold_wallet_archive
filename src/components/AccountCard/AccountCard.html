@@ -23,8 +23,7 @@
             </v-btn>
           </v-flex>
           <v-flex class="pr-4" v-if="displayAmount">
-            <Balance v-if="displayAttributes" class="pr-2 pt-1" :balances="account.balances" />
-            <Balance v-else class="pl-3 pr-2 pt-1" small :balances="account.balances" />
+            <Balance class="pl-3 pr-2 pt-1" small :balances="account.balances" :humanReadable="$attrs.humanReadable" />
           </v-flex>
         </v-layout>
       </v-flex>

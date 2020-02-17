@@ -1,6 +1,6 @@
 const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
 
-export const formatBalance = value => {
+export const formatBalanceHumanReadable = value => {
   if (!value) {
     return;
   }
@@ -23,4 +23,11 @@ export const formatBalance = value => {
 
   // format number and add suffix
   return scaled.toFixed(3) + suffix;
+};
+export const formatBalance = value => {
+  if (!value) {
+    return;
+  }
+  const number = Math.round(value / 10) / 1000;
+  return number.toFixed(3);
 };

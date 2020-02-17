@@ -19,16 +19,20 @@ export default {
       type: String,
       default: 'left',
     },
+    humanReadable: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
+  data () {
     return {};
   },
   computed: {
-    hasMultipleBalances() {
+    hasMultipleBalances () {
       // @Todo detect locked and unconfirmed
       return false;
     },
   },
-  mounted() {},
+  mounted () {},
   methods: {},
 };

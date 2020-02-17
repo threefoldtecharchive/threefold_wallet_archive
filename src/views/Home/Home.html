@@ -3,7 +3,7 @@
     <div class="content">
       <draggable v-model="accounts" group="accounts" @start="drag=true" @end="drag=false" :options="{delay:400}">
         <AccountCard class="px-1 mb-4" clickable v-for="(account, index) in accounts" :key="index" :account="account"
-          @click="seeDetails(account)" />
+          @click="seeDetails(account)" humanReadable />
       </draggable>
     </div>
     <div v-if="isLoadingWallets && !isAppLoading" class="fill-height">
