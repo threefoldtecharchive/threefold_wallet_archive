@@ -5,9 +5,10 @@
         <v-layout column class="pl-4 pt-4 pb-2 overflow-hidden">
           <p>
             <span class="title text-capitalize">{{account ? account.name : 'Wallet name'}}</span>
-            <span v-for="tag in account.tags" style="font-size: 9px; color: gray;">{{tag}}</span>
+            <span v-for="tag in account.tags" class="font-weight-light fa-xs blue-grey--text ml-1">{{tag}}</span>
             <br />
-            <span v-if="displayAttributes" class="body-1 text-truncate">{{getHumanWalletAddress}}</span>
+            <span v-if="displayAttributes"
+              class="body-1 text-truncate font-weight-light">{{getHumanWalletAddress}}</span>
           </p>
         </v-layout>
       </v-flex>

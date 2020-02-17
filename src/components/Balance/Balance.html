@@ -2,25 +2,14 @@
   <div v-for="balance in balances">
     <v-row justify="end">
       <span v-if="hasMultipleBalances" class="caption mr-1">Available </span>
-      <span
-        :class="`text-s-right ${hasMultipleBalances ? 'subtitle-2' : 'title' } ${color}--text`"
-        >{{balance.balance | formatBalance}}
+      <span class="text-s-right">{{balance.balance | formatBalance}}
       </span>
-      <span :class="`ml-1 body-1 font-weight-light text-uppercase`">
-        {{balance.asset_code || ((balance.asset_type === 'native') ? 'xlm' :
-        balance.asset_type)}}
-      </span>
+      <sup class="currency font-weight-light text-uppercase">
+        {{
+          balance.asset_code 
+          || ((balance.asset_type === 'native') ? 'xlm' : balance.asset_type)
+        }}
+      </sup>
     </v-row>
-    <!-- @Todo locked and unconfirmed tokens? -->
-    <!-- <v-row v-if="unconfirmed > 0" justify="end">
-      <span class="caption mr-1">Unconfirmed </span>
-      <span :class="`text-s-right  subtitle-2 ${color}--text`">{{unconfirmed}}</span>
-      <span :class="small ? 'ml-1 body-1 font-weight-light' : 'ml-1 font-weight-light'">{{valuta.toLowerCase()}}</span>
-    </v-row>
-    <v-row v-if="locked" justify="end">
-      <span v-if="hasMultipleBalances" class="caption mr-1">Locked </span>
-      <span :class="`text-s-right  subtitle-2 ${color}--text`">{{locked}}</span>
-      <span :class="small ? 'ml-1 body-1 font-weight-light' : 'ml-1 font-weight-light'">{{valuta.toLowerCase()}}</span>
-    </v-row> -->
   </div>
 </section>
