@@ -1,5 +1,10 @@
 import Vue from 'vue';
-import Vuetify, { VSnackbar, VBtn, VIcon } from 'vuetify/lib';
+import Vuetify, {
+  VSnackbar,
+  VBtn,
+  VIcon,
+  VProgressCircular,
+} from 'vuetify/lib';
 import VuetifyToast from 'vuetify-toast-snackbar';
 
 Vue.use(Vuetify, {
@@ -7,6 +12,7 @@ Vue.use(Vuetify, {
     VSnackbar,
     VBtn,
     VIcon,
+    VProgressCircular,
   },
 });
 

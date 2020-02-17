@@ -6,7 +6,7 @@
           @click="seeDetails(account)" />
       </draggable>
     </div>
-    <div v-if="isLoadingWallets" class="fill-height">
+    <div v-if="isLoadingWallets && !isAppLoading" class="fill-height">
       <v-layout justify-center align-center fill-height column>
         <v-progress-circular :size="70" :width="10" :color="$route.meta.accent" indeterminate />
         <p class="pt-3">

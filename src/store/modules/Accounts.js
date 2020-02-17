@@ -33,15 +33,19 @@ export default {
       });
       context.commit('addAccount', account);
     },
-    syncAccounts: async ({ getters, dispatch }) => {
+    syncAccounts: async ({ commit, getters, dispatch }) => {
+      commit('startAppLoading');
       const op1 = await dispatch(
         'initializePkidAppAccounts',
         getters.appSeedPhrase
       );
+      console.log({ op1 });
+
       const op2 = await dispatch('initializeImportedPkidAccounts');
       await Promise.all([...op1, ...op2]);
+      await dispatch('saveToPkid');
       console.log('aftersave');
-      dispatch('saveToPkid');
+      commit('stopAppLoading');
     },
   },
   mutations: {

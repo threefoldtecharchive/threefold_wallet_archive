@@ -12,10 +12,11 @@ export default {
     position: 0,
     initialized: false,
     fee: StellarSdk.BASE_FEE,
+    appLoadingStack: 0,
   },
   actions: {
-    initializeSingleAccount: async function(
-      context,
+    initializeSingleAccount: async function (
+      { commit },
       { pkidAccount, seedPhrase, type }
     ) {
       const index = pkidAccount.index ? pkidAccount.index : 0;
@@ -29,57 +30,54 @@ export default {
         seedPhrase,
         position: pkidAccount.position,
       });
-      context.commit('addAccount', account);
+      commit('addAccount', account);
     },
-    initializePkidAppAccounts: async (context, seedPhrase) => {
-      const pkidAccounts = await context.dispatch('getPkidAppAccounts');
+    initializePkidAppAccounts: async ({ dispatch, commit }, seedPhrase) => {
+      const pkidAccounts = await dispatch('getPkidAppAccounts');
       const type = 'app';
       return pkidAccounts.map(pkidAccount => {
         pkidAccount.position = pkidAccount.position
           ? pkidAccount.position
           : pkidAccount.index;
-        context.commit('incrementPosition');
-        context.dispatch('initializeSingleAccount', {
+        commit('incrementPosition');
+        return dispatch('initializeSingleAccount', {
           pkidAccount,
           seedPhrase,
           type,
         });
       });
     },
-    initializeImportedPkidAccounts: async context => {
-      const pkidImportedAccounts = await context.dispatch(
-        'getPkidImportedAccounts'
-      );
+    initializeImportedPkidAccounts: async ({ dispatch, commit, getters }) => {
+      const pkidImportedAccounts = await dispatch('getPkidImportedAccounts');
       return pkidImportedAccounts.map(pkidImportedAccount => {
         const seedPhrase = entropyToMnemonic(pkidImportedAccount.seed);
         const type = 'imported';
         pkidImportedAccount.position = pkidImportedAccount.position
           ? pkidImportedAccount.position
-          : context.getters.position;
-        context.commit('incrementPosition');
-        return context.dispatch('initializeSingleAccount', {
+          : getters.position;
+        commit('incrementPosition');
+        return dispatch('initializeSingleAccount', {
           pkidAccount: pkidImportedAccount,
           seedPhrase,
           type,
         });
       });
     },
-    initialize: async (context, { seed, doubleName }) => {
-      context.state.initialized = true;
-      await context.dispatch('setPkidClient', seed);
-      context.commit('setThreebotName', doubleName);
+    initialize: async ({ commit, dispatch, state }, { seed, doubleName }) => {
+      commit('startAppLoading');
+      state.initialized = true;
+      await dispatch('setPkidClient', seed);
+      commit('setThreebotName', doubleName);
 
       const seedPhrase = entropyToMnemonic(seed);
-      context.commit('setAppSeedPhrase', seedPhrase);
+      commit('setAppSeedPhrase', seedPhrase);
 
-      const op1 = await context.dispatch(
-        'initializePkidAppAccounts',
-        seedPhrase
-      );
-      const op2 = await context.dispatch('initializeImportedPkidAccounts');
+      const op1 = await dispatch('initializePkidAppAccounts', seedPhrase);
+      const op2 = await dispatch('initializeImportedPkidAccounts');
       await Promise.all([...op1, ...op2]);
-      await context.dispatch('saveToPkid');
-      context.commit('stopLoadingWallets');
+      await dispatch('saveToPkid');
+      commit('stopAppLoading');
+      commit('stopLoadingWallets');
     },
   },
   mutations: {
@@ -89,8 +87,17 @@ export default {
     setAppSeedPhrase: (state, seedPhrase) => {
       state.appSeedPhrase = seedPhrase;
     },
+    startLoadingWallets: state => {
+      state.isLoadingWallets = true;
+    },
     stopLoadingWallets: state => {
       state.isLoadingWallets = false;
+    },
+    startAppLoading: state => {
+      state.appLoadingStack++;
+    },
+    stopAppLoading: state => {
+      state.appLoadingStack--;
     },
     startMigratingAccount: state => {
       state.isMigratingAccount = true;
@@ -110,5 +117,6 @@ export default {
     position: state => state.position,
     initialized: state => state.initialized,
     fee: state => state.fee,
+    isAppLoading: state => state.appLoadingStack > 0,
   },
 };

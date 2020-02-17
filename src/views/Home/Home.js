@@ -11,7 +11,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(['isLoadingWallets']),
+    ...mapGetters(['isLoadingWallets', 'isAppLoading']),
     accounts: {
       get() {
         const sortedAccounts = [...store.getters.accounts];

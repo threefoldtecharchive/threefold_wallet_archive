@@ -1,6 +1,7 @@
 import toolbar from '../components/toolbar';
 import bottomNav from '../components/bottomNav';
 import copyDialog from '../components/copydialog';
+import Loader from '../components/Loader';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
@@ -9,22 +10,17 @@ export default {
     toolbar,
     bottomNav,
     copyDialog,
+    Loader,
   },
   mounted () {},
   data () {
     return {
       showCreateWalletDialog: false,
       showEditWalletDialog: false,
-      hideSnackbarTimeout: 6000,
     };
   },
   computed: {
-    ...mapGetters([
-      'informationMessage',
-      'fatalError',
-      'isImportingWallet',
-      'devClicks',
-    ]),
+    ...mapGetters(['isImportingWallet', 'devClicks', 'isAppLoading']),
     cssProps () {
       return {
         '--primary-color': this.$vuetify.theme.themes.light.primary,
