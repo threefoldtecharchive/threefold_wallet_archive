@@ -1,11 +1,9 @@
-import {
-  mapGetters,
-  mapActions
-} from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import store from '../../store'
 import cryptoService from '../../services/cryptoService'
 import uuidv4 from 'uuid/v4'
 import { importedSeedFound } from '../../services/walletManagmentService'
+import { getEntropyFromPhrase } from 'mnemonicconversion2924'
 
 export default {
   name: 'create-wallet',
@@ -26,21 +24,15 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'doubleName',
-      'wallets'
-    ])
+    ...mapGetters(['doubleName', 'wallets'])
   },
-  mounted () {
-
-  },
+  mounted () {},
   methods: {
-    ...mapActions([
-      'importWallet',
-      'createWallet'
-    ]),
+    ...mapActions(['importWallet', 'createWallet']),
     walletNameFound () {
-      return this.wallets.find(x => x.name.toLowerCase() == this.walletName.toLowerCase())
+      return this.wallets.find(
+        x => x.name.toLowerCase() == this.walletName.toLowerCase()
+      )
     },
     addCreateWallet () {
       this.walletNameErrors = []
@@ -48,13 +40,19 @@ export default {
       this.walletName = this.walletName.trim()
 
       if (this.walletName.length > 15) {
-        this.walletNameErrors.push('The length of the name should not exceed 15 characters.')
+        this.walletNameErrors.push(
+          'The length of the name should not exceed 15 characters.'
+        )
         return
       }
 
       if (!this.walletNameFound()) {
         // ID: 0 HARDCODED FOR NOW!
-        this.createWallet({ chain: 'tft', walletName: this.walletName, id: '0' })
+        this.createWallet({
+          chain: 'tft',
+          walletName: this.walletName,
+          id: '0'
+        })
 
         this.$router.push({ name: 'home' })
 
@@ -72,7 +70,9 @@ export default {
         return
       }
       if (this.walletName.length > 15) {
-        this.walletNameErrors.push('The length of the name should not exceed 15 characters.')
+        this.walletNameErrors.push(
+          'The length of the name should not exceed 15 characters.'
+        )
         return
       }
       if (this.walletNameFound()) {
@@ -85,34 +85,58 @@ export default {
         return
       }
 
-      this.words = this.words.replace(/[^a-zA-Z ]/g, '').toLowerCase().trim().replace(/\s\s+/g, ' ')
+      this.words = this.words
+        .replace(/[^a-zA-Z ]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/\s\s+/g, ' ')
       const wordCount = this.words.split(' ').length
 
-      if (wordCount !== 24) {
-        this.wordsErrors.push('Please make sure you\'ve entered 24 words. [' + wordCount + '/24]')
+      if (wordCount !== 24 && wordCount !== 29) {
+        this.wordsErrors.push(
+          "Please make sure you've entered 24 words. [" + wordCount + '/24]'
+        )
         return
       }
 
-      if (this.walletName && wordCount === 24) {
+      if (this.walletName) {
         var that = this
         try {
-          const generatedSeed = cryptoService.generateSeedFromMnemonic(this.words)
+          let mySeed
+
+          if (wordCount === 29) {
+            const generatedSeed = getEntropyFromPhrase(this.words.split(' '))
+            mySeed = new Uint8Array(generatedSeed)
+          } else {
+            const generatedSeed = cryptoService.generateSeedFromMnemonic(
+              this.words
+            )
+            const convertHexstringToEntropy = hexString =>
+              new Uint8Array(
+                hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16))
+              )
+
+            mySeed = convertHexstringToEntropy(generatedSeed)
+          }
           // let seed = new Uint8Array([172, 71, 122, 113, 182, 210, 235, 96, 117, 42, 129, 137, 68, 81, 61, 29, 61, 218, 212, 220, 221, 146, 109, 160, 95, 255, 86, 234, 249, 72, 157, 183]);
           // let MnemonicSeed = await cryptoService.generateMnemonicFromSeed(seed);
           // let backToSeed = await cryptoService.generateSeedFromMnemonic(MnemonicSeed);
           // const convertHexstringToEntropy = hexString => new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-          const convertHexstringToEntropy = hexString => new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)))
-
-          const mySeed = convertHexstringToEntropy(generatedSeed)
 
           const foundWallet = importedSeedFound(mySeed)
 
           if (foundWallet) {
-            this.wordsErrors.push(`This seed is already imported under the name "${foundWallet.name}"`)
+            this.wordsErrors.push(
+              `This seed is already imported under the name "${foundWallet.name}"`
+            )
             return
           }
 
-          const obj = { doubleName: this.doubleName, walletName: this.walletName, seed: mySeed }
+          const obj = {
+            doubleName: this.doubleName,
+            walletName: this.walletName,
+            seed: mySeed
+          }
 
           await this.importWallet(obj)
 
