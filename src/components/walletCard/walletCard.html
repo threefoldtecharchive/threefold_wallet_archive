@@ -5,7 +5,7 @@
         <v-flex :class="displayAttributes ? 'xs6' : 'xs6'">
           <v-layout column class="pt-2 pl-2">
             <p>
-              <span class="title text-capitalize">{{wallet? wallet.name : 'Wallet name'}}</span>
+              <span class="title text-capitalize">{{wallet ? wallet.name : 'Wallet name'}}</span>
               <span style="font-size: 9px; color: gray;">{{wallet.holder.type === 'imported' ? " imported" : ''}}</span>
               <br />
               <span v-if="displayAttributes" class="body-1 text-truncate">{{getHumanWalletAddress}}</span>
@@ -16,13 +16,14 @@
         </v-flex>
         <v-flex v-if="!!clickable && !!authenticated" :class="clickable ? 'xs6' : ''">
           <v-layout column class="justify-space-between  align-end">
-            <v-flex v-if="displayAttributes">
+            <v-flex v-if="displayAttributes" class="badge-top accent">
               <v-btn dark small icon text @click.stop="copyAddress" class="px-3 align-self-end badge-top ma-0"
                 style="z-index: 1;" :class="$route.meta.accent" v-show="wallet.currency != 'gram'">
                 <v-icon size="15">
                   file_copy
                 </v-icon>
               </v-btn>
+
             </v-flex>
             <v-flex class="mr-1" v-if="displayAmount">
               <amountIndicator v-if="displayAttributes" class="pr-2 pt-1" :amount='totalAmount'

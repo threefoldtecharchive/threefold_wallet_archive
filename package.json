@@ -5,11 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit --testMatch \"**/src/**/*.spec.[jt]s\"",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@chenfengyuan/vue-qrcode": "^1.0.1",
-    "@jimber/pkid": "^1.0.2",
+    "@jimber/pkid": "^1.0.4",
     "axios": "^0.19.0",
     "bip39": "^3.0.2",
     "clipboard-copy": "^3.1.0",
@@ -23,6 +24,7 @@
     "sass": "^1.22.10",
     "sass-loader": "^7.3.1",
     "tweetnacl-util": "^0.15.0",
+    "uuid": "^3.4.0",
     "vue": "^2.6.10",
     "vue-moment": "^4.1.0",
     "vue-qr": "^2.1.0",
@@ -34,7 +36,9 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
+    "@vue/cli-plugin-unit-jest": "^4.1.2",
     "@vue/cli-service": "^3.11.0",
+    "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.3",
@@ -58,7 +62,18 @@
     },
     "parserOptions": {
       "parser": "babel-eslint"
-    }
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
   },
   "postcss": {
     "plugins": {

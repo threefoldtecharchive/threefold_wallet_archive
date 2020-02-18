@@ -13,9 +13,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'accounts'
-    ])
+    ...mapGetters(['accounts'])
   },
   mounted () {
     window.vueInstance = this
@@ -23,22 +21,22 @@ export default {
     window.decodeBase64 = decodeBase64
   },
   methods: {
-    ...mapActions([
-      'login'
-    ]),
+    ...mapActions(['login', 'loadWallets']),
     async startWallet (doubleName, seed, importedWallets, appWallets) {
-      console.log(`appwallets`,appWallets)
-      console.log(`imported`,importedWallets)
+      console.log(`appwallets`, appWallets)
+      console.log(`imported`, importedWallets)
       window.localStorage.setItem('appWallets', appWallets)
       window.localStorage.setItem('importedWallets', importedWallets)
-      seed = new Uint8Array(
-        decodeBase64(seed)
-      )
-      await this.login({
-        doubleName,
-        seed
-      })
-      router.push({ name: 'home' })
+      seed = new Uint8Array(decodeBase64(seed))
+      try {
+        await this.login({
+          doubleName,
+          seed
+        })
+        router.push({ name: 'home' })
+      } catch (error) {
+        console.log(error.message)
+      }
     }
   }
 }

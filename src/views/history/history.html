@@ -4,7 +4,7 @@
     :displayAttributes="false" />
   <v-col>
 
-    <v-row class="div-toggle-buttons" v-if="hasLocked" justify="center">
+    <v-row class="div-toggle-buttons" v-if="selectedWallet.totalLocked" justify="center">
       <v-btn-toggle dense mandatory class="round">
         <v-btn text v-for="tab in tabs" :key="tab" class="px-3 my-1 mx-1 round" @click="currentTab=tab">{{tab}}</v-btn>
       </v-btn-toggle>
@@ -24,7 +24,7 @@
           <v-row 
             class="pa-0 mb-0" 
             v-for="(input, index) in transaction.inputs" 
-            v-if="input.lock"
+            v-if="input.lock && isStillLocked(input)"
           >
             <div style="width: 100%;">
               <historyCardLocked :key="index" v-if :transaction="input" :locked="true" :outgoing="false" />
@@ -36,7 +36,7 @@
           <v-row 
             class="pa-0 mb-0" 
             v-for="(output, index) in transaction.outputs" 
-            v-if="output.lock && !(output.description && output.description === 'fee') "
+            v-if="output.lock && !(output.description && output.description === 'fee') && isStillLocked(output) "
           >
             <div style="width: 100%;">
               <historyCardLocked :key="index" v-if :transaction="output" :locked="true" :outgoing="true" />

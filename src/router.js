@@ -41,6 +41,18 @@ export default new Router({
     },
     component: () => import(/* webpackChunkName: "history-page" */ './views/history')
   }, {
+    path: '/walletinfo/:wallet',
+    name: 'walletinfo',
+    meta: {
+      accent: 'accent',
+      transfer: 'transfer',
+      info: {
+        title: 'wallet info',
+        text: 'this is info'
+      }
+    },
+    component: () => import(/* webpackChunkName: "history-page" */ './views/walletinfo')
+  }, {
     path: '/profile',
     name: 'profile',
     meta: {

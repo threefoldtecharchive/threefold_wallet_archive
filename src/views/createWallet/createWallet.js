@@ -2,7 +2,10 @@ import {
   mapGetters,
   mapActions
 } from 'vuex'
+import store from '../../store'
 import cryptoService from '../../services/cryptoService'
+import uuidv4 from 'uuid/v4'
+import { importedSeedFound } from '../../services/walletManagmentService'
 
 export default {
   name: 'create-wallet',
@@ -36,39 +39,25 @@ export default {
       'importWallet',
       'createWallet'
     ]),
+    walletNameFound () {
+      return this.wallets.find(x => x.name.toLowerCase() == this.walletName.toLowerCase())
+    },
     addCreateWallet () {
       this.walletNameErrors = []
       this.wordsErrors = []
+      this.walletName = this.walletName.trim()
 
-      const walletNameFound = this.wallets.find(x => x.name == this.walletName.toLowerCase())
-      console.log(walletNameFound)
-      if (!walletNameFound) {
+      if (this.walletName.length > 15) {
+        this.walletNameErrors.push('The length of the name should not exceed 15 characters.')
+        return
+      }
+
+      if (!this.walletNameFound()) {
         // ID: 0 HARDCODED FOR NOW!
         this.createWallet({ chain: 'tft', walletName: this.walletName, id: '0' })
 
-        var postMsg = {
-          walletName: this.walletName,
-          doubleName: this.doubleName
-        }
+        this.$router.push({ name: 'home' })
 
-        postMsg = JSON.stringify(postMsg)
-
-        // Print.postMessage(JSON.stringify(postMsg))
-        var self = this
-        window.flutter_inappwebview.callHandler('ADD_APP_WALLET', postMsg).then(function (result) {
-          console.log('flutter result', result)
-          if (result) {
-            self.$router.push({ name: 'home' })
-          } else {
-            self.walletNameErrors.push('The wallet name was not valid')
-          }
-        })
-        // let result = true
-        // if (result) {
-        //   this.$router.push({ name: 'home' })
-        // } else {
-        //   this.walletNameErrors.push('The wallet name was not valid')
-        // }
         this.$emit('ctaClicked')
         this.walletName = null
         this.words = null
@@ -76,9 +65,18 @@ export default {
         this.walletNameErrors.push('There is already a wallet with this name')
       }
     },
-    addImportWallet () {
+    async addImportWallet () {
+      this.walletName = this.walletName.trim()
       if (!this.walletName) {
         this.walletNameErrors.push('Please enter a name.')
+        return
+      }
+      if (this.walletName.length > 15) {
+        this.walletNameErrors.push('The length of the name should not exceed 15 characters.')
+        return
+      }
+      if (this.walletNameFound()) {
+        this.walletNameErrors.push('There is already a wallet with this name')
         return
       }
 
@@ -91,13 +89,13 @@ export default {
       const wordCount = this.words.split(' ').length
 
       if (wordCount !== 24) {
-        this.wordsErrors.push("Please make sure you've entered 24 words. [" + wordCount + '/24]')
+        this.wordsErrors.push('Please make sure you\'ve entered 24 words. [' + wordCount + '/24]')
         return
       }
 
       if (this.walletName && wordCount === 24) {
         var that = this
-        try{
+        try {
           const generatedSeed = cryptoService.generateSeedFromMnemonic(this.words)
           // let seed = new Uint8Array([172, 71, 122, 113, 182, 210, 235, 96, 117, 42, 129, 137, 68, 81, 61, 29, 61, 218, 212, 220, 221, 146, 109, 160, 95, 255, 86, 234, 249, 72, 157, 183]);
           // let MnemonicSeed = await cryptoService.generateMnemonicFromSeed(seed);
@@ -107,29 +105,21 @@ export default {
 
           const mySeed = convertHexstringToEntropy(generatedSeed)
 
+          const foundWallet = importedSeedFound(mySeed)
+
+          if (foundWallet) {
+            this.wordsErrors.push(`This seed is already imported under the name "${foundWallet.name}"`)
+            return
+          }
+
           const obj = { doubleName: this.doubleName, walletName: this.walletName, seed: mySeed }
 
-          let continueImport = this.importWallet(obj)
+          await this.importWallet(obj)
 
-          if (continueImport) {
-            var postMsg = {
-              walletName: this.walletName,
-              doubleName: this.doubleName,
-              seed: Array.from(mySeed)
-            }
-
-            postMsg = JSON.stringify(postMsg)
-            // Print.postMessage(JSON.stringify(postMsg))
-            console.log('before flutter call', postMsg)
-            var self = this
-            window.flutter_inappwebview.callHandler('ADD_IMPORT_WALLET', postMsg).then(function (result) {
-              console.log('flutter result', result)
-              self.$router.push({ name: 'home' })
-            })
-          }
+          this.$router.push({ name: 'home' })
         } catch (e) {
           console.log(e.message)
-          that.wordsErrors.push("Something went wrong: " + e.message)
+          that.wordsErrors.push('Something went wrong: ' + e.message)
           return
         }
       }

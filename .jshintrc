@@ -1,0 +1,11 @@
+{
+  "esversion": 9,
+  "asi": true,
+  "boss": true,
+  "eqeqeq": true,
+  "newcap": false,
+  "undef": true,
+  "unused": true,
+  "onecase": true,
+  "browser": true
+}
