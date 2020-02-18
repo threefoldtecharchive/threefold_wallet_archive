@@ -6824,6 +6824,11 @@ mkdirp@0.5.1, mkdirp@0.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1, mkdirp@~0
   dependencies:
     minimist "0.0.8"
 
+mnemonicconversion2924@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/mnemonicconversion2924/-/mnemonicconversion2924-1.0.3.tgz#11fe231ca0221df2be932972ee0a5d5440ee2d5c"
+  integrity sha512-xRha24VsW+DMSZV1E1kBDN2TYGo/GulOTX38sxSWKIkLufhN2SiW/j+uC4X/IYCsxi4w3xRvvnJZ5RGP7QvFbg==
+
 moment@^2.19.2, moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
