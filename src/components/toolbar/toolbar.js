@@ -4,7 +4,7 @@ export default {
   components: {},
   name: 'toolbar',
   props: [],
-  data() {
+  data () {
     return {
       isScrolling: false,
     };
@@ -12,21 +12,21 @@ export default {
   computed: {
     ...mapGetters(['syncing', 'accounts', 'devClicks']),
   },
-  mounted() {},
+  mounted () {},
   methods: {
     ...mapMutations(['addDevClick']),
-    onScroll() {
+    onScroll () {
       this.isScrolling =
         (window.pageYOffset || document.documentElement.scrollTop || 0) > 50;
     },
-    seeAdd() {
+    seeAdd () {
       this.$router.push({
         name: 'addwallet',
       });
     },
-    seeWalletInfo() {
+    seeWalletInfo () {
       this.$router.push({
-        name: 'walletinfo',
+        name: 'wallet info',
         params: {
           account: this.$route.params.account,
         },

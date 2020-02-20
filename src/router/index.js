@@ -69,8 +69,8 @@ const routes = [
     component: Transfer,
   },
   {
-    path: '/walletinfo/:wallet',
-    name: 'walletinfo',
+    path: '/walletinfo/:account',
+    name: 'wallet info',
 
     meta: {
       accent: 'accent',

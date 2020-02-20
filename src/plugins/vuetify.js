@@ -11,6 +11,8 @@ import Vuetify, {
   VCard,
   VCardTitle,
   VSkeletonLoader,
+  VForm,
+  VTextField,
 } from 'vuetify/lib';
 import VuetifyToast from 'vuetify-toast-snackbar';
 
@@ -27,6 +29,8 @@ Vue.use(Vuetify, {
     VCard,
     VCardTitle,
     VSkeletonLoader,
+    VForm,
+    VTextField,
   },
 });
 

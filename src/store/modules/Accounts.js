@@ -52,6 +52,13 @@ export default {
       console.log('aftersave');
       commit('stopAppLoading');
     },
+    changeWalletName: async ({ commit, dispatch }, { account, name }) => {
+      commit('startAppLoading');
+      account.name = name;
+      commit('addAccount', account);
+      await dispatch('saveToPkid');
+      commit('stopAppLoading');
+    },
   },
   mutations: {
     addAccount: (state, account) => {
