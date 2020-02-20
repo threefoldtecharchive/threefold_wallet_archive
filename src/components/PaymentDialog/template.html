@@ -36,7 +36,7 @@
       </p>
       <p class="title mt-0">{{payment.amount | formatBalance}}</p>
       <p class="subtitle mb-0 grey--text">Fee</p>
-      <p class="title mt-0">fee</p>
+      <p class="title mt-0">{{payment.fee | formatBalance}}</p>
       <p v-if="payment.memo" class="subtitle mb-0 grey--text">Message</p>
       <p v-if="payment.memo" class="title mt-0">{{payment.memo}}</p>
 
