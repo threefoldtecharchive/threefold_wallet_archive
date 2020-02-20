@@ -4,12 +4,14 @@ import { fetchAccount } from '../../services/AccountService';
 export default {
   state: {
     accounts: [],
+    accountThombstones: [],
   },
   computed: {
     ...mapGetters(['appSeedPhrase']),
   },
   actions: {
     generateAppAccount: async (context, walletName) => {
+      context.commit('addAccountThombstone', walletName);
       const nextAppAcountIndex = context.getters.nextAppAcountIndex;
       const seedPhrase = context.getters.appSeedPhrase;
       const position = context.state.accounts.length;
@@ -20,6 +22,8 @@ export default {
         seedPhrase,
         position: position,
       });
+      context.dispatch('fetchPayments', account.id);
+      context.commit('removeAccountThombstone', walletName);
       context.commit('addAccount', account);
     },
     generateImportedAccount: async (context, { seedPhrase, walletName }) => {
@@ -31,6 +35,7 @@ export default {
         seedPhrase,
         position: position,
       });
+      context.dispatch('fetchPayments', account.id);
       context.commit('addAccount', account);
     },
     syncAccounts: async ({ commit, getters, dispatch }) => {
@@ -61,15 +66,35 @@ export default {
     removeAccount: (state, account) => {
       state.accounts = state.accounts.filter(item => item !== account);
     },
+    removeAppAccount: state => {
+      state.accounts = state.accounts.filter(
+        account => !account.tags.includes('app')
+      );
+    },
+    addAccountThombstone: (state, name) => {
+      state.accountThombstones.push(name);
+    },
+    removeAccountThombstone: (state, name) => {
+      state.accountThombstones = state.accountThombstones.filter(
+        item => item !== name
+      );
+    },
     setAccounts: (state, accounts) => {
       state.accounts = accounts;
     },
   },
   getters: {
     accounts: state => state.accounts,
-    nextAppAcountIndex: state =>
+    nextAppAcountIndex: state => {
       // @Reminder if deleted accounts are not in the account array,
       // this will not be correct
-      state.accounts.filter(account => account.tags.includes('app')).length,
+      const amount = state.accounts.filter(account =>
+        account.tags.includes('app')
+      ).length;
+      const index = amount;
+      console.log(index);
+      return index;
+    },
+    accountThombstones: state => state.accountThombstones,
   },
 };

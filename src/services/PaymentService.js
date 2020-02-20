@@ -1,12 +1,7 @@
 import config from '../public/config';
 import StellarSdk from 'stellar-sdk';
 // let destinationId = 'GBTJEFDDMA5N4TDBFLJGA6K3MQFNHR2KUUFYAKYCOAEE43JD4CP3UTQC';
-export const doTransaction = ({
-  sourceKeyPair,
-  destination,
-  amount,
-  message,
-}) => {
+export const doPayment = ({ sourceKeyPair, destination, amount, message }) => {
   const server = new StellarSdk.Server(config.serverUrl);
   // Transaction will hold a built transaction we can resubmit if the result is unknown.
   let transaction;
@@ -17,16 +12,16 @@ export const doTransaction = ({
   server
     .loadAccount(destination)
     // If the account is not found, surface a nicer error message for logging.
-    .catch(function(error) {
+    .catch(function (error) {
       if (error instanceof StellarSdk.NotFoundError) {
         throw new Error('The destination account does not exist!');
       } else return error;
     })
     // If there was no error, load up-to-date information on your account.
-    .then(function() {
+    .then(function () {
       return server.loadAccount(sourceKeyPair.publicKey());
     })
-    .then(function(sourceAccount) {
+    .then(function (sourceAccount) {
       // Start building the transaction.
       transaction = new StellarSdk.TransactionBuilder(sourceAccount, {
         // @Todo will each account need lumens in order to do transactions?
@@ -54,10 +49,10 @@ export const doTransaction = ({
       // And finally, send it off to Stellar!
       return server.submitTransaction(transaction);
     })
-    .then(function(result) {
+    .then(function (result) {
       console.log('Success! Results:', result);
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.error('Something went wrong!', error);
       // If the result is unknown (no response body, timeout etc.) we simply resubmit
       // already built transaction:
@@ -65,30 +60,44 @@ export const doTransaction = ({
     });
 };
 
-export const mapTransaction = async (rawTransaction) => {
-  const operationsObj = await rawTransaction.operations()
-  const operations = operationsObj.records
-  // @Todo will there be more than one operation for our usecase?
-  // Hardcoded for now 
-  const operation = operations[0]
+export const mapPayment = ({
+  id,
+  amount,
+  created_at,
+  from,
+  to,
+  asset_type,
+  memo,
+  account_id,
+}) => {
+  return {
+    id,
+    amount,
+    created_at,
+    from,
+    to,
+    asset_type,
+    outgoing: account_id === from,
+    memo,
+  };
+};
 
-  const mappedTransaction = {
-    successful: operation.successful,
-    from: operation.from,
-    to: operation.to,
-    amount: operation.amount,
-    asset_type: operation.asset_type,
-    created_at: operation.created_at,
-    type: operation.type
-  }
-  return mappedTransaction
-}
+export const fetchPayments = async id => {
+  const server = new StellarSdk.Server(config.serverUrl);
+  const paymentPayloadObj = await server
+    .payments()
+    .forAccount(id)
+    .call();
 
-export const fetchTransactions = async (id) => {
-  const server = new StellarSdk.Server(config.serverUrl)
-  const transactionObj = await server.transactions().forAccount(id).call()
-  const rawTransactions = transactionObj.records
+  const rawPayments = paymentPayloadObj.records;
+  console.log(rawPayments);
 
-  const mappedTransactions = await Promise.all( rawTransactions.map(t => mapTransaction(t)))
-  return mappedTransactions
-}
+  const mappedPaymentsPromises = rawPayments
+    .filter(p => p.type === 'payment')
+    .map(async p => {
+      const { memo } = await p.transaction();
+      return mapPayment({ ...p, account_id: id });
+    });
+  const mappedPayments = await Promise.all(mappedPaymentsPromises);
+  return mappedPayments;
+};

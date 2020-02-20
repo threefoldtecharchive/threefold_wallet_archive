@@ -2,25 +2,26 @@ import { mapActions, mapGetters } from 'vuex';
 import AccountCard from '../../components/AccountCard';
 import draggable from 'vuedraggable';
 import store from '../../store';
+import SkelletonAccountCard from '../../components/SkelletonAccontCard';
 
 export default {
   name: 'Home',
-  components: { AccountCard, draggable },
+  components: { AccountCard, draggable, SkelletonAccountCard },
   props: [],
-  data() {
+  data () {
     return {};
   },
   computed: {
-    ...mapGetters(['isLoadingWallets', 'isAppLoading']),
+    ...mapGetters(['isLoadingWallets', 'isAppLoading', 'accountThombstones']),
     accounts: {
-      get() {
+      get () {
         const sortedAccounts = [...store.getters.accounts];
         sortedAccounts.sort(
           (account, otherAccount) => account.position - otherAccount.position
         );
         return sortedAccounts;
       },
-      set(value) {
+      set (value) {
         value.map((account, index) => {
           account.position = index;
         });
@@ -29,7 +30,7 @@ export default {
       },
     },
   },
-  mounted() {},
+  mounted () {},
   methods: {
     ...mapActions(['syncAccounts']),
     seeDetails: account => {

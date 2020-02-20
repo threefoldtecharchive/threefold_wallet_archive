@@ -2,7 +2,7 @@ import FormComponent from './components/formComponent';
 import QrDialog from './components/qrDialog';
 import TransactionInfoDialog from './components/transactionInfoDialog';
 import { mapGetters, mapActions } from 'vuex';
-import {doTransaction} from '../../services/TransactionService';
+import { doPayment } from '../../services/PaymentService';
 
 export default {
   name: 'transfer',
@@ -12,7 +12,7 @@ export default {
     // QrScannerDialog,
     QrDialog,
   },
-  data() {
+  data () {
     return {
       tabs: ['receive', 'send'],
       transactionInfoDialog: false,
@@ -29,7 +29,7 @@ export default {
       qrReadingError: false,
     };
   },
-  mounted() {
+  mounted () {
     if (this.$route.params.wallet) {
       this.selectedAccount = this.wallets.find(
         x => x.name === this.$route.params.wallet
@@ -40,20 +40,22 @@ export default {
   },
   computed: {
     ...mapGetters(['accounts', 'fee']),
-    active() {
+    active () {
       return this.$route.query.tab;
     },
   },
   methods: {
     ...mapActions(['sendCoins', 'updateAccounts']),
-    scanQR() {
+    scanQR () {
       window.vueInstance = this; //Don't remove this for flutter app
       const self = this;
-      window.flutter_inappwebview.callHandler('SCAN_QR').then(function(result) {
-        self.onDecode(result);
-      });
+      window.flutter_inappwebview
+        .callHandler('SCAN_QR')
+        .then(function (result) {
+          self.onDecode(result);
+        });
     },
-    onDecode(code) {
+    onDecode (code) {
       var url = new URL(code);
       var tftAddress = url.hostname;
 
@@ -74,7 +76,7 @@ export default {
           ? ''
           : url.searchParams.get('sender');
     },
-    getQueryVar(url, varName) {
+    getQueryVar (url, varName) {
       var val;
       url = new URL(url);
       if (varName === 'HOST') {
@@ -84,7 +86,7 @@ export default {
       }
       return val;
     },
-    transferConfirmed() {
+    transferConfirmed () {
       if (!this.checkForm()) {
         console.log('form not valid');
         return;
@@ -95,7 +97,7 @@ export default {
         this.transactionInfoDialog = true;
       }
     },
-    async send() {
+    async send () {
       const transactiondata = {
         sourceKeyPair: this.selectedAccount.keyPair,
         destination: this.formObject.to.address,
@@ -104,7 +106,7 @@ export default {
       };
 
       console.log(transactiondata);
-      await doTransaction(transactiondata);
+      await doPayment(transactiondata);
 
       this.formObject = {
         to: { address: null },
@@ -119,7 +121,7 @@ export default {
         params: { wallet: this.selectedAccount.name },
       });
     },
-    selectAccount(account) {
+    selectAccount (account) {
       this.selectedAccount = account;
       this.formObject = {
         to: { address: null },
@@ -129,17 +131,17 @@ export default {
       };
       this.$refs.formComponent.$refs.form.reset();
     },
-    checkForm() {
+    checkForm () {
       return this.$refs.formComponent.$refs.form.validate();
     },
-    closeTransactionInfoDialog(save) {
+    closeTransactionInfoDialog (save) {
       if (save) this.send();
       this.transactionInfoDialog = false;
     },
-    closeQrScannerDialog() {
+    closeQrScannerDialog () {
       this.qrScannerDialog = false;
     },
-    closeQrDialog() {
+    closeQrDialog () {
       this.qrDialog = false;
     },
   },

@@ -5,6 +5,12 @@ import Vuetify, {
   VIcon,
   VProgressCircular,
   VDivider,
+  VContainer,
+  VRow,
+  VCol,
+  VCard,
+  VCardTitle,
+  VSkeletonLoader,
 } from 'vuetify/lib';
 import VuetifyToast from 'vuetify-toast-snackbar';
 
@@ -15,6 +21,12 @@ Vue.use(Vuetify, {
     VIcon,
     VProgressCircular,
     VDivider,
+    VContainer,
+    VRow,
+    VCol,
+    VCard,
+    VCardTitle,
+    VSkeletonLoader,
   },
 });
 

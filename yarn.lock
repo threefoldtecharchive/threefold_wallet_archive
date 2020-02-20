@@ -1005,13 +1005,14 @@
     tweetnacl "^1.0.1"
     tweetnacl-util "^0.15.0"
 
-"@jimber/stellar-crypto@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-0.0.7.tgz#28445a6ded1c12d85113d9504591dbc925a9fd27"
-  integrity sha512-M20kJ76v0gCK3CXhBhV/jnP0S7M0XbWG1xC14K+CUTbS2DlFFFw/scqDJvywUtiaLyvpL+0j/bg3C+Vd7EBUuA==
+"@jimber/stellar-crypto@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-0.1.0.tgz#5581f4982d3dd801bea1d044b76b7dbdf6678b99"
+  integrity sha512-A32y+Hinc0S1Tah39f/4dZPh8ujfe/V5Pzf/fo2lMxVTlSbOg+2RFBwwbFB5sGAU/2QLq9x2MzbPHwY1vuQ1lA==
   dependencies:
     "@waves/ts-lib-crypto" "^1.4.2"
     bip39 "^3.0.2"
+    mnemonicconversion2924 "^1.0.3"
     stellar-sdk "^3.3.0"
     tweetnacl-ts "^1.0.3"
     tweetnacl-util "^0.15.1"
@@ -7198,6 +7199,11 @@ mkdirp@0.5.1, mkdirp@0.x, mkdirp@^0.5.1, mkdirp@~0.5.1:
   integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
   dependencies:
     minimist "0.0.8"
+
+mnemonicconversion2924@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/mnemonicconversion2924/-/mnemonicconversion2924-1.0.3.tgz#11fe231ca0221df2be932972ee0a5d5440ee2d5c"
+  integrity sha512-xRha24VsW+DMSZV1E1kBDN2TYGo/GulOTX38sxSWKIkLufhN2SiW/j+uC4X/IYCsxi4w3xRvvnJZ5RGP7QvFbg==
 
 moment@2.24.0:
   version "2.24.0"

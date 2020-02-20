@@ -1,6 +1,27 @@
 <section class="details fill-height">
-  <AccountCard class="mt-0 pa-0" :account="account" />
-  <v-col>
-    <!--    @todo add transacions-->
-  </v-col>
+  <header>
+    <v-container>
+      <v-row>
+        <v-col>
+          <h2 class="text-capitalize">{{account.name}} <span v-for="tag in account.tags"
+              class="font-weight-light fa-xs ml-1">{{tag}}</span></h2>
+          <span>{{getHumanWalletAddress}}</span>
+          <br>
+        </v-col>
+        <v-col>
+          <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances" />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <span>adres:&nbsp{{account.id}}</span>
+        </v-col>
+      </v-row>
+    </v-container>
+  </header>
+  <v-list three-line class="pa-0">
+    <paymentItem v-for="payment in payments(account.id)" :payment="payment" :key="payment.id"
+      @click.stop='selectedPayment = payment' />
+  </v-list>
+  <paymentDialog v-if="selectedPayment" :payment="selectedPayment" @closed="selectedPayment = null" />
 </section>

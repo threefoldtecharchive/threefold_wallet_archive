@@ -29,5 +29,6 @@ export const formatBalance = value => {
     return;
   }
   const number = Math.round(value / 10) / 1000;
-  return number.toFixed(3);
+  console.log(number);
+  return number;
 };

@@ -1,0 +1,21 @@
+<div>
+  <v-list-item :class="payment.outgoing ? 'outgoing': 'incoming'" v-bind="$attrs" v-on="$listeners">
+    <v-list-item-content>
+      <v-list-item-title v-if="payment.memo">{{payment.memo}}</v-list-item-title>
+      <v-list-item-subtitle class="text--primary">
+        {{ payment.outgoing ? payment.to : payment.from }}
+      </v-list-item-subtitle>
+      <v-list-item-subtitle class="amount">
+        {{payment.outgoing ? '-' : '+ ' }} {{ payment.amount | formatBalance }}
+        <sup class="currency font-weight-light text-uppercase">
+          {{
+            payment.asset_code || ((payment.asset_type === 'native') 
+            ? 'xlm' 
+            : payment.asset_type)
+          }}
+        </sup>
+      </v-list-item-subtitle>
+    </v-list-item-content>
+  </v-list-item>
+  <v-divider />
+</div>

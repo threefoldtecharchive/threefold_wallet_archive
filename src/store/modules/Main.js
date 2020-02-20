@@ -16,9 +16,10 @@ export default {
   },
   actions: {
     initializeSingleAccount: async function (
-      { commit },
+      { dispatch, commit },
       { pkidAccount, seedPhrase, type }
     ) {
+      commit('addAccountThombstone', pkidAccount.walletName);
       const index = pkidAccount.index ? pkidAccount.index : 0;
       if (!pkidAccount.stellar) {
         await convertTfAccount(seedPhrase, 1, index);
@@ -30,6 +31,9 @@ export default {
         seedPhrase,
         position: pkidAccount.position,
       });
+      commit('removeAccountThombstone', pkidAccount.walletName);
+      dispatch('fetchPayments', account.id);
+
       commit('addAccount', account);
     },
     initializePkidAppAccounts: async ({ dispatch, commit }, seedPhrase) => {

@@ -1,4 +1,4 @@
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 import router from '../../router';
 
 export default {
@@ -19,7 +19,8 @@ export default {
   },
   mounted () {},
   methods: {
-    ...mapActions(['generateAppAccount', 'setPkidAppAccounts']),
+    ...mapMutations(['removeAppAccount']),
+    ...mapActions(['generateAppAccount', 'setPkidAppAccounts', 'syncAccounts']),
     createWallet () {
       this.generateAppAccount(
         `dev wallet #${Math.random()
@@ -27,8 +28,9 @@ export default {
           .substr(2, 5)}`
       );
     },
-    ResetAppWallets () {
-      this.setPkidAppAccounts([
+    async ResetAppWallets () {
+      this.removeAppAccount();
+      await this.setPkidAppAccounts([
         {
           walletName: 'daily',
           position: 0,
@@ -42,9 +44,10 @@ export default {
         {
           walletName: 'extra',
           position: 2,
-          index: 3,
+          index: 2,
         },
       ]);
+      await this.syncAccounts();
     },
   },
 };
