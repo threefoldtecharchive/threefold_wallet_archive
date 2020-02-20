@@ -381,7 +381,7 @@ export var TFChainNetworkType =  __class__ ('TFChainNetworkType', [NetworkType],
 		else {
 		}
 		if (self.__eq__ (TFChainNetworkType.STANDARD)) {
-			return ['https://explorer.threefoldtoken.com', 'https://explorer2.threefoldtoken.com', 'https://explorer3.threefoldtoken.com'];
+			return ['https://explorer.threefoldtoken.com', 'https://explorer2.threefoldtoken.com' /*, 'https://explorer3.threefoldtoken.com'*/];
 		}
 		if (self.__eq__ (TFChainNetworkType.TESTNET)) {
 			return ['https://explorer.testnet.threefoldtoken.com', 'https://explorer2.testnet.threefoldtoken.com'];
