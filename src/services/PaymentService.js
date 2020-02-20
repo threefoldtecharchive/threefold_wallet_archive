@@ -73,7 +73,7 @@ export const mapPayment = ({
   return {
     id,
     amount,
-    created_at,
+    created_at: new Date(created_at),
     from,
     to,
     asset_type,
@@ -90,7 +90,6 @@ export const fetchPayments = async id => {
     .call();
 
   const rawPayments = paymentPayloadObj.records;
-  console.log(rawPayments);
 
   const mappedPaymentsPromises = rawPayments
     .filter(p => p.type === 'payment')

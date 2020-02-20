@@ -54,7 +54,6 @@ export default {
     async getPkidAppAccounts (context) {
       const client = context.getters.client;
       const data = await client.getDoc(client.keyPair.publicKey, 'wallets');
-      console.log('app data', data);
 
       if (!data.success) {
         if (404 == data.status) {
@@ -75,7 +74,6 @@ export default {
         client.keyPair.publicKey,
         'imported_accounts'
       );
-      console.log('data', data);
 
       if (!data.success) {
         if (data.status === 404) {

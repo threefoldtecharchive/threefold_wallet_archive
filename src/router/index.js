@@ -67,20 +67,22 @@ const routes = [
       history: 'details',
     },
     component: Transfer,
-  }, //, {
-  //   path: '/walletinfo/:wallet',
-  //   name: 'walletinfo',
+  },
+  {
+    path: '/walletinfo/:wallet',
+    name: 'walletinfo',
 
-  //   meta: {
-  //     accent: 'accent',
-  //     transfer: 'transfer',
-  //     info: {
-  //       title: 'wallet info',
-  //       text: 'this is info'
-  //     }
-  //   },
-  //   component: () => import(/* webpackChunkName: "history-page" */ './views/walletinfo')
-  // }, {
+    meta: {
+      accent: 'accent',
+      transfer: 'transfer',
+      info: {
+        title: 'wallet info',
+        text: 'this is info',
+      },
+    },
+    component: () =>
+      import(/* webpackChunkName: "wallet-info" */ '../views/WalletInfo'),
+  }, // {
   //   path: '/profile',
   //   name: 'profile',
   //   meta: {

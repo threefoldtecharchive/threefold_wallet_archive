@@ -29,17 +29,21 @@ export default {
       default: () => {},
     },
   },
-  mounted() {},
+  mounted () {},
   computed: {
     ...mapGetters(['fee']),
-    amount() {
+    amount () {
+      console.log(
+        (Number(this.formObject.amount) + Number(this.fee)).toFixed(2)
+      );
+
       if (this.$route.query.tab == 'receive') {
         return Number(this.formObject.amount).toFixed(2);
       }
 
       return (Number(this.formObject.amount) + Number(this.fee)).toFixed(2);
     },
-    toAccountIsOwn() {
+    toAccountIsOwn () {
       return this.accounts.find(
         x => x.id.toLowerCase() == this.formObject.to.address.toLowerCase()
       );

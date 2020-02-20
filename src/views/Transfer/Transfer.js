@@ -102,7 +102,7 @@ export default {
         sourceKeyPair: this.selectedAccount.keyPair,
         destination: this.formObject.to.address,
         message: this.formObject.message,
-        amount: this.formObject.amount,
+        amount: this.formObject.amount.toFixed(3),
       };
 
       console.log(transactiondata);
