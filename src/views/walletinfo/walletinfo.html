@@ -1,11 +1,21 @@
 <section class="home fill-height">
     <v-col fill-height>
+
+
+        <div>
+            <p class="mb-0 subtitle-2">Address</p>
+            <p style="color: #9b9b9b; word-break: break-all ">{{wallet.address}}</p>
+        </div>
+
+        <div v-if="canShowSeed()">
+            <p class="mb-0 subtitle-2">Seed phrase</p>
+            <p style="color: #9b9b9b;">{{seed}}</p>
+        </div>
+
+   
         <v-text-field v-model="walletName" :error-messages="walletNameErrors" @input="walletNameErrors = []"
-            class="red--text" label="Wallet name"></v-text-field>
-
-        <v-textarea v-if="canShowSeed()" v-model="seed" label="Seed phrase" disabled>
-        </v-textarea>
-
+        class="red--text" label="Wallet name"></v-text-field>
+ 
         <v-btn class="accent mb-1" @click="changeName()" style="width: 100%;">
             Change wallet name
         </v-btn>
