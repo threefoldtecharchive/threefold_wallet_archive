@@ -59,7 +59,7 @@ const routes = [{
         component: Details,
     },
     {
-        path: '/transfer/:account',
+        path: '/transfer/:account?',
         name: 'transfer',
         meta: {
             accent: 'accent',
