@@ -6146,6 +6146,11 @@ js-yaml@^3.13.0, js-yaml@^3.13.1, js-yaml@^3.9.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
+jsbi@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-3.1.1.tgz#8ea18b3e08d102c6cc09acaa9a099921d775f4fa"
+  integrity sha512-+HQESPaV0mRiH614z4JPVPAftcRC2p53x92lySPzUzFwJbJTMpzHz8OYUkcXPN3fOcHUe0NdVcHnCtX/1+eCrA==
+
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
@@ -6824,10 +6829,12 @@ mkdirp@0.5.1, mkdirp@0.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1, mkdirp@~0
   dependencies:
     minimist "0.0.8"
 
-mnemonicconversion2924@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/mnemonicconversion2924/-/mnemonicconversion2924-1.1.1.tgz#b65bb3ce3bac32ff33a75dc40735d38a4bebca60"
-  integrity sha512-crMeymTa860wcLUR9x6OGu05VYXRFq7P8Oh5BHQ78ze3dylKVETzrnVgnA0YKUVx4hrXYZQBghcLlVbWxIHlfg==
+mnemonicconversion2924@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/mnemonicconversion2924/-/mnemonicconversion2924-1.1.2.tgz#f71cfc10f9578c6dfeb0a0bc5d63a1450e6b6478"
+  integrity sha512-Lll1on7VZOnjDQd1XPFMfMRPrOtiwbspfptpAILPxpaIwC84dAnjRAvAPaNsI1asp/UpReaJQnwawDzgQ0oYoQ==
+  dependencies:
+    jsbi "^3.1.1"
 
 moment@^2.19.2, moment@^2.24.0:
   version "2.24.0"
