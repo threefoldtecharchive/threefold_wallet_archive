@@ -7,20 +7,21 @@
           <h2 class="mt-5">
             Importing wallets...
           </h2>
+          <p v-if="loadingScreenText">{{loadingScreenText}}</p>
         </v-col>
       </v-row>
     </div>
-    <toolbar @ctaClicked='handleCTAClick' @enableQrScannerDialog/>
+    <toolbar @ctaClicked='handleCTAClick' @enableQrScannerDialog />
     <v-content class="mt-0">
       <v-container class="pb-0 pt-2 px-1 content fill-height" style="overflow: hidden;" justify-start>
         <router-view />
       </v-container>
     </v-content>
-    <bottomNav/>
+    <bottomNav />
     <!-- <editWallet :show='showEditWalletDialog' @ctaClicked='handleCTAClick' ></editWallet> -->
     <v-snackbar :value="!!informationMessage" top :timeout="hideSnackbarTimeout">
       {{ informationMessage }}
     </v-snackbar>
-    <copyDialog/>
+    <copyDialog />
   </v-app>
 </section>

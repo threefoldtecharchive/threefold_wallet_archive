@@ -12,8 +12,7 @@ export default {
     copyDialog,
     editWallet
   },
-  mounted () {
-  },
+  mounted () {},
   data () {
     return {
       showCreateWalletDialog: false,
@@ -25,7 +24,8 @@ export default {
     ...mapGetters([
       'informationMessage',
       'fatalError',
-      'isImportingWallet'
+      'isImportingWallet',
+      'loadingScreenText'
     ]),
     cssProps () {
       return {
@@ -49,11 +49,10 @@ export default {
         // if (data) this.createWallet(data)
       }
       // if (this.$route.name === 'history') {
-        // this.showEditWalletDialog = !this.showEditWalletDialog
-        // if (data) this.createWallet(data)
+      // this.showEditWalletDialog = !this.showEditWalletDialog
+      // if (data) this.createWallet(data)
       // }
     }
-
   },
   watch: {
     informationMessage (val) {

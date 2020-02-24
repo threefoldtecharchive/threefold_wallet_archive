@@ -1,9 +1,10 @@
-export default({
+export default {
   state: {
     informationMessage: null,
     fatalError: null,
     submitDisabled: true,
-    isImportingWallet: false
+    isImportingWallet: false,
+    loadingScreenText: ''
   },
   actions: {
     setInformationMessage (context, message) {
@@ -22,11 +23,15 @@ export default({
     },
     setImportingWallets: (state, isLoading) => {
       state.isImportingWallet = isLoading
+    },
+    setLoadingScreenText: (state, text) => {
+      state.loadingScreenText = text
     }
   },
   getters: {
-    informationMessage: (state) => state.informationMessage,
-    fatalError: (state) => state.fatalError,
-    isImportingWallet: (state) => state.isImportingWallet
+    informationMessage: state => state.informationMessage,
+    fatalError: state => state.fatalError,
+    isImportingWallet: state => state.isImportingWallet,
+    loadingScreenText: state => state.loadingScreenText
   }
-})
+}

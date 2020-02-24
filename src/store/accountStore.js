@@ -10,7 +10,7 @@ export default {
     wallets: []
   },
   actions: {
-    async generateTfAccount(context, userData) {
+    async generateTfAccount (context, userData) {
       let tfAccount = new tfchain.Account(
         `tft:${userData.doubleName}`,
         userData.doubleName,
@@ -31,6 +31,10 @@ export default {
       }
 
       for (const wallet of appWallets || []) {
+        context.commit(
+          'setLoadingScreenText',
+          `importing wallet: ${wallet.walletName}`
+        )
         await tfAccount.wallet_new(wallet.walletName, wallet.index, 1)
       }
 
@@ -140,6 +144,11 @@ export default {
       }
 
       for (const wallet of importedWallets || []) {
+        context.commit(
+          'setLoadingScreenText',
+          `importing wallet: ${wallet.walletName}`
+        )
+
         wallet.seed = new Uint8Array(wallet.seed)
         await context.dispatch('importWallet', wallet)
       }
@@ -157,7 +166,9 @@ export default {
           const locked = wallet.balance.coins_locked.greater_than(0)
             ? wallet.balance.coins_locked.str({ precision: 3 })
             : null
-          const unconfirmed = wallet.balance.unconfirmed_coins_total.str({ precision: 3 })
+          const unconfirmed = wallet.balance.unconfirmed_coins_total.str({
+            precision: 3
+          })
           return {
             name: wallet.wallet_name,
             address: wallet.address,
