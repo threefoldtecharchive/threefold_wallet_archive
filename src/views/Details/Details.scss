@@ -1,14 +1,14 @@
 header {
-    background: lighten( #2d4052, 20);
-    color: white;
+  background: lighten(#2d4052, 20);
+  color: white;
 }
 
 span {
-    font-size: 2.4vw;
+  font-size: 2.4vw;
 }
 
 @media screen and (min-width: 960px) {
-    span {
-        font-size: 23px;
-    }
+  span {
+    font-size: 23px;
+  }
 }
