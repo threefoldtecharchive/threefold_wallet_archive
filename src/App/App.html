@@ -1,4 +1,5 @@
 <section class="app">
+  <div class="banner" v-if='!isProduction'>staging</div>
   <Loader v-if="isAppLoading" />
   <v-app :style="cssProps">
     <toolbar />

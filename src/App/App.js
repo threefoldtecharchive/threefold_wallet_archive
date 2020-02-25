@@ -3,6 +3,7 @@ import bottomNav from '../components/bottomNav';
 import copyDialog from '../components/copydialog';
 import Loader from '../components/Loader';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
+import config from '../../public/config';
 
 export default {
   name: 'app',
@@ -29,6 +30,9 @@ export default {
         '--gold-color': this.$vuetify.theme.themes.light.gold,
         '--active-color': this.$vuetify.theme[this.$route.meta.accent],
       };
+    },
+    isProduction () {
+      return config.isProduction;
     },
   },
   methods: {
