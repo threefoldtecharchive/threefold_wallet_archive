@@ -1,4 +1,4 @@
-import config from '../public/config';
+import config from '../../public/config';
 import StellarSdk from 'stellar-sdk';
 // let destinationId = 'GBTJEFDDMA5N4TDBFLJGA6K3MQFNHR2KUUFYAKYCOAEE43JD4CP3UTQC';
 export const doPayment = ({ sourceKeyPair, destination, amount, message }) => {
