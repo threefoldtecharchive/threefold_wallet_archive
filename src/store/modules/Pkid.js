@@ -35,7 +35,6 @@ export default {
         importedAccounts
       );
       await Promise.all([appPromise, importedPromise]);
-      console.log('saved to pkid');
     },
     async setPkidAppAccounts ({ getters }, accounts) {
       // wallets key for historic reasons
@@ -48,7 +47,6 @@ export default {
       const keyPair = sodium.crypto_sign_seed_keypair(seed);
 
       const client = new Pkid(config.pkidUrl, keyPair);
-      console.log('client: ', client);
       context.commit('setPkidClient', client);
     },
     async getPkidAppAccounts (context) {
