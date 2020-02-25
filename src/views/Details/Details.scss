@@ -5,6 +5,13 @@ header {
 
 span {
     font-size: 2.4vw;
+    word-break: break-all
+}
+
+@media screen and (max-width: 600px) {
+    span {
+        font-size: 0.875rem;
+    }
 }
 
 @media screen and (min-width: 960px) {
