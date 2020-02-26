@@ -49,5 +49,14 @@ export default {
       ]);
       await this.syncAccounts();
     },
+    errorScreen () {
+      this.$router.push({
+        name: 'error screen',
+        params: {
+          reason: 'Testing error screen',
+          fix: 'There is no fix',
+        },
+      });
+    },
   },
 };

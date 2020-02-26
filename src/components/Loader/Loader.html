@@ -1,3 +1,6 @@
 <v-overlay class="overlay">
-  <v-progress-circular indeterminate color="amber" size=100></v-progress-circular>
+  <v-progress-circular indeterminate color="amber" size="100"></v-progress-circular>
+  <div class="title">{{loadingTitle}}</div>
+  <div class="subtitle">{{loadingSubTitle}}</div>
+  <div @click="addDevClick" class="devv"></div>
 </v-overlay>

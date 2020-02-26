@@ -7,6 +7,7 @@ import Details from '@/views/Details';
 import Transfer from '@/views/Transfer';
 import DevView from '@/views/DevView';
 import store from '../store';
+import errorScreen from '@/views/errorScreen';
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,15 @@ const routes = [
       accent: 'accent',
     },
     component: DevView,
+  },
+  {
+    path: '/errorscreen:reason:fix',
+    name: 'error screen',
+    meta: {
+      title: 'Error Screen',
+      accent: 'accent',
+    },
+    component: errorScreen,
   },
   {
     path: '/addwallet',
