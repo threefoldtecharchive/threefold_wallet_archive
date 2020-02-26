@@ -1,6 +1,6 @@
 <div class="fill-height error-screen">
   <section>
     <p><b>Error:</b> {{reason}}</p>
-    <p><b>Fix:</b> {{fix}}</p>
+    <p><b v-if="showFix">Fix:</b> {{fix}}</p>
   </section>
 </div>

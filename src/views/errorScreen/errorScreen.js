@@ -8,11 +8,18 @@ export default {
       fix: null,
     };
   },
-  computed: {},
+  computed: {
+    showFix() {
+      return this.$route.params.fix;
+    },
+  },
   mounted () {},
   methods: {},
   beforeMount () {
     this.reason = this.$route.params.reason;
-    this.fix = this.$route.params.fix;
+    if(!this.reason){
+      this.reason = "This is a fatal error";
+    }
+    this.fix = this.$route.params.fix
   },
 };
