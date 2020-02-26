@@ -13,8 +13,8 @@ export default {
     copyDialog,
     Loader,
   },
-  mounted () {},
-  data () {
+  mounted() {},
+  data() {
     return {
       showCreateWalletDialog: false,
       showEditWalletDialog: false,
@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     ...mapGetters(['isImportingWallet', 'devClicks', 'isAppLoading']),
-    cssProps () {
+    cssProps() {
       return {
         '--primary-color': this.$vuetify.theme.themes.light.primary,
         '--accent-color': this.$vuetify.theme.themes.light.accent,
@@ -31,8 +31,20 @@ export default {
         '--active-color': this.$vuetify.theme[this.$route.meta.accent],
       };
     },
-    isProduction () {
+    isProduction() {
       return config.isProduction;
+    },
+    showLoader() {
+      if (!this.isAppLoading) {
+        return false;
+      }
+      if (
+        this.$route.name === 'devview' ||
+        this.$route.name === 'error screen'
+      ) {
+        return false;
+      }
+      return true;
     },
   },
   methods: {
@@ -44,21 +56,21 @@ export default {
     ...mapMutations(['resetDevClicks']),
   },
   watch: {
-    informationMessage (val) {
+    informationMessage(val) {
       if (val) {
         setTimeout(() => {
           this.setInformationMessage('');
         }, this.hideSnackbarTimeout);
       }
     },
-    fatalError (val) {
+    fatalError(val) {
       console.error(`ERROR`, val);
       this.$router.push({
         name: 'error',
         query: { msg: val },
       });
     },
-    devClicks (val) {
+    devClicks(val) {
       if (val < 5) {
         return;
       }
@@ -66,7 +78,7 @@ export default {
         name: 'devview',
       });
     },
-    $route (to, from) {
+    $route(to, from) {
       this.resetDevClicks();
     },
   },
