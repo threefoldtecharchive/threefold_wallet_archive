@@ -1,7 +1,7 @@
 export default {
   state: {
-    loadingTitle: 'a title',
-    loadingSubTitle: 'with a subtitle',
+    loadingTitle: null,
+    loadingSubTitle: null,
   },
   mutations: {
     setLoadingMessage(state, { message, additional }) {
