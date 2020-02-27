@@ -59,7 +59,7 @@ export default {
         v => !!v && Number(v) > 0 || 'The amount must be greater than 0'
       ]
       if (['send', 'deregister', 'register'].some(x => x === this.$route.query.tab)) {
-        rules.push(v => !!v && Number(v) <= Number((this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount.replace(",", "") - 0.10).toFixed(9)) || 'Your balance is insufficient')
+        rules.push(v => !!v && Number(v) <= Number((this.wallets.find(x => x.address == this.selectedWallet.address).totalAmount.replace(/,/g, "") - 0.10).toFixed(9)) || 'Your balance is insufficient')
       }
       return rules
     },
