@@ -1,5 +1,5 @@
 export default () => {
-    if (navigator.userAgent.toLowerCase().indexOf("iphone") == -1) {
+    if (navigator.userAgent.toLowerCase().indexOf("iphone") !== -1) {
         return;
     }
     if (document.getElementById('webview_copy') == null) {
@@ -25,6 +25,14 @@ export default () => {
     #cbh-custom-menu li {
         height: 4em;
         padding: 5px 10px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 4em;
+        border-bottom: #00000021 solid 1px;
+    }
+
+    #cbh-custom-menu li:last-child {
+        border-bottom: 0;
     }
 
     #cbh-custom-menu li:hover {
@@ -64,12 +72,12 @@ export default () => {
             webview_selected_item = evt.path[0];
             webview_copy_value = window.getSelection().toString();
             let cbh_menu = document.getElementById('cbh-custom-menu');
-            cbh_menu.style.top = `${evt.clientY}px`;
-            cbh_menu.style.left = `${evt.clientX}px`;
-            if (window.innerHeight - 100 < evt.clientY) {
+            cbh_menu.style.top = `calc(${evt.clientY}px - 4em)`;
+            cbh_menu.style.left = `calc(${evt.clientX}px - 100px)`;
+            if (window.innerHeight - 200 < evt.clientY) {
                 cbh_menu.style.top = `${evt.clientY - 100}px`;
             }
-            if (window.innerHeight - 100 < evt.clientX) {
+            if (window.innerWidth - 100 < evt.clientX) {
                 cbh_menu.style.left = `${evt.clientX - 120}px`;
             }
 
