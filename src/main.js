@@ -4,6 +4,7 @@ import store from './store/'
 import router from './router'
 import vuetify from './plugins/vuetify'
 import moment from 'moment'
+import clipboardHack from './lib/clipboardhack'
 Vue.config.productionTip = false
 
 
@@ -28,6 +29,7 @@ Vue.filter(
 new Vue({
   store,
   el: '#app',
+  created: function () {clipboardHack(); } ,
   vuetify,
   router,
   render: h => h(App)

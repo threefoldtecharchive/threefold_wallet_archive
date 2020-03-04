@@ -1,5 +1,4 @@
-
-window.onload = function() {
+export default () => {
     if (document.getElementById('webview_copy') == null) {
         console.log("Adding clipboard hack");
         let cbh_css = `
@@ -51,7 +50,7 @@ window.onload = function() {
 
         var webview_copy_value = '';
         var webview_selected_item = {};
-        window.addEventListener('click', function (e) {
+        window.addEventListener('click', function () {
             let cbh_menu = document.getElementById('cbh-custom-menu');
             cbh_menu.style.display = 'none';
 
@@ -76,7 +75,7 @@ window.onload = function() {
 
         document.getElementById('webview_copy').onclick = function () {
 
-            window.flutter_inappwebview.callHandler('COPY', webview_copy_value).then(function (result) {
+            window.flutter_inappwebview.callHandler('COPY', webview_copy_value).then(function () {
 
             });
         }
@@ -91,4 +90,6 @@ window.onload = function() {
 
 
     }
+
+
 }
