@@ -1,4 +1,7 @@
 export default () => {
+    if (navigator.userAgent.toLowerCase().indexOf("iphone") == -1) {
+        return;
+    }
     if (document.getElementById('webview_copy') == null) {
         console.log("Adding clipboard hack");
         let cbh_css = `
@@ -11,7 +14,8 @@ export default () => {
         background-color: #fff;
         border: 1px solid #ddd;
         overflow: hidden;
-        width: 120px;
+        width: 200px;
+        vertical-align: center;
         white-space: nowrap;
         font-family: sans-serif;
         box-shadow: 2px 2px 7px 0px rgba(50, 50, 50, 0.5);
@@ -19,7 +23,7 @@ export default () => {
     }
 
     #cbh-custom-menu li {
-
+        height: 4em;
         padding: 5px 10px;
     }
 
@@ -62,11 +66,11 @@ export default () => {
             let cbh_menu = document.getElementById('cbh-custom-menu');
             cbh_menu.style.top = `${evt.clientY}px`;
             cbh_menu.style.left = `${evt.clientX}px`;
-            if (window.innerHeight - 50 < evt.clientY) {
-                cbh_menu.style.top = `${evt.clientY - 50}px`;
+            if (window.innerHeight - 100 < evt.clientY) {
+                cbh_menu.style.top = `${evt.clientY - 100}px`;
             }
-            if (window.innerHeight - 50 < evt.clientX) {
-                cbh_menu.style.left = `${evt.clientX - 70}px`;
+            if (window.innerHeight - 100 < evt.clientX) {
+                cbh_menu.style.left = `${evt.clientX - 120}px`;
             }
 
             cbh_menu.style.display = 'block';
