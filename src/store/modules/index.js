@@ -1,10 +1,15 @@
-import camelCase from 'lodash/camelCase';
-const files = require.context('.', false, /\.js$/);
-const modules = {};
+import accounts from './Accounts';
+import dev from './Dev';
+import load from './Load';
+import main from './Main';
+import payments from './Payments';
+import pkid from './Pkid';
 
-files.keys().forEach(fileName => {
-  if (fileName === './index.js') return;
-  const moduleName = camelCase(fileName.replace(/(\.\/|\.js)/g, ''));
-  modules[moduleName] = files(fileName).default;
-});
-export default modules;
+export default {
+  accounts,
+  dev,
+  load,
+  main,
+  payments,
+  pkid,
+};

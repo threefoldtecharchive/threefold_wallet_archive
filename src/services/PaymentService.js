@@ -2,7 +2,7 @@ import config from '../../public/config';
 import StellarSdk from 'stellar-sdk';
 // let destinationId = 'GBTJEFDDMA5N4TDBFLJGA6K3MQFNHR2KUUFYAKYCOAEE43JD4CP3UTQC';
 export const doPayment = ({ sourceKeyPair, destination, amount, message }) => {
-  const server = new StellarSdk.Server(config.serverUrl);
+  const server = new StellarSdk.Server(config.stellarServerUrl);
   // Transaction will hold a built transaction we can resubmit if the result is unknown.
   let transaction;
 
@@ -85,7 +85,7 @@ export const mapPayment = ({
 };
 
 export const fetchPayments = async id => {
-  const server = new StellarSdk.Server(config.serverUrl);
+  const server = new StellarSdk.Server(config.stellarServerUrl);
   const paymentPayloadObj = await server
     .payments()
     .forAccount(id)

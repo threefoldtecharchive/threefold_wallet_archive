@@ -7,8 +7,15 @@ import sodium from 'libsodium-wrappers';
 import filters from './utils/filters';
 import '@fortawesome/fontawesome-free/css/all.css';
 import global from './components/global';
+import config from '../public/config';
 
-async function startVueApp() {
+const initializeStellarCryptoConfig = () => {
+  window.stellarServerUrl = config.stellarServerUrl;
+  window.stellarNetwork = config.stellarNetwork;
+  window.tftIssuer = config.tftIssuer;
+};
+
+async function startVueApp () {
   Vue.config.productionTip = false;
 
   await sodium.ready;
@@ -16,6 +23,7 @@ async function startVueApp() {
   Vue.use(filters);
   Vue.use(global);
 
+  initializeStellarCryptoConfig();
   new Vue({
     filters,
     router,
