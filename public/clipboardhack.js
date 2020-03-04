@@ -1,4 +1,5 @@
-document.load = function() {
+
+window.onload = function() {
     if (document.getElementById('webview_copy') == null) {
         console.log("Adding clipboard hack");
         let cbh_css = `
