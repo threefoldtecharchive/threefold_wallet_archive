@@ -82,7 +82,9 @@ export default () => {
         document.getElementById('webview_paste').onclick = function () {
 
             window.flutter_inappwebview.callHandler('PASTE', webview_copy_value).then(function (result) {
-                webview_selected_item.innerText += result;
+
+                webview_selected_item.value += result;
+                document.execCommand("insertAdjacentHTML", false, result);
             });
         }
 
