@@ -1,10 +1,14 @@
 <section class="app">
-  <div class="banner" v-if='!isProduction'>staging</div>
-  <Loader v-if="isAppLoading" />
+  <div class="banner" v-if="!isProduction">staging</div>
+  <Loader v-if="showLoader" />
   <v-app :style="cssProps">
     <toolbar />
     <v-content class="mt-0">
-      <v-container class="pa-0 content fill-height" style="overflow: hidden;" justify-start>
+      <v-container
+        class="pa-0 content fill-height"
+        style="overflow: hidden;"
+        justify-start
+      >
         <router-view />
       </v-container>
     </v-content>

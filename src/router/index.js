@@ -42,7 +42,7 @@ const routes = [
     component: DevView,
   },
   {
-    path: '/errorscreen:reason:fix',
+    path: '/errorscreen:reason?:fix?',
     name: 'error screen',
     meta: {
       title: 'Error Screen',
