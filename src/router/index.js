@@ -92,62 +92,7 @@ const routes = [
     },
     component: () =>
       import(/* webpackChunkName: "wallet-info" */ '../views/WalletInfo'),
-  }, // {
-  //   path: '/profile',
-  //   name: 'profile',
-  //   meta: {
-  //     accent: 'accent'
-  //   },
-  //   component: () => import(/* webpackChunkName: "profile-page" */ './views/profile')
-  // },  {
-  //   path: '/settings',
-  //   name: 'settings',
-  //   meta: {
-  //     accent: 'accent'
-  //   },
-  //   component: () => import(/* webpackChunkName: "settings-page" */ './views/settings')
-  // }, {
-  //   path: '/transfer',
-  //   name: 'transfer',
-  //   meta: {
-  //     accent: 'accent',
-  //     overview: 'home',
-  //     history: 'details',
-  //     info: {
-  //       title: 'one hell of a title',
-  //       text: 'this is info'
-  //     }
-  //   },
-  //   component: () => import(/* webpackChunkName: "transfer-page" */ './views/transfer')
-  // }, {
-  //   path: '/login',
-  //   name: 'login',
-  //   meta: {
-  //     accent: 'accent'
-  //   },
-  //   component: () => import(/* webpackChunkName: "login-page" */ './views/login')
-  // }, {
-  //   path: '/Init',
-  //   name: 'Init',
-  //   meta: {
-  //     title: 'Initialize',
-  //     accent: 'accent'
-  //   },
-  //   component: () => import(/* webpackChunkName: "Init-page" */ './views/Init')
-  // }, {
-  //   path: '/error',
-  //   name: 'error',
-  //   meta: {
-  //     accent: 'accent'
-  //   },
-  //   component: () => import(/* webpackChunkName: "error-page" */ './views/errorpage')
-  // }, {
-  //   path: '*',
-  //   redirect: '404',
-  //   meta: {
-  //     accent: 'accent'
-  //   }
-  // }
+  },
 ];
 
 const router = new VueRouter({

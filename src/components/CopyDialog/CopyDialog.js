@@ -1,6 +1,6 @@
 import copy from 'clipboard-copy';
 export default {
-  name: 'copydialog',
+  name: 'CopyDialog',
   components: {},
   props: [],
   data() {

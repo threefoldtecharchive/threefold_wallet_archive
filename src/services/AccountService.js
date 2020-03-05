@@ -51,6 +51,7 @@ export const fetchAccount = async ({
     keyPair,
   });
 };
+
 async function generateAndFetchAccount(keyPair) {
   try {
     await generateAccount(keyPair);

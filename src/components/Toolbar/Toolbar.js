@@ -2,7 +2,7 @@ import { mapGetters, mapMutations } from 'vuex';
 import router from '../../router';
 export default {
   components: {},
-  name: 'toolbar',
+  name: 'Toolbar',
   props: [],
   data () {
     return {

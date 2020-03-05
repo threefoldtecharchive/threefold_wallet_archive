@@ -2,7 +2,7 @@
   <div class="banner" v-if="!isProduction">staging</div>
   <Loader v-if="showLoader" />
   <v-app :style="cssProps">
-    <toolbar />
+    <Toolbar />
     <v-content class="mt-0">
       <v-container
         class="pa-0 content fill-height"
@@ -12,7 +12,7 @@
         <router-view />
       </v-container>
     </v-content>
-    <bottomNav />
-    <copyDialog />
+    <BottomNavigation />
+    <CopyDialog />
   </v-app>
 </section>

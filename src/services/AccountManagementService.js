@@ -7,15 +7,19 @@ export const isImportedWallet = wallet => {
   }
   return true;
 };
+
 export const canRemoveWallet = wallet => {
   return isImportedWallet(wallet);
 };
+
 export const canShowSeed = wallet => {
   return isImportedWallet(wallet);
 };
+
 export const walletNameFound = (name, accounts) => {
   return accounts.find(x => x.name === name);
 };
+
 export const importedSeedFound = (seed, accounts) => {
   return accounts.find(x => x.toString() === seed.toString());
 };

@@ -1,6 +1,6 @@
-import toolbar from '../components/toolbar';
-import bottomNav from '../components/bottomNav';
-import copyDialog from '../components/copydialog';
+import Toolbar from '../components/Toolbar';
+import BottomNavigation from '../components/BottomNavigation';
+import CopyDialog from '../components/CopyDialog';
 import Loader from '../components/Loader';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import config from '../../public/config';
@@ -8,9 +8,9 @@ import config from '../../public/config';
 export default {
   name: 'app',
   components: {
-    toolbar,
-    bottomNav,
-    copyDialog,
+    Toolbar,
+    BottomNavigation,
+    CopyDialog,
     Loader,
   },
   mounted() {},
