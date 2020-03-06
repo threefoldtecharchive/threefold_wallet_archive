@@ -4,7 +4,7 @@ export const formatBalanceHumanReadable = value => {
   if (!value) {
     return;
   }
-  const number = Math.round(value / 10) / 1000;
+  const number = Math.round(value / 10)*10;
 
   // what tier? (determines SI symbol)
   const tier = (Math.log10(number) / 3) | 0;
@@ -28,6 +28,6 @@ export const formatBalance = value => {
   if (!value) {
     return;
   }
-  const number = Math.round(value / 10) / 1000;
-  return number;
+  const number = Math.round(value / 10)*10;
+  return number.toFixed(3);
 };

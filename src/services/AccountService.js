@@ -1,6 +1,6 @@
 import { keypairFromAccount } from '@jimber/stellar-crypto/dist/service/cryptoService';
 import {
-  loadAcount,
+  loadAccount,
   generateAccount,
 } from '@jimber/stellar-crypto/dist/service/stellarService';
 import { mnemonicToEntropy } from 'bip39';
@@ -32,9 +32,13 @@ export const fetchAccount = async ({
   position,
 }) => {
   const keyPair = keypairFromAccount(seedPhrase, index);
+  console.log(seedPhrase);
+  console.log(index);
+  console.log(keyPair.publicKey());
+  
   let accountResponse;
   try {
-    accountResponse = await loadAcount(keyPair);
+    accountResponse = await loadAccount(keyPair);
   } catch (e) {
     if (e.message !== 'Not Found') {
       throw Error('Something went wrong while fetching account');
@@ -55,8 +59,8 @@ export const fetchAccount = async ({
 async function generateAndFetchAccount(keyPair) {
   try {
     await generateAccount(keyPair);
-    return await loadAcount(keyPair);
   } catch (e) {
     throw Error('Something went wrong while generating account');
   }
+  return await loadAcount(keyPair);
 }

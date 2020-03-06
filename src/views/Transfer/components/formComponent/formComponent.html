@@ -5,7 +5,7 @@
     </v-text-field>
 
     <v-text-field dense label="Amount" v-on:input="formObject.amount = $event * 10000;" type="number" min="0.00"
-      :rules="amountRules" class="inputNumber mb-0" clearable suffix="tft">
+      :rules="amountRules" class="inputNumber mb-0" clearable suffix="TFT">
     </v-text-field>
 
     <v-text-field label="Message" v-model="formObject.message" :rules="messageRules" :counter="maxMessageLength"

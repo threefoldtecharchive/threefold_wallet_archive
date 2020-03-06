@@ -55,7 +55,7 @@ const routes = [
     name: 'addwallet',
     meta: {
       accent: 'accent',
-      title: 'import/create wallet',
+      title: 'import wallet',
     },
     component: createWallet,
   },

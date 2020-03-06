@@ -2,6 +2,7 @@ import { fetchAccount } from '../../services/AccountService';
 import { entropyToMnemonic } from 'bip39';
 import { convertTfAccount } from '@jimber/stellar-crypto';
 import StellarSdk from 'stellar-sdk';
+import axios from 'axios';
 
 export default {
   state: {
@@ -15,14 +16,19 @@ export default {
     appLoadingStack: 0,
   },
   actions: {
-    initializeSingleAccount: async function (
+    initializeSingleAccount: async function(
       { dispatch, commit },
       { pkidAccount, seedPhrase, type }
     ) {
       commit('addAccountThombstone', pkidAccount.walletName);
       const index = pkidAccount.index ? pkidAccount.index : 0;
       if (!pkidAccount.stellar) {
-        await convertTfAccount(seedPhrase, 1, index);
+        try {
+          await convertTfAccount(seedPhrase, 1, index);
+        } catch (error) {
+          axios.get()
+
+        }
       }
       const account = await fetchAccount({
         index: index,
