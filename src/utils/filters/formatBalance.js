@@ -1,10 +1,14 @@
-const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
+const SI_SYMBOL = ['', 'k', 'M', 'B', 'T', 'Qa', 'Qi'];
 
 export const formatBalanceHumanReadable = value => {
   if (!value) {
     return;
   }
-  const number = Math.round(value / 10)*10;
+  const number = Number(value);
+
+  if(number < 10000) {
+    return number.toFixed(2)
+  }
 
   // what tier? (determines SI symbol)
   const tier = (Math.log10(number) / 3) | 0;
@@ -22,12 +26,12 @@ export const formatBalanceHumanReadable = value => {
   const scaled = number / scale;
 
   // format number and add suffix
-  return scaled.toFixed(3) + suffix;
+  return scaled.toFixed(2) + " " + suffix;
 };
+
 export const formatBalance = value => {
   if (!value) {
     return;
   }
-  const number = Math.round(value / 10)*10;
-  return number.toFixed(3);
+  return Number(value).toFixed(3);
 };
