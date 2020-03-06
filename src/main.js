@@ -29,7 +29,17 @@ Vue.filter(
 new Vue({
   store,
   el: '#app',
-  created: function () {clipboardHack(); } ,
+  created: function () {
+    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      clipboardHack();
+
+      // They isnt always loaded correctly.
+      setTimeout(function() {
+        clipboardHack();
+      }, 1000)
+    }
+  } ,
   vuetify,
   router,
   render: h => h(App)
