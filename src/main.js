@@ -19,7 +19,7 @@ router.beforeEach((to, from, next) => {
 })
 
 Vue.filter(
-  Vue.filter('formatDate', function(value) {
+  Vue.filter('formatDate', function (value) {
     if (value) {
       return moment(String(value)).format('D MMMM YYYY HH:mm:ss')
     }
@@ -30,16 +30,18 @@ new Vue({
   store,
   el: '#app',
   created: function () {
-    var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-      clipboardHack();
+    clipboardHack();
 
-      // They isnt always loaded correctly.
-      setTimeout(function() {
-        clipboardHack();
-      }, 1000)
-    }
-  } ,
+    // var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    // if (isMobile) {
+    //   clipboardHack();
+
+    //   // They isnt always loaded correctly.
+    //   setTimeout(function() {
+    //     clipboardHack();
+    //   }, 1000)
+    // }
+  },
   vuetify,
   router,
   render: h => h(App)
