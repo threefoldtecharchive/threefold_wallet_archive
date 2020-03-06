@@ -24,7 +24,13 @@
 }
 
 .v-btn--icon.v-size--default .v-icon {
-  font-size: 48px !important;
+  font-size: 5vw !important;
+}
+
+@media screen and (min-width: 1000px) {
+  .v-btn--icon.v-size--default .v-icon {
+    font-size: 50px !important;
+  }
 }
 
 @media screen and (max-width: 500px) {

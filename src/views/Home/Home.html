@@ -5,7 +5,7 @@
         <AccountCard class="px-1 mb-4" clickable v-for="(account, index) in accounts" :key="index" :account="account"
           @click="seeDetails(account)" humanReadable />
       </draggable>
-      <SkelletonAccountCard :name="name" v-for="name in accountThombstones" :key="name" />
+      <SkeletonAccountCard :name="name" v-for="name in accountThombstones" :key="name" />
     </div>
     <div v-if="isLoadingWallets && !isAppLoading" class="fill-height">
       <v-layout justify-center align-center fill-height column>

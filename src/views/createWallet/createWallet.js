@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      tabs: ['import', 'create'],
+      tabs: ['import'], // create is disabled
       currentTab: 'import',
       walletName: null,
       words: null,
@@ -52,7 +52,7 @@ export default {
         this.walletNameErrors.push(walletValidation.message);
         return;
       }
-      this.generateAppAccount(this.walletName);
+      this.generateAppAccount(this.walletName).catch(e => {this.$flashMessage.error('Failed to generate account')});
       this.clearForm();
     },
 
@@ -79,7 +79,7 @@ export default {
       this.generateImportedAccount({
         seedPhrase,
         walletName: this.walletName,
-      });
+      }).catch(e => {this.$flashMessage.error('Failed to import account')})
 
       this.clearForm();
     },

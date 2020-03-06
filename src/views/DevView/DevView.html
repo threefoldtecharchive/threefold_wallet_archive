@@ -1,4 +1,4 @@
-<div class="fill-height">
+<div class="fill-height dev-view">
   <v-tabs grow background-color="indigo" dark>
     <v-tab>
       Data
@@ -10,14 +10,11 @@
         </p>
         <v-card-text>
           <ul>
-            <li>
-              appSeedPhrase : <br>{{appSeedPhrase}}
-            </li>
+            <li>appSeedPhrase : <br />{{appSeedPhrase}}</li>
             <li>
               threeBotName = {{threeBotName}}
             </li>
           </ul>
-
         </v-card-text>
       </v-card>
       <v-card>
@@ -42,7 +39,7 @@
           <p>Resets app wallets</p>
         </v-card-text>
         <v-card-actions>
-          <v-btn dark text color="deep-purple" @click='ResetAppWallets'>
+          <v-btn dark text color="deep-purple" @click="ResetAppWallets">
             Reset
           </v-btn>
         </v-card-actions>
@@ -59,8 +56,21 @@
           </div>
         </v-card-text>
         <v-card-actions>
-          <v-btn dark text color="deep-purple" @click='createWallet'>
+          <v-btn dark text color="deep-purple" @click="createWallet">
             create Wallet
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-card>
+        <v-card-text>
+          <p class="display-1 text--primary">
+            Show error page
+          </p>
+          <p>errorScreen</p>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn dark text color="deep-purple" @click="errorScreen">
+            Error
           </v-btn>
         </v-card-actions>
       </v-card>
