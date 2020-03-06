@@ -14,7 +14,6 @@ export default () => {
         background-color: #fff;
         border: 1px solid #ddd;
         overflow: hidden;
-        width: 200px;
         vertical-align: center;
         white-space: nowrap;
         font-family: sans-serif;
@@ -23,16 +22,17 @@ export default () => {
     }
 
     #cbh-custom-menu li {
-        height: 4em;
-        padding: 5px 10px;
+        height: 1.6em;
         text-align: center;
         vertical-align: middle;
-        line-height: 4em;
-        border-bottom: #00000021 solid 1px;
+        line-height: 1.6em;
+        border-right: #00000021 solid 1px;
+        display: inline-block;
+        padding: 0.4em 1em;
     }
 
     #cbh-custom-menu li:last-child {
-        border-bottom: 0;
+        border-right: 0;
     }
 
     #cbh-custom-menu li:hover {
@@ -68,18 +68,20 @@ export default () => {
 
         }, true);
 
+        function clamp(num, min, max) {
+            return num <= min ? min : num >= max ? max : num;
+        }
+        
         document.addEventListener('contextmenu', function (evt) {
             webview_selected_item = evt.path[0];
             webview_copy_value = window.getSelection().toString();
             let cbh_menu = document.getElementById('cbh-custom-menu');
-            cbh_menu.style.top = `calc(${evt.clientY}px - 4em)`;
-            cbh_menu.style.left = `calc(${evt.clientX}px - 100px)`;
-            if (window.innerHeight - 200 < evt.clientY) {
-                cbh_menu.style.top = `${evt.clientY - 100}px`;
-            }
-            if (window.innerWidth - 100 < evt.clientX) {
-                cbh_menu.style.left = `${evt.clientX - 120}px`;
-            }
+
+            const y = clamp(evt.clientY - 60, 0, window.innerHeight)
+            const x = clamp(evt.clientX - 75, 0, window.innerWidth - 150)
+
+            cbh_menu.style.top = `${y}px`;
+            cbh_menu.style.left = `${x}px`;
 
             cbh_menu.style.display = 'block';
             evt.preventDefault();
