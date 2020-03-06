@@ -7,6 +7,8 @@ import sodium from 'libsodium-wrappers';
 import filters from './utils/filters';
 import '@fortawesome/fontawesome-free/css/all.css';
 import global from './components/global';
+import clipboardHack from './utils/clipboardhack'
+
 import config from '../public/config';
 
 const initializeStellarCryptoConfig = () => {
@@ -15,7 +17,7 @@ const initializeStellarCryptoConfig = () => {
   window.tftIssuer = config.tftIssuer;
 };
 
-async function startVueApp () {
+async function startVueApp() {
   Vue.config.productionTip = false;
 
   await sodium.ready;
@@ -24,7 +26,14 @@ async function startVueApp () {
   Vue.use(global);
 
   initializeStellarCryptoConfig();
+
   new Vue({
+    created: function () {
+      var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (isMobile) {
+        clipboardHack();
+      }
+    },
     filters,
     router,
     store,
