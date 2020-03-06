@@ -3,12 +3,20 @@ header {
   color: white;
 }
 
-span {
-  font-size: 2.4vw;
+
+.address {
+    font-size: 2.4vw;
+    word-break: break-all
+}
+
+@media screen and (max-width: 600px) {
+    .address {
+        font-size: 0.875rem;
+    }
 }
 
 @media screen and (min-width: 960px) {
-  span {
-    font-size: 23px;
-  }
+    .address {
+        font-size: 23px;
+    }
 }
