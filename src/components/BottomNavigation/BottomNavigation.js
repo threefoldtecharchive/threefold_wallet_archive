@@ -26,10 +26,10 @@ export default {
   beforeDestroy() {},
   methods: {
     handleCta() {
-      let wallet = this.$route.params.wallet;
+      let account = this.$route.params.account;
       this.$router.push({
         name: this.$route.meta.transfer,
-        params: { wallet },
+        params: { account: account ? account : null },
       });
     },
   },

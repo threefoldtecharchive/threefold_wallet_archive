@@ -64,12 +64,13 @@ const routes = [
     name: 'details',
     meta: {
       title: 'details',
+      transfer: 'transfer',
       accent: 'accent',
     },
     component: Details,
   },
   {
-    path: '/transfer',
+    path: '/transfer/:account?',
     name: 'transfer',
     meta: {
       accent: 'accent',
