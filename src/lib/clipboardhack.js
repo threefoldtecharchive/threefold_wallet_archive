@@ -3,6 +3,12 @@ export default () => {
         return;
     }
     if (document.getElementById('webview_copy') == null) {
+        function htmlencode(str) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
         console.log("Adding clipboard hack");
         let cbh_css = `
     #cbh-custom-menu {
@@ -97,8 +103,7 @@ export default () => {
 
             window.flutter_inappwebview.callHandler('PASTE', webview_copy_value).then(function (result) {
                 webview_selected_item.select();
-
-                document.execCommand("insertHTML", false, webview_selected_item.value + result);
+                document.execCommand("insertHTML", false, htmlencode(webview_selected_item.value + result));
 
             });
         }
