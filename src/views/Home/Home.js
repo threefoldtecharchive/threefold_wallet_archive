@@ -2,11 +2,11 @@ import { mapActions, mapGetters } from 'vuex';
 import AccountCard from '../../components/AccountCard';
 import draggable from 'vuedraggable';
 import store from '../../store';
-import SkelletonAccountCard from '../../components/SkelletonAccontCard';
+import SkeletonAccountCard from '../../components/SkeletonAccountCard';
 
 export default {
   name: 'Home',
-  components: { AccountCard, draggable, SkelletonAccountCard },
+  components: { AccountCard, draggable, SkeletonAccountCard },
   props: [],
   data () {
     return {};

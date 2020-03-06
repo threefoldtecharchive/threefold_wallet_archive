@@ -38,7 +38,7 @@
             <div style="width: 100%; display: flex;">
               <span class="text-capitalize">{{ data.item.name }}</span>
               <v-spacer></v-spacer>
-              {{ data.item.totalAmount }} {{data.item.currency}}
+              {{ data.item.balances[0].balance | formatBalance }} {{data.item.balances[0].asset_code }}
             </div>
           </template>
           <template v-slot:item="data">
@@ -48,7 +48,7 @@
               </v-col>
               <v-spacer></v-spacer>
               <v-col cols="5" align="end">
-                {{ data.item.totalAmount }} {{data.item.currency}}
+                {{ data.item.balances[0].balance | formatBalance  }} {{data.item.balances[0].asset_code }}
               </v-col>
             </v-row>
           </template>
@@ -68,7 +68,7 @@
     <v-row>
       <v-col>
         <span v-if="$route.query.tab != 'receive'"
-          >Fee: {{fee | formatBalance}} {{selectedAccount.currency}}</span
+          >Fee: 0.1 TFT</span
         >
         <v-btn
           class="mx-0 mt-3"

@@ -4,7 +4,7 @@ export default {
   props: [],
   data() {
     return {
-      bottomnav: 0,
+      BottomNavigation: 0,
       submitDisabled: true,
       showTransferButtonOn: [],
     };

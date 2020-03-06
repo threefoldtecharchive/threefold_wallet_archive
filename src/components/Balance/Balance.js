@@ -32,6 +32,9 @@ export default {
       // @Todo detect locked and unconfirmed
       return false;
     },
+    validBalances() {
+      return this.balances.filter(b => b.asset_code === 'TFT' )
+    }
   },
   mounted () {},
   methods: {},

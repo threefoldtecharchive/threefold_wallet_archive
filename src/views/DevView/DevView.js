@@ -5,7 +5,7 @@ export default {
   name: 'DevView',
   components: {},
   props: [],
-  data () {
+  data() {
     return {};
   },
   computed: {
@@ -17,18 +17,18 @@ export default {
       'threeBotName',
     ]),
   },
-  mounted () {},
+  mounted() {},
   methods: {
     ...mapMutations(['removeAppAccount']),
     ...mapActions(['generateAppAccount', 'setPkidAppAccounts', 'syncAccounts']),
-    createWallet () {
+    createWallet() {
       this.generateAppAccount(
         `dev wallet #${Math.random()
           .toString(36)
           .substr(2, 5)}`
       );
     },
-    async ResetAppWallets () {
+    async ResetAppWallets() {
       this.removeAppAccount();
       await this.setPkidAppAccounts([
         {
@@ -48,6 +48,11 @@ export default {
         },
       ]);
       await this.syncAccounts();
+    },
+    errorScreen() {
+      this.$router.push({
+        name: 'error screen',
+      });
     },
   },
 };
