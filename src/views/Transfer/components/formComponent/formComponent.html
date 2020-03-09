@@ -4,7 +4,7 @@
       :rules="toRules" append-icon="far fa-address-book" @click:append="toDialog = true" clearable>
     </v-text-field>
 
-    <v-text-field dense label="Amount" v-on:input="formObject.amount = $event * 10000;" type="number" min="0.00"
+    <v-text-field dense label="Amount" v-on:input="formObject.amount = $event;" type="number" min="0.00"
       :rules="amountRules" class="inputNumber mb-0" clearable suffix="TFT">
     </v-text-field>
 

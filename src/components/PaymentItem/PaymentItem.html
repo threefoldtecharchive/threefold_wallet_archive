@@ -5,7 +5,7 @@
       <v-list-item-subtitle class="text--primary">
         {{ payment.outgoing ? payment.to : payment.from }}
       </v-list-item-subtitle>
-      <v-list-item-subtitle class="amount">
+      <v-list-item-subtitle class="amount"  style="overflow: visible;">
         {{payment.outgoing ? '-' : '+ ' }} {{ payment.amount | formatBalance }}
         <sup class="currency font-weight-light text-uppercase">
           {{

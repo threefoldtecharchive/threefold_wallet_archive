@@ -15,6 +15,7 @@ const initializeStellarCryptoConfig = () => {
   window.stellarServerUrl = config.stellarServerUrl;
   window.stellarNetwork = config.stellarNetwork;
   window.tftIssuer = config.tftIssuer;
+  window.serviceUrl = config.serviceUrl;
 };
 
 async function startVueApp() {

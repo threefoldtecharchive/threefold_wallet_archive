@@ -41,7 +41,7 @@ export default {
         return Number(this.formObject.amount).toFixed(2);
       }
 
-      return (Number(this.formObject.amount) + Number(this.fee)).toFixed(2);
+      return (Number(this.formObject.amount) + Number(this.fee/1000)).toFixed(2);
     },
     toAccountIsOwn () {
       return this.accounts.find(
