@@ -117,8 +117,8 @@ export default {
       await doPayment(transactiondata);
 
       this.$router.push({
-        name: this.$route.meta.history,
-        params: { wallet: this.selectedAccount.name },
+        name: 'details',
+        params: { account: this.selectedAccount.name },
       });
     },
     selectAccount(account) {
