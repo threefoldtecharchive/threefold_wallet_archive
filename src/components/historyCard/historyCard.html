@@ -11,7 +11,7 @@
           </v-col>
           <v-col>
             <amountIndicator :color="outgoing? 'error' : 'accent'" :amount='amount' :valuta='valuta'
-              :small='smallAmount'/>
+              :small='smallAmount' />
           </v-col>
         </v-row>
       </v-col>
@@ -29,38 +29,42 @@
           </v-icon>
         </v-btn>
       </v-card-title>
-        <v-card-text>
-          <v-row align="center" class="my-3 text-center">
-            <v-col cols="5">
-              <v-avatar>
-                <v-icon class="primary" color="white">person</v-icon>
-              </v-avatar>
-              <p class="body-1 pt-2 text-truncate">{{sender}}</p>
-            </v-col>
-            <v-col cols="2">
-              <v-avatar>
-                <v-icon size="25">keyboard_arrow_right</v-icon>
-              </v-avatar>
-            </v-col>
-            <v-col cols="5">
-              <v-avatar>
-                <v-icon class="primary" color="white">person</v-icon>
-              </v-avatar>
-              <p class="body-1 pt-2 text-truncate">{{receiver}}</p>
-            </v-col>
-          </v-row>
-          <p class="subtitle mb-0 grey--text">Date</p>
-          <p class="title mt-0">{{timeStamp | formatDate}} </p>
-          <p class="subtitle mb-0 grey--text">Amount
-            <span v-if="outgoing && transaction.outputs.some(x => x.is_fee)">(fee incl)</span>
-          </p>
-          <p class="title mt-0">{{amountModal}}</p>
-          <p v-if="outgoing && transaction.outputs.some(x => x.is_fee)" class="subtitle mb-0 grey--text">Fee</p>
-          <p v-if="outgoing && transaction.outputs.some(x => x.is_fee)" class="title mt-0">{{fee}}</p>
-          <p v-if="transaction.message" class="subtitle mb-0 grey--text">Message</p>
-          <p v-if="transaction.message" class="title mt-0">{{transaction.message}}</p>
-          
-        </v-card-text>
+      <v-card-text>
+        <v-row align="center" dense class="mt-2 text-center">
+          <v-col>
+            <v-avatar>
+              <v-icon class="primary" color="white">person</v-icon>
+            </v-avatar>
+            <p class="body-1 pt-2">{{sender}}</p>
+          </v-col>
+        </v-row>
+        <v-row align="center" justify="center" dense class="my-0 text-center">
+          <v-col cols="2">
+            <v-avatar>
+              <v-icon size="25">keyboard_arrow_down</v-icon>
+            </v-avatar>
+          </v-col>
+        </v-row>
+        <v-row align="center" dense class="mt-2 text-center">
+          <v-col>
+            <v-avatar>
+              <v-icon class="primary" color="white">person</v-icon>
+            </v-avatar>
+            <p class="body-1 pt-2">{{receiver}}</p>
+          </v-col>
+        </v-row>
+        <p class="subtitle mb-0 grey--text">Date</p>
+        <p class="title mt-0">{{timeStamp | formatDate}} </p>
+        <p class="subtitle mb-0 grey--text">Amount
+          <span v-if="outgoing && transaction.outputs.some(x => x.is_fee)">(fee incl)</span>
+        </p>
+        <p class="title mt-0">{{amountModal}}</p>
+        <p v-if="outgoing && transaction.outputs.some(x => x.is_fee)" class="subtitle mb-0 grey--text">Fee</p>
+        <p v-if="outgoing && transaction.outputs.some(x => x.is_fee)" class="title mt-0">{{fee}}</p>
+        <p v-if="transaction.message" class="subtitle mb-0 grey--text">Message</p>
+        <p v-if="transaction.message" class="title mt-0">{{transaction.message}}</p>
+
+      </v-card-text>
     </v-card>
   </v-dialog>
 </section>
