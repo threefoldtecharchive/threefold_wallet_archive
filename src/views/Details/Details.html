@@ -19,9 +19,10 @@
       </v-row>
     </v-container>
   </header>
-  <v-list three-line class="pa-0">
-    <paymentItem v-for="payment in payments(account.id)" :payment="payment" :key="payment.id"
+  <v-list three-line class="pa-0 payment-list">
+    <paymentItem v-for="payment in payments(account.id)" :payment="payment" :key="payment.id" class="payment-item"
       @click.stop='selectedPayment = payment' />
   </v-list>
+  <span class="info-payments" v-if="payments(account.id).length > 20">Only last 200 payments are shown</span>
   <paymentDialog v-if="selectedPayment" :payment="selectedPayment" @closed="selectedPayment = null" />
 </section>

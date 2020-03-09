@@ -37,7 +37,6 @@ export default {
       this.selectedAccount = this.accounts.find(
         x => x.name === this.$route.params.account
       );
-      return;
     }
     this.$router.replace({ query: { tab: this.tabs[this.tabs.length - 1] } });
     if (!this.selectedAccount.address) this.selectedAccount = this.accounts[0];
@@ -100,7 +99,6 @@ export default {
       }
     },
     async send() {
-      console.log(transactiondata);
 
       const fundedTransaction = await buildFundedPaymentTransaction(
         this.selectedAccount.keyPair,
@@ -108,15 +106,12 @@ export default {
         new Number(this.formObject.amount),
         this.formObject.message
       );
-      await submitFundedTransaction(
-        fundedTransaction,
-        this.selectedAccount.keyPair
-      );
 
-      console.log(transactiondata);
       try {
-        
-        await doPayment(transactiondata);
+        await submitFundedTransaction(
+          fundedTransaction,
+          this.selectedAccount.keyPair
+        );  
         // @todo add feedback
 
       } catch{

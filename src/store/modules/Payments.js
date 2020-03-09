@@ -14,6 +14,20 @@ export default {
   },
   mutations: {
     addPayment: (state, payload) => {
+      const id = payload.id;
+
+      const payments = payload.payments.filter(p => {
+        if (p.asset_code !== 'TFT') {
+          console.log(
+            'Non TFT transactions not yet supported so will be skipped'
+          );
+          return false;
+        }
+        return true;
+      });
+
+      payload = { id, payments };
+
       const index = state.payments.findIndex(a => a.id === payload.id);
 
       if (index === -1) {
