@@ -2,11 +2,6 @@
   position: fixed;
   width: 100vw;
   height: 100vh;
-  .v-btn {
-    position: absolute !important;
-    right: 0;
-    bottom: 0;
-  }
 }
 
 .v-application .title {
@@ -61,4 +56,16 @@
     font-size: 1.5rem !important;
     line-height: 2rem !important;
   }
+}
+.payment-dialog{
+  padding: 0;
+}
+.payment-header{
+  background: #4a5c70;
+  color: white;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
 }

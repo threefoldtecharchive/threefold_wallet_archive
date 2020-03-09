@@ -1,5 +1,5 @@
 @mixin item($color) {
-  border-left: 1rem solid $color;
+  border-left: 0.5rem solid $color;
   .amount {
     color: darken($color, 40) !important;
   }
