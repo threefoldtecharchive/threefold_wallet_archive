@@ -33,10 +33,11 @@ export default {
     };
   },
   mounted() {
-    if (this.$route.params.wallet) {
-      this.selectedAccount = this.wallets.find(
-        x => x.name === this.$route.params.wallet
+    if (this.$route.params.account) {
+      this.selectedAccount = this.accounts.find(
+        x => x.name === this.$route.params.account
       );
+      return;
     }
     this.$router.replace({ query: { tab: this.tabs[this.tabs.length - 1] } });
     if (!this.selectedAccount.address) this.selectedAccount = this.accounts[0];
