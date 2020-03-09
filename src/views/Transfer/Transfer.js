@@ -1,7 +1,7 @@
 import FormComponent from './components/formComponent';
 import QrDialog from './components/qrDialog';
 import TransactionInfoDialog from './components/transactionInfoDialog';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 import {
   buildFundedPaymentTransaction,
   submitFundedTransaction,
@@ -49,6 +49,7 @@ export default {
   },
   methods: {
     ...mapActions(['sendCoins', 'updateAccounts']),
+    ...mapMutations(['startAppLoading', 'stopAppLoading']),
     scanQR() {
       window.vueInstance = this; //Don't remove this for flutter app
       const self = this;
@@ -136,9 +137,11 @@ export default {
     checkForm() {
       return this.$refs.formComponent.$refs.form.validate();
     },
-    closeTransactionInfoDialog(save) {
-      if (save) this.send();
+    async closeTransactionInfoDialog(save) {
+      this.startAppLoading()
+      if (save) await this.send();
       this.transactionInfoDialog = false;
+      this.stopAppLoading()
     },
     closeQrScannerDialog() {
       this.qrScannerDialog = false;
