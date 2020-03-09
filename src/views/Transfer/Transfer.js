@@ -114,7 +114,14 @@ export default {
       );
 
       console.log(transactiondata);
-      await doPayment(transactiondata);
+      try {
+        
+        await doPayment(transactiondata);
+        // @todo add feedback
+
+      } catch{
+        // @todo handle error
+      }
 
       this.$router.push({
         name: 'details',
