@@ -11,6 +11,7 @@ export default {
   },
   actions: {
     generateAppAccount: async (context, walletName) => {
+      context.commit('startAppLoading');
       context.commit('addAccountThombstone', walletName);
       const nextAppAcountIndex = context.getters.nextAppAcountIndex;
       const seedPhrase = context.getters.appSeedPhrase;
@@ -25,8 +26,12 @@ export default {
       context.dispatch('fetchPayments', account.id);
       context.commit('removeAccountThombstone', walletName);
       context.commit('addAccount', account);
+
+      await context.dispatch('saveToPkid');
+      context.commit('stopAppLoading');
     },
     generateImportedAccount: async (context, { seedPhrase, walletName }) => {
+      context.commit('startAppLoading');
       const position = context.state.accounts.length;
       const account = await fetchAccount({
         index: 0,
@@ -37,6 +42,8 @@ export default {
       });
       context.dispatch('fetchPayments', account.id);
       context.commit('addAccount', account);
+      await context.dispatch('saveToPkid');
+      context.commit('stopAppLoading');
     },
     syncAccounts: async ({ commit, getters, dispatch }) => {
       commit('startAppLoading');
@@ -56,6 +63,12 @@ export default {
       commit('startAppLoading');
       account.name = name;
       commit('addAccount', account);
+      await dispatch('saveToPkid');
+      commit('stopAppLoading');
+    },
+    async deleteAccount({ commit, dispatch }, account) {
+      commit('startAppLoading');
+      commit('removeAccount', account);
       await dispatch('saveToPkid');
       commit('stopAppLoading');
     },

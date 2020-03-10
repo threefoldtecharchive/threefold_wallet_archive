@@ -52,7 +52,9 @@ export default {
         this.walletNameErrors.push(walletValidation.message);
         return;
       }
-      this.generateAppAccount(this.walletName).catch(e => {this.$flashMessage.error('Failed to generate account')});
+      this.generateAppAccount(this.walletName).catch(e => {
+        this.$flashMessage.error('Failed to generate account');
+      });
       this.clearForm();
     },
 
@@ -79,7 +81,10 @@ export default {
       this.generateImportedAccount({
         seedPhrase,
         walletName: this.walletName,
-      }).catch(e => {this.$flashMessage.error('Failed to import account')})
+      }).catch(e => {
+        console.error(e);
+        this.$flashMessage.error('Failed to import account');
+      });
 
       this.clearForm();
     },

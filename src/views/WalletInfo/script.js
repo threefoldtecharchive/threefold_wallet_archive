@@ -3,7 +3,7 @@ import router from '../../router';
 
 export default {
   name: 'WalletInfo',
-  data () {
+  data() {
     return {
       account: null,
       name: null,
@@ -13,13 +13,17 @@ export default {
     ...mapGetters(['accounts']),
   },
   methods: {
-    ...mapActions(['changeWalletName']),
-    change () {
+    ...mapActions(['changeWalletName', 'deleteAccount']),
+    change() {
       this.changeWalletName({ account: this.account, name: this.name });
       router.push({ name: 'home' });
     },
+    async deleteWallet() {
+      await this.deleteAccount(this.account);
+      router.push({ name: 'home' });
+    },
   },
-  beforeMount () {
+  beforeMount() {
     const account = this.accounts.find(
       x => x.name === this.$route.params.account
     );

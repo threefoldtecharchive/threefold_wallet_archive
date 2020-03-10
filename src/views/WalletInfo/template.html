@@ -7,7 +7,10 @@
         v-model="name"
         :value="account.name"
       ></v-text-field>
-      <v-btn class="mr-4" @click.stop="change">Change wallet name</v-btn>
+        <v-btn color="success" class="mr-4" @click.stop="change">Change wallet name</v-btn>
+        <v-btn v-if="account.tags.includes('imported')" color="error" class="mr-4" @click.stop="deleteWallet">
+          <v-icon>fa-trash</v-icon>
+        </v-btn>
     </v-container>
   </v-form>
 </div>
