@@ -1,5 +1,4 @@
 export default () => {
-alert("twee")
     function htmlencode(str) {
         var div = document.createElement('div');
         div.appendChild(document.createTextNode(str));
@@ -10,12 +9,9 @@ alert("twee")
         return;
     }
 
-    console.log("Adding clipboard hack");
-
-    /* JS code */
-
     var webview_copy_value = '';
     var webview_selected_item = {};
+
     window.addEventListener('click', function () {
         let cbh_menu = document.getElementById('cbh-custom-menu');
         cbh_menu.style.display = 'none';
@@ -46,6 +42,7 @@ alert("twee")
 
         });
     }
+
     document.getElementById('webview_paste').onclick = function () {
         window.flutter_inappwebview.callHandler('PASTE', webview_copy_value).then(function (result) {
             webview_selected_item.select();
