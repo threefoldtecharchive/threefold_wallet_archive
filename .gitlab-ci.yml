@@ -48,6 +48,7 @@ staging_deployment:
     - staging
   script:
     - *staging_deploy_script
+    - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed wallet version $CI_COMMIT_TAG"
   only:
     - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
 
@@ -87,3 +88,4 @@ production_deploy:
     - docker pull jimber/wallet:$CI_COMMIT_TAG
     - docker rm -f wallet
     - docker run -d -it --name=wallet --network=3proxynet jimber/wallet:$CI_COMMIT_TAG
+    - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed wallet version $CI_COMMIT_TAG"
