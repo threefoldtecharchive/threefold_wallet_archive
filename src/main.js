@@ -46,6 +46,9 @@ async function startVueApp() {
     vuetify,
     render: h => h(App),
   }).$mount('#app');
+
+  window.flutter_inappwebview.callHandler('VUE_INITIALIZED')
+  
 }
 
 startVueApp();
