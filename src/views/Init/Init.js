@@ -2,6 +2,7 @@ import { mapActions } from 'vuex';
 import { decodeBase64 } from 'tweetnacl-util';
 import router from '../../router';
 import { migrateToPkid } from '../../services/PkidMigrationService';
+import config from '../../../public/config'
 
 export default {
   name: 'Init',
@@ -13,12 +14,14 @@ export default {
   computed: {},
   mounted() {
     window.vueInstance = this;
-    window.vueInstance.startWallet(
-      'jonaswijne.3bot',
-      'SsoeBx7TRjjc71PXmr913rCVtNAkDsJ7KCvZjglXcfa=',
-      null,
-      null
-    );
+    if (config.devWallet) {
+      window.vueInstance.startWallet(
+        'devWallet.3bot',
+        config.devWallet,
+        null,
+        null
+      );
+    }
   },
   methods: {
     ...mapActions(['initialize']),
