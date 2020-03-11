@@ -29,7 +29,7 @@ staging_build:
   variables:
     DOCKER_IMAGE_TAG: staging
   only:
-    - ^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$
+    - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
   tags:
     - builder
   script:
@@ -49,7 +49,7 @@ staging_deployment:
   script:
     - *staging_deploy_script
   only:
-    - ^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$
+    - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
 
 test_deployment:
   variables:
@@ -63,3 +63,27 @@ test_deployment:
     - staging
   script:
     - *staging_deploy_script
+
+production_build:
+  only:
+    - /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
+  stage: build
+  tags:
+    - builder
+  script: 
+    - cp public/production.config.js public/config.js
+    - docker build -t jimber/wallet:$CI_COMMIT_TAG .
+    - docker push jimber/wallet:$CI_COMMIT_TAG
+
+production_deploy:
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
+      when: manual
+    - when: never
+  stage: deploy
+  tags:
+    - production
+  script: 
+    - docker pull jimber/wallet:$CI_COMMIT_TAG
+    - docker rm -f wallet
+    - docker run -d -it --name=wallet --network=3proxynet jimber/wallet:$CI_COMMIT_TAG
