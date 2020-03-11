@@ -3,6 +3,7 @@ import { entropyToMnemonic } from 'bip39';
 import { convertTfAccount } from '@jimber/stellar-crypto';
 import StellarSdk from 'stellar-sdk';
 import axios from 'axios';
+import router from '../../router';
 
 export default {
   state: {
@@ -21,13 +22,12 @@ export default {
       { pkidAccount, seedPhrase, type }
     ) {
       commit('addAccountThombstone', pkidAccount.walletName);
-      const index = pkidAccount.index ? pkidAccount.index : 0;
+      const index = pkidAccount.index ? pkidAccount.index : 0;      
       if (!pkidAccount.stellar) {
         try {
           await convertTfAccount(seedPhrase, 1, index);
         } catch (error) {
-          axios.get()
-
+          console.log("couldn't convert account")
         }
       }
       const account = await fetchAccount({
@@ -84,7 +84,19 @@ export default {
 
       const op1 = await dispatch('initializePkidAppAccounts', seedPhrase);
       const op2 = await dispatch('initializeImportedPkidAccounts');
-      await Promise.all([...op1, ...op2]);
+      try {
+        await Promise.all([...op1, ...op2]);
+      } catch (error) {
+        console.error(error)
+        router.push({
+          name: 'error screen',
+          params: {
+            reason: 'conversion mistake',
+            fix: 'close and reopen wallet',
+          },
+        });
+        return;
+      }
       await dispatch('saveToPkid');
       commit('stopAppLoading');
       commit('stopLoadingWallets');

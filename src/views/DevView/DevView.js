@@ -52,6 +52,10 @@ export default {
     errorScreen() {
       this.$router.push({
         name: 'error screen',
+        params: {
+          reason: 'conversion mistake',
+          fix: 'close and reopen wallet',
+        },
       });
     },
   },

@@ -1,9 +1,7 @@
-<div class="fill-height error-screen">
-  <section>
-    <div class="v-card v-sheet v-sheet--tile theme--light v-card--shaped">
-      <div class="v-card-title">ERROR</div>
-      <div class="v-card-subtitle">{{reason}}</div>
-      <div class="v-card-text" v-if="showFix">{{fix}}</div>
-    </div>
-  </section>
-</div>
+  <v-row class="fill-height" align="center" justify="center">
+    <v-col align="center" justify="center">
+      <h1 class="red-text">Error</h1>
+      <h2>{{reason}}</h2>
+      <p>{{fix}}</p>
+    </v-col>
+  </v-row>

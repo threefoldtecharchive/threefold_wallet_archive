@@ -15,7 +15,7 @@ export default {
     window.vueInstance = this;
     window.vueInstance.startWallet(
       'jonaswijne.3bot',
-      'SsoeBx7TRjjc70PXmr913rCVtNAkDsJ7KCvZjglXcIa=',
+      'SsoeBx7TRjjc71PXmr913rCVtNAkDsJ7KCvZjglXcfa=',
       null,
       null
     );
