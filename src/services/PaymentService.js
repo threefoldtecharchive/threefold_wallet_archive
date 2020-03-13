@@ -39,7 +39,8 @@ export const fetchPayments = async id => {
   const mappedPaymentsPromises = rawPayments
     .filter(p => p.type === 'payment')
     .map(async p => {
-      const { memo, fee_charged } = await p.transaction();
+      // const { memo, fee_charged } = await p.transaction();
+      const { memo, fee_charged } = {memo:'', fee_charged: 0.1};
       return mapPayment({ ...p, account_id: id, fee: fee_charged });
     });
   const mappedPayments = await Promise.all(mappedPaymentsPromises);

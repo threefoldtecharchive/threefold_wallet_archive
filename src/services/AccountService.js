@@ -18,6 +18,7 @@ export const mapAccount = async ({
   position,
   seed,
   keyPair,
+  seedPhrase,
 }) => ({
   name: name,
   tags: tags,
@@ -27,6 +28,7 @@ export const mapAccount = async ({
   position,
   seed,
   keyPair,
+  seedPhrase,
 });
 
 export const fetchAccount = async ({
@@ -35,11 +37,11 @@ export const fetchAccount = async ({
   name,
   tags,
   position,
-  retry = 0
+  retry = 0,
 }) => {
   if (retry > 3) {
     console.error('too many retries');
-    throw new Error('too many retries')
+    throw new Error('too many retries');
   }
 
   const keyPair = keypairFromAccount(seedPhrase, index);
@@ -53,7 +55,7 @@ export const fetchAccount = async ({
     accountResponse = await generateAndFetchAccount(keyPair, seedPhrase, index);
   }
 
-  const valid = await validateAndFixAccountResponse(accountResponse, keyPair)
+  const valid = await validateAndFixAccountResponse(accountResponse, keyPair);
 
   if (!valid) {
     return await fetchAccount({
@@ -62,10 +64,10 @@ export const fetchAccount = async ({
       name,
       tags,
       position,
-      retry: retry+1
-    })
+      retry: retry + 1,
+    });
   }
-  
+
   return mapAccount({
     accountResponse,
     index,
@@ -74,6 +76,7 @@ export const fetchAccount = async ({
     position,
     seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex'),
     keyPair,
+    seedPhrase,
   });
 };
 
@@ -82,7 +85,7 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
     const revineAddress = revineAddressFromSeed(seedPhrase, index);
     await generateAccount(keyPair, revineAddress);
   } catch (e) {
-    console.error(e)
+    console.error(e);
     throw Error('Something went wrong while generating account');
   }
   console.log('loading account');
@@ -90,9 +93,9 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
 }
 
 const validateAndFixAccountResponse = async (accountResponse, keyPair) => {
-  if (!(accountResponse.balances.find(b => b.asset_code === 'TFT'))) {
+  if (!accountResponse.balances.find(b => b.asset_code === 'TFT')) {
     await addTrustLine(keyPair);
     return false;
   }
   return true;
-}
+};

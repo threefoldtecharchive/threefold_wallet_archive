@@ -1,5 +1,7 @@
 import { mapGetters } from 'vuex';
 import { fetchAccount } from '../../services/AccountService';
+import { entropyToMnemonic } from 'bip39';
+import { keypairFromAccount } from "@jimber/stellar-crypto/dist/service/cryptoService";
 
 export default {
   state: {
@@ -16,6 +18,8 @@ export default {
       const nextAppAcountIndex = context.getters.nextAppAcountIndex;
       const seedPhrase = context.getters.appSeedPhrase;
       const position = context.state.accounts.length;
+      const kp = keypairFromAccount(seedPhrase, index)
+      context.dispatch('fetchPayments', kp.pub);
       const account = await fetchAccount({
         index: nextAppAcountIndex,
         name: walletName,
@@ -23,7 +27,6 @@ export default {
         seedPhrase,
         position: position,
       });
-      context.dispatch('fetchPayments', account.id);
       context.commit('removeAccountThombstone', walletName);
       context.commit('addAccount', account);
 
@@ -81,7 +84,7 @@ export default {
         state.accounts.push(account);
         return;
       }
-      state.accounts[index] = account;
+      state.accounts.splice(index, 1, account)
     },
     removeAccount: (state, account) => {
       state.accounts = state.accounts.filter(item => item !== account);
