@@ -1,8 +1,7 @@
 <section class="default-padding fill-height">
-  <v-text-field value="John Doe" label="Addres" disabled></v-text-field>
+  <v-text-field label="Address" :value="this.account.id" append-outer-icon="fas fa-copy" @click:append-outer.stop="copyAddress" readonly></v-text-field>
+  <v-text-field label="Seed phrase" :value="this.seed" append-outer-icon="fas fa-copy" @click:append-outer.stop="copySeed" readonly></v-text-field>
   <v-text-field label="Wallet name" v-model="name" :value="account.name"></v-text-field>
   <v-btn color="success" class="mr-4" @click.stop="change">Change wallet name</v-btn>
-  <v-btn v-if="account.tags.includes('imported')" color="error" class="mr-4" @click.stop="deleteWallet">
-    <v-icon>fa-trash</v-icon>
-  </v-btn>
+  <v-btn v-if="account.tags.includes('imported')" color="error" class="mr-4" @click.stop="deleteWallet"></v-btn>
 </section>

@@ -1,5 +1,6 @@
 import { mapGetters, mapActions } from 'vuex';
 import router from '../../router';
+import cryptoService from '../../services/cryptoService';
 
 export default {
   name: 'WalletInfo',
@@ -7,6 +8,7 @@ export default {
     return {
       account: null,
       name: null,
+      seed: null,
     };
   },
   computed: {
@@ -17,6 +19,34 @@ export default {
     change() {
       this.changeWalletName({ account: this.account, name: this.name });
       router.push({ name: 'home' });
+    },
+    copyAddress () {
+      this.$root.$emit('copy', {
+        title: 'Copy address to clipboard',
+        toCopy: this.account.id,
+        callback: () => {
+          this.$flashMessage.info(
+            `Address has been copied to clipboard (${this.account.id.substring(
+              0,
+              8
+            )}...).`
+          );
+        },
+      });
+    },
+    copySeed () {
+      this.$root.$emit('copy', {
+        title: 'Copy seed to clipboard',
+        toCopy: this.seed,
+        callback: () => {
+          this.$flashMessage.info(
+            `Address has been copied to clipboard (${this.account.id.substring(
+              0,
+              8
+            )}...).`
+          );
+        },
+      });
     },
     async deleteWallet() {
       await this.deleteAccount(this.account);
@@ -32,6 +62,8 @@ export default {
       return;
     }
     this.account = account;
+    console.log(this.account.id)
     this.name = account.name;
+    this.seed = cryptoService.generateMnemonicFromSeed(this.account.seed)
   },
 };
