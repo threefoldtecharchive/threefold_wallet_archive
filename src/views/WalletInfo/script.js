@@ -8,7 +8,6 @@ export default {
     return {
       account: null,
       name: null,
-      seed: null,
     };
   },
   computed: {
@@ -62,8 +61,7 @@ export default {
       return;
     }
     this.account = account;
-    console.log(this.account.id)
+    console.log(this.account)
     this.name = account.name;
-    this.seed = cryptoService.generateMnemonicFromSeed(this.account.seed)
   },
 };

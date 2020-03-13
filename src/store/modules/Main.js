@@ -63,6 +63,8 @@ export default {
               name: account.name,
               position: account.position,
               seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
+              walletEntropy: account.walletEntropy,
+              walletSeedPhrase: account.walletSeedPhrase,
               keyPair: account.keyPair,
               seedPhrase: account.seedPhrase,
             }).then(newAccount => {

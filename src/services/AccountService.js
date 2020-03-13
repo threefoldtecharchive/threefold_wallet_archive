@@ -1,4 +1,5 @@
 import {
+  calculateWalletEntropyFromAccount,
   keypairFromAccount,
   revineAddressFromSeed,
 } from '@jimber/stellar-crypto/dist/service/cryptoService';
@@ -7,7 +8,7 @@ import {
   generateAccount,
   addTrustLine,
 } from '@jimber/stellar-crypto/dist/service/stellarService';
-import { mnemonicToEntropy } from 'bip39';
+import { mnemonicToEntropy, entropyToMnemonic } from 'bip39';
 import store from '../store';
 
 export const mapAccount = async ({
@@ -17,6 +18,8 @@ export const mapAccount = async ({
   index,
   position,
   seed,
+  walletEntropy,
+  walletSeedPhrase,
   keyPair,
   seedPhrase,
 }) => ({
@@ -27,6 +30,8 @@ export const mapAccount = async ({
   index,
   position,
   seed,
+  walletEntropy,
+  walletSeedPhrase,
   keyPair,
   seedPhrase,
 });
@@ -44,7 +49,9 @@ export const fetchAccount = async ({
     throw new Error('too many retries');
   }
 
-  const keyPair = keypairFromAccount(seedPhrase, index);
+  const walletEntropy = calculateWalletEntropyFromAccount(seedPhrase, index)
+  const keyPair = keypairFromAccount(walletEntropy);
+
   let accountResponse;
   try {
     accountResponse = await loadAccount(keyPair);
@@ -75,6 +82,8 @@ export const fetchAccount = async ({
     name,
     position,
     seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex'),
+    walletEntropy,
+    walletSeedPhrase: entropyToMnemonic(walletEntropy),
     keyPair,
     seedPhrase,
   });
