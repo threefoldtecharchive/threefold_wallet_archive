@@ -1,6 +1,7 @@
 @import '../../App/App.scss';
 .v-card {
   border-radius: $borderradius !important;
+  user-select: none;
 }
 .account-card {
   .content {

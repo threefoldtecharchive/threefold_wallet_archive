@@ -10,13 +10,12 @@ export default {
   name: 'Details',
   components: { AccountCard, Balance, PaymentItem, PaymentDialog },
   props: [],
-  data () {
+  data() {
     return {
-      account: null,
       selectedPayment: null,
     };
   },
-  beforeMount () {
+  beforeMount() {
     const account = store.getters.accounts.find(
       x => x.name === this.$route.params.account
     );
@@ -24,31 +23,24 @@ export default {
       router.push({ name: 'home' });
       return;
     }
-    this.account = account;
+    this.id = account.id;
   },
   methods: {
     ...mapActions(['fetchPayments']),
-    openPayment (payment) {
+    openPayment(payment) {
       this.selectedPayment = payment;
     },
   },
   computed: {
-    ...mapGetters(['threeBotName', 'payments']),
-    getHumanWalletAddress () {
+    ...mapGetters(['threeBotName', 'payments', 'accounts']),
+    account() {
+      return this.accounts.find(a => a.id === this.id);
+    },
+    getHumanWalletAddress() {
       return `${this.account.name.replace(/\s/g, '')}@${this.threeBotName}`;
     },
   },
-  beforeMount () {
-    const account = store.getters.accounts.find(
-      x => x.name === this.$route.params.account
-    );
-    if (!account) {
-      router.push({ name: 'home' });
-      return;
-    }
-    this.account = account;
-  },
-  mounted () {
+  mounted() {
     this.fetchPayments(this.account.id);
   },
 };

@@ -2,7 +2,7 @@
   <v-layout column fill-height pa-4>
     <div class="content">
       <draggable v-model="accounts" group="accounts" @start="drag=true" @end="drag=false" :options="{delay:400}">
-        <AccountCard class="px-1 mb-4" clickable v-for="(account, index) in accounts" :key="index" :account="account"
+        <AccountCard class="px-1 mb-4" clickable v-for="(account, index) in accounts" :key="`${index}_${account.name}_${account.balances[0].balance}`" :account="account"
           @click="seeDetails(account)" humanReadable />
       </draggable>
       <SkeletonAccountCard :name="name" v-for="name in actualAccountThombstones" :key="name" />

@@ -1,7 +1,9 @@
-import { fetchAccount } from '../../services/AccountService';
-import { entropyToMnemonic } from 'bip39';
+import { fetchAccount, mapAccount } from '../../services/AccountService';
+import { mapPayment } from '../../services/PaymentService';
+import { entropyToMnemonic, mnemonicToEntropy } from 'bip39';
 import { convertTfAccount } from '@jimber/stellar-crypto';
-import StellarSdk from 'stellar-sdk';
+import config from '../../../public/config';
+import StellarSdk, { Server } from 'stellar-sdk';
 import axios from 'axios';
 import router from '../../router';
 
@@ -17,17 +19,72 @@ export default {
     appLoadingStack: 0,
   },
   actions: {
+    async initializeTransactionWatcher({ commit, dispatch }, account) {
+      const server = new Server(config.stellarServerUrl);
+      server
+        .payments()
+        .forAccount(account.id)
+        .cursor('now')
+        .stream({
+          onmessage: message => {
+            console.log({ message });
+
+            const { memo, fee_charged } = { memo: '', fee_charged: 0.1 };
+            const payment = mapPayment({
+              ...message,
+              account_id: account.id,
+              fee: fee_charged,
+            });
+
+            commit('addPayment', { payments: [payment], id: account.id });
+
+            console.log(`${account.id} updated `);
+            // dispatch('reloadAccount', account.id);
+          },
+          onerror: e => {
+            console.error(e);
+          },
+        });
+    },
+    async initializeAccountWatcher({ commit }, account) {
+      const server = new Server(config.stellarServerUrl);
+      server
+        .accounts()
+        .accountId(account.id)
+        .cursor('now')
+        .stream({
+          onmessage: message => {
+            console.log({ message });
+
+            mapAccount({
+              accountResponse: message,
+              index: account.index,
+              tags: account.tags,
+              name: account.name,
+              position: account.position,
+              seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
+              keyPair: account.keyPair,
+              seedPhrase: account.seedPhrase,
+            }).then(newAccount => {
+              commit('addAccount', newAccount);
+            });
+          },
+          onerror: e => {
+            console.error(e);
+          },
+        });
+    },
     initializeSingleAccount: async function(
       { dispatch, commit },
       { pkidAccount, seedPhrase, type }
     ) {
       commit('addAccountThombstone', pkidAccount.walletName);
-      const index = pkidAccount.index ? pkidAccount.index : 0;      
+      const index = pkidAccount.index ? pkidAccount.index : 0;
       if (!pkidAccount.stellar) {
         try {
           await convertTfAccount(seedPhrase, 1, index);
         } catch (error) {
-          console.log("couldn't convert account")
+          console.log("couldn't convert account");
         }
       }
       const account = await fetchAccount({
@@ -41,6 +98,9 @@ export default {
       dispatch('fetchPayments', account.id);
 
       commit('addAccount', account);
+
+      dispatch('initializeTransactionWatcher', account);
+      dispatch('initializeAccountWatcher', account);
     },
     initializePkidAppAccounts: async ({ dispatch, commit }, seedPhrase) => {
       const pkidAccounts = await dispatch('getPkidAppAccounts');
@@ -87,7 +147,7 @@ export default {
       try {
         await Promise.all([...op1, ...op2]);
       } catch (error) {
-        console.error(error)
+        console.error(error);
         router.push({
           name: 'error screen',
           params: {
@@ -98,6 +158,7 @@ export default {
         return;
       }
       await dispatch('saveToPkid');
+
       commit('stopAppLoading');
       commit('stopLoadingWallets');
     },
