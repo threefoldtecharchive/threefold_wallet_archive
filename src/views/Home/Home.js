@@ -31,7 +31,7 @@ export default {
           account.position = index;
         });
         store.commit('setAccounts', value);
-        store.dispatch('syncAccounts');
+        store.dispatch('saveToPkid');
       },
     },
   },

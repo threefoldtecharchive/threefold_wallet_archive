@@ -17,19 +17,23 @@ export default {
       'threeBotName',
     ]),
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
-    ...mapMutations(['removeAppAccount']),
-    ...mapActions(['generateAppAccount', 'setPkidAppAccounts', 'syncAccounts']),
+    ...mapMutations(['removeAppAccounts', 'removeImportedAccounts']),
+    ...mapActions(['generateAppAccount', 'setPkidAppAccounts', 'setPkidImportedAccounts', 'syncAccounts']),
+    Restart() {
+      location.reload();
+    },
     createWallet() {
       this.generateAppAccount(
         `dev wallet #${Math.random()
           .toString(36)
-          .substr(2, 5)}`
+          .substr(2, 5)}`,
       );
     },
     async ResetAppWallets() {
-      this.removeAppAccount();
+      this.removeAppAccounts();
       await this.setPkidAppAccounts([
         {
           walletName: 'daily',
@@ -41,12 +45,11 @@ export default {
           position: 1,
           index: 1,
         },
-        {
-          walletName: 'extra',
-          position: 2,
-          index: 2,
-        },
       ]);
+      await this.syncAccounts();
+    },
+    async RemoveImportedAccounts() {
+      await this.setPkidImportedAccounts([]);
       await this.syncAccounts();
     },
     errorScreen() {

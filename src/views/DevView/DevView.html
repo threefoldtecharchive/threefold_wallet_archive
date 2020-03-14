@@ -34,6 +34,19 @@
       <v-card>
         <v-card-text>
           <p class="display-1 text--primary">
+            Restart Wallet
+          </p>
+          <p>Restarts the 3bot_connect wallet </p>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn dark text color="deep-purple" @click="Restart">
+            restart
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-card>
+        <v-card-text>
+          <p class="display-1 text--primary">
             Reset app wallets
           </p>
           <p>Resets app wallets</p>
@@ -41,6 +54,18 @@
         <v-card-actions>
           <v-btn dark text color="deep-purple" @click="ResetAppWallets">
             Reset
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-card>
+        <v-card-text>
+          <p class="display-1 text--primary">
+            Remove imported wallets
+          </p>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn text @click="RemoveImportedAccounts">
+            Remove
           </v-btn>
         </v-card-actions>
       </v-card>

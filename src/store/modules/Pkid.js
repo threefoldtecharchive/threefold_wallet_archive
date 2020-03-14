@@ -63,8 +63,8 @@ export default {
 
       return data.data;
     },
-    setPkidImportedAccounts (context, accounts) {
-      context.getters.client.setDoc('imported_accounts', accounts, true);
+    async setPkidImportedAccounts(context, accounts) {
+      await context.getters.client.setDoc('imported_accounts', accounts, true);
     },
     async getPkidImportedAccounts (context) {
       const client = context.getters.client;

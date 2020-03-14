@@ -1,7 +1,7 @@
 import { mapGetters } from 'vuex';
 import { fetchAccount } from '../../services/AccountService';
 import { entropyToMnemonic } from 'bip39';
-import { keypairFromAccount } from "@jimber/stellar-crypto/dist/service/cryptoService";
+import { keypairFromAccount } from '@jimber/stellar-crypto/dist/service/cryptoService';
 
 export default {
   state: {
@@ -18,7 +18,7 @@ export default {
       const nextAppAcountIndex = context.getters.nextAppAcountIndex;
       const seedPhrase = context.getters.appSeedPhrase;
       const position = context.state.accounts.length;
-      const kp = keypairFromAccount(seedPhrase, index)
+      const kp = keypairFromAccount(seedPhrase, index);
       context.dispatch('fetchPayments', kp.pub);
       const account = await fetchAccount({
         index: nextAppAcountIndex,
@@ -52,7 +52,7 @@ export default {
       commit('startAppLoading');
       const op1 = await dispatch(
         'initializePkidAppAccounts',
-        getters.appSeedPhrase
+        getters.appSeedPhrase,
       );
       console.log({ op1 });
 
@@ -84,14 +84,19 @@ export default {
         state.accounts.push(account);
         return;
       }
-      state.accounts.splice(index, 1, account)
+      state.accounts.splice(index, 1, account);
     },
     removeAccount: (state, account) => {
       state.accounts = state.accounts.filter(item => item !== account);
     },
-    removeAppAccount: state => {
+    removeAppAccounts: state => {
       state.accounts = state.accounts.filter(
-        account => !account.tags.includes('app')
+        account => !account.tags.includes('app'),
+      );
+    },
+    removeImportedAccounts: state => {
+      state.accounts = state.accounts.filter(
+        account => !account.tags.includes('app'),
       );
     },
     addAccountThombstone: (state, name) => {
@@ -99,7 +104,7 @@ export default {
     },
     removeAccountThombstone: (state, name) => {
       state.accountThombstones = state.accountThombstones.filter(
-        item => item !== name
+        item => item !== name,
       );
     },
     setAccounts: (state, accounts) => {
@@ -112,7 +117,7 @@ export default {
       // @Reminder if deleted accounts are not in the account array,
       // this will not be correct
       const amount = state.accounts.filter(account =>
-        account.tags.includes('app')
+        account.tags.includes('app'),
       ).length;
       const index = amount;
       console.log(index);
