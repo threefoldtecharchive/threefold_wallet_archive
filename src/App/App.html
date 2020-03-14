@@ -1,5 +1,5 @@
 <section class="app">
-  <div class="banner" v-if="!isProduction">staging</div>
+  <div class="banner" v-if="!isProduction" @click="$router.push({name: 'devview',})">staging</div>
   <Loader v-if="showLoader" />
   <v-app :style="cssProps">
     <Toolbar />
