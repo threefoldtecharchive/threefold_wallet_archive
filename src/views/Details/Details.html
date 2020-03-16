@@ -12,17 +12,21 @@
           <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances" />
         </v-col>
       </v-row>
-      <v-row>
-        <v-col>
-          <span class="address">address:&nbsp{{account.id}}</span>
-        </v-col>
-      </v-row>
     </v-container>
   </header>
   <v-list three-line class="pa-0 payment-list">
-    <paymentItem v-for="payment in payments(account.id)" :payment="payment" :key="payment.id" class="payment-item"
+    <template v-for="payment, i  in accountPayments" >
+      <div class="date" v-if="showDate(payment, i)">
+        <span>
+        {{payment.created_at | formatDay}}
+        </span>
+        <v-divider></v-divider>
+      </div>
+
+    <paymentItem :key="payment.id" :payment="payment"  class="payment-item"
       @click.stop='selectedPayment = payment' />
+    </template>
   </v-list>
-  <span class="info-payments" v-if="payments(account.id).length > 20">Only last 200 payments are shown</span>
+  <span class="info-payments" v-if="accountPayments.length > 20">Only last 200 payments are shown</span>
   <paymentDialog v-if="selectedPayment" :payment="selectedPayment" @closed="selectedPayment = null" />
 </section>

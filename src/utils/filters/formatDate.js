@@ -1,7 +1,21 @@
 import moment from 'moment';
 
-export const formatDate = value => {
-  if (value) {
-    return String(moment(String(value)).format('DD MMMM YYYY hh:mm:ss'));
+export const formatDay = value => {
+  if (!value) {
+    return '';
   }
+  const date = moment(String(value));
+
+  if (date.year() )
+
+
+  return String(moment(String(value)).format('DD MMMM YYYY'));
+};
+
+
+export const formatDate = value => {
+  if (!value) {
+    return;
+  }
+  return String(moment(String(value)).format('DD MMMM YYYY hh:mm:ss'));
 };
