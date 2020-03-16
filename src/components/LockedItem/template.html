@@ -1,0 +1,16 @@
+<div>
+  <v-list-item class="item" v-bind="$attrs" v-on="$listeners">
+    <v-list-item-content>
+      <v-list-item-subtitle class="text--primary">
+        {{ item.id }}
+      </v-list-item-subtitle>
+      <v-list-item-subtitle class="amount"  style="overflow: visible;">
+        {{ item.balance | formatBalance }}
+        <sup class="currency font-weight-light text-uppercase">
+          TFT
+        </sup>
+      </v-list-item-subtitle>
+    </v-list-item-content>
+  </v-list-item>
+  <v-divider />
+</div>

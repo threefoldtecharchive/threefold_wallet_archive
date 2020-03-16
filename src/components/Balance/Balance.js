@@ -22,20 +22,24 @@ export default {
     humanReadable: {
       type: Boolean,
       default: false,
+    }, locked: {
+      type: Boolean,
+      default: false,
     },
   },
-  data () {
+  data() {
     return {};
   },
   computed: {
-    hasMultipleBalances () {
+    hasMultipleBalances() {
       // @Todo detect locked and unconfirmed
       return false;
     },
     validBalances() {
-      return this.balances.filter(b => b.asset_code === 'TFT' )
-    }
+      return this.balances.filter(b => b.asset_code === 'TFT');
+    },
   },
-  mounted () {},
+  mounted() {
+  },
   methods: {},
 };

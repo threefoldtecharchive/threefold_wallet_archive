@@ -1,7 +1,7 @@
 <section class="blance">
   <div v-for="balance in validBalances">
     <v-row justify="end">
-      <span v-if="hasMultipleBalances" class="caption mr-1">Available</span>
+      <span v-if="locked" class="caption mr-1">Locked</span>
       <span class="text-s-right" v-if="humanReadable">
         {{balance.balance | formatBalanceHumanReadable}}
       </span>

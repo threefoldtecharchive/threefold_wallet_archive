@@ -2,6 +2,7 @@ import AccountCard from '../../components/AccountCard';
 import Balance from '../../components/Balance';
 import PaymentItem from '../../components/PaymentItem';
 import PaymentDialog from '../../components/PaymentDialog';
+import LockedItem from '../../components/LockedItem';
 import store from '../../store';
 import router from '../../router';
 import { mapActions, mapGetters } from 'vuex';
@@ -10,11 +11,13 @@ import moment from 'moment';
 
 export default {
   name: 'Details',
-  components: { AccountCard, Balance, PaymentItem, PaymentDialog },
+  components: { AccountCard, Balance, PaymentItem, PaymentDialog, LockedItem },
   props: [],
   data() {
     return {
       selectedPayment: null,
+      name: null,
+      tab: 0,
     };
   },
   beforeMount() {
@@ -28,7 +31,7 @@ export default {
     this.id = account.id;
   },
   methods: {
-    ...mapActions(['fetchPayments']),
+    ...mapActions(['fetchPayments', 'changeWalletName', 'deleteAccount']),
     openPayment(payment) {
       this.selectedPayment = payment;
     },
@@ -41,6 +44,42 @@ export default {
 
       return !time.isSame(String(previousPayment.created_at), 'day');
 
+    },
+    change() {
+      this.changeWalletName({ account: this.account, name: this.name });
+      router.push({ name: 'home' });
+    },
+    copyAddress() {
+      this.$root.$emit('copy', {
+        title: 'Copy address to clipboard',
+        toCopy: this.account.id,
+        callback: () => {
+          this.$flashMessage.info(
+            `Address has been copied to clipboard (${this.account.id.substring(
+              0,
+              8,
+            )}...).`,
+          );
+        },
+      });
+    },
+    copySeed() {
+      this.$root.$emit('copy', {
+        title: 'Copy seed to clipboard',
+        toCopy: this.seed,
+        callback: () => {
+          this.$flashMessage.info(
+            `Address has been copied to clipboard (${this.account.id.substring(
+              0,
+              8,
+            )}...).`,
+          );
+        },
+      });
+    },
+    async deleteWallet() {
+      await this.deleteAccount(this.account);
+      router.push({ name: 'home' });
     },
   },
   computed: {
@@ -57,5 +96,6 @@ export default {
   },
   mounted() {
     this.fetchPayments(this.account.id);
+    this.name = this.account.name;
   },
 };

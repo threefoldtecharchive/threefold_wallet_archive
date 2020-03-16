@@ -8,21 +8,22 @@ import {
   generateAccount,
   addTrustLine,
 } from '@jimber/stellar-crypto/dist/service/stellarService';
-import { mnemonicToEntropy, entropyToMnemonic } from 'bip39';
+import { mnemonicToEntropy } from 'bip39';
 import store from '../store';
+import { getLockedBalances } from '@jimber/stellar-crypto/dist/service/lockService';
 
 export const mapAccount = async ({
-  accountResponse,
-  name,
-  tags,
-  index,
-  position,
-  seed,
-  walletEntropy,
-  walletSeedPhrase,
-  keyPair,
-  seedPhrase,
-}) => ({
+                                   accountResponse,
+                                   name,
+                                   tags,
+                                   index,
+                                   position,
+                                   seed,
+                                   keyPair,
+                                   seedPhrase,
+                                   lockedBalances,
+                                   lockedBalance,
+                                 }) => ({
   name: name,
   tags: tags,
   id: accountResponse.id,
@@ -30,28 +31,26 @@ export const mapAccount = async ({
   index,
   position,
   seed,
-  walletEntropy,
-  walletSeedPhrase,
   keyPair,
   seedPhrase,
+  lockedBalances,
+  lockedBalance,
 });
 
 export const fetchAccount = async ({
-  seedPhrase,
-  index,
-  name,
-  tags,
-  position,
-  retry = 0,
-}) => {
+                                     seedPhrase,
+                                     index,
+                                     name,
+                                     tags,
+                                     position,
+                                     retry = 0,
+                                   }) => {
   if (retry > 3) {
     console.error('too many retries');
     throw new Error('too many retries');
   }
-
-  const walletEntropy = calculateWalletEntropyFromAccount(seedPhrase, index)
-  const keyPair = keypairFromAccount(walletEntropy);
-
+  const entropy = calculateWalletEntropyFromAccount(seedPhrase, index);
+  const keyPair = keypairFromAccount(entropy);
   let accountResponse;
   try {
     accountResponse = await loadAccount(keyPair);
@@ -75,6 +74,11 @@ export const fetchAccount = async ({
     });
   }
 
+  const lockedBalances = await getLockedBalances(keyPair);
+  const lockedBalance = lockedBalances.reduce((total, lockedBalance) => {
+    return total + Number(lockedBalance.balance);
+  }, 0);
+
   return mapAccount({
     accountResponse,
     index,
@@ -82,10 +86,10 @@ export const fetchAccount = async ({
     name,
     position,
     seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex'),
-    walletEntropy,
-    walletSeedPhrase: entropyToMnemonic(walletEntropy),
     keyPair,
     seedPhrase,
+    lockedBalances,
+    lockedBalance,
   });
 };
 

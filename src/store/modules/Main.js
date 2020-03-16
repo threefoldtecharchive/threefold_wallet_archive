@@ -57,16 +57,9 @@ export default {
             console.log({ message });
 
             mapAccount({
+              ...account,
               accountResponse: message,
-              index: account.index,
-              tags: account.tags,
-              name: account.name,
-              position: account.position,
-              seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
-              walletEntropy: account.walletEntropy,
-              walletSeedPhrase: account.walletSeedPhrase,
-              keyPair: account.keyPair,
-              seedPhrase: account.seedPhrase,
+              // seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
             }).then(newAccount => {
               commit('addAccount', newAccount);
             });
