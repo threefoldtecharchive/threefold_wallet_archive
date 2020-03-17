@@ -10,7 +10,7 @@
         </v-col>
         <v-col>
           <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances"/>
-          <Balance v-if="account.lockedBalance.length" class="pl-3 pr-2 pt-1 mr-2" small locked :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]'/>
+          <Balance v-if="account.lockedBalances.length" class="pl-3 pr-2 pt-1 mr-2" small locked :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]'/>
         </v-col>
       </v-row>
     </v-container>
@@ -29,7 +29,7 @@
       <!--Payments-->
       <v-icon small>fa-money-bill-wave</v-icon>
     </v-tab>
-    <v-tab v-if="account.lockedBalance.length">
+    <v-tab v-if="account.lockedBalances.length">
       <!--Locked Payments-->
       <v-icon small>fa-lock</v-icon>
     </v-tab>
@@ -57,7 +57,7 @@
         <span class="info-payments" v-if="accountPayments.length > 20">Only last 200 payments are shown</span>
       </v-tab-item>
 
-      <v-tab-item :key="1" v-if="account.lockedBalance.length">
+      <v-tab-item :key="1" v-if="account.lockedBalances.length">
         <v-list>
           <LockedItem v-for="balance,i in account.lockedBalances" :item="balance" :key="i"/>
         </v-list>
