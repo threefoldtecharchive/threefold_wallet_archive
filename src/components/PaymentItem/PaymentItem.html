@@ -3,14 +3,14 @@
     <v-list-item-content>
       <v-list-item-title v-if="payment.memo">{{payment.memo}}</v-list-item-title>
       <v-list-item-subtitle class="text--primary">
-        {{ payment.outgoing ? payment.to : payment.from }}
+        {{ payment.outgoing ? payment.to : payment.from | readableAddress }}
       </v-list-item-subtitle>
       <v-list-item-subtitle class="amount"  style="overflow: visible;">
         {{payment.outgoing ? '-' : '+ ' }} {{ payment.amount | formatBalance }}
         <sup class="currency font-weight-light text-uppercase">
           {{
-            payment.asset_code || ((payment.asset_type === 'native') 
-            ? 'xlm' 
+            payment.asset_code || ((payment.asset_type === 'native')
+            ? 'xlm'
             : payment.asset_type)
           }}
         </sup>

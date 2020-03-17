@@ -12,6 +12,7 @@ export const mapPayment = ({
   fee,
   account_id,
 }) => {
+
   return {
     id,
     amount,
