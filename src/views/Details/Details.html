@@ -10,7 +10,8 @@
         </v-col>
         <v-col>
           <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances"/>
-          <Balance v-if="account.lockedBalances.length" class="pl-3 pr-2 pt-1 mr-2" small locked :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]'/>
+          <Balance v-if="account.lockedBalances.length" class="pl-3 pr-2 pt-1 mr-2" small locked
+                   :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]'/>
         </v-col>
       </v-row>
     </v-container>
@@ -39,8 +40,29 @@
     </v-tab>
 
 
-    <v-tabs-items v-model="tab" class="fill-height">
+    <v-tabs-items v-model="tab" class="flex-fill">
       <v-tab-item :key="0">
+        <v-container v-if="!accountPayments.length && isPaymentLoading(account.id)">
+          <v-row
+            align-content="center"
+            justify="center"
+          >
+            <v-col
+              class="subtitle-1 text-center"
+              cols="12"
+            >
+              Getting payments
+            </v-col>
+            <v-col cols="6">
+              <v-progress-linear
+                color="deep-purple accent-4"
+                indeterminate
+                rounded
+                height="6"
+              ></v-progress-linear>
+            </v-col>
+          </v-row>
+        </v-container>
         <v-list three-line class="pa-0 payment-list">
           <template v-for="payment, i  in accountPayments">
             <div class="date" v-if="showDate(payment, i)">
@@ -53,8 +75,8 @@
             <paymentItem :key="payment.id" :payment="payment" class="payment-item"
                          @click.stop='selectedPayment = payment'/>
           </template>
+          <infinite-loading v-if="accountPayments.length" @infinite="infiniteHandler"></infinite-loading>
         </v-list>
-        <span class="info-payments" v-if="accountPayments.length > 20">Only last 200 payments are shown</span>
       </v-tab-item>
 
       <v-tab-item :key="1" v-if="account.lockedBalances.length">

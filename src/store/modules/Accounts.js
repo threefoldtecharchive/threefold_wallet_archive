@@ -120,7 +120,6 @@ export default {
         account.tags.includes('app'),
       ).length;
       const index = amount;
-      console.log(index);
       return index;
     },
     accountThombstones: state => state.accountThombstones,

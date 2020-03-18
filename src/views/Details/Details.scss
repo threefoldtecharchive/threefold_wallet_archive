@@ -45,3 +45,12 @@ header {
     border-width: 2px 0 0 0;
   }
 }
+.details {
+  display: flex;
+  flex-direction: column;
+
+}
+.v-tabs{
+  display: flex;
+  flex-direction: column;
+}

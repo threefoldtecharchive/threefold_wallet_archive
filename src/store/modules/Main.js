@@ -36,7 +36,7 @@ export default {
               fee: fee_charged,
             });
 
-            commit('addPayment', { payments: [payment], id: account.id });
+            commit('addPayments', { payments: [payment], id: account.id });
 
             console.log(`${account.id} updated `);
             // dispatch('reloadAccount', account.id);
@@ -54,7 +54,6 @@ export default {
         .cursor('now')
         .stream({
           onmessage: message => {
-            console.log({ message });
 
             mapAccount({
               ...account,

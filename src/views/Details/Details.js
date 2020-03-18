@@ -5,13 +5,14 @@ import PaymentDialog from '../../components/PaymentDialog';
 import LockedItem from '../../components/LockedItem';
 import store from '../../store';
 import router from '../../router';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 import moment from 'moment';
-
+import InfiniteLoading from 'vue-infinite-loading';
+import { fetchPayments } from '../../services/PaymentService';
 
 export default {
   name: 'Details',
-  components: { AccountCard, Balance, PaymentItem, PaymentDialog, LockedItem },
+  components: { AccountCard, Balance, PaymentItem, PaymentDialog, LockedItem, InfiniteLoading },
   props: [],
   data() {
     return {
@@ -32,6 +33,7 @@ export default {
   },
   methods: {
     ...mapActions(['fetchPayments', 'changeWalletName', 'deleteAccount']),
+    ...mapMutations(['addPayments']),
     openPayment(payment) {
       this.selectedPayment = payment;
     },
@@ -81,9 +83,15 @@ export default {
       await this.deleteAccount(this.account);
       router.push({ name: 'home' });
     },
+    async infiniteHandler($state) {
+      const lastPayment = this.accountPayments[this.accountPayments.length - 1]
+      const payments = await fetchPayments(this.id, lastPayment.id);
+      this.addPayments({payments, id:this.id});
+      $state.loaded();
+    },
   },
   computed: {
-    ...mapGetters(['threeBotName', 'payments', 'accounts']),
+    ...mapGetters(['threeBotName', 'payments', 'accounts', 'isPaymentLoading']),
     account() {
       return this.accounts.find(a => a.id === this.id);
     },
@@ -95,7 +103,7 @@ export default {
     },
   },
   mounted() {
-    this.fetchPayments(this.account.id);
+    // this.fetchPayments(this.account.id);
     this.name = this.account.name;
   },
 };
