@@ -75,7 +75,13 @@
             <paymentItem :key="payment.id" :payment="payment" class="payment-item"
                          @click.stop='selectedPayment = payment'/>
           </template>
-          <infinite-loading v-if="accountPayments.length" @infinite="infiniteHandler"></infinite-loading>
+          <infinite-loading
+            v-if="accountPayments.length"
+            @infinite="infiniteHandler"
+            spinner="waveDots"
+          >
+            <div slot="no-more">No more payments</div>
+          </infinite-loading>
         </v-list>
       </v-tab-item>
 
@@ -89,7 +95,8 @@
         <div class="px-3 ">
           <v-text-field label="Address" :value="account.id" append-outer-icon="fas fa-copy"
                         @click:append-outer.stop="copyAddress" readonly></v-text-field>
-          <v-text-field v-if="account.tags.includes('imported')" label="Seed phrase" :value="account.seedPhrase" append-outer-icon="fas fa-copy"
+          <v-text-field v-if="account.tags.includes('imported')" label="Seed phrase" :value="account.seedPhrase"
+                        append-outer-icon="fas fa-copy"
                         @click:append-outer.stop="copySeed" readonly></v-text-field>
           <v-text-field label="Wallet name" v-model="name" :value="account.name"></v-text-field>
           <v-btn color="success" class="mr-4" @click.stop="change">Change wallet name</v-btn>

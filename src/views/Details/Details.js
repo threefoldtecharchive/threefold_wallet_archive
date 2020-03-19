@@ -86,6 +86,11 @@ export default {
     async infiniteHandler($state) {
       const lastPayment = this.accountPayments[this.accountPayments.length - 1]
       const payments = await fetchPayments(this.id, lastPayment.id);
+
+      if (payments.length === 0){
+        $state.complete();
+      }
+
       this.addPayments({payments, id:this.id});
       $state.loaded();
     },
