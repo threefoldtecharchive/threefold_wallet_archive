@@ -1,4 +1,5 @@
 import { fetchPayments } from '../../services/PaymentService';
+import moment from 'moment';
 
 export default {
   state: {
@@ -57,6 +58,7 @@ export default {
 
         currentPayments[index] = payment;
       }
+      currentPayments.sort((a, b) => moment(b.created_at).format('YYYYMMDD') - moment(a.created_at).format('YYYYMMDD'));
 
       state.payments[index] = { id, payments: currentPayments };
     },
