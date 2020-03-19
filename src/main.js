@@ -48,7 +48,6 @@ async function startVueApp() {
   }).$mount('#app');
 
   window.flutter_inappwebview.callHandler('VUE_INITIALIZED')
-  
 }
 
 startVueApp();

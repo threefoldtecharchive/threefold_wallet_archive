@@ -113,10 +113,10 @@ export default {
           fundedTransaction,
           this.selectedAccount.keyPair
         );  
-        // @todo add feedback
 
-      } catch{
-        // @todo handle error
+        this.$flashMessage.info(`Successfully tranferred ${this.formObject.amount} to ${this.formObject.to.address}.`);
+      } catch {
+        this.$flashMessage.error(`Payment failed.`);
       }
 
       this.$router.push({

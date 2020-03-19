@@ -37,6 +37,9 @@ export default {
             });
 
             commit('addPayments', { payments: [payment], id: account.id });
+            
+            // We need to relocate this or manage to get a reference to flashmessage in here which feels a bit dirty. 
+            // this.$flashMessage.info(`Successfully received ${payment.amount} ${payment.asset_code} from ${account.id}.`);
 
             console.log(`${account.id} updated `);
             // dispatch('reloadAccount', account.id);

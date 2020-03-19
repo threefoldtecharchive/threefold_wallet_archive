@@ -50,6 +50,7 @@ export default {
     change() {
       this.changeWalletName({ account: this.account, name: this.name });
       router.push({ name: 'home' });
+      this.$flashMessage.info(`Renamed wallet to ${this.name}.`);
     },
     copyAddress() {
       this.$root.$emit('copy', {
@@ -82,6 +83,7 @@ export default {
     async deleteWallet() {
       await this.deleteAccount(this.account);
       router.push({ name: 'home' });
+      this.$flashMessage.info(`Deleted wallet ${this.name}.`);
     },
     async infiniteHandler($state) {
       const lastPayment = this.accountPayments[this.accountPayments.length - 1]
