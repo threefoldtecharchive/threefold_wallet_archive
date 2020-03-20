@@ -24,8 +24,8 @@
           <p class="subtitle mb-0 grey--text">Date</p>
 
           <p class="title mt-0">{{payment.created_at | formatDate }}</p>
-          <p v-if="payment.memo" class="subtitle mb-0 grey--text">Message</p>
-          <p v-if="payment.memo" class="title mt-0">{{payment.memo}}</p>
+          <p v-if="memo" class="subtitle mb-0 grey--text">Message</p>
+          <p v-if="memo" class="title mt-0">{{memo}}</p>
         </v-col>
       </v-row>
       <!-- <v-row align="center" justify="center" class="my-4 text-center pt-4">

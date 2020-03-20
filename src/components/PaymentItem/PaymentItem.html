@@ -1,7 +1,6 @@
 <div>
   <v-list-item :class="payment.outgoing ? 'outgoing': 'incoming'" v-bind="$attrs" v-on="$listeners">
     <v-list-item-content>
-      <v-list-item-title v-if="payment.memo">{{payment.memo}}</v-list-item-title>
       <v-list-item-subtitle class="text--primary">
         {{ payment.outgoing ? payment.to : payment.from | readableAddress }}
       </v-list-item-subtitle>
