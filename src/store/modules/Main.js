@@ -49,7 +49,7 @@ export default {
           },
         });
     },
-    async initializeAccountWatcher({ commit }, account) {
+    async initializeAccountWatcher({ commit, getters }, account) {
       const server = new Server(config.stellarServerUrl);
       server
         .accounts()
@@ -59,7 +59,7 @@ export default {
           onmessage: message => {
 
             mapAccount({
-              ...account,
+              ...getters.accounts.find(a => a.id === account.id),
               accountResponse: message,
               // seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
             }).then(newAccount => {
