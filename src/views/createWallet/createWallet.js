@@ -20,7 +20,7 @@ export default {
       words: null,
       walletNameErrors: [],
       wordsErrors: [],
-      step: 0
+      step: 0,
     };
   },
   computed: {
@@ -89,12 +89,14 @@ export default {
       this.generateImportedAccount({
         seedPhrase,
         walletName,
-      }).then(() => {
-        this.$flashMessage.info(`Successfully imported ${walletName}.`);
-      }).catch(e => {
-        console.error(e);
-        this.$flashMessage.error('Failed to import account.');
-      });
+      })
+        .then(() => {
+          this.$flashMessage.info(`Successfully imported ${walletName}.`);
+        })
+        .catch(e => {
+          console.error(e);
+          this.$flashMessage.error('Failed to import account.');
+        });
 
       this.clearForm();
     },

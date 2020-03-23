@@ -35,7 +35,7 @@ export default {
   mounted() {
     if (this.$route.params.account) {
       this.selectedAccount = this.accounts.find(
-        x => x.name === this.$route.params.account,
+        x => x.name === this.$route.params.account
       );
       return;
     }
@@ -51,16 +51,18 @@ export default {
   methods: {
     ...mapActions(['sendCoins', 'updateAccounts']),
     ...mapMutations(['startAppLoading', 'stopAppLoading']),
-    switchTo(tab, index){
-      this.selectedTab = index
-      this.$router.push({query:{tab: tab}})
+    switchTo(tab, index) {
+      this.selectedTab = index;
+      this.$router.push({ query: { tab: tab } });
     },
     scanQR() {
       window.vueInstance = this; //Don't remove this for flutter app
       const self = this;
-      window.flutter_inappwebview.callHandler('SCAN_QR').then(function(result) {
-        self.onDecode(result);
-      });
+      window.flutter_inappwebview
+        .callHandler('SCAN_QR')
+        .then(function (result) {
+          self.onDecode(result);
+        });
     },
     onDecode(code) {
       var url = new URL(code);
@@ -110,17 +112,18 @@ export default {
           this.selectedAccount.keyPair,
           this.formObject.to.address,
           new Number(this.formObject.amount),
-          this.formObject.message,
+          this.formObject.message
         );
 
         await submitFundedTransaction(
           fundedTransaction,
-          this.selectedAccount.keyPair,
+          this.selectedAccount.keyPair
         );
 
-        this.$flashMessage.info(`Successfully tranferred ${this.formObject.amount} to ${this.formObject.to.address}.`);
+        this.$flashMessage.info(
+          `Successfully tranferred ${this.formObject.amount} to ${this.formObject.to.address}.`
+        );
       } catch {
-
         //@todo show correct error message for multiple errors eg: "reason": "invalid address"
 
         this.$flashMessage.error(`Payment failed.`);

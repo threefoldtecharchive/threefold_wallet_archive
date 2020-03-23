@@ -3,20 +3,17 @@ export default {
   components: {},
   name: 'Toolbar',
   props: [],
-  data () {
-    return {
-    };
+  data() {
+    return {};
   },
-  computed: {
-  },
-  mounted () {
-  },
+  computed: {},
+  mounted() {},
   methods: {
     ...mapMutations(['addDevClick']),
-    seeAdd () {
+    seeAdd() {
       this.$router.push({
         name: 'addwallet',
       });
-    }
+    },
   },
 };
