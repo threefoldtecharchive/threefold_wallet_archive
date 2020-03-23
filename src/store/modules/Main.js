@@ -36,7 +36,10 @@ export default {
               fee: fee_charged,
             });
 
-            commit('addPayment', { payments: [payment], id: account.id });
+            commit('addPayments', { payments: [payment], id: account.id });
+            
+            // We need to relocate this or manage to get a reference to flashmessage in here which feels a bit dirty. 
+            // this.$flashMessage.info(`Successfully received ${payment.amount} ${payment.asset_code} from ${account.id}.`);
 
             console.log(`${account.id} updated `);
             // dispatch('reloadAccount', account.id);
@@ -46,7 +49,7 @@ export default {
           },
         });
     },
-    async initializeAccountWatcher({ commit }, account) {
+    async initializeAccountWatcher({ commit, getters }, account) {
       const server = new Server(config.stellarServerUrl);
       server
         .accounts()
@@ -54,10 +57,9 @@ export default {
         .cursor('now')
         .stream({
           onmessage: message => {
-            console.log({ message });
 
             mapAccount({
-              ...account,
+              ...getters.accounts.find(a => a.id === account.id),
               accountResponse: message,
               // seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
             }).then(newAccount => {

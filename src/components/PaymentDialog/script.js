@@ -5,9 +5,20 @@ export default {
       type: Object,
     },
   },
+  data() {
+    return {
+      memo: null,
+    };
+  },
   methods: {
-    close () {
+    close() {
       this.$emit('closed');
     },
+  },
+  mounted() {
+    console.log(this.payment);
+    this.payment.memo().then(m => {
+      this.memo = m;
+    });
   },
 };

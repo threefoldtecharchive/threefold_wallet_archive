@@ -69,22 +69,31 @@ export default {
         this.walletName,
         this.accounts
       );
+
       if (!walletValidation.success) {
         this.walletNameErrors.push(walletValidation.message);
         return;
       }
+
       const seedValidation = validateAndGenerateSeed(this.words, this.accounts);
+
       if (!seedValidation.success) {
         this.wordsErrors.push(seedValidation.message);
         return;
       }
+
       const seedPhrase = seedValidation.seedPhrase;
+
+      const walletName = this.walletName;
+
       this.generateImportedAccount({
         seedPhrase,
-        walletName: this.walletName,
+        walletName,
+      }).then(() => {
+        this.$flashMessage.info(`Successfully imported ${walletName}.`);
       }).catch(e => {
         console.error(e);
-        this.$flashMessage.error('Failed to import account');
+        this.$flashMessage.error('Failed to import account.');
       });
 
       this.clearForm();

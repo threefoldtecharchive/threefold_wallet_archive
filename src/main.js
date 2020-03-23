@@ -47,8 +47,7 @@ async function startVueApp() {
     render: h => h(App),
   }).$mount('#app');
 
-  // window.flutter_inappwebview.callHandler('VUE_INITIALIZED')
-  
+  window.flutter_inappwebview.callHandler('VUE_INITIALIZED')
 }
 
 startVueApp();

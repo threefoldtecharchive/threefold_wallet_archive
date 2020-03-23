@@ -35,8 +35,9 @@ export default {
   mounted() {
     if (this.$route.params.account) {
       this.selectedAccount = this.accounts.find(
-        x => x.name === this.$route.params.account
+        x => x.name === this.$route.params.account,
       );
+      return;
     }
     this.$router.replace({ query: { tab: this.tabs[this.tabs.length - 1] } });
     if (!this.selectedAccount.address) this.selectedAccount = this.accounts[0];
@@ -104,23 +105,25 @@ export default {
       }
     },
     async send() {
-
-      const fundedTransaction = await buildFundedPaymentTransaction(
-        this.selectedAccount.keyPair,
-        this.formObject.to.address,
-        new Number(this.formObject.amount),
-        this.formObject.message
-      );
-
       try {
+        const fundedTransaction = await buildFundedPaymentTransaction(
+          this.selectedAccount.keyPair,
+          this.formObject.to.address,
+          new Number(this.formObject.amount),
+          this.formObject.message,
+        );
+
         await submitFundedTransaction(
           fundedTransaction,
-          this.selectedAccount.keyPair
-        );  
-        // @todo add feedback
+          this.selectedAccount.keyPair,
+        );
 
-      } catch{
-        // @todo handle error
+        this.$flashMessage.info(`Successfully tranferred ${this.formObject.amount} to ${this.formObject.to.address}.`);
+      } catch {
+
+        //@todo show correct error message for multiple errors eg: "reason": "invalid address"
+
+        this.$flashMessage.error(`Payment failed.`);
       }
 
       this.$router.push({
@@ -142,10 +145,10 @@ export default {
       return this.$refs.formComponent.$refs.form.validate();
     },
     async closeTransactionInfoDialog(save) {
-      this.startAppLoading()
+      this.startAppLoading();
       if (save) await this.send();
       this.transactionInfoDialog = false;
-      this.stopAppLoading()
+      this.stopAppLoading();
     },
     closeQrScannerDialog() {
       this.qrScannerDialog = false;

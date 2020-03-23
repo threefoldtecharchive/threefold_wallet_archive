@@ -4,26 +4,25 @@ import {
   revineAddressFromSeed,
 } from '@jimber/stellar-crypto/dist/service/cryptoService';
 import {
-  loadAccount,
-  generateAccount,
   addTrustLine,
+  generateAccount,
+  loadAccount,
 } from '@jimber/stellar-crypto/dist/service/stellarService';
 import { mnemonicToEntropy } from 'bip39';
-import store from '../store';
 import { getLockedBalances } from '@jimber/stellar-crypto/dist/service/lockService';
 
 export const mapAccount = async ({
-                                   accountResponse,
-                                   name,
-                                   tags,
-                                   index,
-                                   position,
-                                   seed,
-                                   keyPair,
-                                   seedPhrase,
-                                   lockedBalances,
-                                   lockedBalance,
-                                 }) => ({
+  accountResponse,
+  name,
+  tags,
+  index,
+  position,
+  seed,
+  keyPair,
+  seedPhrase,
+  lockedBalances,
+  lockedBalance,
+}) => ({
   name: name,
   tags: tags,
   id: accountResponse.id,
@@ -38,13 +37,13 @@ export const mapAccount = async ({
 });
 
 export const fetchAccount = async ({
-                                     seedPhrase,
-                                     index,
-                                     name,
-                                     tags,
-                                     position,
-                                     retry = 0,
-                                   }) => {
+  seedPhrase,
+  index,
+  name,
+  tags,
+  position,
+  retry = 0,
+}) => {
   if (retry > 3) {
     console.error('too many retries');
     throw new Error('too many retries');

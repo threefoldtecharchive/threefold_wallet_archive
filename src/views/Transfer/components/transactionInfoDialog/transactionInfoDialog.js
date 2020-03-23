@@ -33,10 +33,6 @@ export default {
   computed: {
     ...mapGetters(['fee']),
     amount () {
-      console.log(
-        (Number(this.formObject.amount) + Number(this.fee)).toFixed(2)
-      );
-
       if (this.$route.query.tab == 'receive') {
         return Number(this.formObject.amount).toFixed(2);
       }
