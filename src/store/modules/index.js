@@ -6,10 +6,10 @@ import payments from './Payments';
 import pkid from './Pkid';
 
 export default {
-  accounts,
-  dev,
-  load,
-  main,
-  payments,
-  pkid,
+    accounts,
+    dev,
+    load,
+    main,
+    payments,
+    pkid,
 };

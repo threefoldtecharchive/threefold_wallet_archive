@@ -1,17 +1,17 @@
 export default {
-  state: {
-    loadingTitle: null,
-    loadingSubTitle: null,
-  },
-  mutations: {
-    setLoadingMessage(state, { message, additional }) {
-      state.loadingTitle = message;
-      state.loadingSubTitle = additional;
+    state: {
+        loadingTitle: null,
+        loadingSubTitle: null,
     },
-  },
-  actions: {},
-  getters: {
-    loadingSubTitle: state => state.loadingSubTitle,
-    loadingTitle: state => state.loadingTitle,
-  },
+    mutations: {
+        setLoadingMessage(state, { message, additional }) {
+            state.loadingTitle = message;
+            state.loadingSubTitle = additional;
+        },
+    },
+    actions: {},
+    getters: {
+        loadingSubTitle: state => state.loadingSubTitle,
+        loadingTitle: state => state.loadingTitle,
+    },
 };
