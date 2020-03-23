@@ -1,9 +1,9 @@
 <section class="transfer fill-height" ref="transfer">
   <v-tabs v-model="selectedTab" background-color="primary lighten-2" class="elevation-2" dark grow>
-    <v-tabs-slider></v-tabs-slider>
+    <v-tabs-slider color="accent"></v-tabs-slider>
 
     <v-tab v-for="(tab, index) in tabs" :key="index" @click="switchTo(tab, index)">
-      {{ tab }}
+        {{ tab }}
     </v-tab>
   </v-tabs>
   <v-card>
