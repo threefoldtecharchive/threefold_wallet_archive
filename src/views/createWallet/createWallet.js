@@ -20,6 +20,7 @@ export default {
       words: null,
       walletNameErrors: [],
       wordsErrors: [],
+      step: 0
     };
   },
   computed: {

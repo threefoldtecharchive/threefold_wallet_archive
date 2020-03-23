@@ -1,36 +1,18 @@
 <section class="toolbar">
-  <v-app-bar class="primary white--text text-capitalize" v-scroll="onScroll">
-    <v-row justify="center">
-      <v-col
-        cols="2"
-        v-if="$route.name != 'home' && $route.name != 'login' && $route.name != 'init'"
-      >
-        <v-btn text x-small fab dark :to='{name: "home"}'>
-          <v-icon flatclass="white--text">fas fa-arrow-left</v-icon>
-        </v-btn>
-      </v-col>
+  <v-app-bar class="primary white--text text-capitalize"> 
+    <v-row align="center">
+      <v-btn text x-small fab dark @click='$router.push({name: "home"})'
+        v-if="$route.name != 'home' && $route.name != 'login' && $route.name != 'init'">
+        <v-icon flat class="white--text">fas fa-arrow-left</v-icon>
+      </v-btn>
       <v-col>
         <h2 class="title" @click="addDevClick">
           {{($route.meta.title || $route.name) || '3Bot'}}
         </h2>
-        <!-- <v-progress-circular v-if="syncing" indeterminate size="12" :color="$route.meta.accent" /> -->
       </v-col>
-      <v-col cols="2">
-        <v-btn
-          x-small
-          text
-          fab
-          dark
-          class="accent"
-          v-if="$route.name == 'home'"
-          @click="seeAdd"
-        >
-          <v-icon>
-            fas fa-plus
-          </v-icon>
+        <v-btn text dark v-if="$route.name == 'home'" @click="seeAdd">
+          Import Wallet
         </v-btn>
-
-      </v-col>
     </v-row>
   </v-app-bar>
 </section>

@@ -1,7 +1,10 @@
   <v-row class="fill-height" align="center" justify="center">
     <v-col align="center" justify="center">
-      <h1 class="red-text">Error</h1>
-      <h2>{{reason}}</h2>
-      <p>{{fix}}</p>
+      <v-icon size="80" class="pb-5 error--text">
+        fas fa-exclamation-circle
+      </v-icon>
+      <h1 class="error--text">Error</h1>
+      <h2 class="grey--text text-capitalize">{{reason}}</h2>
+      <p class="grey--text text-capitalize">{{fix}}</p>
     </v-col>
   </v-row>

@@ -50,6 +50,10 @@ export default {
   methods: {
     ...mapActions(['sendCoins', 'updateAccounts']),
     ...mapMutations(['startAppLoading', 'stopAppLoading']),
+    switchTo(tab, index){
+      this.selectedTab = index
+      this.$router.push({query:{tab: tab}})
+    },
     scanQR() {
       window.vueInstance = this; //Don't remove this for flutter app
       const self = this;

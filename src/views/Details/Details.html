@@ -9,22 +9,16 @@
           <br>
         </v-col>
         <v-col>
-          <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances"/>
-          <Balance v-if="account.lockedBalances.length" class="pl-3 pr-2 pt-1 mr-2" small locked :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]'/>
+          <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances" />
+          <Balance v-if="account.lockedBalances.length" class="pl-3 pr-2 pt-1 mr-2" small locked
+            :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]' />
         </v-col>
       </v-row>
     </v-container>
   </header>
 
-  <v-tabs class="fill-height"
-          centered
-          color="accent"
-          slider-color="accent"
-          v-model="tab"
-          background-color="#517394"
-          dark
-          grow
-  >
+  <v-tabs class="fill-height" centered color="accent" slider-color="accent" v-model="tab" background-color="#517394"
+    dark grow>
     <v-tab>
       <!--Payments-->
       <v-icon small>fa-money-bill-wave</v-icon>
@@ -44,14 +38,14 @@
         <v-list three-line class="pa-0 payment-list">
           <template v-for="payment, i  in accountPayments">
             <div class="date" v-if="showDate(payment, i)">
-            <span>
-        {{payment.created_at | formatDay}}
-        </span>
+              <span>
+                {{payment.created_at | formatDay}}
+              </span>
               <v-divider></v-divider>
             </div>
 
             <paymentItem :key="payment.id" :payment="payment" class="payment-item"
-                         @click.stop='selectedPayment = payment'/>
+              @click.stop='selectedPayment = payment' />
           </template>
         </v-list>
         <span class="info-payments" v-if="accountPayments.length > 20">Only last 200 payments are shown</span>
@@ -59,22 +53,28 @@
 
       <v-tab-item :key="1" v-if="account.lockedBalances.length">
         <v-list>
-          <LockedItem v-for="balance,i in account.lockedBalances" :item="balance" :key="i"/>
+          <LockedItem v-for="balance,i in account.lockedBalances" :item="balance" :key="i" />
         </v-list>
       </v-tab-item>
 
       <v-tab-item :key="2">
-        <div class="px-3 ">
+        <v-col class="py-5">
           <v-text-field label="Address" :value="account.id" append-outer-icon="fas fa-copy"
-                        @click:append-outer.stop="copyAddress" readonly></v-text-field>
+          @click:append-outer.stop="copyAddress" readonly></v-text-field>
           <v-text-field label="Seed phrase" :value="account.walletSeedPhrase" append-outer-icon="fas fa-copy"
-                        @click:append-outer.stop="copySeed" readonly></v-text-field>
+          @click:append-outer.stop="copySeed" readonly></v-text-field>
           <v-text-field label="Wallet name" v-model="name" :value="account.name"></v-text-field>
-          <v-btn color="success" class="mr-4" @click.stop="change">Change wallet name</v-btn>
-          <v-btn v-if="account.tags.includes('imported')" color="error" class="mr-4" @click.stop="deleteWallet"></v-btn>
-        </div>
+          <v-row>
+            <v-col v-if="account.tags.includes('imported')" >
+              <v-btn block color="error" class="mr-4" @click.stop="deleteWallet"></v-btn>
+            </v-col>
+            <v-col>
+              <v-btn block color="success" class="mr-4" @click.stop="change">Change wallet name</v-btn>
+            </v-col>
+          </v-row>
+        </v-col>
       </v-tab-item>
     </v-tabs-items>
   </v-tabs>
-  <paymentDialog v-if="selectedPayment" :payment="selectedPayment" @closed="selectedPayment = null"/>
+  <paymentDialog v-if="selectedPayment" :payment="selectedPayment" @closed="selectedPayment = null" />
 </section>
