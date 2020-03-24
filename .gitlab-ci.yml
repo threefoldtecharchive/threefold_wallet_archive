@@ -6,7 +6,7 @@
 
 .set_ci_version: &set_ci_version
   - eval "[ -z "$CI_COMMIT_TAG" ] && export VERSION=$CI_COMMIT_SHORT_SHA || export VERSION=$CI_COMMIT_TAG "
-  - sed -i 's/{{version}}/$VERSION/g' public/version.js
+  - sed -i "s/{{version}}/$VERSION/g" public/version.js
 #caching modules
 cache:
   paths:
@@ -53,7 +53,7 @@ staging_deployment:
     - staging
   script:
     - *staging_deploy_script
-    - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed wallet version $CI_COMMIT_TAG"
+    - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed staging wallet version:$CI_COMMIT_REF_NAME commit:$CI_COMMIT_SHORT_SHA"
   dependencies:
     - staging_build
 
