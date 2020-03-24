@@ -5,7 +5,7 @@
     - docker run -d -it --network=jimber_proxy_net --name 3bot_wallet jimber/wallet:$DOCKER_IMAGE_TAG
 
 .set_ci_version: &set_ci_version
-  - [ -z "$CI_COMMIT_TAG" ] && export VERSION=$CI_COMMIT_TAG || export VERSION=$CI_COMMIT_SHORT_SHA
+  - eval "[ -z "$CI_COMMIT_TAG" ] && export VERSION=$CI_COMMIT_SHORT_SHA || export VERSION=$CI_COMMIT_TAG "
   - sed -i 's/{{version}}/$VERSION/g' public/version.js
 #caching modules
 cache:
@@ -32,8 +32,9 @@ staging_build:
   dependencies: []
   variables:
     DOCKER_IMAGE_TAG: staging
-  only:
-    - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
+    - when: manual
   tags:
     - builder
   script:
@@ -48,14 +49,13 @@ staging_deployment:
     GIT_STRATEGY: none
     GIT_CHECKOUT: "false"
   stage: deploy
-  dependencies: []
   tags:
     - staging
   script:
     - *staging_deploy_script
     - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed wallet version $CI_COMMIT_TAG"
-  only:
-    - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
+  dependencies:
+    - staging_build
 
 test_deployment:
   variables:
