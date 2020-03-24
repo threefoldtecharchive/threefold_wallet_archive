@@ -3,6 +3,10 @@
     - docker pull jimber/wallet:staging
     - docker rm -f 3bot_wallet; true
     - docker run -d -it --network=jimber_proxy_net --name 3bot_wallet jimber/wallet:$DOCKER_IMAGE_TAG
+
+.set_ci_version: &set_ci_version
+  - [ -z "$CI_COMMIT_TAG" ] && export VERSION=$CI_COMMIT_TAG || export VERSION=$CI_COMMIT_SHORT_SHA
+  - sed -i 's/{{version}}/$VERSION/g' public/version.js
 #caching modules
 cache:
   paths:
@@ -33,6 +37,7 @@ staging_build:
   tags:
     - builder
   script:
+    - *set_ci_version
     - cp public/staging.config.js public/config.js
     - docker build -t jimber/wallet:staging .
     - echo "$DOCKER_PW" | docker login -u $DOCKER_USER --password-stdin
@@ -71,7 +76,8 @@ production_build:
   stage: build
   tags:
     - builder
-  script: 
+  script:
+    - *set_ci_version
     - cp public/production.config.js public/config.js
     - docker build -t jimber/wallet:$CI_COMMIT_TAG .
     - docker push jimber/wallet:$CI_COMMIT_TAG

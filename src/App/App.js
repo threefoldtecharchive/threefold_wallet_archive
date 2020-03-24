@@ -4,6 +4,7 @@ import CopyDialog from '../components/CopyDialog';
 import Loader from '../components/Loader';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import config from '../../public/config';
+import version from '../../public/version'
 
 export default {
     name: 'app',
@@ -18,6 +19,7 @@ export default {
         return {
             showCreateWalletDialog: false,
             showEditWalletDialog: false,
+            version:version,
         };
     },
     computed: {
