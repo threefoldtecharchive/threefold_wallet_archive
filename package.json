@@ -48,9 +48,12 @@
     "prettier": "^2.0.1",
     "sass": "^1.23.7",
     "sass-loader": "^8.0.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "vue-cli-plugin-vuetify": "^2.0.3",
     "vue-template-compiler": "^2.6.10",
-    "vuetify-loader": "^1.3.0"
+    "vuetify-loader": "^1.3.0",
+    "webpack-bundle-analyzer": "^3.6.1",
+    "webpack": "latest"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
