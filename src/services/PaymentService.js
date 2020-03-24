@@ -8,7 +8,7 @@ export const mapPayment = ({
     from,
     to,
     asset_code,
-    memo,
+    payment,
     fee,
     account_id,
 }) => {
@@ -20,7 +20,7 @@ export const mapPayment = ({
         to,
         asset_code,
         outgoing: account_id === from,
-        memo,
+        memo: getMemoClosure(payment),
         fee,
     };
 };
@@ -41,11 +41,8 @@ export const fetchPayments = async (id, cursor = 'now') => {
         .filter(p => p.type === 'payment')
         .map(async p => {
             // const { memo, fee_charged } = await p.transaction();
-            const { memo, fee_charged } = {
-                memo: getMemoClosure(p),
-                fee_charged: 0.1,
-            };
-            return mapPayment({ ...p, account_id: id, fee: fee_charged, memo });
+            const fee = 0.1;
+            return mapPayment({ ...p, account_id: id, fee, payment: p });
         });
     const mappedPayments = await Promise.all(mappedPaymentsPromises);
     return mappedPayments;

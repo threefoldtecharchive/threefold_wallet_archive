@@ -4,7 +4,6 @@ import { entropyToMnemonic, mnemonicToEntropy } from 'bip39';
 import { convertTfAccount } from '@jimber/stellar-crypto';
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
-import axios from 'axios';
 import router from '../../router';
 
 export default {
@@ -27,16 +26,13 @@ export default {
                 .cursor('now')
                 .stream({
                     onmessage: message => {
-                        console.log({ message });
+                        const fee = 0.1;
 
-                        const { memo, fee_charged } = {
-                            memo: '',
-                            fee_charged: 0.1,
-                        };
                         const payment = mapPayment({
                             ...message,
                             account_id: account.id,
-                            fee: fee_charged,
+                            fee,
+                            payment: message
                         });
 
                         commit('addPayments', {
