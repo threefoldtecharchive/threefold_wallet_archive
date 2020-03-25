@@ -16,7 +16,7 @@
       <v-text-field
         :error-messages="walletNameErrors"
         @input="walletNameErrors = []"
-        v-model="walletName"
+        v-model.trim="walletName"
         class="red--text"
         label="Wallet name"
       ></v-text-field>
@@ -43,7 +43,7 @@
         <v-text-field
           :error-messages="walletNameErrors"
           @input="walletNameErrors = []"
-          v-model="walletName"
+          v-model.trim="walletName"
           class="red--text"
           label="Wallet name"
         ></v-text-field>
