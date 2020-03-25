@@ -4,6 +4,7 @@ import load from './Load';
 import main from './Main';
 import payments from './Payments';
 import pkid from './Pkid';
+import log from './Log';
 
 export default {
     accounts,
@@ -12,4 +13,5 @@ export default {
     main,
     payments,
     pkid,
+    log,
 };
