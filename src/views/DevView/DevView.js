@@ -22,8 +22,8 @@ export default {
         ...mapMutations(['removeAppAccounts', 'removeImportedAccounts']),
         ...mapActions([
             'generateAppAccount',
-            'setPkidAppAccounts',
-            'setPkidImportedAccounts',
+            'persistPkidAppAccounts',
+            'persistPkidImportedAccounts',
             'syncAccounts',
         ]),
         Restart() {
@@ -36,7 +36,7 @@ export default {
         },
         async ResetAppWallets() {
             this.removeAppAccounts();
-            await this.setPkidAppAccounts([
+            await this.persistPkidAppAccounts([
                 {
                     walletName: 'daily',
                     position: 0,
@@ -51,7 +51,7 @@ export default {
             await this.syncAccounts();
         },
         async RemoveImportedAccounts() {
-            await this.setPkidImportedAccounts([]);
+            await this.persistPkidImportedAccounts([]);
             await this.syncAccounts();
         },
         errorScreen() {

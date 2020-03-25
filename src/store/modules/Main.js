@@ -101,7 +101,7 @@ export default {
             dispatch('initializeAccountWatcher', account);
         },
         initializePkidAppAccounts: async ({ dispatch, commit }, seedPhrase) => {
-            const pkidAccounts = await dispatch('getPkidAppAccounts');
+            const pkidAccounts = await dispatch('fetchPkidAppAccounts');
             const type = 'app';
             return pkidAccounts.map(pkidAccount => {
                 pkidAccount.position = pkidAccount.position
@@ -121,7 +121,7 @@ export default {
             getters,
         }) => {
             const pkidImportedAccounts = await dispatch(
-                'getPkidImportedAccounts'
+                'fetchPkidImportedAccounts'
             );
             return pkidImportedAccounts.map(pkidImportedAccount => {
                 const seedPhrase = entropyToMnemonic(pkidImportedAccount.seed);

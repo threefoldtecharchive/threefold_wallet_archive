@@ -1,6 +1,5 @@
 import { mapGetters } from 'vuex';
 import { fetchAccount } from '../../services/AccountService';
-import { entropyToMnemonic } from 'bip39';
 import { keypairFromAccount } from '@jimber/stellar-crypto/dist/service/cryptoService';
 
 export default {
@@ -116,13 +115,14 @@ export default {
     },
     getters: {
         accounts: state => state.accounts,
+        appAccounts: state => state.accounts.filter(account => account.tags.includes('app')),
+        importedAccounts: state => state.accounts.filter(account => account.tags.includes('imported')),
         nextAppAcountIndex: state => {
             // @Reminder if deleted accounts are not in the account array,
             // this will not be correct
-            const amount = state.accounts.filter(account =>
-                account.tags.includes('app')
+            const index = state.accounts.filter(account =>
+              account.tags.includes('app')
             ).length;
-            const index = amount;
             return index;
         },
         accountThombstones: state => state.accountThombstones,
