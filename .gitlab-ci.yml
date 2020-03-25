@@ -3,7 +3,7 @@
     - docker pull jimber/wallet:$DOCKER_IMAGE_TAG
     - docker rm -f wallet || true
     - docker run -d -it --network=jimber_proxy_net --name wallet jimber/wallet:$DOCKER_IMAGE_TAG
-    - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed staging wallet version:$CI_COMMIT_REF_NAME commit:$CI_COMMIT_SHORT_SHA"
+    - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed $ENVIROMENT_NAME wallet version:$CI_COMMIT_REF_NAME commit:$CI_COMMIT_SHORT_SHA"
 
 .set_ci_version: &set_ci_version
     - eval "[ -z "$CI_COMMIT_TAG" ] && export VERSION=$CI_COMMIT_SHORT_SHA || export VERSION=$CI_COMMIT_TAG "
