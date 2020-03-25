@@ -15,7 +15,7 @@ export const mapPayment = ({
     return {
         id,
         amount,
-        created_at: new Date(created_at),
+        created_at: created_at,
         from,
         to,
         asset_code,
