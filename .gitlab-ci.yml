@@ -32,7 +32,7 @@ test:
     tags:
         - builder
     script:
-        - docker build -t wallet-test -f Dockerfile.test .
+        - docker build -t wallet-test -f test.dockerfile .
         - docker run --rm wallet-test
 
 build:staging:
