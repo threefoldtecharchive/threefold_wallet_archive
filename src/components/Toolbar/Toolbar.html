@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col
         cols="2"
-        v-if="$route.name != 'home' && $route.name != 'login' && $route.name != 'init'"
+        v-if="$route.name != 'home' && $route.name != 'login' && $route.name != 'init' && $route.name != 'error screen'"
       >
         <v-btn text x-small fab dark :to='{name: "home"}'>
           <v-icon flatclass="white--text">fas fa-arrow-left</v-icon>
@@ -29,7 +29,9 @@
             fas fa-plus
           </v-icon>
         </v-btn>
-
+        <v-btn text x-small fab dark @click="restartWallet" v-if="$route.name == 'error screen'" >
+          <v-icon flatclass="white--text">fas fa-sync</v-icon>
+        </v-btn>
       </v-col>
     </v-row>
   </v-app-bar>

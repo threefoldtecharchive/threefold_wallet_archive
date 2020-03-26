@@ -1,6 +1,7 @@
 import config from '../../../public/config';
 import Pkid from '@jimber/pkid';
 import sodium from 'libsodium-wrappers';
+import router from '../../router';
 
 export default {
     state: {
@@ -76,6 +77,13 @@ export default {
             if (data.status === 404) {
                 return null;
             }
+            router.push({
+                name: 'error screen',
+                params: {
+                    reason: 'There seems to be a problem with our services',
+                    fix: 'Try again later',
+                },
+            });
             // @todo: handel this situation
             throw new Error('something is wrong with Pkid connection');
         },
