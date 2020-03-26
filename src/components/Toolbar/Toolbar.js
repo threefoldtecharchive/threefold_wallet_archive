@@ -34,5 +34,6 @@ export default {
                 },
             });
         },
+        restartWallet() { location.replace('/init')},
     },
 };
