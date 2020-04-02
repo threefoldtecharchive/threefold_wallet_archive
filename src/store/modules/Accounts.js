@@ -13,6 +13,7 @@ export default {
     actions: {
         generateAppAccount: async (context, walletName) => {
             context.commit('startAppLoading');
+            commit('setLoadingMessage',{message: `Generating account: ${walletName}`})
             context.commit('addAccountThombstone', walletName);
             const nextAppAcountIndex = context.getters.nextAppAcountIndex;
             const seedPhrase = context.getters.appSeedPhrase;
@@ -37,6 +38,7 @@ export default {
             { seedPhrase, walletName }
         ) => {
             context.commit('startAppLoading');
+            commit('setLoadingMessage',{message: `Generating account: ${walletName}`})
             const position = context.state.accounts.length;
             const account = await fetchAccount({
                 index: 0,
@@ -52,6 +54,7 @@ export default {
         },
         syncAccounts: async ({ commit, getters, dispatch }) => {
             commit('startAppLoading');
+            commit('setLoadingMessage',{message: 'Syncing accounts'})
             const op1 = await dispatch(
                 'initializePkidAppAccounts',
                 getters.appSeedPhrase
@@ -66,6 +69,7 @@ export default {
         },
         changeWalletName: async ({ commit, dispatch }, { account, name }) => {
             commit('startAppLoading');
+            commit('setLoadingMessage',{message: 'Changing wallet name'})
             account.name = name;
             commit('addAccount', account);
             await dispatch('saveToPkid');
@@ -73,6 +77,7 @@ export default {
         },
         async deleteAccount({ commit, dispatch }, account) {
             commit('startAppLoading');
+            commit('setLoadingMessage',{message: 'Deleting wallet'})
             commit('removeAccount', account);
             await dispatch('saveToPkid');
             commit('stopAppLoading');
