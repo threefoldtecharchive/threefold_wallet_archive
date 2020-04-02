@@ -5,6 +5,7 @@ import { convertTfAccount } from '@jimber/stellar-crypto';
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
 import router from '../../router';
+import store from '..';
 
 export default {
     state: {
@@ -142,6 +143,7 @@ export default {
             { seed, doubleName }
         ) => {
             commit('startAppLoading');
+            commit('setLoadingMessage',{message: 'Initializing wallet'})
             state.initialized = true;
             await dispatch('setPkidClient', seed);
             commit('setThreebotName', doubleName);
@@ -168,7 +170,7 @@ export default {
 
             commit('stopAppLoading');
             commit('stopLoadingWallets');
-        },
+        }
     },
     mutations: {
         setThreebotName: (state, threeBotName) => {
@@ -183,7 +185,7 @@ export default {
         stopLoadingWallets: state => {
             state.isLoadingWallets = false;
         },
-        startAppLoading: state => {
+        startAppLoading: (state) => {
             state.appLoadingStack++;
         },
         stopAppLoading: state => {
