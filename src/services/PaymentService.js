@@ -8,8 +8,7 @@ export const mapPayment = ({
     from,
     to,
     asset_code,
-    payment,
-    fee,
+    rawPayment,
     account_id,
 }) => {
     return {
@@ -19,9 +18,10 @@ export const mapPayment = ({
         from,
         to,
         asset_code,
+        fee: 0.1,
         outgoing: account_id === from,
-        memo: getMemoClosure(payment),
-        fee,
+        memo: getMemoClosure(rawPayment),
+        rawPayment,
     };
 };
 
@@ -35,17 +35,14 @@ export const fetchPayments = async (id, cursor = 'now') => {
         .order('desc')
         .call();
 
-    const rawPayments = paymentPayloadObj.records;
-
-    const mappedPaymentsPromises = rawPayments
+    return paymentPayloadObj.records
         .filter(p => p.type === 'payment')
-        .map(async p => {
-            // const { memo, fee_charged } = await p.transaction();
-            const fee = 0.1;
-            return mapPayment({ ...p, account_id: id, fee, payment: p });
-        });
-    const mappedPayments = await Promise.all(mappedPaymentsPromises);
-    return mappedPayments;
+        .filter(
+            p =>
+                p.to !==
+                'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID'
+        )
+        .map(p => mapPayment({ ...p, account_id: id, rawPayment: p }));
 };
 
 const getMemoClosure = rawPayment => {

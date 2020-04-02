@@ -1,10 +1,15 @@
 import { fetchAccount, mapAccount } from '../../services/AccountService';
 import { mapPayment } from '../../services/PaymentService';
-import { entropyToMnemonic, mnemonicToEntropy } from 'bip39';
+import { entropyToMnemonic } from 'bip39';
 import { convertTfAccount } from '@jimber/stellar-crypto';
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
 import router from '../../router';
+import { generateActivationCode } from '@jimber/stellar-crypto/dist/service/stellarService';
+import {
+    calculateWalletEntropyFromAccount,
+    keypairFromAccount,
+} from '@jimber/stellar-crypto/dist/service/cryptoService';
 
 export default {
     state: {
@@ -32,7 +37,7 @@ export default {
                             ...message,
                             account_id: account.id,
                             fee,
-                            payment: message
+                            rawPayment: message,
                         });
 
                         commit('addPayments', {
@@ -72,7 +77,7 @@ export default {
                     },
                 });
         },
-        initializeSingleAccount: async function (
+        async initializeSingleAccount(
             { dispatch, commit },
             { pkidAccount, seedPhrase, type }
         ) {
@@ -100,9 +105,14 @@ export default {
             dispatch('initializeTransactionWatcher', account);
             dispatch('initializeAccountWatcher', account);
         },
-        initializePkidAppAccounts: async ({ dispatch, commit }, seedPhrase) => {
+        async initializePkidAppAccounts({ dispatch, commit }, seedPhrase) {
             const pkidAccounts = await dispatch('fetchPkidAppAccounts');
             const type = 'app';
+
+            if (!pkidAccounts) {
+                return;
+            }
+
             return pkidAccounts.map(pkidAccount => {
                 pkidAccount.position = pkidAccount.position
                     ? pkidAccount.position
@@ -115,11 +125,7 @@ export default {
                 });
             });
         },
-        initializeImportedPkidAccounts: async ({
-            dispatch,
-            commit,
-            getters,
-        }) => {
+        async initializeImportedPkidAccounts({ dispatch, commit, getters }) {
             const pkidImportedAccounts = await dispatch(
                 'fetchPkidImportedAccounts'
             );
@@ -137,10 +143,12 @@ export default {
                 });
             });
         },
-        initialize: async (
-            { commit, dispatch, state },
-            { seed, doubleName }
-        ) => {
+        async generateInitialAccount({}, seedPhrase) {
+            const entropy = calculateWalletEntropyFromAccount(seedPhrase, 0);
+            const keyPair = keypairFromAccount(entropy);
+            return await generateActivationCode(keyPair);
+        },
+        async initialize({ commit, dispatch, state }, { seed, doubleName }) {
             commit('startAppLoading');
             state.initialized = true;
             await dispatch('setPkidClient', seed);
@@ -149,7 +157,47 @@ export default {
             const seedPhrase = entropyToMnemonic(seed);
             commit('setAppSeedPhrase', seedPhrase);
 
-            const op1 = await dispatch('initializePkidAppAccounts', seedPhrase);
+            let op1 = await dispatch('initializePkidAppAccounts', seedPhrase);
+
+            if (!op1) {
+                try {
+                    await fetchAccount({
+                        seedPhrase,
+                        index: 0,
+                        name: 'daily',
+                        tags: ['app'],
+                        position: 0,
+                        retry: 0,
+                    });
+                    await dispatch('persistPkidAppAccounts', [
+                        {
+                            walletName: 'daily',
+                            position: 0,
+                            index: 0,
+                        },
+                    ]);
+                    await dispatch('persistPkidImportedAccounts', []);
+
+                    op1 = await dispatch(
+                        'initializePkidAppAccounts',
+                        seedPhrase
+                    );
+                } catch (e) {
+                    dispatch('generateInitialAccount', seedPhrase).then(
+                        code => {
+                            router.push({
+                                name: 'error screen',
+                                params: {
+                                    reason: 'send sms to 0000000000 with code:',
+                                    fix: code,
+                                },
+                            });
+                        }
+                    );
+                    return;
+                }
+            }
+
             const op2 = await dispatch('initializeImportedPkidAccounts');
             try {
                 await Promise.all([...op1, ...op2]);
