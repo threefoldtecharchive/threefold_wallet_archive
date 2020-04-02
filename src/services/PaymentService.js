@@ -37,11 +37,7 @@ export const fetchPayments = async (id, cursor = 'now') => {
 
     return paymentPayloadObj.records
         .filter(p => p.type === 'payment')
-        .filter(
-            p =>
-                p.to !==
-                'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID'
-        )
+        .filter(p => p.to !== config.tftFundAccount)
         .map(p => mapPayment({ ...p, account_id: id, rawPayment: p }));
 };
 
