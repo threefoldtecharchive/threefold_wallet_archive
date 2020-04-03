@@ -16,6 +16,8 @@ const initializeStellarCryptoConfig = () => {
     window.stellarNetwork = config.stellarNetwork;
     window.tftIssuer = config.tftIssuer;
     window.serviceUrl = config.serviceUrl;
+    window.feeDestination = config.feeDestination;
+    window.feeAmount = config.feeAmount;
 };
 
 const initializeFlutterInappwebviewPolyfill = () => {
