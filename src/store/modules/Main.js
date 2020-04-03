@@ -5,7 +5,6 @@ import { convertTfAccount } from '@jimber/stellar-crypto';
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
 import router from '../../router';
-import store from '..';
 
 export default {
     state: {
