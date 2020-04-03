@@ -21,6 +21,8 @@ export default {
         initialized: false,
         fee: StellarSdk.BASE_FEE,
         appLoadingStack: 0,
+        loadingTitle: null,
+        loadingSubTitle: null,
     },
     actions: {
         async initializeTransactionWatcher({ commit, dispatch }, account) {
@@ -151,7 +153,7 @@ export default {
         },
         async initialize({ commit, dispatch, state }, { seed, doubleName }) {
             commit('startAppLoading');
-            commit('setLoadingMessage',{message: 'Initializing wallet'})
+            commit('setLoadingMessage', { message: 'Initializing wallet' });
             state.initialized = true;
             await dispatch('setPkidClient', seed);
             commit('setThreebotName', doubleName);
@@ -192,7 +194,7 @@ export default {
                                 params: {
                                     tel: response.phonenumbers[0],
                                     code: response.activation_code,
-                                    address: response.address
+                                    address: response.address,
                                 },
                             });
                         }
@@ -219,7 +221,7 @@ export default {
 
             commit('stopAppLoading');
             commit('stopLoadingWallets');
-        }
+        },
     },
     mutations: {
         setThreebotName: (state, threeBotName) => {
@@ -234,11 +236,15 @@ export default {
         stopLoadingWallets: state => {
             state.isLoadingWallets = false;
         },
-        startAppLoading: (state) => {
+        startAppLoading: state => {
             state.appLoadingStack++;
         },
         stopAppLoading: state => {
             state.appLoadingStack--;
+            if (state.appLoadingStack <= 0) {
+                state.loadingTitle = null;
+                state.loadingSubTitle = null;
+            }
         },
         startMigratingAccount: state => {
             state.isMigratingAccount = true;
@@ -249,8 +255,14 @@ export default {
         incrementPosition: state => {
             state.position++;
         },
+        setLoadingMessage(state, { message, additional }) {
+            state.loadingTitle = message;
+            state.loadingSubTitle = additional;
+        },
     },
     getters: {
+        loadingSubTitle: state => state.loadingSubTitle,
+        loadingTitle: state => state.loadingTitle,
         threeBotName: state => state.threeBotName,
         appSeedPhrase: state => state.appSeedPhrase,
         isLoadingWallets: state => state.isLoadingWallets,
