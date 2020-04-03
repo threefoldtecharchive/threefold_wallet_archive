@@ -13,7 +13,7 @@ export default {
     actions: {
         generateAppAccount: async (context, walletName) => {
             context.commit('startAppLoading');
-            commit('setLoadingMessage',{message: `Generating account: ${walletName}`})
+            context.commit('setLoadingMessage',{message: `Generating account: ${walletName}`})
             context.commit('addAccountThombstone', walletName);
             const nextAppAcountIndex = context.getters.nextAppAcountIndex;
             const seedPhrase = context.getters.appSeedPhrase;
@@ -38,7 +38,7 @@ export default {
             { seedPhrase, walletName }
         ) => {
             context.commit('startAppLoading');
-            commit('setLoadingMessage',{message: `Generating account: ${walletName}`})
+            context.commit('setLoadingMessage',{message: `Generating account: ${walletName}`})
             const position = context.state.accounts.length;
             const account = await fetchAccount({
                 index: 0,
