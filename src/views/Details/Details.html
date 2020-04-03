@@ -92,9 +92,9 @@
       </v-tab-item>
 
       <v-tab-item :key="2">
-        <div class="px-3 ">
+        <div class="px-3 mt-4">
           <v-text-field label="Address" :value="account.id" append-outer-icon="fas fa-copy"
-                        @click:append-outer.stop="copyAddress" readonly></v-text-field>
+                        @click:append-outer.stop="copyAddress" readonly disabled></v-text-field>
           <v-text-field v-if="account.tags.includes('imported')" label="Seed phrase" :value="account.seedPhrase"
                         append-outer-icon="fas fa-copy"
                         @click:append-outer.stop="copySeed" readonly></v-text-field>
