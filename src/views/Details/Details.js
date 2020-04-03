@@ -95,8 +95,8 @@ export default {
             const lastPayment = this.accountPayments[
                 this.accountPayments.length - 1
             ];
-            const id = lastPayment  ? lastPayment.id : 'now' ;
-            const payments = await fetchPayments(this.id, id );
+            const id = lastPayment ? lastPayment.id : 'now';
+            const payments = await fetchPayments(this.id, id);
 
             if (payments.length === 0) {
                 $state.complete();

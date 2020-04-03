@@ -21,14 +21,17 @@ const initializeStellarCryptoConfig = () => {
 };
 
 const initializeFlutterInappwebviewPolyfill = () => {
-    if (window.flutter_inappwebview){
+    if (window.flutter_inappwebview) {
         return;
     }
     window.flutter_inappwebview = {
-        async callHandler (key, ...args){
-            console.log('flutter_inappwebview.callhandler called', {key,...args});
-        }
-    }
+        async callHandler(key, ...args) {
+            console.log('flutter_inappwebview.callhandler called', {
+                key,
+                ...args,
+            });
+        },
+    };
 };
 
 async function startVueApp() {
@@ -38,7 +41,7 @@ async function startVueApp() {
 
     Vue.use(filters);
     Vue.use(global);
-    initializeFlutterInappwebviewPolyfill()
+    initializeFlutterInappwebviewPolyfill();
     initializeStellarCryptoConfig();
 
     new Vue({

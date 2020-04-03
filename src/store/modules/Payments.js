@@ -62,8 +62,8 @@ export default {
 
                 currentPayments[index] = payment;
             }
-            currentPayments.sort(
-              (a, b) => moment(b.created_at).isBefore(a.created_at) ? -1 : 1
+            currentPayments.sort((a, b) =>
+                moment(b.created_at).isBefore(a.created_at) ? -1 : 1
             );
 
             state.payments[index] = { id, payments: currentPayments };

@@ -12,13 +12,12 @@ export default {
     },
     actions: {
         async saveToPkid({ getters, dispatch }) {
-            const appAccounts = getters.appAccounts
-                .map(account => ({
-                    walletName: account.name,
-                    position: account.position,
-                    index: account.index,
-                    stellar: true,
-                }));
+            const appAccounts = getters.appAccounts.map(account => ({
+                walletName: account.name,
+                position: account.position,
+                index: account.index,
+                stellar: true,
+            }));
             if (appAccounts.length <= 0) {
                 // should be a mistake
                 // @todo: look if exception is better, hint: probably
@@ -26,12 +25,11 @@ export default {
                 return;
             }
             const appPromise = dispatch('persistPkidAppAccounts', appAccounts);
-            const importedAccounts = getters.importedAccounts
-                .map(account => ({
-                    walletName: account.name,
-                    seed: account.seed,
-                    stellar: true,
-                }));
+            const importedAccounts = getters.importedAccounts.map(account => ({
+                walletName: account.name,
+                seed: account.seed,
+                stellar: true,
+            }));
             const importedPromise = dispatch(
                 'persistPkidImportedAccounts',
                 importedAccounts
@@ -67,8 +65,8 @@ export default {
         async fetchPkidDocument({ getters }, documentKey) {
             const client = getters.client;
             const data = await client.getDoc(
-              client.keyPair.publicKey,
-              documentKey,
+                client.keyPair.publicKey,
+                documentKey
             );
 
             if (data.success) {
@@ -99,10 +97,7 @@ export default {
         },
         async addImportedWallet({ dispatch }, postMessage) {
             const wallets = await dispatch('fetchPkidImportedAccounts');
-            await dispatch('setPkidImportedWallets', [
-                ...wallets,
-                postMessage,
-            ]);
+            await dispatch('setPkidImportedWallets', [...wallets, postMessage]);
         },
         async updatePkidAccounts(context) {
             // @todo

@@ -1,5 +1,5 @@
 .transfer {
-    .v-btn-toggle{
+    .v-btn-toggle {
         background-color: transparent;
     }
     .v-btn--active {
@@ -7,12 +7,11 @@
         color: white !important;
         border: none;
     }
-    input{
+    input {
         // display: none;
         background-color: green;
     }
-
 }
-.v-select__selections > input[type=text] {
+.v-select__selections > input[type='text'] {
     display: none;
 }
