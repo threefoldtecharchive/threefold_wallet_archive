@@ -76,11 +76,11 @@
                          @click.stop='selectedPayment = payment'/>
           </template>
           <infinite-loading
-            v-if="accountPayments.length"
+            class="py-4"
             @infinite="infiniteHandler"
             spinner="waveDots"
           >
-            <div slot="no-more">No more payments</div>
+            <div slot="no-more">No {{accountPayments.length ? 'more ' : ''}}payments {{accountPayments.length ? ' ' : 'yet'}}</div>
           </infinite-loading>
         </v-list>
       </v-tab-item>
