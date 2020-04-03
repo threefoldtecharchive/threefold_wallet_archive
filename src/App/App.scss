@@ -15,12 +15,12 @@ $borderradius: 6px;
 }
 
 .banner{
-  top: 9px;
-  right: -40px;
+  bottom: 9px;
+  left: -40px;
   transform: rotate(45deg);
   position: fixed;
   z-index: 1000;
-  background: red;
+  background: rgba(255, 0, 0, 0.45);
   padding: 5px 40px;
 }
 
