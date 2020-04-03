@@ -43,6 +43,7 @@ export default {
             if (
                 this.$route.name === 'devview' ||
                 this.$route.name === 'init' ||
+                this.$route.name === 'sms' ||
                 this.$route.name === 'error screen'
             ) {
                 return false;

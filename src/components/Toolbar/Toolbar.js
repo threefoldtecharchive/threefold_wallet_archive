@@ -1,5 +1,5 @@
 import { mapGetters, mapMutations } from 'vuex';
-import router from '../../router';
+
 export default {
     components: {},
     name: 'Toolbar',
@@ -11,6 +11,16 @@ export default {
     },
     computed: {
         ...mapGetters(['syncing', 'accounts', 'devClicks']),
+        showBack() {
+            const { name } = this.$route;
+            return (
+                name !== 'home' &&
+                name !== 'login' &&
+                name !== 'init' &&
+                name !== 'error screen' &&
+                name !== 'sms'
+            );
+        },
     },
     mounted() {},
     methods: {
@@ -34,6 +44,8 @@ export default {
                 },
             });
         },
-        restartWallet() { location.replace('/init')},
+        restartWallet() {
+            location.replace('/init');
+        },
     },
 };

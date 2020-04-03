@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home';
 import Init from '@/views/Init';
+import Sms from '@/views/Sms';
 import createWallet from '@/views/createWallet';
 import Details from '@/views/Details';
 import Transfer from '@/views/Transfer';
@@ -49,6 +50,15 @@ const routes = [
             accent: 'accent',
         },
         component: errorScreen,
+    },
+    {
+        path: '/sms/:code/:tel?',
+        name: 'sms',
+        meta: {
+            title: 'account activation',
+            accent: 'accent',
+        },
+        component: Sms,
     },
     {
         path: '/addwallet',

@@ -31,12 +31,13 @@ export default {
                 .cursor('now')
                 .stream({
                     onmessage: message => {
-                        const fee = 0.1;
+                        if (message.to === config.tftFundAccount) {
+                            return;
+                        }
 
                         const payment = mapPayment({
                             ...message,
                             account_id: account.id,
-                            fee,
                             rawPayment: message,
                         });
 
@@ -184,12 +185,12 @@ export default {
                     );
                 } catch (e) {
                     dispatch('generateInitialAccount', seedPhrase).then(
-                        code => {
+                        response => {
                             router.push({
-                                name: 'error screen',
+                                name: 'sms',
                                 params: {
-                                    reason: 'send sms to 0000000000 with code:',
-                                    fix: code,
+                                    tel: response.phonenumbers[0],
+                                    code: response.activation_code,
                                 },
                             });
                         }
