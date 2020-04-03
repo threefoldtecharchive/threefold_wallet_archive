@@ -60,8 +60,9 @@
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,vue}": [
+    "*.{js,vue,scss}": [
       "vue-cli-service lint",
+      "yarn prettier",
       "git add"
     ]
   }
