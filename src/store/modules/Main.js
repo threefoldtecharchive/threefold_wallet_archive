@@ -5,15 +5,11 @@ import { convertTfAccount } from '@jimber/stellar-crypto';
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
 import router from '../../router';
-<<<<<<< HEAD
 import { generateActivationCode } from '@jimber/stellar-crypto/dist/service/stellarService';
 import {
     calculateWalletEntropyFromAccount,
     keypairFromAccount,
 } from '@jimber/stellar-crypto/dist/service/cryptoService';
-=======
-import store from '..';
->>>>>>> Showing messages in loading screen
 
 export default {
     state: {
