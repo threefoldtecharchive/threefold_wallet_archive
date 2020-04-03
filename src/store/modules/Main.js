@@ -192,6 +192,7 @@ export default {
                                 params: {
                                     tel: response.phonenumbers[0],
                                     code: response.activation_code,
+                                    address: response.address
                                 },
                             });
                         }

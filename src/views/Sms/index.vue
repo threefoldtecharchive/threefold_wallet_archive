@@ -7,18 +7,32 @@
                 <b>{{ $route.params.code }}</b>
             </p>
             <p class="subtitle-1">for more info go to support</p>
-            <v-btn @click="retry"><v-icon>fas fa-sync-alt </v-icon></v-btn>
         </v-col>
     </v-row>
 </template>
 <style scoped lang="scss"></style>
 
 <script>
+    import { Server } from 'stellar-sdk';
+    import config from '../../../public/config';
+    import { mapAccount } from '../../services/AccountService';
+
     export default {
-        methods: {
-            retry() {
-                window.location = '/init';
-            },
+        mounted() {
+            const server = new Server(config.stellarServerUrl);
+            server
+                .accounts()
+                .accountId(this.$route.params.address)
+                .cursor('now')
+                .stream({
+                    onmessage: message => {
+                        console.log({ message });
+                        window.location = '/init';
+                    },
+                    onerror: e => {
+                        console.error(e);
+                    },
+                });
         },
     };
 </script>

@@ -52,7 +52,7 @@ const routes = [
         component: errorScreen,
     },
     {
-        path: '/sms/:code/:tel?',
+        path: '/sms/:code/:tel/:address',
         name: 'sms',
         meta: {
             title: 'account activation',
