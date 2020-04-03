@@ -86,7 +86,7 @@
       </v-tab-item>
 
       <v-tab-item :key="1" v-if="account.lockedBalances.length">
-        <v-list>
+        <v-list class="pa-0">
           <LockedItem v-for="balance,i in account.lockedBalances" :item="balance" :key="i"/>
         </v-list>
       </v-tab-item>
