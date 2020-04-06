@@ -101,7 +101,6 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
         const revineAddress = revineAddressFromSeed(seedPhrase, index);
         await generateAccount(keyPair, revineAddress);
     } catch (e) {
-        console.error(e);
         throw Error('Something went wrong while generating account');
     }
     console.log('loading account');
