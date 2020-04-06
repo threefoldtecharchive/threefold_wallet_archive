@@ -104,7 +104,7 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
         throw Error('Something went wrong while generating account');
     }
     console.log('loading account');
-    return await loadAcount(keyPair);
+    return await loadAccount(keyPair);
 }
 
 const validateAndFixAccountResponse = async (accountResponse, keyPair) => {
