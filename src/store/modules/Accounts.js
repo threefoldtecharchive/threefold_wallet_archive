@@ -40,7 +40,7 @@ export default {
             { seedPhrase, walletName }
         ) => {
             context.commit('startAppLoading');
-            commit('setLoadingMessage', {
+            context.commit('setLoadingMessage', {
                 message: `Generating account: ${walletName}`,
             });
             const position = context.state.accounts.length;
