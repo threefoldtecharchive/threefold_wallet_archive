@@ -5,7 +5,7 @@ import {
 } from '@jimber/stellar-crypto/dist/service/cryptoService';
 import {
     addTrustLine,
-    generateAccount,
+    migrateAccount,
     loadAccount,
 } from '@jimber/stellar-crypto/dist/service/stellarService';
 import { mnemonicToEntropy } from 'bip39';
@@ -99,7 +99,7 @@ export const fetchAccount = async ({
 async function generateAndFetchAccount(keyPair, seedPhrase, index) {
     try {
         const revineAddress = revineAddressFromSeed(seedPhrase, index);
-        await generateAccount(keyPair, revineAddress);
+        await migrateAccount(keyPair, revineAddress);
     } catch (e) {
         throw Error('Something went wrong while generating account');
     }
