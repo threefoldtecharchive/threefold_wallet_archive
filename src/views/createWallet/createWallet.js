@@ -3,6 +3,7 @@ import {
     isValidWalletName,
     validateAndGenerateSeed,
 } from '@/services/AccountManagementService';
+import router from '../../router';
 
 export default {
     name: 'create-wallet',
@@ -99,7 +100,14 @@ export default {
                 })
                 .catch(e => {
                     console.error(e);
-                    this.$flashMessage.error('Failed to import account.');
+                    router.push({
+                        name: 'error screen',
+                        params: {
+                            reason: 'Failed to import account.',
+                            fix:
+                                'Try again later, if that doesn\'t work contact support',
+                        },
+                    });
                 });
 
             this.clearForm();
