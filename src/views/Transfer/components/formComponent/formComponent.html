@@ -1,15 +1,15 @@
 <section class="form-component">
   <v-form ref="form" v-model="valid">
     <v-text-field dense v-if="selectedTab == 1" label="To (Wallet Address)" v-model="formObject.to.address"
-      :rules="toRules" append-icon="far fa-address-book" @click:append="toDialog = true" clearable>
+      :rules="toRules" class="my-5" append-icon="far fa-address-book" @click:append="toDialog = true" clearable>
     </v-text-field>
 
     <v-text-field dense label="Amount" v-on:input="formObject.amount = $event;" type="number" min="0.00"
-      :rules="amountRules" class="inputNumber mb-0" clearable suffix="TFT">
+      :rules="amountRules" class="inputNumber my-5" clearable suffix="TFT">
     </v-text-field>
 
     <v-text-field label="Message" v-model="formObject.message" :rules="messageRules" :counter="maxMessageLength"
-      clearable :maxlength="maxMessageLength">
+      clearable class="my-5" :maxlength="maxMessageLength">
     </v-text-field>
 
     <ToDialog v-if="toDialog" ref="toDialog" :dialog="toDialog" :closeDialog="closetoDialog"

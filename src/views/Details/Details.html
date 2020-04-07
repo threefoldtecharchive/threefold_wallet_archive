@@ -9,23 +9,16 @@
           <br>
         </v-col>
         <v-col>
-          <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances"/>
+          <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances" />
           <Balance v-if="account.lockedBalances.length" class="pl-3 pr-2 pt-1 mr-2" small locked
-                   :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]'/>
+            :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]' />
         </v-col>
       </v-row>
     </v-container>
   </header>
 
-  <v-tabs class="fill-height"
-          centered
-          color="accent"
-          slider-color="accent"
-          v-model="tab"
-          background-color="#517394"
-          dark
-          grow
-  >
+  <v-tabs class="fill-height" centered color="accent" slider-color="accent" v-model="tab" background-color="#517394"
+    dark grow>
     <v-tab>
       <!--Payments-->
       <v-icon small>fa-money-bill-wave</v-icon>
@@ -43,37 +36,26 @@
     <v-tabs-items v-model="tab" class="flex-fill">
       <v-tab-item :key="0">
         <v-container v-if="!accountPayments.length && isPaymentLoading(account.id)">
-          <v-row
-            align-content="center"
-            justify="center"
-          >
-            <v-col
-              class="subtitle-1 text-center"
-              cols="12"
-            >
+          <v-row align-content="center" justify="center">
+            <v-col class="subtitle-1 text-center" cols="12">
               Getting payments
             </v-col>
             <v-col cols="6">
-              <v-progress-linear
-                color="deep-purple accent-4"
-                indeterminate
-                rounded
-                height="6"
-              ></v-progress-linear>
+              <v-progress-linear color="deep-purple accent-4" indeterminate rounded height="6"></v-progress-linear>
             </v-col>
           </v-row>
         </v-container>
         <v-list three-line class="pa-0 payment-list">
           <template v-for="payment, i  in accountPayments">
             <div class="date" v-if="showDate(payment, i)">
-            <span>
-        {{payment.created_at | formatDay}}
-        </span>
+              <span>
+                {{payment.created_at | formatDay}}
+              </span>
               <v-divider></v-divider>
             </div>
 
             <paymentItem :key="payment.id" :payment="payment" class="payment-item"
-                         @click.stop='selectedPayment = payment'/>
+              @click.stop='selectedPayment = payment' />
           </template>
           <infinite-loading
             class="py-4"
@@ -94,18 +76,22 @@
       <v-tab-item :key="2">
         <div class="px-3 mt-4">
           <v-text-field label="Address" :value="account.id" append-outer-icon="fas fa-copy"
-                        @click:append-outer.stop="copyAddress" readonly></v-text-field>
+            @click:append-outer.stop="copyAddress" readonly></v-text-field>
           <v-text-field v-if="account.tags.includes('imported')" label="Seed phrase" :value="account.seedPhrase"
-                        append-outer-icon="fas fa-copy"
-                        @click:append-outer.stop="copySeed" readonly></v-text-field>
+            append-outer-icon="fas fa-copy" @click:append-outer.stop="copySeed" readonly></v-text-field>
           <v-text-field label="Wallet name" v-model="name" :value="account.name"></v-text-field>
-          <v-btn color="success" class="mr-4" @click.stop="change">Change wallet name</v-btn>
-          <v-btn v-if="account.tags.includes('imported')" color="error" class="mr-4" @click.stop="deleteWallet">
-            <v-icon>fas fa-trash</v-icon>
-          </v-btn>
-        </div>
+
+          <v-row>
+            <v-col v-if="account.tags.includes('imported')" >
+              <v-btn block color="error" class="mr-4" @click.stop="deleteWallet"></v-btn>
+            </v-col>
+            <v-col>
+              <v-btn block color="success" class="mr-4" @click.stop="change">Change wallet name</v-btn>
+            </v-col>
+          </v-row>
+        </v-col>
       </v-tab-item>
     </v-tabs-items>
   </v-tabs>
-  <paymentDialog v-if="selectedPayment" :payment="selectedPayment" @closed="selectedPayment = null"/>
+  <paymentDialog v-if="selectedPayment" :payment="selectedPayment" @closed="selectedPayment = null" />
 </section>

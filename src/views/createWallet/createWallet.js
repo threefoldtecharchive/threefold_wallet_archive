@@ -89,6 +89,7 @@ export default {
 
             const walletName = this.walletName;
 
+
             this.generateImportedAccount({
                 seedPhrase,
                 walletName,
@@ -108,7 +109,6 @@ export default {
                         },
                     });
                 });
-
             this.clearForm();
         },
     },

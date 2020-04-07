@@ -8,6 +8,7 @@ import {
 } from '@jimber/stellar-crypto/dist/service/stellarService';
 
 export default {
+
     name: 'transfer',
     components: {
         FormComponent,

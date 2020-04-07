@@ -1,6 +1,7 @@
 <section class="app">
   <Loader v-if="showLoader" />
   <v-app :style="cssProps">
+
     <div class="banner" v-if="!isProduction" @click="$router.push({name: 'devview',})">staging</div>
     <div class="version">{{version}}</div>
     <Toolbar />
