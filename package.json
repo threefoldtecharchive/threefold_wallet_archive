@@ -7,13 +7,14 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "format": "prettier --write '{src,public}/**/*.{vue,js,scss}'"
   },
   "dependencies": {
     "@chenfengyuan/vue-qrcode": "^1.0.2",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@jimber/pkid": "^1.0.4",
-    "@jimber/stellar-crypto": "^0.9.4",
+    "@jimber/stellar-crypto": "^0.9.7",
     "axios": "^0.19.2",
     "bip39": "latest",
     "clipboard-copy": "^3.1.0",
@@ -45,19 +46,23 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.0.0",
     "lint-staged": "^9.5.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.1",
     "sass": "^1.23.7",
     "sass-loader": "^8.0.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "vue-cli-plugin-vuetify": "^2.0.3",
     "vue-template-compiler": "^2.6.10",
-    "vuetify-loader": "^1.3.0"
+    "vuetify-loader": "^1.3.0",
+    "webpack": "latest",
+    "webpack-bundle-analyzer": "^3.6.1"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,vue}": [
+    "*.{js,vue,scss}": [
       "vue-cli-service lint",
+      "yarn prettier",
       "git add"
     ]
   }

@@ -57,20 +57,24 @@
             <paymentItem :key="payment.id" :payment="payment" class="payment-item"
               @click.stop='selectedPayment = payment' />
           </template>
-          <infinite-loading v-if="accountPayments.length" @infinite="infiniteHandler" spinner="waveDots">
-            <div slot="no-more">No more payments</div>
+          <infinite-loading
+            class="py-4"
+            @infinite="infiniteHandler"
+            spinner="waveDots"
+          >
+            <div slot="no-more">No {{accountPayments.length ? 'more ' : ''}}payments {{accountPayments.length ? ' ' : 'yet'}}</div>
           </infinite-loading>
         </v-list>
       </v-tab-item>
 
       <v-tab-item :key="1" v-if="account.lockedBalances.length">
-        <v-list>
-          <LockedItem v-for="balance,i in account.lockedBalances" :item="balance" :key="i" />
+        <v-list class="pa-0">
+          <LockedItem v-for="balance,i in account.lockedBalances" :item="balance" :key="i"/>
         </v-list>
       </v-tab-item>
 
       <v-tab-item :key="2">
-        <v-col class="py-5">
+        <div class="px-3 mt-4">
           <v-text-field label="Address" :value="account.id" append-outer-icon="fas fa-copy"
             @click:append-outer.stop="copyAddress" readonly></v-text-field>
           <v-text-field v-if="account.tags.includes('imported')" label="Seed phrase" :value="account.seedPhrase"

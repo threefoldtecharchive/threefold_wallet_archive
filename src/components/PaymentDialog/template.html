@@ -14,7 +14,7 @@
       <v-row>
         <v-col justify="center" align="center" class="payment-header">
           <b class="my-1">{{payment.outgoing ? '-' : '+'}} {{payment.amount | formatBalance}} <sup>TFT</sup></b>
-          <small v-if="payment.outgoing" style="font-size: small;" >0.1 <sup>TFT</sup> fee included</small>
+          <small style="font-size: small;" v-if="payment.outgoing">0.1 <sup>TFT</sup> fee excluded</small>
           <span class="my-1" style="font-size: 1rem; ;width: 58vw; display: block;">{{payment.to | readableAddress}}</span>
         </v-col>
       </v-row>

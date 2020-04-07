@@ -1,16 +1,63 @@
 <section class="create-wallet fill-height">
-  <v-row class="px-5 primary lighten-2"> 
-    <v-col class="py-3 my-0">
-      <p class="my-0 white--text">You can use this to import a wallet from the Threefold app.</p>
-    </v-col>
-  </v-row>
-  <v-card>
-    <v-row class="fill-height px-5">
-      <v-col>
-        <v-text-field :error-messages="walletNameErrors" @input="walletNameErrors = []" v-model="walletName"
-          class="red--text" label="Wallet name"></v-text-field>
-        <v-textarea :error-messages="wordsErrors" @input="wordsErrors = []" v-model="words" name="input-7-1"
-          label="Words (Seed phrase)" value="" hint="Please enter all words lowercased and separted by one space.">
+  <v-col>
+    <v-row justify="center">
+      <v-btn-toggle dense mandatory class="round">
+        <v-btn
+          text
+          v-for="tab in tabs"
+          :key="tab"
+          class="px-3 my-1 mx-1 round"
+          @click="currentTab=tab"
+          >{{tab}}</v-btn
+        >
+      </v-btn-toggle>
+    </v-row>
+    <v-container v-if="currentTab == 'create'">
+      <v-text-field
+        :error-messages="walletNameErrors"
+        @input="walletNameErrors = []"
+        v-model.trim="walletName"
+        class="red--text"
+        label="Wallet name"
+      ></v-text-field>
+
+      <div>
+        <v-btn
+          class="mx-0 mt-3"
+          style="width: 100%;"
+          color="accent"
+          @click="createNewWallet"
+          :disabled="!walletName"
+        >
+          Create wallet</v-btn
+        >
+      </div>
+    </v-container>
+
+    <v-container v-if="currentTab == 'import'">
+      <v-row class="caption" justify="center">
+        <span>You can use this to import a wallet from the Threefold app.</span>
+      </v-row>
+
+      <v-row>
+        <v-text-field
+          :error-messages="walletNameErrors"
+          @input="walletNameErrors = []"
+          v-model.trim="walletName"
+          class="red--text"
+          label="Wallet name"
+        ></v-text-field>
+      </v-row>
+      <v-row>
+        <v-textarea
+          :error-messages="wordsErrors"
+          @input="wordsErrors = []"
+          v-model="words"
+          name="input-7-1"
+          label="Words (Seed phrase)"
+          value=""
+          hint="Please enter all words lowercased and separted by one space."
+        >
         </v-textarea>
         <v-alert type="warning">
           Make sure to keep this seed written down and stored in a safe place.

@@ -1,91 +1,94 @@
-.staging_deploy_script: &staging_deploy_script
+.deploy_wallet: &deploy_wallet
     - echo "Deploying image with tag $DOCKER_IMAGE_TAG -- https://hub.docker.com/r/jimber/wallet"
-    - docker pull jimber/wallet:staging
-    - docker rm -f 3bot_wallet; true
-    - docker run -d -it --network=jimber_proxy_net --name 3bot_wallet jimber/wallet:$DOCKER_IMAGE_TAG
-#caching modules
+    - docker pull jimber/wallet:$DOCKER_IMAGE_TAG
+    - docker rm -f wallet || true
+    - docker run -d -it --network=jimber_proxy_net --name wallet jimber/wallet:$DOCKER_IMAGE_TAG
+    - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed $ENVIROMENT_NAME wallet version:$CI_COMMIT_REF_NAME commit:$CI_COMMIT_SHORT_SHA"
+
+.set_ci_version: &set_ci_version
+    - eval "[ -z "$CI_COMMIT_TAG" ] && export VERSION=$CI_COMMIT_SHORT_SHA || export VERSION=$CI_COMMIT_TAG "
+    - sed -i "s/{{version}}/$VERSION/g" public/version.js
+
+.build_wallet: &build_wallet
+    - cp public/$ENVIROMENT_NAME.config.js public/config.js
+    - docker build -t jimber/wallet:$DOCKER_IMAGE_TAG .
+    - echo "$DOCKER_PW" | docker login -u $DOCKER_USER --password-stdin
+    - docker push jimber/wallet:$DOCKER_IMAGE_TAG
+
+    #caching modules
 cache:
-  paths:
-    - node_modules/
-    - .yarn
+    paths:
+        - node_modules/
+        - .yarn
 
 #steps gitlab will take
 stages:
-  - test
-  - build
-  - deploy
+    - test
+    - build
+    - deploy
 
 test:
-  stage: test
-  tags:
-    - builder
-  script:
-    - docker build -t wallet-test -f Dockerfile.test .
-    - docker run --rm wallet-test
+    stage: test
+    tags:
+        - builder
+    script:
+        - docker build -t wallet-test -f test.dockerfile .
+        - docker run --rm wallet-test
 
-staging_build:
-  stage: build
-  dependencies: []
-  variables:
-    DOCKER_IMAGE_TAG: staging
-  only:
-    - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
-  tags:
-    - builder
-  script:
-    - cp public/staging.config.js public/config.js
-    - docker build -t jimber/wallet:staging .
-    - echo "$DOCKER_PW" | docker login -u $DOCKER_USER --password-stdin
-    - docker push jimber/wallet:staging
+build:staging:
+    stage: build
+    dependencies:
+        - test
+    variables:
+        ENVIROMENT_NAME: staging
+        DOCKER_IMAGE_TAG: staging
+    rules:
+        - if: $CI_COMMIT_TAG =~ /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
+        - when: manual
+    tags:
+        - builder
+    script:
+        - *set_ci_version
+        - *build_wallet
 
-staging_deployment:
-  variables:
-    GIT_STRATEGY: none
-    GIT_CHECKOUT: "false"
-  stage: deploy
-  dependencies: []
-  tags:
-    - staging
-  script:
-    - *staging_deploy_script
-    - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed wallet version $CI_COMMIT_TAG"
-  only:
-    - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
+deploy:staging:
+    variables:
+        GIT_STRATEGY: none
+        GIT_CHECKOUT: 'false'
+        ENVIROMENT_NAME: staging
+        DOCKER_IMAGE_TAG: staging
+    stage: deploy
+    tags:
+        - staging
+    script:
+        - *deploy_wallet
+    dependencies:
+        - build:staging
 
-test_deployment:
-  variables:
-    GIT_STRATEGY: none
-    GIT_CHECKOUT: "false"
-  stage: deploy
-  only:
-    - development_testing
-  dependencies: []
-  tags:
-    - staging
-  script:
-    - *staging_deploy_script
+build:production:
+    only:
+        - /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
+    stage: build
+    tags:
+        - builder
+    variables:
+        ENVIROMENT_NAME: production
+        DOCKER_IMAGE_TAG: '${CI_COMMIT_TAG}'
+    script:
+        - *set_ci_version
+        - *build_wallet
 
-production_build:
-  only:
-    - /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
-  stage: build
-  tags:
-    - builder
-  script: 
-    - cp public/production.config.js public/config.js
-    - docker build -t jimber/wallet:$CI_COMMIT_TAG .
-    - docker push jimber/wallet:$CI_COMMIT_TAG
+deploy:production:
+    variables:
+        ENVIROMENT_NAME: production
+        DOCKER_IMAGE_TAG: '${CI_COMMIT_TAG}'
 
-production_deploy:
-  rules:
-    - if: $CI_COMMIT_TAG =~ /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
-      when: manual
-    - when: never
-  stage: deploy
-  tags:
-    - production
-  script: 
-    - docker pull jimber/wallet:$CI_COMMIT_TAG
-    - docker rm -f wallet
-    - docker run -d -it --name=wallet --network=3proxynet jimber/wallet:$CI_COMMIT_TAG
-    - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed wallet version $CI_COMMIT_TAG"
+    rules:
+        - if: $CI_COMMIT_TAG =~ /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
+          when: manual
+        - when: never
+    stage: deploy
+    tags:
+        - production
+    script:
+        - *deploy_wallet

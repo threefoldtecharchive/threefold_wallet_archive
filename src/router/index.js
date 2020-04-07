@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home';
 import Init from '@/views/Init';
+import Sms from '@/views/Sms';
 import createWallet from '@/views/createWallet';
 import Details from '@/views/Details';
 import Transfer from '@/views/Transfer';
@@ -12,104 +13,117 @@ import errorScreen from '@/views/errorScreen';
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: Home,
-    meta: {
-      title: 'wallet',
-      transfer: 'transfer',
-      accent: 'accent',
-      tags: ['showTransferButton'],
+    {
+        path: '/',
+        name: 'home',
+        component: Home,
+        meta: {
+            title: 'wallet',
+            transfer: 'transfer',
+            accent: 'accent',
+            tags: ['showTransferButton'],
+        },
     },
-  },
-  {
-    path: '/init',
-    name: 'init',
-    meta: {
-      title: 'initialize',
-      accent: 'accent',
+    {
+        path: '/init',
+        name: 'init',
+        meta: {
+            title: 'initialize',
+            accent: 'accent',
+        },
+        component: Init,
     },
-    component: Init,
-  },
-  {
-    path: '/devview',
-    name: 'devview',
-    meta: {
-      title: 'devview',
-      accent: 'accent',
+    {
+        path: '/devview',
+        name: 'devview',
+        meta: {
+            title: 'devview',
+            accent: 'accent',
+        },
+        component: DevView,
     },
-    component: DevView,
-  },
-  {
-    path: '/errorscreen:reason?:fix?',
-    name: 'error screen',
-    meta: {
-      title: 'Error Screen',
-      accent: 'accent',
+    {
+        path: '/errorscreen:reason?:fix?',
+        name: 'error screen',
+        meta: {
+            title: 'Error Screen',
+            accent: 'accent',
+        },
+        component: errorScreen,
     },
-    component: errorScreen,
-  },
-  {
-    path: '/addwallet',
-    name: 'addwallet',
-    meta: {
-      accent: 'accent',
-      title: 'import wallet',
+    {
+        path: '/sms/:code/:tel/:address',
+        name: 'sms',
+        meta: {
+            title: 'account activation',
+            accent: 'accent',
+        },
+        component: Sms,
     },
-    component: createWallet,
-  },
-  {
-    path: '/details/:account',
-    name: 'details',
-    meta: {
-      title: 'details',
-      transfer: 'transfer',
-      accent: 'accent',
+    {
+        path: '/addwallet',
+        name: 'addwallet',
+        meta: {
+            accent: 'accent',
+            title: 'import wallet',
+        },
+        component: createWallet,
     },
-    component: Details,
-  },
-  {
-    path: '/transfer/:account?',
-    name: 'transfer',
-    meta: {
-      accent: 'accent',
-      overview: 'home',
-      history: 'details',
+    {
+        path: '/details/:account',
+        name: 'details',
+        meta: {
+            title: 'details',
+            transfer: 'transfer',
+            accent: 'accent',
+        },
+        component: Details,
     },
-    component: Transfer,
-  },
-  {
-    path: '/walletinfo/:account',
-    name: 'wallet info',
+    {
+        path: '/transfer/:account?',
+        name: 'transfer',
+        meta: {
+            accent: 'accent',
+            overview: 'home',
+            history: 'details',
+        },
+        component: Transfer,
+    },
+    {
+        path: '/walletinfo/:account',
+        name: 'wallet info',
 
-    meta: {
-      accent: 'accent',
-      transfer: 'transfer',
-      info: {
-        title: 'wallet info',
-        text: 'this is info',
-      },
+        meta: {
+            accent: 'accent',
+            transfer: 'transfer',
+            info: {
+                title: 'wallet info',
+                text: 'this is info',
+            },
+        },
+        component: () =>
+            import(/* webpackChunkName: "wallet-info" */ '../views/WalletInfo'),
     },
-    component: () =>
-      import(/* webpackChunkName: "wallet-info" */ '../views/WalletInfo'),
-  },
 ];
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes,
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes,
 });
 
 router.beforeEach((to, from, next) => {
-  if (!store.getters.initialized && to.name !== 'error' && to.name !== 'init') {
-    next({
-      name: 'init',
-    });
-    return;
-  }
-  next();
+    if (
+        !store.getters.initialized &&
+        to.name !== 'error' &&
+        to.name !== 'init'
+    ) {
+        next({
+            name: 'init',
+        });
+        return;
+    }
+    next();
 });
 
 export default router;

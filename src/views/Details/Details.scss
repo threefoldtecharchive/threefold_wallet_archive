@@ -1,56 +1,55 @@
 header {
-  background: lighten(#2d4052, 20);
-  color: white;
+    background: lighten(#2d4052, 20);
+    color: white;
 }
 
 .address {
-  font-size: 2.4vw;
-  word-break: break-all;
+    font-size: 2.4vw;
+    word-break: break-all;
 }
 
 @media screen and (max-width: 600px) {
-  .address {
-    font-size: 0.875rem;
-  }
+    .address {
+        font-size: 0.875rem;
+    }
 }
 
 @media screen and (min-width: 960px) {
-  .address {
-    font-size: 23px;
-  }
+    .address {
+        font-size: 23px;
+    }
 }
 
 .payment-item:last-child {
-  margin-bottom: 5rem;
+    margin-bottom: 5rem;
 }
 
 .info-payments {
-  display: block;
-  text-align: center;
-  color: rgb(168, 168, 168);
-  padding-bottom: 2rem;
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
+    display: block;
+    text-align: center;
+    color: rgb(168, 168, 168);
+    padding-bottom: 2rem;
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
 }
 
 .date {
-  span {
-    color: grey;
-    font-size: 0.8rem;
-    padding-left: 1.5rem;
-  }
+    span {
+        color: grey;
+        font-size: 0.8rem;
+        padding-left: 1.5rem;
+    }
 
-  hr {
-    border-width: 2px 0 0 0;
-  }
+    hr {
+        border-width: 2px 0 0 0;
+    }
 }
 .details {
-  display: flex;
-  flex-direction: column;
-
+    display: flex;
+    flex-direction: column;
 }
-.v-tabs{
-  display: flex;
-  flex-direction: column;
+.v-tabs {
+    display: flex;
+    flex-direction: column;
 }

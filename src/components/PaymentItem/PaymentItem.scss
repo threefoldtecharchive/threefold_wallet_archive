@@ -1,14 +1,14 @@
 @mixin item($color) {
-  border-left: 0.5rem solid $color;
-  .amount {
-    color: darken($color, 40) !important;
-  }
+    border-left: 0.5rem solid $color;
+    .amount {
+        color: darken($color, 40) !important;
+    }
 }
 
 .outgoing {
-  @include item(pink);
+    @include item(pink);
 }
 
 .incoming {
-  @include item(#c1f5c1);
+    @include item(#c1f5c1);
 }
