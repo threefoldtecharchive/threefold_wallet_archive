@@ -8,5 +8,6 @@ export default {
     tftFundAccount: 'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID',
     feeDestination: 'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID',
     feeAmount: '0.1000000',
+    env: 'dev',
     // devWallet: 'SsoeDx7TRjjc71PXmr813rCVtNAkDsJ7KCvZjglXcfa=',
 };

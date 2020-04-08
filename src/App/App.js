@@ -36,6 +36,9 @@ export default {
         isProduction() {
             return config.isProduction;
         },
+        env() {
+            return config.env;
+        },
         showLoader() {
             if (!this.isAppLoading) {
                 return false;

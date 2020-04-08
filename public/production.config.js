@@ -7,4 +7,5 @@ export default {
     tftFundAccount: '?',
     feeDestination: '?',
     feeAmount: '0.1000000',
+    env: 'production',
 };
