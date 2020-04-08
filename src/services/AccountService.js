@@ -5,11 +5,19 @@ import {
 } from '@jimber/stellar-crypto/dist/service/cryptoService';
 import {
     addTrustLine,
-    migrateAccount,
     loadAccount,
+    migrateAccount,
 } from '@jimber/stellar-crypto/dist/service/stellarService';
 import { mnemonicToEntropy } from 'bip39';
-import { getLockedBalances } from '@jimber/stellar-crypto/dist/service/lockService';
+import {
+    fetchUnlockTransaction,
+    getLockedBalances,
+    transferLockedTokens,
+} from '@jimber/stellar-crypto/dist/service/lockService';
+import moment from 'moment';
+import { Server } from 'stellar-sdk';
+import config from '../../public/config';
+import store from '../store';
 
 export const mapAccount = async ({
     accountResponse,
@@ -35,6 +43,44 @@ export const mapAccount = async ({
     lockedBalances,
     lockedBalance,
 });
+
+// todo: make this an interval loop
+// todo: upodate locked balance
+// todo: remove converted escrow accounts
+async function lockedTokenSubRoutine(lockedBalances) {
+    const server = new Server(config.stellarServerUrl);
+    for (const lockedBalance of lockedBalances) {
+        const unlockHash = lockedBalance.unlockHash;
+        if (unlockHash) {
+            store.commit('setLoadingMessage', {
+                message: 'fetching locked tokens',
+            });
+            lockedBalance.unlockTransaction = await fetchUnlockTransaction(
+                unlockHash
+            );
+            if (
+                !moment
+                    .unix(lockedBalance.unlockTransaction.timeBounds.minTime)
+                    .isBefore()
+            ) {
+                continue;
+            }
+            await server.submitTransaction(lockedBalance.unlockTransaction);
+            lockedBalance.unlockHash = null;
+            lockedBalance.unlockTransaction = null;
+        }
+
+        // could be already changed to null
+        if (!lockedBalance.unlockHash ) {
+            console.log(lockedBalance);
+            await transferLockedTokens(
+                lockedBalance.keyPair,
+                lockedBalance.id,
+                Number(lockedBalance.balance)
+            );
+        }
+    }
+}
 
 export const fetchAccount = async ({
     seedPhrase,
@@ -78,6 +124,8 @@ export const fetchAccount = async ({
     }
 
     const lockedBalances = await getLockedBalances(keyPair);
+    lockedTokenSubRoutine(lockedBalances);
+
     const lockedBalance = lockedBalances.reduce((total, lockedBalance) => {
         return total + Number(lockedBalance.balance);
     }, 0);

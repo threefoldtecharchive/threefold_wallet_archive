@@ -16,3 +16,10 @@ export const formatDate = value => {
     }
     return String(moment(String(value)).format('DD MMMM YYYY hh:mm:ss'));
 };
+
+export const formatUnlockTime = value => {
+    if (!value) {
+        return;
+    }
+    return moment.unix(value).format('DD MMMM YYYY hh:mm:ss');
+}

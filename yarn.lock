@@ -1074,6 +1074,20 @@
     tweetnacl "^1.0.1"
     tweetnacl-util "^0.15.0"
 
+"@jimber/stellar-crypto@^0.10.1":
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-0.10.1.tgz#4f634d83ed61c23a846887cdca57ae7f221bff4a"
+  integrity sha512-gSEVH9ptmqcCIRdrCWH4uGG8bgR8g/4BMpjkMyu9RD9BvO3++1SUIpSJCVIN8XkKs9gnRUjcRq6aAmmRxF+VHA==
+  dependencies:
+    "@jimber/stellar-crypto" "^0.4.0"
+    "@waves/ts-lib-crypto" "^1.4.2"
+    axios "^0.19.2"
+    bip39 "^3.0.2"
+    mnemonicconversion2924 "^1.1.2"
+    stellar-sdk "^4.0.2"
+    tweetnacl-ts "^1.0.3"
+    tweetnacl-util "^0.15.1"
+
 "@jimber/stellar-crypto@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-0.4.0.tgz#a94c5cb4576adb39122f9f1918cffa878f0f6d79"
@@ -1083,20 +1097,6 @@
     bip39 "^3.0.2"
     mnemonicconversion2924 "^1.1.2"
     stellar-sdk "^3.3.0"
-    tweetnacl-ts "^1.0.3"
-    tweetnacl-util "^0.15.1"
-
-"@jimber/stellar-crypto@^0.9.7":
-  version "0.9.7"
-  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-0.9.7.tgz#5b27364739d21b8e6afa7664d157153692142633"
-  integrity sha512-d09EAbzZssOrKBQfBfXb15ZXUWB+LD0HewS1O+dC7+VGmrbmKrK1+QXla6XLnV43GKoJZ3zAPE64lLloPpwbHQ==
-  dependencies:
-    "@jimber/stellar-crypto" "^0.4.0"
-    "@waves/ts-lib-crypto" "^1.4.2"
-    axios "^0.19.2"
-    bip39 "^3.0.2"
-    mnemonicconversion2924 "^1.1.2"
-    stellar-sdk "^4.0.2"
     tweetnacl-ts "^1.0.3"
     tweetnacl-util "^0.15.1"
 
