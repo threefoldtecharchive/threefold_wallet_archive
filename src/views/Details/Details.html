@@ -27,8 +27,12 @@
           grow
   >
     <v-tab>
+    <!--Payments-->
+    <v-icon small>fa-money-bill-wave</v-icon>
+    </v-tab>
+    <v-tab>
       <!--Payments-->
-      <v-icon small>fa-money-bill-wave</v-icon>
+      <v-icon small>fa-exchange-alt</v-icon>
     </v-tab>
     <v-tab v-if="account.lockedBalances.length">
       <!--Locked Payments-->
@@ -42,6 +46,11 @@
 
     <v-tabs-items v-model="tab" class="flex-fill">
       <v-tab-item :key="0">
+        <div v-for="balance,i in account.balances" :key="i">
+          {{balance.balance}} {{balance.asset_code || "XLM"}}
+        </div>
+      </v-tab-item>
+      <v-tab-item :key="1">
         <v-container v-if="!accountPayments.length && isPaymentLoading(account.id)">
           <v-row
             align-content="center"
@@ -85,13 +94,13 @@
         </v-list>
       </v-tab-item>
 
-      <v-tab-item :key="1" v-if="account.lockedBalances.length">
+      <v-tab-item :key="2" v-if="account.lockedBalances.length">
         <v-list class="pa-0">
           <LockedItem v-for="balance,i in account.lockedBalances" :item="balance" :key="i"/>
         </v-list>
       </v-tab-item>
 
-      <v-tab-item :key="2">
+      <v-tab-item :key="3">
         <div class="px-3 mt-4">
           <v-text-field label="Address" :value="account.id" append-outer-icon="fas fa-copy"
                         @click:append-outer.stop="copyAddress" readonly></v-text-field>
