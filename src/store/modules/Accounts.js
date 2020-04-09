@@ -1,6 +1,6 @@
 import { mapGetters } from 'vuex';
 import { fetchAccount } from '../../services/AccountService';
-import { keypairFromAccount } from '@jimber/stellar-crypto/dist/service/cryptoService';
+import { keypairFromAccount } from '@jimber/stellar-crypto';
 
 export default {
     state: {

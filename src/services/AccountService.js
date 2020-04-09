@@ -2,18 +2,14 @@ import {
     calculateWalletEntropyFromAccount,
     keypairFromAccount,
     revineAddressFromSeed,
-} from '@jimber/stellar-crypto/dist/service/cryptoService';
-import {
     addTrustLine,
     loadAccount,
     migrateAccount,
-} from '@jimber/stellar-crypto/dist/service/stellarService';
-import { mnemonicToEntropy } from 'bip39';
-import {
     fetchUnlockTransaction,
     getLockedBalances,
     transferLockedTokens,
-} from '@jimber/stellar-crypto/dist/service/lockService';
+} from '@jimber/stellar-crypto';
+import { mnemonicToEntropy } from 'bip39';
 import moment from 'moment';
 import { Server } from 'stellar-sdk';
 import config from '../../public/config';
@@ -71,7 +67,7 @@ async function lockedTokenSubRoutine(lockedBalances) {
         }
 
         // could be already changed to null
-        if (!lockedBalance.unlockHash ) {
+        if (!lockedBalance.unlockHash) {
             console.log(lockedBalance);
             await transferLockedTokens(
                 lockedBalance.keyPair,

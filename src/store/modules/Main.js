@@ -1,15 +1,15 @@
 import { fetchAccount, mapAccount } from '../../services/AccountService';
 import { mapPayment } from '../../services/PaymentService';
 import { entropyToMnemonic } from 'bip39';
-import { convertTfAccount } from '@jimber/stellar-crypto';
+import {
+    calculateWalletEntropyFromAccount,
+    convertTfAccount,
+    generateActivationCode,
+    keypairFromAccount,
+} from '@jimber/stellar-crypto';
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
 import router from '../../router';
-import { generateActivationCode } from '@jimber/stellar-crypto/dist/service/stellarService';
-import {
-    calculateWalletEntropyFromAccount,
-    keypairFromAccount,
-} from '@jimber/stellar-crypto/dist/service/cryptoService';
 
 export default {
     state: {

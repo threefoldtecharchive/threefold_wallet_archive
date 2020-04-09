@@ -5,7 +5,7 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
 import {
     buildFundedPaymentTransaction,
     submitFundedTransaction,
-} from '@jimber/stellar-crypto/dist/service/stellarService';
+} from '@jimber/stellar-crypto';
 
 export default {
     name: 'transfer',
