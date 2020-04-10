@@ -32,6 +32,7 @@ export default {
                 .forAccount(account.id)
                 .cursor('now')
                 .stream({
+                    reconnectTimeout: 5000,
                     onmessage: message => {
                         if (message.to === config.tftFundAccount) {
                             return;
@@ -66,6 +67,7 @@ export default {
                 .accountId(account.id)
                 .cursor('now')
                 .stream({
+                    reconnectTimeout: 5000,
                     onmessage: message => {
                         mapAccount({
                             ...getters.accounts.find(a => a.id === account.id),
