@@ -1,12 +1,13 @@
 import AccountCard from '../../components/AccountCard';
 import Balance from '../../components/Balance';
+import PaymentItem from '../../components/PaymentItem';
 import PaymentDialog from '../../components/PaymentDialog';
 import LockedItem from '../../components/LockedItem';
-import Balances from './Components/Balances';
-import Transactions from './Components/Transactions';
 import store from '../../store';
 import router from '../../router';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
+import moment from 'moment';
+import InfiniteLoading from 'vue-infinite-loading';
 import { fetchPayments } from '../../services/PaymentService';
 
 export default {
@@ -14,10 +15,10 @@ export default {
     components: {
         AccountCard,
         Balance,
+        PaymentItem,
         PaymentDialog,
         LockedItem,
-        Balances,
-        Transactions
+        InfiniteLoading,
     },
     props: [],
     data() {
@@ -43,7 +44,15 @@ export default {
         openPayment(payment) {
             this.selectedPayment = payment;
         },
-        
+        showDate(payment, i) {
+            const previousPayment = this.accountPayments[i - 1];
+            if (!previousPayment) {
+                return true;
+            }
+            const time = moment(String(payment.created_at));
+
+            return !time.isSame(String(previousPayment.created_at), 'day');
+        },
         change() {
             this.changeWalletName({ account: this.account, name: this.name });
             router.push({ name: 'home' });
