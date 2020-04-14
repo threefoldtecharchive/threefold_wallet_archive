@@ -25,7 +25,7 @@ export const migrateToPkid = async ({ seed, importedWallets, appWallets }) => {
 
         const pkidAppAccounts = [
             {
-                walletName: 'daily',
+                walletName: 'Daily',
                 index: 0,
                 position: 0,
                 stellar: false,

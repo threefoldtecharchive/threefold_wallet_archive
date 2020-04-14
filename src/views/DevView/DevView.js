@@ -38,7 +38,7 @@ export default {
             this.removeAppAccounts();
             await this.persistPkidAppAccounts([
                 {
-                    walletName: 'daily',
+                    walletName: 'Daily',
                     position: 0,
                     index: 0,
                 },

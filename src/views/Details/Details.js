@@ -54,9 +54,18 @@ export default {
             return !time.isSame(String(previousPayment.created_at), 'day');
         },
         change() {
-            this.changeWalletName({ account: this.account, name: this.name });
+            const name = this.name.charAt(0).toUpperCase() + this.name.substring(1);
+
+            if (this.accounts.find(a => a.name === name)) {
+                this.$flashMessage.error(
+                    `Can't rename wallet to ${name}, name already in use.`
+                );
+                return;
+            }
+
+            this.changeWalletName({ account: this.account, name });
             router.push({ name: 'home' });
-            this.$flashMessage.info(`Renamed wallet to ${this.name}.`);
+            this.$flashMessage.info(`Renamed wallet to ${name}.`);
         },
         copyAddress() {
             this.$root.$emit('copy', {
