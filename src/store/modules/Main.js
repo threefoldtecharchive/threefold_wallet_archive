@@ -32,7 +32,7 @@ export default {
                 .forAccount(account.id)
                 .cursor('now')
                 .stream({
-                    reconnectTimeout: 5000,
+                    reconnectTimeout: 60000,
                     onmessage: message => {
                         if (message.to === config.tftFundAccount) {
                             return;
@@ -67,7 +67,7 @@ export default {
                 .accountId(account.id)
                 .cursor('now')
                 .stream({
-                    reconnectTimeout: 5000,
+                    reconnectTimeout: 60000,
                     onmessage: message => {
                         mapAccount({
                             ...getters.accounts.find(a => a.id === account.id),
@@ -170,14 +170,14 @@ export default {
                     await fetchAccount({
                         seedPhrase,
                         index: 0,
-                        name: 'daily',
+                        name: 'Daily',
                         tags: ['app'],
                         position: 0,
                         retry: 0,
                     });
                     await dispatch('persistPkidAppAccounts', [
                         {
-                            walletName: 'daily',
+                            walletName: 'Daily',
                             position: 0,
                             index: 0,
                         },
