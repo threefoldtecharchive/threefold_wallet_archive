@@ -30,7 +30,7 @@ export default {
     },
     beforeMount() {
         const account = store.getters.accounts.find(
-            x => x.name === this.$route.params.account
+            x => x.id === this.$route.params.account
         );
         if (!account) {
             router.push({ name: 'home' });

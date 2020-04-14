@@ -58,7 +58,7 @@ export default {
                 router.push({
                     name: 'details',
                     params: {
-                        account: this.account.name,
+                        account: this.account.id,
                     },
                 });
             }

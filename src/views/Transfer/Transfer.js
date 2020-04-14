@@ -130,7 +130,7 @@ export default {
 
             this.$router.push({
                 name: 'details',
-                params: { account: this.selectedAccount.name },
+                params: { account: this.selectedAccount.id },
             });
         },
         selectAccount(account) {

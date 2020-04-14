@@ -47,7 +47,7 @@ export default {
             this.$router.push({
                 name: 'details',
                 params: {
-                    account: account.name,
+                    account: account.id,
                 },
             });
         },
