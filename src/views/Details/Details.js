@@ -84,10 +84,10 @@ export default {
         copySeed() {
             this.$root.$emit('copy', {
                 title: 'Copy seed to clipboard',
-                toCopy: this.seed,
+                toCopy: this.account.seedPhrase,
                 callback: () => {
                     this.$flashMessage.info(
-                        `Address has been copied to clipboard (${this.account.id.substring(
+                        `Seedphrase has been copied to clipboard (${this.account.seedPhrase.substring(
                             0,
                             8
                         )}...).`
