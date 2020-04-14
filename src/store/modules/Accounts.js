@@ -34,6 +34,7 @@ export default {
 
             await context.dispatch('saveToPkid');
             context.commit('stopAppLoading');
+            return account;
         },
         generateImportedAccount: async (
             context,
@@ -55,6 +56,7 @@ export default {
             context.commit('addAccount', account);
             await context.dispatch('saveToPkid');
             context.commit('stopAppLoading');
+            return account;
         },
         syncAccounts: async ({ commit, getters, dispatch }) => {
             commit('startAppLoading');

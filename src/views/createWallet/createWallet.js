@@ -28,7 +28,7 @@ export default {
     },
     mounted() {},
     methods: {
-        ...mapActions(['generateAppAccount', 'generateImportedAccount']),
+        ...mapActions(['generateAppAccount', 'generateImportedAccount', 'initializeAccountWatcher', 'initializeTransactionWatcher']),
         clearForm() {
             this.$router.push({ name: 'home' });
             this.clearErrors();
@@ -93,10 +93,12 @@ export default {
                 seedPhrase,
                 walletName,
             })
-                .then(() => {
+                .then((account) => {
                     this.$flashMessage.info(
-                        `Successfully imported ${walletName}.`
+                        `Successfully imported ${account.name}.`
                     );
+                    this.initializeAccountWatcher(account)
+                    this.initializeTransactionWatcher(account)
                 })
                 .catch(e => {
                     router.push({
@@ -109,6 +111,7 @@ export default {
                     });
                 });
 
+            this.
             this.clearForm();
         },
     },
