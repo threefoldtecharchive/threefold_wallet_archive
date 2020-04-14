@@ -19,45 +19,19 @@
 
         </v-col>
       </v-row>
+
       <v-row class="px-6 pt-2">
         <v-col>
           <p class="subtitle mb-0 grey--text">Date</p>
-
           <p class="title mt-0">{{payment.created_at | formatDate }}</p>
+
+          <p class="subtitle mb-0 grey--text">{{payment.outgoing ? 'To' : 'From'}}</p>
+          <p class="title mt-0">{{payment.outgoing ? payment.to : payment.from | readableAddress}}</p>
+
           <p v-if="memo" class="subtitle mb-0 grey--text">Message</p>
           <p v-if="memo" class="title mt-0">{{memo}}</p>
         </v-col>
       </v-row>
-      <!-- <v-row align="center" justify="center" class="my-4 text-center pt-4">
-        <v-col cols="10" class="d-block pa-0">
-          <v-avatar>
-            <v-icon class="primary" color="white">fa-user</v-icon>
-          </v-avatar>
-          <p class="body-1 pt-2">{{payment.from}}</p>
-        </v-col>
-        <v-col cols="10" class="d-inline pa-0 mb-4">
-          <v-avatar>
-            <v-icon size="25">fa-arrow-down</v-icon>
-          </v-avatar>
-        </v-col>
-        <v-col cols="10" class="d-block pa-0">
-          <v-avatar>
-            <v-icon class="primary" color="white">fa-user</v-icon>
-          </v-avatar>
-          <p class="body-1 pt-2">{{payment.to}}</p>
-        </v-col>
-      </v-row>
-      <p class="subtitle mb-0 grey--text">Date</p>
-      <p class="title mt-0">{{payment.created_at | formatDate }}</p>
-      <p class="subtitle mb-0 grey--text">
-        Amount
-        <span>(fee incl)</span>
-      </p>
-      <p class="title mt-0">{{payment.amount | formatBalance}}</p>
-      <p class="subtitle mb-0 grey--text">Fee</p>
-      <p class="title mt-0">{{payment.fee | formatBalance}}</p>
-      <p v-if="payment.memo" class="subtitle mb-0 grey--text">Message</p>
-      <p v-if="payment.memo" class="title mt-0">{{payment.memo}}</p> -->
     </v-card-text>
   </v-card>
 </v-dialog>
