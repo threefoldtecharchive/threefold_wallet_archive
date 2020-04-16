@@ -21,6 +21,9 @@ export default {
         selectedAccount: {
             type: Object,
         },
+        selectedCurrency: {
+            type: String
+        }
     },
     data() {
         return {

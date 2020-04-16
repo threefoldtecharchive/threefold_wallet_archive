@@ -1,4 +1,5 @@
-import ToDialog from '../toDialog';
+import ToDialog from '../toDialog'
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'form-component',
@@ -24,6 +25,9 @@ export default {
         fee: {
             type: Number,
         },
+        selectedCurrency: {
+            type: String
+        }
     },
     data() {
         return {
@@ -34,6 +38,9 @@ export default {
         };
     },
     computed: {
+        ...mapGetters([
+            'currencies'
+        ]),
         toRules() {
             const rules = [
                 v => !!v || 'Wallet address is required!',

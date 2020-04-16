@@ -1,5 +1,6 @@
 import { fetchPayments } from '../../services/PaymentService';
 import moment from 'moment';
+import config from '../../../public/config';
 
 export default {
     state: {
@@ -28,9 +29,10 @@ export default {
             const id = payload.id;
 
             const payments = payload.payments.filter(p => {
-                if (p.asset_code !== 'TFT') {
+                console.log(config.currencies)
+                if (!config.currencies[p.asset_code]) {
                     console.log(
-                        'Non TFT transactions not yet supported so will be skipped'
+                        'This currency is not supported'
                     );
                     return false;
                 }

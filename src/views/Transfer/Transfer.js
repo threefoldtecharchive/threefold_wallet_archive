@@ -30,6 +30,7 @@ export default {
             selectedTab: 1,
             selectedAccount: {},
             qrReadingError: false,
+            selectedCurrency: "TFT"
         };
     },
     mounted() {
@@ -46,7 +47,7 @@ export default {
             this.selectedAccount = this.accounts[0];
     },
     computed: {
-        ...mapGetters(['accounts', 'fee']),
+        ...mapGetters(['accounts', 'fee', 'currencies']),
         active() {
             return this.$route.query.tab;
         },
@@ -111,7 +112,8 @@ export default {
                     this.selectedAccount.keyPair,
                     this.formObject.to.address,
                     new Number(this.formObject.amount),
-                    this.formObject.message
+                    this.formObject.message,
+                    this.selectedCurrency
                 );
 
                 await submitFundedTransaction(
@@ -122,9 +124,9 @@ export default {
                 this.$flashMessage.info(
                     `Successfully transferred ${this.formObject.amount} to ${this.formObject.to.address}.`
                 );
-            } catch {
+            } catch(e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"
-
+                console.log(e)
                 this.$flashMessage.error(`Payment failed.`);
             }
 
@@ -142,6 +144,9 @@ export default {
                 sender: null,
             };
             this.$refs.formComponent.$refs.form.reset();
+        },
+        selectCurrency(){
+            console.log("should clear the from field")
         },
         checkForm() {
             return this.$refs.formComponent.$refs.form.validate();
