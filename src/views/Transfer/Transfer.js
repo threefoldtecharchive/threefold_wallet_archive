@@ -38,7 +38,7 @@ export default {
         });
         if (this.$route.params.account) {
             this.selectedAccount = this.accounts.find(
-                x => x.name === this.$route.params.account
+                x => x.id === this.$route.params.account
             );
             return;
         }
