@@ -99,6 +99,20 @@ export default {
                 console.log('form not valid');
                 return;
             }
+
+            const ASSET_CODE = 'TFT';
+            const form = this.$refs.formComponent;
+            const fromAccount = form.selectedAccount;
+            const balance = Number(
+                fromAccount.balances.find(b => b.asset_code === ASSET_CODE)
+                    .balance
+            );
+            const amountToTransfer = Number(form.formObject.amount);
+            if (balance < amountToTransfer) {
+                this.$flashMessage.error('not enough funds');
+                return;
+            }
+
             if (this.active === 'receive') {
                 this.qrDialog = true;
             } else if (this.active == 'send') {
