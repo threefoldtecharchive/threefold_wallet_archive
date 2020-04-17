@@ -152,9 +152,6 @@ export default {
             };
             this.$refs.formComponent.$refs.form.reset();
         },
-        selectCurrency(){
-            console.log("should clear the from field")
-        },
         checkForm() {
             return this.$refs.formComponent.$refs.form.validate();
         },
