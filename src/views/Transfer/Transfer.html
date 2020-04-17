@@ -23,8 +23,35 @@
       </v-btn>
     </v-row>
 
-    <v-row dense>
-      <v-col dense>
+    <v-row >
+      <v-col>
+        <v-select
+          class="mt-1 pt-0"
+          :label="selectedTab == 1 ? 'From' : 'To'"
+          @change="selectAccount"
+          :items="availableAccounts"
+          v-model="selectedAccount"
+          return-object
+          append-icon="fas fa-caret-down"
+        >
+          <template v-slot:selection="data">
+            <div style="width: 100%; display: flex;">
+              <span class="text-capitalize">{{ data.item.name }}</span>
+              <v-spacer></v-spacer>
+              {{data.item.balances.find(x=>x.asset_code == selectedCurrency).balance | formatBalance}}
+              <!-- {{ data.item.balances[0].balance | formatBalance }} {{data.item.balances[0].asset_code }} -->
+            </div>
+          </template>
+          <template v-slot:item="data">
+            <v-row class="text-capitalize">
+                {{ data.item.name }}
+              <v-spacer></v-spacer>
+              {{data.item.balances.find(x=>x.asset_code == selectedCurrency).balance | formatBalance }}
+            </v-row>
+          </template>
+        </v-select>
+      </v-col>
+      <v-col cols="4">
         <v-select
           class="mt-1 pt-0"
           label="Currency"
@@ -36,31 +63,6 @@
           append-icon="fas fa-caret-down"
         >
       </v-select>
-        <v-select
-          class="mt-1 pt-0"
-          :label="selectedTab == 1 ? 'From' : 'To'"
-          @change="selectAccount"
-          :items="accounts"
-          v-model="selectedAccount"
-          return-object
-          append-icon="fas fa-caret-down"
-        >
-          <template v-slot:selection="data">
-            <div style="width: 100%; display: flex;">
-              <span class="text-capitalize">{{ data.item.name }}</span>
-              <v-spacer></v-spacer>
-              {{data.item.balances.find(x=>x.asset_code == selectedCurrency).balance | formatBalance}} {{selectedCurrency}}
-              <!-- {{ data.item.balances[0].balance | formatBalance }} {{data.item.balances[0].asset_code }} -->
-            </div>
-          </template>
-          <template v-slot:item="data">
-            <v-row class="text-capitalize">
-                {{ data.item.name }}
-              <v-spacer></v-spacer>
-              {{data.item.balances.find(x=>x.asset_code == selectedCurrency).balance | formatBalance }} {{selectedCurrency}}
-            </v-row>
-          </template>
-        </v-select>
       </v-col>
     </v-row>
 

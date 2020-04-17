@@ -51,6 +51,13 @@ export default {
         active() {
             return this.$route.query.tab;
         },
+        availableAccounts(){
+            return this.accounts.filter(account => {
+                return account.balances.find(balance => {
+                    return balance.asset_code === this.selectedCurrency
+                })
+            })
+        }
     },
     methods: {
         ...mapActions(['sendCoins', 'updateAccounts']),
