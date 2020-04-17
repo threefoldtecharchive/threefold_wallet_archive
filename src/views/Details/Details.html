@@ -47,7 +47,7 @@
     <v-tabs-items v-model="tab" class="flex-fill">
       <v-tab-item :key="0">
         <v-col>
-          <v-card class="pa-2 mb-2" v-for="balance in account.balances" v-if="balance.asset_type != 'native'">
+          <v-card class="pa-2 mb-2" v-for="balance in account.balances" v-if="balance.asset_type != 'native'" @click="seeTransactionsFor(balance.asset_code)">
             <h1>
               {{balance.asset_code}}
             </h1> 
@@ -62,6 +62,16 @@
         </v-col>
       </v-tab-item>
       <v-tab-item :key="1">
+        <v-select
+            class="pb-0 mb-0"
+            label="Filter by currency"
+            :items="filterOptions"
+            v-model="selectedCurrency"
+            item-value="All"
+            return-object
+            append-icon="fas fa-caret-down"
+          >
+        </v-select>
         <v-container v-if="!accountPayments.length && isPaymentLoading(account.id)">
           <v-row
             align-content="center"
