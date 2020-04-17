@@ -103,12 +103,12 @@ export default {
                 position: pkidAccount.position,
             });
             commit('removeAccountThombstone', pkidAccount.walletName);
-            dispatch('fetchPayments', account.id);
+            // dispatch('fetchPayments', account.id);
 
             commit('addAccount', account);
 
-            dispatch('initializeTransactionWatcher', account);
-            dispatch('initializeAccountWatcher', account);
+            // dispatch('initializeTransactionWatcher', account);
+            // dispatch('initializeAccountWatcher', account);
         },
         async initializePkidAppAccounts({ dispatch, commit }, seedPhrase) {
             const pkidAccounts = await dispatch('fetchPkidAppAccounts');
