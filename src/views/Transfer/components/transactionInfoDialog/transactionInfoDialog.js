@@ -28,6 +28,9 @@ export default {
             type: Object,
             default: () => {},
         },
+        selectedCurrency: {
+            type: String
+        }
     },
     mounted() {},
     computed: {

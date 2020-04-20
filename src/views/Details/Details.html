@@ -8,11 +8,6 @@
           <span>{{getHumanWalletAddress}}</span>
           <br>
         </v-col>
-        <v-col>
-          <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances"/>
-          <Balance v-if="account.lockedBalances.length" class="pl-3 pr-2 pt-1 mr-2" small locked
-                   :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]'/>
-        </v-col>
       </v-row>
     </v-container>
   </header>
@@ -26,9 +21,13 @@
           dark
           grow
   >
+  <v-tab>
+    <!--Balances-->
+    <v-icon small>fa-money-bill-wave</v-icon>
+  </v-tab>
     <v-tab>
       <!--Payments-->
-      <v-icon small>fa-money-bill-wave</v-icon>
+      <v-icon small>fa-exchange-alt</v-icon>
     </v-tab>
     <v-tab v-if="account.lockedBalances.length">
       <!--Locked Payments-->
@@ -42,6 +41,33 @@
 
     <v-tabs-items v-model="tab" class="flex-fill">
       <v-tab-item :key="0">
+        <v-col>
+          <v-card class="pa-2 mb-2" v-for="balance in account.balances" v-if="balance.asset_type != 'native'" @click="seeTransactionsFor(balance.asset_code)">
+            <h1>
+              {{balance.asset_code}}
+            </h1> 
+            <div class="subtitle-1">
+              Balance {{balance.balance | formatBalance}}
+            </div>
+            <div class="subtitle-2" v-if="account.lockedBalances.length">
+              <!-- @ TODO more info - will there be locked on all or only tft?  -->
+              Locked {{account.lockedBalance | formatBalance}}
+            </div>
+          </v-card>
+        </v-col>
+      </v-tab-item>
+      <v-tab-item :key="1">
+        <v-select
+            class="mx-1"
+            label="Filter by currency"
+            :items="filterOptions"
+            v-model="selectedCurrency"
+            item-value="All"
+            return-object
+            append-icon="fas fa-caret-down"
+          >
+          <option value="foo">foo</option>
+        </v-select>
         <v-container v-if="!accountPayments.length && isPaymentLoading(account.id)">
           <v-row
             align-content="center"
@@ -77,13 +103,13 @@
         </v-list>
       </v-tab-item>
 
-      <v-tab-item :key="1" v-if="account.lockedBalances.length">
+      <v-tab-item :key="2" v-if="account.lockedBalances.length">
         <v-list class="pa-0">
           <LockedItem v-for="balance,i in account.lockedBalances" :item="balance" :key="i"/>
         </v-list>
       </v-tab-item>
 
-      <v-tab-item :key="2">
+      <v-tab-item :key="3">
         <div class="px-3 mt-4">
           <v-text-field label="Address" :value="account.id" append-outer-icon="fas fa-copy"
                         @click:append-outer.stop="copyAddress" readonly></v-text-field>

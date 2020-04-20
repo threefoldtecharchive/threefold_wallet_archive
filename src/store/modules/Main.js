@@ -20,6 +20,7 @@ export default {
         position: 0,
         initialized: false,
         fee: StellarSdk.BASE_FEE,
+        currencies: config.currencies,
         appLoadingStack: 0,
         loadingTitle: null,
         loadingSubTitle: null,
@@ -272,6 +273,7 @@ export default {
         position: state => state.position,
         initialized: state => state.initialized,
         fee: state => state.fee,
+        currencies: state => Object.keys(state.currencies),
         isAppLoading: state => state.appLoadingStack > 0,
     },
 };

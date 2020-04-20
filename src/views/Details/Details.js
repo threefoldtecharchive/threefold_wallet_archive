@@ -26,6 +26,7 @@ export default {
             selectedPayment: null,
             name: null,
             tab: 0,
+            selectedCurrency: "All",
         };
     },
     beforeMount() {
@@ -41,6 +42,11 @@ export default {
     methods: {
         ...mapActions(['fetchPayments', 'changeWalletName', 'deleteAccount']),
         ...mapMutations(['addPayments']),
+        seeTransactionsFor(asset_code) {
+            this.selectedCurrency = asset_code;
+            this.tab = 1
+
+        },
         openPayment(payment) {
             this.selectedPayment = payment;
         },
@@ -121,18 +127,27 @@ export default {
             'payments',
             'accounts',
             'isPaymentLoading',
+            'currencies'
         ]),
         account() {
             return this.accounts.find(a => a.id === this.id);
         },
         accountPayments() {
-            return this.payments(this.id);
+            return this.payments(this.id).filter(payment => {
+                if(this.selectedCurrency == 'All' || payment.asset_code == this.selectedCurrency){
+                    return true
+                }
+                return false
+            });
         },
         getHumanWalletAddress() {
             return `${this.account.name.replace(/\s/g, '')}@${
                 this.threeBotName
             }`;
         },
+        filterOptions(){
+            return ["All", ...this.currencies]
+        }
     },
     mounted() {
         // this.fetchPayments(this.account.id);

@@ -8,4 +8,14 @@ export default {
     feeDestination: 'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID',
     feeAmount: '0.1000000',
     env: 'staging',
+    currencies: {
+        TFT: {
+            asset_code: "TFT",
+            issuer: "GA47YZA3PKFUZMPLQ3B5F2E3CJIB57TGGU7SPCQT2WAEYKN766PWIMB3",
+        },
+        FreeTFT: {
+            asset_code: "FreeTFT",
+            issuer: "GBLDUINEFYTF7XEE7YNWA3JQS4K2VD37YU7I2YAE7R5AHZDKQXSS2J6R",
+        }
+    }
 };

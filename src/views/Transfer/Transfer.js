@@ -30,6 +30,7 @@ export default {
             selectedTab: 1,
             selectedAccount: {},
             qrReadingError: false,
+            selectedCurrency: "TFT"
         };
     },
     mounted() {
@@ -46,10 +47,19 @@ export default {
             this.selectedAccount = this.accounts[0];
     },
     computed: {
-        ...mapGetters(['accounts', 'fee']),
+        ...mapGetters(['accounts', 'fee', 'currencies']),
         active() {
             return this.$route.query.tab;
         },
+        availableAccounts(){
+            // Filter accounts based on the selected currency
+            return this.accounts.filter(account => {
+                // Check if account has balance for the selected currency
+                return account.balances.find(balance => {
+                    return balance.asset_code === this.selectedCurrency
+                })
+            })
+        }
     },
     methods: {
         ...mapActions(['sendCoins', 'updateAccounts']),
@@ -125,7 +135,8 @@ export default {
                     this.selectedAccount.keyPair,
                     this.formObject.to.address,
                     new Number(this.formObject.amount),
-                    this.formObject.message
+                    this.formObject.message,
+                    this.selectedCurrency
                 );
 
                 await submitFundedTransaction(
@@ -136,9 +147,10 @@ export default {
                 this.$flashMessage.info(
                     `Successfully transferred ${this.formObject.amount} to ${this.formObject.to.address}.`
                 );
-            } catch {
+            } catch(e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"
-
+                console.log(e)
+                window.e = e
                 this.$flashMessage.error(`Payment failed.`);
             }
 
@@ -172,6 +184,9 @@ export default {
         closeQrDialog() {
             this.qrDialog = false;
         },
+        balanceForCurrency(balances){
+            return balances.find(x=>x.asset_code == this.selectedCurrency).balance
+        }
     },
     watch: {},
 };

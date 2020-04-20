@@ -18,6 +18,7 @@ const initializeStellarCryptoConfig = () => {
     window.serviceUrl = config.serviceUrl;
     window.feeDestination = config.feeDestination;
     window.feeAmount = config.feeAmount;
+    window.currencies = config.currencies;
 };
 
 const initializeFlutterInappwebviewPolyfill = () => {
