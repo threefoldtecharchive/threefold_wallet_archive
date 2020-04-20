@@ -29,7 +29,7 @@
       <!--Payments-->
       <v-icon small>fa-exchange-alt</v-icon>
     </v-tab>
-    <v-tab v-if="account.lockedBalances.length">
+    <v-tab v-if="account.lockedTransactions.length">
       <!--Locked Payments-->
       <v-icon small>fa-lock</v-icon>
     </v-tab>
@@ -49,9 +49,8 @@
             <div class="subtitle-1">
               Balance {{balance.balance | formatBalance}}
             </div>
-            <div class="subtitle-2" v-if="account.lockedBalances.length">
-              <!-- @ TODO more info - will there be locked on all or only tft?  -->
-              Locked {{account.lockedBalance | formatBalance}}
+            <div class="subtitle-2" v-if="account.lockedBalances[balance.asset_code]">
+              Locked {{account.lockedBalances[balance.asset_code] | formatBalance}}
             </div>
           </v-card>
         </v-col>
@@ -103,9 +102,9 @@
         </v-list>
       </v-tab-item>
 
-      <v-tab-item :key="2" v-if="account.lockedBalances.length">
+      <v-tab-item :key="2" v-if="account.lockedTransactions.length">
         <v-list class="pa-0">
-          <LockedItem v-for="balance,i in account.lockedBalances" :item="balance" :key="i"/>
+          <LockedItem v-for="balance,i in account.lockedTransactions" :item="balance" :key="i"/>
         </v-list>
       </v-tab-item>
 

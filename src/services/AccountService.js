@@ -24,8 +24,8 @@ export const mapAccount = async ({
     seed,
     keyPair,
     seedPhrase,
+    lockedTransactions,
     lockedBalances,
-    lockedBalance,
 }) => ({
     name: name,
     tags: tags,
@@ -36,8 +36,8 @@ export const mapAccount = async ({
     seed,
     keyPair,
     seedPhrase,
+    lockedTransactions,
     lockedBalances,
-    lockedBalance,
 });
 
 // todo: make this an interval loop
@@ -119,12 +119,18 @@ export const fetchAccount = async ({
         });
     }
 
-    const lockedBalances = await getLockedBalances(keyPair);
-    lockedTokenSubRoutine(lockedBalances);
+    const lockedTransactions = await getLockedBalances(keyPair);
+    lockedTokenSubRoutine(lockedTransactions);
 
-    const lockedBalance = lockedBalances.reduce((total, lockedBalance) => {
-        return total + Number(lockedBalance.balance);
-    }, 0);
+    let lockedBalances = {}
+    lockedTransactions.forEach(transaction => {
+        if(lockedBalances[transaction.balance.asset_code]){
+            lockedBalances[transaction.balance.asset_code] += transaction.balance.balance
+        }
+        else{
+            lockedBalances[transaction.balance.asset_code] = transaction.balance.balance
+        }
+    })
 
     return mapAccount({
         accountResponse,
@@ -135,8 +141,8 @@ export const fetchAccount = async ({
         seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex'),
         keyPair,
         seedPhrase,
+        lockedTransactions,
         lockedBalances,
-        lockedBalance,
     });
 };
 
