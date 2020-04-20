@@ -8,11 +8,6 @@
           <span>{{getHumanWalletAddress}}</span>
           <br>
         </v-col>
-        <!-- <v-col>
-          <Balance class="pl-3 pr-2 pt-1 mr-2" small :balances="account.balances"/>
-          <Balance v-if="account.lockedBalances.length" class="pl-3 pr-2 pt-1 mr-2" small locked
-                   :balances='[{"balance":account.lockedBalance,"asset_code":"TFT"}]'/>
-        </v-col> -->
       </v-row>
     </v-container>
   </header>
@@ -71,6 +66,7 @@
             return-object
             append-icon="fas fa-caret-down"
           >
+          <option value="foo">foo</option>
         </v-select>
         <v-container v-if="!accountPayments.length && isPaymentLoading(account.id)">
           <v-row

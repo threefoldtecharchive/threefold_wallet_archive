@@ -52,7 +52,9 @@ export default {
             return this.$route.query.tab;
         },
         availableAccounts(){
+            // Filter accounts based on the selected currency
             return this.accounts.filter(account => {
+                // Check if account has balance for the selected currency
                 return account.balances.find(balance => {
                     return balance.asset_code === this.selectedCurrency
                 })
@@ -134,6 +136,7 @@ export default {
             } catch(e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"
                 console.log(e)
+                window.e = e
                 this.$flashMessage.error(`Payment failed.`);
             }
 
@@ -167,6 +170,9 @@ export default {
         closeQrDialog() {
             this.qrDialog = false;
         },
+        balanceForCurrency(balances){
+            return balances.find(x=>x.asset_code == this.selectedCurrency).balance
+        }
     },
     watch: {},
 };

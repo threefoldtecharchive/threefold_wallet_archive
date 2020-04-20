@@ -26,7 +26,8 @@ export default {
             type: Number,
         },
         selectedCurrency: {
-            type: String
+            type: String,
+            default: "TFT"
         }
     },
     data() {

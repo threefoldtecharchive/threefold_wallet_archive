@@ -38,15 +38,14 @@
             <div style="width: 100%; display: flex;">
               <span class="text-capitalize">{{ data.item.name }}</span>
               <v-spacer></v-spacer>
-              {{data.item.balances.find(x=>x.asset_code == selectedCurrency).balance | formatBalance}}
-              <!-- {{ data.item.balances[0].balance | formatBalance }} {{data.item.balances[0].asset_code }} -->
+              {{balanceForCurrency(data.item.balances) | formatBalance}}
             </div>
           </template>
           <template v-slot:item="data">
             <v-row class="text-capitalize">
                 {{ data.item.name }}
               <v-spacer></v-spacer>
-              {{data.item.balances.find(x=>x.asset_code == selectedCurrency).balance | formatBalance }}
+              {{balanceForCurrency(data.item.balances) | formatBalance}}
             </v-row>
           </template>
         </v-select>

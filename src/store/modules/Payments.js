@@ -32,7 +32,7 @@ export default {
                 console.log(config.currencies)
                 if (!config.currencies[p.asset_code]) {
                     console.log(
-                        'This currency is not supported'
+                        p.asset_code, ' is not supported'
                     );
                     return false;
                 }
