@@ -110,7 +110,7 @@ export default {
                 return;
             }
 
-            const ASSET_CODE = 'TFT';
+            const ASSET_CODE = this.$refs.formComponent.selectedCurrency;
             const form = this.$refs.formComponent;
             const fromAccount = form.selectedAccount;
             const balance = Number(
