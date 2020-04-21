@@ -72,7 +72,7 @@ async function lockedTokenSubRoutine(lockedBalances) {
             await transferLockedTokens(
                 lockedBalance.keyPair,
                 lockedBalance.id,
-                lockedBalance.asset_code,
+                lockedBalance.balance.asset_code,
                 Number(lockedBalance.balance)
             );
         }
