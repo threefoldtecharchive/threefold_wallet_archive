@@ -8,4 +8,5 @@ export default {
     feeDestination: '?',
     feeAmount: '0.1000000',
     env: 'production',
+    watchersEnabled: false,
 };

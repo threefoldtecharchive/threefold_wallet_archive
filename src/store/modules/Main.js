@@ -108,8 +108,10 @@ export default {
 
             commit('addAccount', account);
 
-            // dispatch('initializeTransactionWatcher', account);
-            // dispatch('initializeAccountWatcher', account);
+            if (config.watchersEnabled){
+                dispatch('initializeTransactionWatcher', account);
+                dispatch('initializeAccountWatcher', account);
+            }
         },
         async initializePkidAppAccounts({ dispatch, commit }, seedPhrase) {
             const pkidAccounts = await dispatch('fetchPkidAppAccounts');

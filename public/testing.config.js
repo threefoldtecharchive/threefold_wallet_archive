@@ -17,5 +17,6 @@ export default {
             asset_code: "FreeTFT",
             issuer: "GBLDUINEFYTF7XEE7YNWA3JQS4K2VD37YU7I2YAE7R5AHZDKQXSS2J6R",
         }
-    }
+    },
+    watchersEnabled: false,
 };
