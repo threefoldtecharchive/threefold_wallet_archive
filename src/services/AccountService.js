@@ -72,6 +72,7 @@ async function lockedTokenSubRoutine(lockedBalances) {
             await transferLockedTokens(
                 lockedBalance.keyPair,
                 lockedBalance.id,
+                lockedBalance.asset_code,
                 Number(lockedBalance.balance)
             );
         }
@@ -125,10 +126,10 @@ export const fetchAccount = async ({
     let lockedBalances = {}
     lockedTransactions.forEach(transaction => {
         if(lockedBalances[transaction.balance.asset_code]){
-            lockedBalances[transaction.balance.asset_code] += transaction.balance.balance
+            lockedBalances[transaction.balance.asset_code] += Number(transaction.balance.balance)
         }
         else{
-            lockedBalances[transaction.balance.asset_code] = transaction.balance.balance
+            lockedBalances[transaction.balance.asset_code] = Number(transaction.balance.balance)
         }
     })
 
