@@ -4,6 +4,7 @@ import {
     validateAndGenerateSeed,
 } from '@/services/AccountManagementService';
 import router from '../../router';
+import config from '../../../public/config';
 
 export default {
     name: 'create-wallet',
@@ -97,8 +98,10 @@ export default {
                     this.$flashMessage.info(
                         `Successfully imported ${account.name}.`
                     );
-                    this.initializeAccountWatcher(account)
-                    this.initializeTransactionWatcher(account)
+                    if(config.watchersEnabled){
+                        this.initializeAccountWatcher(account)
+                        this.initializeTransactionWatcher(account)
+                    }
                 })
                 .catch(e => {
                     router.push({
