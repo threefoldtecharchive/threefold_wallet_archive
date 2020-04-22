@@ -85,18 +85,20 @@ export default () => {
         document.addEventListener(
             'contextmenu',
             function (evt) {
-                webview_selected_item = evt.path[0];
-                webview_copy_value = window.getSelection().toString();
-                let cbh_menu = document.getElementById('cbh-custom-menu');
+                if(!window.noCopyPaste){
+                    webview_selected_item = evt.path[0];
+                    webview_copy_value = window.getSelection().toString();
+                    let cbh_menu = document.getElementById('cbh-custom-menu');
 
-                const y = clamp(evt.clientY - 60, 0, window.innerHeight);
-                const x = clamp(evt.clientX - 75, 0, window.innerWidth - 150);
+                    const y = clamp(evt.clientY - 60, 0, window.innerHeight);
+                    const x = clamp(evt.clientX - 75, 0, window.innerWidth - 150);
 
-                cbh_menu.style.top = `${y}px`;
-                cbh_menu.style.left = `${x}px`;
+                    cbh_menu.style.top = `${y}px`;
+                    cbh_menu.style.left = `${x}px`;
 
-                cbh_menu.style.display = 'block';
-                evt.preventDefault();
+                    cbh_menu.style.display = 'block';
+                    evt.preventDefault();
+                }
             },
             false
         );

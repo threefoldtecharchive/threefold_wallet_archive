@@ -51,5 +51,11 @@ export default {
                 },
             });
         },
+        disableCopy(){
+            window.noCopyPaste = true
+        },
+        enableCopy(){
+            window.noCopyPaste = false
+        }
     },
 };
