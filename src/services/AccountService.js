@@ -73,7 +73,7 @@ async function lockedTokenSubRoutine(lockedBalances) {
                 lockedBalance.keyPair,
                 lockedBalance.id,
                 lockedBalance.balance.asset_code,
-                Number(lockedBalance.balance)
+                Number(lockedBalance.balance.balance)
             );
         }
     }
