@@ -30,7 +30,8 @@ export default {
             selectedTab: 1,
             selectedAccount: {},
             qrReadingError: false,
-            selectedCurrency: "TFT"
+            selectedCurrency: "TFT",
+            fee: 0.1,
         };
     },
     mounted() {
@@ -47,7 +48,7 @@ export default {
             this.selectedAccount = this.accounts[0];
     },
     computed: {
-        ...mapGetters(['accounts', 'fee', 'currencies']),
+        ...mapGetters(['accounts', 'currencies']),
         active() {
             return this.$route.query.tab;
         },
@@ -81,7 +82,7 @@ export default {
             if (tftAddress === '') {
                 tftAddress = url.pathname.replace('//', '');
             }
-            this.formObject.selectedCurrency = currency
+            this.selectedCurrency = currency
             this.formObject.to.address = tftAddress;
             this.formObject.amount =
                 url.searchParams.get('amount') == 'null'
@@ -120,7 +121,8 @@ export default {
                     .balance
             );
             const amountToTransfer = Number(form.formObject.amount);
-            if (balance < amountToTransfer + this.fee && this.selectedTab == 1) {
+
+            if (this.selectedTab && balance < amountToTransfer  + this.fee) {
                 this.$flashMessage.error('not enough funds');
                 return;
             }
