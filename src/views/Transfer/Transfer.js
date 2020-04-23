@@ -118,7 +118,7 @@ export default {
                     .balance
             );
             const amountToTransfer = Number(form.formObject.amount);
-            if (balance < amountToTransfer) {
+            if (balance < amountToTransfer + this.fee && this.selectedTab == 1) {
                 this.$flashMessage.error('not enough funds');
                 return;
             }
