@@ -42,7 +42,7 @@ export default {
         ) => {
             context.commit('startAppLoading');
             context.commit('setLoadingMessage', {
-                message: `Generating account: ${walletName}`,
+                message: `Importing wallet: ${walletName}`,
             });
             const position = context.state.accounts.length;
             const account = await fetchAccount({
