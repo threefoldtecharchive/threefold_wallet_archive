@@ -76,10 +76,12 @@ export default {
         onDecode(code) {
             var url = new URL(code);
             var tftAddress = url.hostname;
+            var currency = url.protocol.match(/[a-zA-Z]+/g)[0]
 
             if (tftAddress === '') {
                 tftAddress = url.pathname.replace('//', '');
             }
+            this.formObject.selectedCurrency = currency
             this.formObject.to.address = tftAddress;
             this.formObject.amount =
                 url.searchParams.get('amount') == 'null'
