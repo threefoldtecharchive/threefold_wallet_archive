@@ -6,61 +6,46 @@
             :style="clickable ? 'cursor:pointer' : ''"
             @click="clicked"
         >
-            <v-layout class="content-inner">
-                <v-flex class="xs8">
-                    <v-layout column class="pl-4 pt-4 pb-2 overflow-hidden">
-                        <p>
-                            <span class="title text-capitalize">{{
-                                account ? account.name : 'Wallet name'
-                            }}</span>
-                            <span
-                                v-for="tag in account.tags"
-                                class="font-weight-light fa-xs blue-grey--text ml-1"
-                                >{{ tag }}</span
+            <v-btn dark small icon text
+            @click.stop="copyAddress"
+            class="copybutton"
+            :class="$route.meta.accent"
+            >
+                <v-icon size="15">
+                    fas fa-copy
+                </v-icon>
+            </v-btn>
+            <v-card-text class="py-1">
+                <v-col>
+                    <v-row>
+                        <span class="title text-capitalize">
+                            {{account ? account.name : 'Wallet name'}}
+                        </span>
+                        <span 
+                            v-for="tag in account.tags"
+                            class="font-weight-light fa-xs blue-grey--text ml-1"
+                            :key="tag"
                             >
-                            <br />
-                            <span
-                                v-if="displayAttributes"
-                                class="body-1 text-truncate font-weight-light"
-                                >{{ getHumanWalletAddress }}</span
-                            >
-                        </p>
-                    </v-layout>
-                </v-flex>
-                <v-flex :class="clickable ? 'xs4' : ''">
-                    <v-layout
-                        column
-                        class="justify-space-between align-end pb-2"
-                    >
-                        <v-flex
-                            v-if="displayAttributes"
-                            class="badge-top accent"
-                        >
-                            <v-btn
-                                dark
-                                small
-                                icon
-                                text
-                                @click.stop="copyAddress"
-                                class="px-3 align-self-end badge-top ma-0"
-                                style="z-index: 1;"
-                                :class="$route.meta.accent"
-                            >
-                                <v-icon size="15">
-                                    fas fa-copy
-                                </v-icon>
-                            </v-btn>
-                        </v-flex>
-                    </v-layout>
-                </v-flex>
-            </v-layout>
+                            {{ tag }}
+                        </span>
+                    </v-row>
+                    <v-row>
+                        <v-col class="py-1" align="center" v-for="balance in allowedBalances" :key="balance.issuer">
+                            
+                            <v-row class="subtitle-2 blue-grey--text font-weight-light">{{balance.asset_code}}</v-row>
+                            <v-row class="body-2">{{balance.balance | formatBalanceHumanReadable }}</v-row>
+                        </v-col>
+                    </v-row>
+                </v-col>
+            </v-card-text>
         </div>
         <div class="drag">
             <div></div>
             <div></div>
             <div></div>
-        </div> </v-card
-></template>
+        </div>
+    </v-card>
+</template>
 <script>
     import Balance from './Balance';
     import { mapGetters } from 'vuex';
@@ -94,12 +79,15 @@
             };
         },
         computed: {
-            ...mapGetters(['accounts', 'threeBotName']),
+            ...mapGetters(['accounts', 'threeBotName', 'currencies']),
             getHumanWalletAddress() {
                 return `${this.account.name.replace(/\s/g, '')}@${
                     this.threeBotName
                 }`;
             },
+            allowedBalances () {
+                return this.account.balances.filter(b => this.currencies.includes(b.asset_code))
+            }
         },
         mounted() {},
         methods: {
@@ -185,7 +173,12 @@
             white-space: normal;
         }
     }
-
+    .copybutton{
+        position: absolute;
+        right:0px;
+        border-radius: 0 $borderradius;
+        z-index: 1;
+    }
     .drag {
         position: absolute;
         top: 50%;
