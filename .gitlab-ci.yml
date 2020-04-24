@@ -122,3 +122,32 @@ deploy:production:
         - production
     script:
         - *deploy_wallet
+
+
+build:production_beta:
+    only:
+        - /^b(\d+\.)?(\d+\.)?(\*|\d+)$/
+    stage: build
+    tags:
+        - builder
+    variables:
+        ENVIROMENT_NAME: production_beta
+        DOCKER_IMAGE_TAG: '${CI_COMMIT_TAG}'
+    script:
+        - *set_ci_version
+        - *build_wallet
+
+deploy:production_beta:
+    variables:
+        ENVIROMENT_NAME: production_beta
+        DOCKER_IMAGE_TAG: '${CI_COMMIT_TAG}'
+
+    rules:
+        - if: $CI_COMMIT_TAG =~ /^b(\d+\.)?(\d+\.)?(\*|\d+)$/
+          when: manual
+        - when: never
+    stage: deploy
+    tags:
+        - production_beta
+    script:
+        - *deploy_wallet
