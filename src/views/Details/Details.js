@@ -134,10 +134,7 @@ export default {
         },
         accountPayments() {
             return this.payments(this.id).filter(payment => {
-                if(this.selectedCurrency == 'All' || payment.asset_code == this.selectedCurrency){
-                    return true
-                }
-                return false
+                return this.selectedCurrency === 'All' || payment.asset_code === this.selectedCurrency;
             });
         },
         getHumanWalletAddress() {
@@ -150,7 +147,7 @@ export default {
         }
     },
     mounted() {
-        // this.fetchPayments(this.account.id);
+        this.fetchPayments(this.account.id);
         this.name = this.account.name;
     },
 };
