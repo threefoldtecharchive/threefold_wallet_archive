@@ -84,7 +84,8 @@
           style="width: 100%;"
           color="accent"
           @click="transferConfirmed"
-          :disabled="!formObject.amount"
+          :loading="$route.query.tab === 'send' && !this.accountsReady"
+          :disabled="!formObject.amount || ($route.query.tab === 'send' && !this.accountsReady)"
         >
           <div v-if="$route.query.tab === 'receive'">
             Generate QR

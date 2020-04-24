@@ -26,7 +26,7 @@ export default {
         loadingSubTitle: null,
     },
     actions: {
-        async updateAccount({ commit }, accountId) {
+        async updateAccount({getters, commit }, accountId) {
             const server = new Server(config.stellarServerUrl);
             const message = await server
                 .accounts()
