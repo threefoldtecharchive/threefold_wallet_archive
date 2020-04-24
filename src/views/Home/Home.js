@@ -40,7 +40,9 @@ export default {
             },
         },
     },
-    mounted() {},
+    mounted() {
+
+    },
     methods: {
         ...mapActions(['syncAccounts']),
         seeDetails: account => {

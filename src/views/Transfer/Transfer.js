@@ -36,6 +36,7 @@ export default {
         };
     },
     mounted() {
+        this.disableAccountEventStreams()
         const updatePromises = this.accounts.map(account =>
             this.updateAccount(account.id)
         );
@@ -72,7 +73,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['updateAccount']),
+        ...mapActions(['updateAccount', 'disableAccountEventStreams']),
         ...mapMutations(['startAppLoading', 'stopAppLoading']),
         scanQR() {
             window.vueInstance = this; //Don't remove this for flutter app

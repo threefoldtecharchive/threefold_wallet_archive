@@ -40,7 +40,7 @@ export default {
         this.id = account.id;
     },
     methods: {
-        ...mapActions(['fetchPayments', 'changeWalletName', 'deleteAccount', 'updateAccount']),
+        ...mapActions(['fetchPayments', 'changeWalletName', 'deleteAccount', 'updateAccount','initializeAccountEventStreams']),
         ...mapMutations(['addPayments']),
         seeTransactionsFor(asset_code) {
             this.selectedCurrency = asset_code;
@@ -149,6 +149,7 @@ export default {
     mounted() {
         this.fetchPayments(this.account.id);
         this.updateAccount(this.account.id);
+        this.initializeAccountEventStreams([this.account]);
         this.name = this.account.name;
     },
 };

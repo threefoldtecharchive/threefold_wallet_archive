@@ -1,5 +1,5 @@
 import { fetchAccount, mapAccount } from '../../services/AccountService';
-import { mapPayment } from '../../services/PaymentService';
+import { fetchPayments, mapPayment } from '../../services/PaymentService';
 import { entropyToMnemonic } from 'bip39';
 import {
     calculateWalletEntropyFromAccount,
@@ -10,6 +10,7 @@ import {
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
 import router from '../../router';
+import Accounts from './Accounts';
 
 export default {
     state: {
@@ -24,9 +25,10 @@ export default {
         appLoadingStack: 0,
         loadingTitle: null,
         loadingSubTitle: null,
+        accountEventStreams: null,
     },
     actions: {
-        async updateAccount({getters, commit }, accountId) {
+        async updateAccount({ getters, commit }, accountId) {
             const server = new Server(config.stellarServerUrl);
             const message = await server
                 .accounts()
@@ -75,6 +77,52 @@ export default {
                         console.error(e);
                     },
                 });
+        },
+        disableAccountEventStreams({ commit, getters }) {
+            const eventStreams = getters.accountEventStreams;
+            commit('setAccountEventStreams', null);
+            try {
+                if (!eventStreams) {
+                    return;
+                }
+                eventStreams.forEach(close => close());
+            } catch (e) {
+                console.error(e);
+            }
+        },
+        async initializeAccountEventStreams(
+            { dispatch, commit, getters },
+            accounts
+        ) {
+            dispatch('disableAccountEventStreams');
+            const server = new Server(config.stellarServerUrl);
+
+            const accountEventStreams = accounts.map(account =>
+                server
+                    .accounts()
+                    .accountId(account.id)
+                    .cursor('now')
+                    .stream({
+                        onmessage: message => {
+                            dispatch('fetchPayments', account.id);
+                            mapAccount({
+                                ...getters.accounts.find(
+                                    a => a.id === account.id
+                                ),
+                                accountResponse: message,
+                                // seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
+                            }).then(newAccount => {
+                                dispatch('fetchPayments', account.id);
+                                commit('addAccount', newAccount);
+                            });
+                        },
+                        onerror: e => {
+                            console.error(e);
+                        },
+                    })
+            );
+
+            commit('setAccountEventStreams', accountEventStreams);
         },
         async initializeAccountWatcher({ commit, getters }, account) {
             const server = new Server(config.stellarServerUrl);
@@ -171,7 +219,10 @@ export default {
             const keyPair = keypairFromAccount(entropy);
             return await generateActivationCode(keyPair);
         },
-        async initialize({ commit, dispatch, state }, { seed, doubleName }) {
+        async initialize(
+            { commit, dispatch, state, getters },
+            { seed, doubleName }
+        ) {
             commit('startAppLoading');
             commit('setLoadingMessage', { message: 'Initializing wallet' });
             state.initialized = true;
@@ -238,7 +289,7 @@ export default {
                 return;
             }
             await dispatch('saveToPkid');
-
+            dispatch('initializeAccountEventStreams', getters.accounts);
             commit('stopAppLoading');
             commit('stopLoadingWallets');
         },
@@ -279,6 +330,9 @@ export default {
             state.loadingTitle = message;
             state.loadingSubTitle = additional;
         },
+        setAccountEventStreams: (state, accountEventStreams) => {
+            state.accountEventStreams = accountEventStreams;
+        },
     },
     getters: {
         loadingSubTitle: state => state.loadingSubTitle,
@@ -292,5 +346,6 @@ export default {
         fee: state => state.fee,
         currencies: state => Object.keys(state.currencies),
         isAppLoading: state => state.appLoadingStack > 0,
+        accountEventStreams: state => state.accountEventStreams,
     },
 };
