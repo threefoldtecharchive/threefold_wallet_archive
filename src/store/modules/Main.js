@@ -107,12 +107,10 @@ export default {
             // dispatch('fetchPayments', account.id);
 
             commit('addAccount', account);
-            if(account.name === 'Daily'){
+
+            if (config.watchersEnabled){
                 dispatch('initializeAccountWatcher', account);
                 dispatch('initializeTransactionWatcher', account);
-            }
-            if (config.watchersEnabled){
-
             }
         },
         async initializePkidAppAccounts({ dispatch, commit }, seedPhrase) {
