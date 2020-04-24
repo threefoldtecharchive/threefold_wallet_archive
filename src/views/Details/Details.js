@@ -26,7 +26,8 @@ export default {
             selectedPayment: null,
             name: null,
             tab: 0,
-            selectedCurrency: "All",
+            selectedCurrency: 'All',
+            fetchingPayments: false,
         };
     },
     beforeMount() {
@@ -119,6 +120,11 @@ export default {
 
             this.addPayments({ payments, id: this.id });
             $state.loaded();
+        },
+        async updatePayments(){
+            this.fetchingPayments = true
+            await this.fetchPayments(this.account.id);
+            this.fetchingPayments = false
         },
     },
     computed: {

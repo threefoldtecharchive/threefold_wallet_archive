@@ -45,7 +45,7 @@
           <v-card class="pa-2 mb-2" v-for="balance in account.balances" v-if="balance.asset_type != 'native'" @click="seeTransactionsFor(balance.asset_code)">
             <h1>
               {{balance.asset_code}}
-            </h1> 
+            </h1>
             <div class="subtitle-1">
               Balance {{balance.balance | formatBalance}}
             </div>
@@ -56,8 +56,9 @@
         </v-col>
       </v-tab-item>
       <v-tab-item :key="1">
-        <v-select
-            class="pa-6 pb-3 ma-0 white"
+        <div class="input white align-center pa-6 pb-0 layout">
+          <v-select
+            class="ma-0"
             background-color="white"
             label="Filter by currency"
             :items="filterOptions"
@@ -66,8 +67,11 @@
             return-object
             append-icon="fas fa-caret-down"
           >
-          <option value="foo">foo</option>
-        </v-select>
+          </v-select>
+          <v-btn class="ml-8" color="primary" icon @click='updatePayments' :loading="fetchingPayments">
+            <v-icon>fas fa-sync-alt</v-icon>
+          </v-btn>
+        </div>
         <v-container v-if="!accountPayments.length && isPaymentLoading(account.id)">
           <v-row
             align-content="center"

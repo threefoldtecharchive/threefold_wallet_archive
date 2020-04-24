@@ -10,6 +10,7 @@ export default {
     computed: {},
     actions: {
         fetchPayments: async ({ commit }, id) => {
+            console.trace('oh no ')
             commit('addPaymentLoading', id);
             const payments = await fetchPayments(id);
             commit('addPayments', { payments, id });
