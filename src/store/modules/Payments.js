@@ -29,7 +29,6 @@ export default {
             const id = payload.id;
 
             const payments = payload.payments.filter(p => {
-                console.log(config.currencies)
                 if (!config.currencies[p.asset_code]) {
                     console.log(
                         p.asset_code, ' is not supported'
