@@ -26,6 +26,21 @@ export default {
         loadingSubTitle: null,
     },
     actions: {
+        async updateAccount({ commit }, accountId) {
+            const server = new Server(config.stellarServerUrl);
+            const message = await server
+                .accounts()
+                .accountId(accountId)
+                .cursor('now')
+                .call();
+
+            const newAccount = await mapAccount({
+                ...getters.accounts.find(a => a.id === accountId),
+                accountResponse: message,
+                // seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
+            });
+            commit('addAccount', newAccount);
+        },
         async initializeTransactionWatcher({ commit, dispatch }, account) {
             const server = new Server(config.stellarServerUrl);
             server
@@ -108,7 +123,7 @@ export default {
 
             commit('addAccount', account);
 
-            if (config.watchersEnabled){
+            if (config.watchersEnabled) {
                 dispatch('initializeAccountWatcher', account);
                 dispatch('initializeTransactionWatcher', account);
             }

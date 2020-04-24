@@ -63,7 +63,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['sendCoins', 'updateAccounts']),
+        ...mapActions(['sendCoins', 'updateAccounts', 'updateAccounts']),
         ...mapMutations(['startAppLoading', 'stopAppLoading']),
         scanQR() {
             window.vueInstance = this; //Don't remove this for flutter app

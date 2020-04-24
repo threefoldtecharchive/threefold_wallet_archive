@@ -1,4 +1,5 @@
 import AccountCard from '../../../../components/AccountCard';
+import { mapActions } from 'vuex';
 export default {
     name: 'to-dialog',
     components: {
@@ -22,8 +23,8 @@ export default {
             type: Object,
         },
         selectedCurrency: {
-            type: String
-        }
+            type: String,
+        },
     },
     data() {
         return {
@@ -43,8 +44,13 @@ export default {
             );
         },
     },
-    mounted() {},
+    mounted() {
+        for (const account of this.computedAccounts) {
+            this.updateAccount(account.id);
+        }
+    },
     methods: {
+        ...mapActions(['updateAccount']),
         selectAccount() {
             this.closeDialog(true, {
                 address: this.externAddress,
