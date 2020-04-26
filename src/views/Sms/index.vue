@@ -2,15 +2,18 @@
     <v-row class="fill-height" align="center" justify="center">
         <v-col align="center" justify="center">
             <p class="headline">
-                To activate your account please send an sms to
-                <b>{{ $route.params.tel }}</b> with code
-                <b>{{ $route.params.code }}</b>
+                Please wait while your account is activated.
             </p>
+            <span class="code"></span>
             <p class="subtitle-1">for more info go to support</p>
         </v-col>
     </v-row>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+    .code {
+        display: none;
+    }
+</style>
 
 <script>
     import { Server } from 'stellar-sdk';
