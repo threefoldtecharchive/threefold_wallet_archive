@@ -113,7 +113,9 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    store.dispatch('disableAccountEventStreams')
+    window.noCopyPaste = false;
+
+    store.dispatch('disableAccountEventStreams');
     if (
         !store.getters.initialized &&
         to.name !== 'error' &&

@@ -41,7 +41,7 @@ export default {
         },
     },
     mounted() {
-
+        this.disableCopy();
     },
     methods: {
         ...mapActions(['syncAccounts']),
@@ -53,11 +53,11 @@ export default {
                 },
             });
         },
-        disableCopy(){
-            window.noCopyPaste = true
+        disableCopy() {
+            window.noCopyPaste = true;
         },
-        enableCopy(){
-            window.noCopyPaste = false
-        }
+        enableCopy() {
+            window.noCopyPaste = false;
+        },
     },
 };
