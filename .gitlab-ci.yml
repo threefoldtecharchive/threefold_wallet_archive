@@ -135,7 +135,6 @@ deploy:production:
 build:production_beta:
     only:
         - /^b(\d+\.)?(\d+\.)?(\*|\d+)$/
-    stage: build
     tags:
         - builder
     variables:
@@ -154,7 +153,6 @@ deploy:production_beta:
         - if: $CI_COMMIT_TAG =~ /^b(\d+\.)?(\d+\.)?(\*|\d+)$/
           when: manual
         - when: never
-    stage: deploy
     tags:
         - production_beta
     script:
