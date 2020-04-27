@@ -9,6 +9,9 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 import moment from 'moment';
 import InfiniteLoading from 'vue-infinite-loading';
 import { fetchPayments } from '../../services/PaymentService';
+import {
+    isValidWalletName
+} from '@/services/AccountManagementService';
 
 export default {
     name: 'Details',
@@ -62,10 +65,15 @@ export default {
         },
         change() {
             const name = this.name.charAt(0).toUpperCase() + this.name.substring(1);
-
-            if (this.accounts.find(a => a.name === name)) {
+            this.name = this.name.trim();
+            
+            const walletValidation = isValidWalletName(
+                this.name,
+                this.accounts
+            );
+            if (!walletValidation.success) {
                 this.$flashMessage.error(
-                    `Can't rename wallet to ${name}, name already in use.`
+                    walletValidation.message
                 );
                 return;
             }
