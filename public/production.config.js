@@ -3,8 +3,8 @@ export default {
     stellarServerUrl: 'https://horizon.stellar.org',
     stellarNetwork: 'Public Global Stellar Network ; September 2015',
     serviceUrl: 'https://tokenservices.threefold.io/threefoldfoundation',
-    tftFundAccount: '?',
-    feeDestination: '?',
+    tftFundAccount: 'GAAN2EVASE724NRZWDKPW57NVSGIJZHVEDSSAJ7PKYIS2D26OEUYXGX3',
+    feeDestination: 'GAAN2EVASE724NRZWDKPW57NVSGIJZHVEDSSAJ7PKYIS2D26OEUYXGX3',
     feeAmount: '0.1000000',
     env: 'production',
     currencies: {
