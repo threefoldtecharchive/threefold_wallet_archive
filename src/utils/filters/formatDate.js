@@ -14,7 +14,7 @@ export const formatDate = value => {
     if (!value) {
         return;
     }
-    return String(moment(String(value)).format('DD MMMM YYYY hh:mm:ss'));
+    return String(moment(String(value)).format('HH:mm:ss | DD MMMM YYYY'));
 };
 
 export const formatUnlockTime = value => {
