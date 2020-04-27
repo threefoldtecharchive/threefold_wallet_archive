@@ -30,7 +30,15 @@ export const mapAccount = async ({
     name: name,
     tags: tags,
     id: accountResponse.id,
-    balances: accountResponse.balances,
+    balances: accountResponse.balances.sort(( b, a) => {
+        if (a.asset_code < b.asset_code) {
+            return -1;
+        }
+        if (a.asset_code > b.asset_code) {
+            return 1;
+        }
+        return 0;
+    }),
     index,
     position,
     seed,
@@ -123,15 +131,18 @@ export const fetchAccount = async ({
     const lockedTransactions = await getLockedBalances(keyPair);
     lockedTokenSubRoutine(lockedTransactions);
 
-    let lockedBalances = {}
+    let lockedBalances = {};
     lockedTransactions.forEach(transaction => {
-        if(lockedBalances[transaction.balance.asset_code]){
-            lockedBalances[transaction.balance.asset_code] += Number(transaction.balance.balance)
+        if (lockedBalances[transaction.balance.asset_code]) {
+            lockedBalances[transaction.balance.asset_code] += Number(
+                transaction.balance.balance
+            );
+        } else {
+            lockedBalances[transaction.balance.asset_code] = Number(
+                transaction.balance.balance
+            );
         }
-        else{
-            lockedBalances[transaction.balance.asset_code] = Number(transaction.balance.balance)
-        }
-    })
+    });
 
     return mapAccount({
         accountResponse,
