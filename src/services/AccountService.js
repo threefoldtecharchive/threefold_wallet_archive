@@ -45,16 +45,22 @@ export const mapAccount = async ({
     keyPair,
     seedPhrase,
     lockedTransactions: lockedTransactions.sort((a, b) => {
-        if (!a.unlockTransaction){
+        if (!a.unlockTransaction) {
             return 0;
         }
-        if (!b.unlockTransaction){
+        if (!b.unlockTransaction) {
             return 0;
         }
-        if (a.unlockTransaction.timeBounds.minTime < b.unlockTransaction.timeBounds.minTime) {
+        if (
+            a.unlockTransaction.timeBounds.minTime <
+            b.unlockTransaction.timeBounds.minTime
+        ) {
             return -1;
         }
-        if (a.unlockTransaction.timeBounds.minTime > b.unlockTransaction.timeBounds.minTime) {
+        if (
+            a.unlockTransaction.timeBounds.minTime >
+            b.unlockTransaction.timeBounds.minTime
+        ) {
             return 1;
         }
         return 0;
