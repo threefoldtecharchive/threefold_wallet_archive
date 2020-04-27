@@ -216,7 +216,18 @@ export default {
         async generateInitialAccount({}, seedPhrase) {
             const entropy = calculateWalletEntropyFromAccount(seedPhrase, 0);
             const keyPair = keypairFromAccount(entropy);
-            return await generateActivationCode(keyPair);
+            try {
+                return await generateActivationCode(keyPair);
+            } catch (e) {
+                await router.push({
+                    name: 'error screen',
+                    params: {
+                        reason: 'Activation mistake',
+                        fix: 'Please retry, if this error persists, please contact support',
+                    },
+                });
+                throw e;
+            }
         },
         async initialize(
             { commit, dispatch, state, getters },
