@@ -4,7 +4,7 @@
             <p class="headline">
                 Please wait while your account is activated.
             </p>
-            <span class="code"></span>
+            <span class="code">{{$route.params.code}}</span>
             <p class="subtitle-1">for more info go to support</p>
         </v-col>
     </v-row>
@@ -18,12 +18,12 @@
 <script>
     import { Server } from 'stellar-sdk';
     import config from '../../../public/config';
-    import { mapAccount } from '../../services/AccountService';
+    import { mapMutations } from 'vuex';
 
     export default {
         mounted() {
             const server = new Server(config.stellarServerUrl);
-            server
+            const stream = server
                 .accounts()
                 .accountId(this.$route.params.address)
                 .cursor('now')
@@ -32,10 +32,11 @@
                         console.log({ message });
                         window.location = '/init';
                     },
-                    onerror: e => {
-                        console.error(e);
-                    },
                 });
+            this.setAccountEventStreams(stream);
+        },
+        methods: {
+            ...mapMutations(['setAccountEventStreams']),
         },
     };
 </script>
