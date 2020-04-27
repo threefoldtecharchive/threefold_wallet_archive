@@ -10,7 +10,6 @@ import {
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
 import router from '../../router';
-import Accounts from './Accounts';
 
 export default {
     state: {
@@ -226,6 +225,7 @@ export default {
             commit('startAppLoading');
             commit('setLoadingMessage', { message: 'Initializing wallet' });
             state.initialized = true;
+            await router.push({ name: 'home' });
             await dispatch('setPkidClient', seed);
             commit('setThreebotName', doubleName);
 
@@ -290,6 +290,14 @@ export default {
             }
             await dispatch('saveToPkid');
             dispatch('initializeAccountEventStreams', getters.accounts);
+            if (getters.accounts.length === 1) {
+                await router.push({
+                    name: 'details',
+                    params: {
+                        account: getters.accounts[0].id,
+                    },
+                });
+            }
             commit('stopAppLoading');
             commit('stopLoadingWallets');
         },

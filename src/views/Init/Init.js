@@ -36,13 +36,12 @@ export default {
                 return;
             }
             try {
-                this.initialize({
+                await this.initialize({
                     doubleName,
                     seed,
                     importedWallets,
                     appWallets,
                 });
-                router.push({ name: 'home' });
             } catch (error) {
                 console.log(error.message);
             }
