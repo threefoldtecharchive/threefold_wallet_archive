@@ -30,7 +30,7 @@ export const mapAccount = async ({
     name: name,
     tags: tags,
     id: accountResponse.id,
-    balances: accountResponse.balances.sort(( b, a) => {
+    balances: accountResponse.balances.sort((b, a) => {
         if (a.asset_code < b.asset_code) {
             return -1;
         }
@@ -44,7 +44,21 @@ export const mapAccount = async ({
     seed,
     keyPair,
     seedPhrase,
-    lockedTransactions,
+    lockedTransactions: lockedTransactions.sort((a, b) => {
+        if (!a.unlockTransaction){
+            return 0;
+        }
+        if (!b.unlockTransaction){
+            return 0;
+        }
+        if (a.unlockTransaction.timeBounds.minTime < b.unlockTransaction.timeBounds.minTime) {
+            return -1;
+        }
+        if (a.unlockTransaction.timeBounds.minTime > b.unlockTransaction.timeBounds.minTime) {
+            return 1;
+        }
+        return 0;
+    }),
     lockedBalances,
 });
 
