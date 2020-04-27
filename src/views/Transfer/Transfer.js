@@ -92,7 +92,7 @@ export default {
             if (tftAddress === '') {
                 tftAddress = url.pathname.replace('//', '');
             }
-            currencyIndex = currencies[currencies.findIndex(c => c.toLowerCase() === currency)]
+            currencyIndex = currencies[currencies.findIndex(c => {return c.toLowerCase() == currency})]
             this.selectedCurrency = currencies[currencyIndex];
             this.formObject.to.address = tftAddress;
             this.formObject.amount =
