@@ -34,7 +34,7 @@ export default {
             };
         },
         isProduction() {
-            return config.isProduction;
+            return config.env === 'production';
         },
         env() {
             return config.env;
