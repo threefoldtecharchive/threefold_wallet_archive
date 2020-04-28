@@ -37,7 +37,6 @@ export const isValidWalletName = (walletName, accounts) => {
             message: 'The length of the name should not exceed 15 characters.',
         };
     }
-    console.log("hellooooooooooooo")
     if (!walletName.match(/^[0-9a-zA-Z]+$/)){
         return {
             success: false,
