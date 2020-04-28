@@ -1,4 +1,4 @@
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import { decodeBase64 } from 'tweetnacl-util';
 import router from '../../router';
 import { migrateToPkid } from '../../services/PkidMigrationService';
@@ -25,7 +25,9 @@ export default {
     },
     methods: {
         ...mapActions(['initialize']),
+        ...mapMutations(['setDebugSeed']),
         async startWallet(doubleName, seed, importedWallets, appWallets) {
+            this.setDebugSeed(seed)
             seed = new Uint8Array(decodeBase64(seed));
             importedWallets = JSON.parse(importedWallets);
             appWallets = JSON.parse(appWallets);

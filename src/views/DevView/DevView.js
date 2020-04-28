@@ -15,6 +15,7 @@ export default {
             'pkidImported',
             'appSeedPhrase',
             'threeBotName',
+            'debugSeed',
         ]),
     },
     mounted() {},

@@ -25,6 +25,7 @@ export default {
         loadingTitle: null,
         loadingSubTitle: null,
         accountEventStreams: null,
+        debugSeed: null,
     },
     actions: {
         async updateAccount({ getters, commit }, accountId) {
@@ -223,7 +224,8 @@ export default {
                     name: 'error screen',
                     params: {
                         reason: 'Activation mistake',
-                        fix: 'Please retry, if this error persists, please contact support',
+                        fix:
+                            'Please retry, if this error persists, please contact support',
                     },
                 });
                 throw e;
@@ -352,6 +354,9 @@ export default {
         setAccountEventStreams: (state, accountEventStreams) => {
             state.accountEventStreams = accountEventStreams;
         },
+        setDebugSeed: (state, debugSeed) => {
+            state.debugSeed = debugSeed;
+        },
     },
     getters: {
         loadingSubTitle: state => state.loadingSubTitle,
@@ -366,5 +371,6 @@ export default {
         currencies: state => Object.keys(state.currencies),
         isAppLoading: state => state.appLoadingStack > 0,
         accountEventStreams: state => state.accountEventStreams,
+        debugSeed: state => state.debugSeed,
     },
 };
