@@ -1,133 +1,187 @@
 <section class="details fill-height">
-  <header>
-    <v-container class="pb-0">
-      <v-row>
-        <v-col>
-          <h2 class="text-capitalize">{{account.name}}
-            <span v-for="tag in account.tags" class="font-weight-light fa-xs ml-1">{{tag}}</span></h2>
-          <span>{{getHumanWalletAddress}}</span>
-          <br>
-        </v-col>
-      </v-row>
-    </v-container>
-  </header>
-
-  <v-tabs class="fill-height"
-          centered
-          color="accent"
-          slider-color="accent"
-          v-model="tab"
-          background-color="#517394"
-          dark
-          grow
-  >
-  <v-tab>
-    <!--Balances-->
-    <v-icon small>fa-money-bill-wave</v-icon>
-  </v-tab>
-    <v-tab>
-      <!--Payments-->
-      <v-icon small>fa-exchange-alt</v-icon>
-    </v-tab>
-    <v-tab v-if="account.lockedTransactions.length">
-      <!--Locked Payments-->
-      <v-icon small>fa-lock</v-icon>
-    </v-tab>
-    <v-tab>
-      <!--Info-->
-      <v-icon small>fa-info-circle</v-icon>
-    </v-tab>
-
-
-    <v-tabs-items v-model="tab" class="flex-fill">
-      <v-tab-item :key="0">
-        <v-col>
-          <v-card class="pa-2 mb-2" v-for="balance in account.balances" v-if="balance.asset_type != 'native'" @click="seeTransactionsFor(balance.asset_code)">
-            <h1>
-              {{balance.asset_code}}
-            </h1>
-            <div class="subtitle-1">
-              Balance {{balance.balance | formatBalance}}
-            </div>
-            <div class="subtitle-2" v-if="account.lockedBalances[balance.asset_code]">
-              Locked {{account.lockedBalances[balance.asset_code] | formatBalance}}
-            </div>
-          </v-card>
-        </v-col>
-      </v-tab-item>
-      <v-tab-item :key="1">
-        <div class="input white align-center pa-6 pb-0 layout">
-          <v-select
-            class="ma-0"
-            background-color="white"
-            label="Filter by currency"
-            :items="filterOptions"
-            v-model="selectedCurrency"
-            item-value="All"
-            return-object
-            append-icon="fas fa-caret-down"
-          >
-          </v-select>
-          <v-btn class="ml-8" color="primary" icon @click='updatePayments' :loading="fetchingPayments">
-            <v-icon>fas fa-sync-alt</v-icon>
-          </v-btn>
-        </div>
-        <v-container v-if="!accountPayments.length && isPaymentLoading(account.id)">
-          <v-row
-            align-content="center"
-            justify="center"
-          >
-            <v-col
-              class="subtitle-1 text-center"
-              cols="12"
-            >
-              Getting payments
-            </v-col>
-          </v-row>
+    <header>
+        <v-container class="pb-0">
+            <v-row>
+                <v-col>
+                    <h2 class="text-capitalize">
+                        {{account.name}}
+                        <span
+                            v-for="tag in account.tags"
+                            class="font-weight-light fa-xs ml-1"
+                            >{{tag}}</span
+                        >
+                    </h2>
+                    <span>{{getHumanWalletAddress}}</span>
+                    <br />
+                </v-col>
+            </v-row>
         </v-container>
-        <v-list three-line class="pa-0 payment-list">
-          <template v-for="payment, i  in accountPayments">
-            <div class="date" v-if="showDate(payment, i)">
-            <span>
-        {{payment.created_at | formatDay}}
-        </span>
-              <v-divider></v-divider>
-            </div>
+    </header>
 
-            <paymentItem :key="payment.id" :payment="payment" class="payment-item"
-                         @click.stop='selectedPayment = payment'/>
-          </template>
-          <infinite-loading
-            class="py-4"
-            @infinite="infiniteHandler"
-            spinner="waveDots"
-          >
-            <div slot="no-more">No {{accountPayments.length ? 'more ' : ''}}payments {{accountPayments.length ? ' ' : 'yet'}}</div>
-          </infinite-loading>
-        </v-list>
-      </v-tab-item>
+    <v-tabs
+        class="fill-height"
+        centered
+        color="accent"
+        slider-color="accent"
+        v-model="tab"
+        background-color="#517394"
+        dark
+        grow
+    >
+        <v-tab>
+            <!--Balances-->
+            <v-icon small>fa-money-bill-wave</v-icon>
+        </v-tab>
+        <v-tab>
+            <!--Payments-->
+            <v-icon small>fa-exchange-alt</v-icon>
+        </v-tab>
+        <v-tab v-if="account.lockedTransactions.length">
+            <!--Locked Payments-->
+            <v-icon small>fa-lock</v-icon>
+        </v-tab>
+        <v-tab>
+            <!--Info-->
+            <v-icon small>fa-info-circle</v-icon>
+        </v-tab>
 
-      <v-tab-item :key="2" v-if="account.lockedTransactions.length">
-        <v-list class="pa-0">
-          <LockedItem v-for="balance,i in account.lockedTransactions" :item="balance" :key="i"/>
-        </v-list>
-      </v-tab-item>
+        <v-tabs-items v-model="tab" class="flex-fill">
+            <v-tab-item :key="0">
+                <v-col>
+                    <v-card
+                        class="pa-2 mb-2"
+                        v-for="balance in account.balances"
+                        v-if="balance.asset_type != 'native'"
+                        v-bind:key="balance.asset_code"
+                        @click="seeTransactionsFor(balance.asset_code)"
+                    >
+                        <h1>
+                            {{balance.asset_code}}
+                        </h1>
+                        <div class="subtitle-1">
+                            Balance {{balance.balance | formatBalance}}
+                        </div>
+                        <div
+                            class="subtitle-2"
+                            v-if="account.lockedBalances[balance.asset_code]"
+                        >
+                            Locked {{account.lockedBalances[balance.asset_code]
+                            | formatBalance}}
+                        </div>
+                    </v-card>
+                </v-col>
+            </v-tab-item>
+            <v-tab-item :key="1">
+                <div class="input white align-center pa-6 pb-0 layout">
+                    <v-select
+                        class="ma-0"
+                        background-color="white"
+                        label="Filter by currency"
+                        :items="filterOptions"
+                        v-model="selectedCurrency"
+                        item-value="All"
+                        return-object
+                        append-icon="fas fa-caret-down"
+                    >
+                    </v-select>
+                    <v-btn
+                        class="ml-8"
+                        color="primary"
+                        icon
+                        @click="updatePayments"
+                        :loading="fetchingPayments"
+                    >
+                        <v-icon>fas fa-sync-alt</v-icon>
+                    </v-btn>
+                </div>
+                <v-container
+                    v-if="!accountPayments.length && isPaymentLoading(account.id)"
+                >
+                    <v-row align-content="center" justify="center">
+                        <v-col class="subtitle-1 text-center" cols="12">
+                            Getting payments
+                        </v-col>
+                    </v-row>
+                </v-container>
+                <v-list three-line class="pa-0 payment-list">
+                    <template v-for="payment, i  in filteredAccountPayments">
+                        <div class="date" v-if="showDate(payment, i)">
+                            <span>
+                                {{payment.created_at | formatDay}}
+                            </span>
+                            <v-divider></v-divider>
+                        </div>
 
-      <v-tab-item :key="3">
-        <div class="px-3 mt-4">
-          <v-text-field label="Address" :value="account.id" append-outer-icon="fas fa-copy"
-                        @click:append-outer.stop="copyAddress" readonly></v-text-field>
-          <v-text-field v-if="account.tags.includes('imported')" label="Seed phrase" :value="account.seedPhrase"
+                        <paymentItem
+                            :key="payment.id"
+                            :payment="payment"
+                            class="payment-item"
+                            @click.stop="selectedPayment = payment"
+                        />
+                    </template>
+                    <infinite-loading
+                        class="py-4"
+                        @infinite="infiniteHandler"
+                        spinner="waveDots"
+                    >
+                        <div slot="no-more">
+                            No {{accountPayments.length ? 'more ' : ''}}payments
+                            {{accountPayments.length ? ' ' : 'yet'}}
+                        </div>
+                    </infinite-loading>
+                </v-list>
+            </v-tab-item>
+
+            <v-tab-item :key="2" v-if="account.lockedTransactions.length">
+                <v-list class="pa-0">
+                    <LockedItem
+                        v-for="balance,i in account.lockedTransactions"
+                        :item="balance"
+                        :key="i"
+                    />
+                </v-list>
+            </v-tab-item>
+
+            <v-tab-item :key="3">
+                <div class="px-3 mt-4">
+                    <v-text-field
+                        label="Address"
+                        :value="account.id"
                         append-outer-icon="fas fa-copy"
-                        @click:append-outer.stop="copySeed" readonly></v-text-field>
-          <v-text-field label="Wallet name" v-model.trim="name" :value="account.name"></v-text-field>
-          <v-btn color="success" class="mr-4" @click.stop="change">Change wallet name</v-btn>
-          <v-btn v-if="account.tags.includes('imported')" color="error" class="mr-4" @click.stop="deleteWallet">
-            <v-icon>fas fa-trash</v-icon>
-          </v-btn>
-        </div>
-      </v-tab-item>
-    </v-tabs-items>
-  </v-tabs>
-  <paymentDialog v-if="selectedPayment" :payment="selectedPayment" @closed="selectedPayment = null"/>
+                        @click:append-outer.stop="copyAddress"
+                        readonly
+                    ></v-text-field>
+                    <v-text-field
+                        v-if="account.tags.includes('imported')"
+                        label="Seed phrase"
+                        :value="account.seedPhrase"
+                        append-outer-icon="fas fa-copy"
+                        @click:append-outer.stop="copySeed"
+                        readonly
+                    ></v-text-field>
+                    <v-text-field
+                        label="Wallet name"
+                        v-model.trim="name"
+                        :value="account.name"
+                    ></v-text-field>
+                    <v-btn color="success" class="mr-4" @click.stop="change"
+                        >Change wallet name</v-btn
+                    >
+                    <v-btn
+                        v-if="account.tags.includes('imported')"
+                        color="error"
+                        class="mr-4"
+                        @click.stop="deleteWallet"
+                    >
+                        <v-icon>fas fa-trash</v-icon>
+                    </v-btn>
+                </div>
+            </v-tab-item>
+        </v-tabs-items>
+    </v-tabs>
+    <paymentDialog
+        v-if="selectedPayment"
+        :payment="selectedPayment"
+        @closed="selectedPayment = null"
+    />
 </section>

@@ -31,7 +31,7 @@ export const fetchPayments = async (id, cursor = 'now') => {
         .payments()
         .forAccount(id)
         .cursor(cursor)
-        .limit(15)
+        .limit(100)
         .order('desc')
         .call();
 

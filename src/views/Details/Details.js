@@ -116,8 +116,9 @@ export default {
             this.$flashMessage.info(`Deleted wallet ${this.name}.`);
         },
         async infiniteHandler($state) {
+            const initialLength = this.accountPayments.length;
             const lastPayment = this.accountPayments[
-                this.accountPayments.length - 1
+                initialLength - 1
             ];
             const id = lastPayment ? lastPayment.id : 'now';
             const payments = await fetchPayments(this.id, id);
@@ -127,6 +128,11 @@ export default {
             }
 
             this.addPayments({ payments, id: this.id });
+
+            if (payments.length === 0) {
+                $state.complete();
+            }
+
             $state.loaded();
         },
         async updatePayments(){
@@ -147,6 +153,9 @@ export default {
             return this.accounts.find(a => a.id === this.id);
         },
         accountPayments() {
+            return this.payments(this.id);
+        },
+        filteredAccountPayments() {
             return this.payments(this.id).filter(payment => {
                 return this.selectedCurrency === 'All' || payment.asset_code === this.selectedCurrency;
             });
