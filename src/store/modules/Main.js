@@ -156,7 +156,22 @@ export default {
                 try {
                     await convertTfAccount(seedPhrase, 1, index);
                 } catch (error) {
-                    console.log("couldn't convert account");
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error &&
+                        error.response.data.error.includes(
+                            'GET: no content available (code: 204)'
+                        )
+                    ) {
+                        console.log(error.response.data.error);
+                        commit(
+                            'removeAccountThombstone',
+                            pkidAccount.walletName
+                        );
+                        return ;
+                    }
                 }
             }
             const account = await fetchAccount({
@@ -301,6 +316,20 @@ export default {
                 });
                 return;
             }
+
+            if (!getters.appAccounts.length){
+                const response = await dispatch('generateInitialAccount', seedPhrase);
+                await router.push({
+                    name: 'sms',
+                    params: {
+                        tel: response.phonenumbers[0],
+                        code: response.activation_code,
+                        address: response.address,
+                    },
+                });
+                return;
+            }
+
             await dispatch('saveToPkid');
             dispatch('initializeAccountEventStreams', getters.accounts);
             if (getters.accounts.length === 1) {
