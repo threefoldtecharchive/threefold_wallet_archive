@@ -19,6 +19,7 @@
 .build_wallet: &build_wallet
     - docker build -t jimber/wallet:$DOCKER_IMAGE_TAG .
     - echo "$DOCKER_PW" | docker login -u $DOCKER_USER --password-stdin
+    - echo $DOCKER_IMAGE_TAG
     - docker push jimber/wallet:$DOCKER_IMAGE_TAG
 
 cache:
