@@ -37,7 +37,13 @@ export default {
         },
         async ResetAppWallets() {
             this.removeAppAccounts();
-            await this.persistPkidAppAccounts([]);
+            await this.persistPkidAppAccounts([
+                {
+                    walletName: 'Daily',
+                    position: 0,
+                    index: 0,
+                },
+            ]);
             await this.syncAccounts();
         },
         async RemoveImportedAccounts() {
