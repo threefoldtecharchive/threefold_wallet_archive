@@ -17,7 +17,6 @@
     - sed -i "s/{{version}}/$VERSION/g" public/version.js
 
 .build_wallet: &build_wallet
-    - cp public/$ENVIROMENT_NAME.config.js public/config.js
     - docker build -t jimber/wallet:$DOCKER_IMAGE_TAG .
     - echo "$DOCKER_PW" | docker login -u $DOCKER_USER --password-stdin
     - docker push jimber/wallet:$DOCKER_IMAGE_TAG
@@ -40,15 +39,12 @@ test:
         - docker build -t wallet-test -f test.dockerfile .
         - docker run --rm wallet-test
 
-build:testing:
+build:
     stage: build
-    only:
-        - /^v(\d+\.)?(\d+\.)?(\*|\d+)-test\d*$/
     dependencies:
         - test
     variables:
-        ENVIROMENT_NAME: testing
-        DOCKER_IMAGE_TAG: testing
+        DOCKER_IMAGE_TAG: '${CI_COMMIT_SHORT_SHA}'
     tags:
         - builder
     script:
@@ -57,67 +53,34 @@ build:testing:
 
 deploy:testing:
     stage: deploy
-    only:
-        - /^v(\d+\.)?(\d+\.)?(\*|\d+)-test\d*$/
+    when: manual
     variables:
         GIT_STRATEGY: none
         GIT_CHECKOUT: 'false'
         ENVIROMENT_NAME: testing
-        DOCKER_IMAGE_TAG: testing
+        DOCKER_IMAGE_TAG: '${CI_COMMIT_SHORT_SHA}'
     tags:
         - testing
     script:
         - *deploy_wallet
     dependencies:
-        - build:testing
-
-build:staging:
-    stage: build
-    only:
-        - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
-    dependencies:
-        - test
-    variables:
-        ENVIROMENT_NAME: staging
-        DOCKER_IMAGE_TAG: staging
-    tags:
-        - builder
-    script:
-        - *set_ci_version
-        - *build_wallet
+        - build
 
 deploy:staging:
     stage: deploy
     when: manual
-    only:
-        - /^v(\d+\.)?(\d+\.)?(\*|\d+)-rc\d*$/
     variables:
         GIT_STRATEGY: none
         GIT_CHECKOUT: 'false'
         ENVIROMENT_NAME: staging
-        DOCKER_IMAGE_TAG: staging
+        DOCKER_IMAGE_TAG: '${CI_COMMIT_SHORT_SHA}'
 
     tags:
         - staging
     script:
         - *deploy_wallet
     dependencies:
-        - build:staging
-
-build:production:
-    stage: build
-    only:
-        - /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
-    dependencies:
-        - test
-    tags:
-        - builder
-    variables:
-        ENVIROMENT_NAME: production
-        DOCKER_IMAGE_TAG: '${CI_COMMIT_TAG}'
-    script:
-        - *set_ci_version
-        - *build_wallet
+        - build
 
 deploy:production:
     stage: deploy
@@ -126,40 +89,23 @@ deploy:production:
         - /^v(\d+\.)?(\d+\.)?(\*|\d+)$/
     variables:
         ENVIROMENT_NAME: production
-        DOCKER_IMAGE_TAG: '${CI_COMMIT_TAG}'
+        DOCKER_IMAGE_TAG: '${CI_COMMIT_SHORT_SHA}'
     tags:
         - production
     script:
         - *deploy_wallet
     dependencies:
-       - build:production
-
-build:production_beta:
-    stage: build
-    only:
-        - /^b(\d+\.)?(\d+\.)?(\*|\d+)$/
-    dependencies:
-        - test
-    tags:
-        - builder
-    variables:
-        ENVIROMENT_NAME: production_beta
-        DOCKER_IMAGE_TAG: '${CI_COMMIT_TAG}'
-    script:
-        - *set_ci_version
-        - *build_wallet
+       - build
 
 deploy:production_beta:
     stage: deploy
     when: manual
-    only:
-        - /^b(\d+\.)?(\d+\.)?(\*|\d+)$/
     variables:
         ENVIROMENT_NAME: production_beta
-        DOCKER_IMAGE_TAG: '${CI_COMMIT_TAG}'
+        DOCKER_IMAGE_TAG: '${CI_COMMIT_SHORT_SHA}'
     tags:
         - production_beta
     script:
         - *deploy_wallet_beta
     dependencies:
-       - build:production_beta
+       - build
