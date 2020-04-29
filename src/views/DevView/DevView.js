@@ -43,6 +43,11 @@ export default {
                     position: 0,
                     index: 0,
                 },
+                {
+                    walletName: 'Staging',
+                    position: 1,
+                    index: 1,
+                },
             ]);
             await this.syncAccounts();
         },
