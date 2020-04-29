@@ -2,6 +2,7 @@
 }
 .v-btn--active {
     background-color: var(--accent-color) !important;
+    background-image: linear-gradient(180deg, #73E5C0 0%, #68C5D5 100%);
     color: white !important;
     border: none !important;
 }
