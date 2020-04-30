@@ -69,7 +69,6 @@ export default {
             });
         },
         async retryMigrate(account) {
-            debugger
             const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
             await convertTokens(revineAddress, account.keyPair.publicKey());
             
