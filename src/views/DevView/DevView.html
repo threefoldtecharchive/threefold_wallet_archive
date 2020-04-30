@@ -33,10 +33,8 @@
     </v-tab>
     <v-tab-item>
       <v-card>
+        <v-card-title>Restart wallet</v-card-title>
         <v-card-text>
-          <p class="display-1 text--primary">
-            Restart Wallet
-          </p>
           <p>Restarts the 3bot_connect wallet </p>
         </v-card-text>
         <v-card-actions>
@@ -46,10 +44,24 @@
         </v-card-actions>
       </v-card>
       <v-card>
+        <v-card-title>
+          Retry migration
+        </v-card-title>
         <v-card-text>
-          <p class="display-1 text--primary">
-            Reset app wallets
-          </p>
+          <p>Retry the conversion from TFChain to Stellar network</p>
+          <v-col>
+            <v-row v-for="account in accounts" :key=account.id>
+              {{account.name}}
+              <v-spacer></v-spacer>
+              <v-btn x-small dark text color="deep-purple" @click="retryMigrate(account)">Retry</v-btn>
+            </v-row>
+          </v-col>
+        </v-card-text>
+      </v-card>
+      <addTrustlineCard/>
+      <v-card>
+        <v-card-title>Reset app wallets</v-card-title>
+        <v-card-text>
           <p>Resets app wallets</p>
         </v-card-text>
         <v-card-actions>
@@ -60,31 +72,14 @@
       </v-card>
       <v-card>
         <v-card-title>
-          Retry migration
+          Remove imported wallets
         </v-card-title>
-        <v-card-text>
-          <v-col>
-            <v-row v-for="account in accounts" :key=account.id>
-              {{account.name}}
-              <v-spacer></v-spacer>
-              <v-btn x-small @click="retryMigrate(account)">Retry</v-btn>
-            </v-row>
-          </v-col>
-        </v-card-text>
-      </v-card>
-      <v-card>
-        <v-card-text>
-          <p class="display-1 text--primary">
-            Remove imported wallets
-          </p>
-        </v-card-text>
         <v-card-actions>
-          <v-btn text @click="RemoveImportedAccounts">
+          <v-btn dark text color="deep-purple" @click="RemoveImportedAccounts">
             Remove
           </v-btn>
         </v-card-actions>
       </v-card>
-      <addTrustlineCard/>
       <v-card>
         <v-card-text>
           <p class="display-1 text--primary">
@@ -103,11 +98,11 @@
         </v-card-actions>
       </v-card>
       <v-card>
+        <v-card-title>
+          Show error page
+        </v-card-title>
         <v-card-text>
-          <p class="display-1 text--primary">
-            Show error page
-          </p>
-          <p>errorScreen</p>
+          <p>Show the error screen</p>
         </v-card-text>
         <v-card-actions>
           <v-btn dark text color="deep-purple" @click="errorScreen">

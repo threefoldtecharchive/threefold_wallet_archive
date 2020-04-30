@@ -13,7 +13,7 @@
                 <v-row v-for="account in accounts" :key=account.id>
                 {{account.name}}
                 <v-spacer></v-spacer>
-                <v-btn x-small @click="addTrustLines(account)" >Add Threefold trustlines</v-btn>
+                <v-btn x-small dark text color="deep-purple" @click="addTrustLines(account)" >Add Threefold trustlines</v-btn>
                 </v-row>
             </v-col>
         </v-card-text>
