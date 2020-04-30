@@ -1,5 +1,9 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
 import router from '../../router';
+import {
+convertTokens,
+revineAddressFromSeed
+} from '@jimber/stellar-crypto';
 
 export default {
     name: 'DevView',
@@ -25,7 +29,7 @@ export default {
             'generateAppAccount',
             'persistPkidAppAccounts',
             'persistPkidImportedAccounts',
-            'syncAccounts',
+            'syncAccounts'
         ]),
         Restart() {
             location.reload();
@@ -64,5 +68,11 @@ export default {
                 },
             });
         },
+        async retryMigrate(account) {
+            debugger
+            const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
+            await convertTokens(revineAddress, account.keyPair.publicKey());
+            
+        }
     },
 };
