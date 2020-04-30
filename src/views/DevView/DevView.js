@@ -1,13 +1,12 @@
-import { mapGetters, mapActions, mapMutations } from 'vuex';
-import router from '../../router';
+import { mapGetters, mapActions, mapMut
 import {
 convertTokens,
 revineAddressFromSeed
 } from '@jimber/stellar-crypto';
-
+import AddTrustlineCard from './components/AddTrustlineCard';
 export default {
     name: 'DevView',
-    components: {},
+    components: { AddTrustlineCard },
     props: [],
     data() {
         return {};
@@ -20,6 +19,7 @@ export default {
             'appSeedPhrase',
             'threeBotName',
             'debugSeed',
+            'currencies',
         ]),
     },
     mounted() {},
