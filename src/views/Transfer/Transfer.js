@@ -160,7 +160,7 @@ export default {
                 );
 
                 this.$flashMessage.info(
-                    `Successfully transferred ${this.formObject.amount} to ${this.formObject.to.address}.`
+                    `Successfully transferred ${this.formObject.amount} ${this.selectedCurrency} to ${this.formObject.to.address}.`
                 );
             } catch (e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"
