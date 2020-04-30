@@ -1,4 +1,4 @@
-import { mapGetters, mapActions, mapMut
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 import {
 convertTokens,
 revineAddressFromSeed
