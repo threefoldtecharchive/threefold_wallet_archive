@@ -1,5 +1,5 @@
 <template>
-    <v-dialog scrollable fullscreen v-model="payment">
+    <v-dialog persistent v-model="payment">
         <v-card class="payment-dialog">
             <v-card-title
                 style="background-color: #34495e; color: white;"
@@ -84,7 +84,6 @@
             },
         },
         mounted() {
-            console.log(this.payment);
             this.payment.memo().then(m => {
                 this.memo = m;
             });
@@ -94,8 +93,10 @@
 <style scoped lang="scss">
     .v-card {
         position: fixed;
-        width: 100vw;
-        height: 100vh;
+        top: 10vh;
+        left: 50%;
+        transform: translate(-50%, 0);
+        width: 80vw;
     }
 
     .v-application .title {
