@@ -74,4 +74,10 @@
         },
     };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+    .toolbar{
+        position: sticky;
+        top: 0;
+        z-index: 99;
+    }
+</style>
