@@ -161,9 +161,11 @@ export default {
                         error.response &&
                         error.response.data &&
                         error.response.data.error &&
-                        error.response.data.error.includes(
+                        (error.response.data.error.includes(
                             'GET: no content available (code: 204)'
-                        )
+                        ) ||
+                            error.response.data.error ===
+                                'Tfchain address has 0 balance, no need to activate an account')
                     ) {
                         console.log(error.response.data.error);
                         commit(
