@@ -193,6 +193,7 @@
             height: 4px;
             border-radius: 0 2px 2px 0;
             background: lightgrey;
+            background-image: linear-gradient(180deg, rgba(115, 229, 192, 0.4) 0%, rgba(104, 197, 213, 0.4) 100%);
         }
     }
 </style>
