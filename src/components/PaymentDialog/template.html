@@ -25,8 +25,11 @@
           <p class="subtitle mb-0 grey--text">Date</p>
           <p class="title mt-0">{{payment.created_at | formatDate }}</p>
 
-          <p class="subtitle mb-0 grey--text">{{payment.outgoing ? 'To' : 'From'}}</p>
-          <p class="title mt-0">{{payment.outgoing ? payment.to : payment.from | readableAddress}}</p>
+          <p class="subtitle mb-0 grey--text">From</p>
+          <p class="title mt-0">{{payment.from | readableAddress}}</p>
+
+          <p class="subtitle mb-0 grey--text">To</p>
+          <p class="title mt-0">{{payment.to | readableAddress}}</p>
 
           <p v-if="memo" class="subtitle mb-0 grey--text">Message</p>
           <p v-if="memo" class="title mt-0">{{memo}}</p>
