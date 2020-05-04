@@ -18,7 +18,11 @@
                     <v-col
                         justify="center"
                         align="center"
-                        class="payment-header"
+                        :class="
+                            payment.outgoing
+                                ? 'payment-header out'
+                                : 'payment-header in'
+                        "
                     >
                         <b class="my-1">
                             {{ payment.outgoing ? '-' : '+' }}
@@ -153,10 +157,16 @@
     .payment-header {
         background: #4a5c70;
         color: white;
-        height: 30vh;
+        height: 15vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        &.out {
+            background-image: linear-gradient(180deg, #e6926d 0%, #e67163 100%);
+        }
+        &.in {
+            background-image: linear-gradient(180deg, #73e5c0 0%, #68c5d5 100%);
+        }
     }
 </style>
