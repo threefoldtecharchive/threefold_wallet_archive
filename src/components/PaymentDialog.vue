@@ -20,14 +20,17 @@
                         align="center"
                         class="payment-header"
                     >
-                        <b class="my-1"
-                            >{{ payment.outgoing ? '-' : '+' }}
+                        <b class="my-1">
+                            {{ payment.outgoing ? '-' : '+' }}
                             {{ payment.amount | formatBalance }}
-                            <sup>TFT</sup></b
+                            <sup>TFT</sup>
+                        </b>
+                        <small
+                            style="font-size: small;"
+                            v-if="payment.outgoing"
                         >
-                        <small style="font-size: small;" v-if="payment.outgoing"
-                            >0.1 <sup>TFT</sup> fee excluded</small
-                        >
+                            0.1 <sup>TFT</sup> fee excluded
+                        </small>
                     </v-col>
                 </v-row>
 
