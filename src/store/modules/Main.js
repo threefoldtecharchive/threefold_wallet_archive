@@ -170,7 +170,7 @@ export default {
                             'removeAccountThombstone',
                             pkidAccount.walletName
                         );
-                        return ;
+                        return;
                     }
                 }
             }
@@ -317,8 +317,11 @@ export default {
                 return;
             }
 
-            if (!getters.appAccounts.length){
-                const response = await dispatch('generateInitialAccount', seedPhrase);
+            if (!getters.appAccounts.length) {
+                const response = await dispatch(
+                    'generateInitialAccount',
+                    seedPhrase
+                );
                 await router.push({
                     name: 'sms',
                     params: {
@@ -358,6 +361,10 @@ export default {
             state.isLoadingWallets = false;
         },
         startAppLoading: state => {
+            if (state.appLoadingStack === 0) {
+                state.loadingTitle = null;
+                state.loadingSubTitle = null;
+            }
             state.appLoadingStack++;
         },
         stopAppLoading: state => {
