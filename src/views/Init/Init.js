@@ -46,6 +46,13 @@ export default {
                 });
             } catch (error) {
                 console.log(error.message);
+                router.push({
+                    name: 'error screen',
+                    params: {
+                        reason: 'Initialization failed',
+                        fix: 'Please refresh, if error persists, please contact support?',
+                    },
+                });
             }
         },
     },
