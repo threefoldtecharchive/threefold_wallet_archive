@@ -6,6 +6,8 @@ import {
     convertTfAccount,
     generateActivationCode,
     keypairFromAccount,
+    convertTokens,
+    revineAddressFromSeed
 } from '@jimber/stellar-crypto';
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
@@ -155,6 +157,7 @@ export default {
             if (!pkidAccount.stellar) {
                 try {
                     await convertTfAccount(seedPhrase, 1, index);
+                    pkidAccount.isConverted = true
                 } catch (error) {
                     if (
                         error &&
@@ -167,6 +170,7 @@ export default {
                             error.response.data.error ===
                                 'Tfchain address has 0 balance, no need to activate an account')
                     ) {
+                        pkidAccount.isConverted = true
                         console.log(error.response.data.error);
                         commit(
                             'removeAccountThombstone',
@@ -182,7 +186,35 @@ export default {
                 tags: [type],
                 seedPhrase,
                 position: pkidAccount.position,
+                isConverted: pkidAccount.isConverted
             });
+
+            if (!account.isConverted) {
+                console.log("retrying conversion ... ")
+                const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
+                try{
+                    await convertTokens(revineAddress, account.keyPair.publicKey())
+                    account.isConverted = true
+                }
+                catch (error) {
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error &&
+                        (error.response.data.error.includes(
+                            'GET: no content available (code: 204)'
+                        ) ||
+                            error.response.data.error ===
+                                'Tfchain address has 0 balance, no need to activate an account' 
+                          ||
+                            error.response.data.error === 'Migration already executed for address')
+                    ) {
+                        pkidAccount.isConverted = true
+                    }
+                }
+
+            }
             commit('removeAccountThombstone', pkidAccount.walletName);
             // dispatch('fetchPayments', account.id);
 
@@ -206,6 +238,9 @@ export default {
                     ? pkidAccount.position
                     : pkidAccount.index;
                 commit('incrementPosition');
+                pkidAccount.isConverted = pkidAccount.isConverted 
+                ? pkidAccount.isConverted
+                : false
                 return dispatch('initializeSingleAccount', {
                     pkidAccount,
                     seedPhrase,
@@ -223,7 +258,10 @@ export default {
                 pkidImportedAccount.position = pkidImportedAccount.position
                     ? pkidImportedAccount.position
                     : getters.position;
-                commit('incrementPosition');
+                    commit('incrementPosition');
+                pkidImportedAccount.isConverted = pkidImportedAccount.isConverted 
+                    ? pkidImportedAccount.isConverted
+                    : false
                 return dispatch('initializeSingleAccount', {
                     pkidAccount: pkidImportedAccount,
                     seedPhrase,
@@ -258,10 +296,10 @@ export default {
             await router.push({ name: 'home' });
             await dispatch('setPkidClient', seed);
             commit('setThreebotName', doubleName);
-
+            
             const seedPhrase = entropyToMnemonic(seed);
             commit('setAppSeedPhrase', seedPhrase);
-
+            
             let op1 = await dispatch('initializePkidAppAccounts', seedPhrase);
 
             if (!op1) {
@@ -272,6 +310,7 @@ export default {
                         name: 'Daily',
                         tags: ['app'],
                         position: 0,
+                        isConverted:false,
                         retry: 0,
                     });
                     await dispatch('persistPkidAppAccounts', [

@@ -28,6 +28,7 @@ export default {
                 tags: ['app'],
                 seedPhrase,
                 position: position,
+                isConverted: false
             });
             context.commit('removeAccountThombstone', walletName);
             context.commit('addAccount', account);
@@ -51,6 +52,7 @@ export default {
                 tags: ['imported'],
                 seedPhrase,
                 position: position,
+                isConverted: false
             });
             context.dispatch('fetchPayments', account.id);
             context.commit('addAccount', account);

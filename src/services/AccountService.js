@@ -26,6 +26,7 @@ export const mapAccount = async ({
     seedPhrase,
     lockedTransactions,
     lockedBalances,
+    isConverted
 }) => ({
     name: name,
     tags: tags,
@@ -66,6 +67,7 @@ export const mapAccount = async ({
         return 0;
     }),
     lockedBalances,
+    isConverted
 });
 
 // todo: make this an interval loop
@@ -113,6 +115,7 @@ export const fetchAccount = async ({
     name,
     tags,
     position,
+    isConverted,
     retry = 0,
 }) => {
     if (retry > 3) {
@@ -144,6 +147,7 @@ export const fetchAccount = async ({
             name,
             tags,
             position,
+            isConverted,
             retry: retry + 1,
         });
     }
@@ -175,6 +179,7 @@ export const fetchAccount = async ({
         seedPhrase,
         lockedTransactions,
         lockedBalances,
+        isConverted
     });
 };
 
