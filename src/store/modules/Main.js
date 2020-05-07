@@ -210,7 +210,6 @@ export default {
                           ||
                             error.response.data.error === 'Migration already executed for address')
                     ) {
-                        // @Todo fetch locked
                         account = await fetchAccount({
                             index: index,
                             name: pkidAccount.walletName,
