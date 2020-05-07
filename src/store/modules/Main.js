@@ -194,7 +194,14 @@ export default {
                 const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
                 try{
                     await convertTokens(revineAddress, account.keyPair.publicKey())
-                    account.isConverted = true
+                    account = await fetchAccount({
+                        index: index,
+                        name: pkidAccount.walletName,
+                        tags: [type],
+                        seedPhrase,
+                        position: pkidAccount.position,
+                        isConverted: true
+                    });
                 }
                 catch (error) {
                     if (
