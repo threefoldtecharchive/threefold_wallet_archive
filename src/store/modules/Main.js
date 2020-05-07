@@ -180,7 +180,7 @@ export default {
                     }
                 }
             }
-            const account = await fetchAccount({
+            let account = await fetchAccount({
                 index: index,
                 name: pkidAccount.walletName,
                 tags: [type],
@@ -210,10 +210,17 @@ export default {
                           ||
                             error.response.data.error === 'Migration already executed for address')
                     ) {
-                        pkidAccount.isConverted = true
+                        // @Todo fetch locked
+                        account = await fetchAccount({
+                            index: index,
+                            name: pkidAccount.walletName,
+                            tags: [type],
+                            seedPhrase,
+                            position: pkidAccount.position,
+                            isConverted: true
+                        });
                     }
                 }
-
             }
             commit('removeAccountThombstone', pkidAccount.walletName);
             // dispatch('fetchPayments', account.id);
