@@ -147,6 +147,7 @@ export default {
             } else if (this.active == 'send') {
                 this.transactionInfoDialog = true;
             }
+            this.$refs.confirmButton.focus();
         },
         async send() {
             try {
