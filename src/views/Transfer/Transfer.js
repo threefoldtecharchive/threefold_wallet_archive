@@ -147,7 +147,7 @@ export default {
             } else if (this.active == 'send') {
                 this.transactionInfoDialog = true;
             }
-            this.$refs.confirmButton.focus();
+            this.$refs.formComponent.$refs.form.inputs.forEach( input => input.blur() )
         },
         async send() {
             try {
