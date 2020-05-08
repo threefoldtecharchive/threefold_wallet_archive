@@ -30,13 +30,13 @@ export default {
             selectedTab: 1,
             selectedAccount: {},
             qrReadingError: false,
-            selectedCurrency: "TFTA",
+            selectedCurrency: 'TFTA',
             fee: 0.1,
             accountsReady: false,
         };
     },
     mounted() {
-        this.disableAccountEventStreams()
+        this.disableAccountEventStreams();
         const updatePromises = this.accounts.map(account =>
             this.updateAccount(account.id)
         );
@@ -66,9 +66,11 @@ export default {
             // Filter accounts based on the selected currency
             return this.accounts.filter(account => {
                 // Check if account has balance for the selected currency
-                return account.balances.find(balance => {
-                    return balance.asset_code === this.selectedCurrency;
-                });
+                return account.balances.find(balance =>
+                  (
+                    balance.asset_code === this.selectedCurrency &&
+                    Number(balance.balance) > 0.1
+                  ));
             });
         },
     },
@@ -92,8 +94,10 @@ export default {
             if (tftAddress === '') {
                 tftAddress = url.pathname.replace('//', '');
             }
-            const currencyIndex = this.currencies.findIndex(c => {return c.toLowerCase() == currency})
-            this.selectedCurrency = this.currencies[currencyIndex]
+            const currencyIndex = this.currencies.findIndex(c => {
+                return c.toLowerCase() == currency;
+            });
+            this.selectedCurrency = this.currencies[currencyIndex];
             this.formObject.to.address = tftAddress;
             this.formObject.amount =
                 url.searchParams.get('amount') == 'null'
