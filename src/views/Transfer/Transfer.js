@@ -30,7 +30,7 @@ export default {
             selectedTab: 1,
             selectedAccount: {},
             qrReadingError: false,
-            selectedCurrency: "TFT",
+            selectedCurrency: "TFTA",
             fee: 0.1,
             accountsReady: false,
         };
