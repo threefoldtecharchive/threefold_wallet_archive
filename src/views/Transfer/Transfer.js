@@ -64,7 +64,7 @@ export default {
         },
         availableAccounts() {
             // Filter accounts based on the selected currency
-            return this.accounts.filter(account => {
+            const accounts =  this.accounts.filter(account => {
                 // Check if account has balance for the selected currency
                 return account.balances.find(balance =>
                   (
@@ -72,6 +72,10 @@ export default {
                     Number(balance.balance) > 0.1
                   ));
             });
+            return accounts.sort(
+                (account, otherAccount) =>
+                    account.position - otherAccount.position
+            );
         },
     },
     methods: {
