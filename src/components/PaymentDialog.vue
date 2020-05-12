@@ -1,5 +1,5 @@
 <template>
-    <v-dialog persistent v-model="payment">
+    <v-dialog v-model="payment" @input="close">
         <v-card class="payment-dialog">
             <v-card-title
                 style="background-color: #34495e; color: white;"
