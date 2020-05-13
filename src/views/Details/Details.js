@@ -129,7 +129,7 @@ export default {
 
             this.addPayments({ payments, id: this.id });
 
-            if (payments.length === 0) {
+            if (this.accountPayments === initialLength) {
                 $state.complete();
             }
 

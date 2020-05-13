@@ -60,14 +60,13 @@ export default {
                     currentPayments.push(payment);
                     continue;
                 }
-
-                currentPayments[index] = payment;
+                currentPayments.splice(index,1,payment)
             }
             currentPayments.sort((a, b) =>
                 moment(b.created_at).isBefore(a.created_at) ? -1 : 1
             );
 
-            state.payments[index] = { id, payments: currentPayments };
+            state.payments.splice(index, 1,{ id, payments: currentPayments })
         },
     },
     getters: {
