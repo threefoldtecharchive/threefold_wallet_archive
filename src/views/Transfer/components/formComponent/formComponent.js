@@ -53,6 +53,7 @@ export default {
         },
         messageRules() {
             const rules = [
+                v => !!v || 'Message is required!',
                 v =>
                     typeof v == 'undefined' ||
                     (typeof v === 'string' &&
