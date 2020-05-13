@@ -27,7 +27,12 @@
                         <b class="my-1">
                             {{ payment.outgoing ? '-' : '+' }}
                             {{ payment.amount | formatBalance }}
-                            <sup>TFT</sup>
+                            <sup>{{
+                                payment.asset_code ||
+                                (payment.asset_type === 'native'
+                                    ? 'xlm'
+                                    : payment.asset_type)
+                            }}</sup>
                         </b>
                         <small
                             style="font-size: small;"
