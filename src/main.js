@@ -8,6 +8,7 @@ import filters from './utils/filters';
 import '@fortawesome/fontawesome-free/css/all.css';
 import global from './components/global';
 import clipboardHack from './utils/clipboardhack';
+import VueCompositionApi from '@vue/composition-api';
 
 import config from '../public/config';
 
@@ -39,6 +40,7 @@ async function startVueApp() {
 
     await sodium.ready;
 
+    Vue.use(VueCompositionApi);
     Vue.use(filters);
     Vue.use(global);
     initializeFlutterInappwebviewPolyfill();

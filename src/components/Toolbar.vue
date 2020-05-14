@@ -1,5 +1,5 @@
-<template
-    ><section class="toolbar">
+<template>
+    <section class="toolbar">
         <v-app-bar color="primary" dark>
             <v-btn v-if="showBack" text small fab dark :to="{ name: 'home' }">
                 <v-icon flatclass="white--text" icon>fas fa-wallet</v-icon>
@@ -13,7 +13,6 @@
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
-
 
             <v-btn
                 x-small
@@ -42,21 +41,19 @@
     </section>
 </template>
 <script>
-    import { mapGetters, mapMutations } from 'vuex';
+    import { computed } from '@vue/composition-api';
 
     export default {
-        components: {},
-        name: 'Toolbar',
-        props: [],
-        data() {
-            return {
-                isScrolling: false,
-            };
-        },
-        computed: {
-            ...mapGetters(['syncing', 'accounts', 'devClicks']),
-            showBack() {
-                const { name } = this.$route;
+        setup(_, context) {
+            debugger;
+            const {root} = context;
+
+            const addDevClick = () => root.$store.commit('addDevClick');
+
+            const restartWallet = () => location.replace('/init');
+
+            const showBack = computed(() => {
+                const { name } = root.$route;
                 return (
                     name !== 'home' &&
                     name !== 'login' &&
@@ -64,18 +61,14 @@
                     name !== 'error screen' &&
                     name !== 'sms'
                 );
-            },
-        },
-        methods: {
-            ...mapMutations(['addDevClick']),
-            restartWallet() {
-                location.replace('/init');
-            },
+            });
+
+            return { addDevClick, restartWallet, showBack};
         },
     };
 </script>
 <style scoped lang="scss">
-    .toolbar{
+    .toolbar {
         position: sticky;
         top: 0;
         z-index: 99;
