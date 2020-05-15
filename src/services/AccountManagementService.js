@@ -37,6 +37,12 @@ export const isValidWalletName = (walletName, accounts) => {
             message: 'The length of the name should not exceed 15 characters.',
         };
     }
+    if (!walletName.match(/^[0-9a-zA-Z]+$/)){
+        return {
+            success: false,
+            message: 'The name can only contain letters and numbers',
+        };
+    }
     if (accounts.find(x => x.name.toLowerCase() == walletName.toLowerCase())) {
         return {
             success: false,

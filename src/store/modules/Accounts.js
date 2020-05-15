@@ -28,6 +28,7 @@ export default {
                 tags: ['app'],
                 seedPhrase,
                 position: position,
+                isConverted: false
             });
             context.commit('removeAccountThombstone', walletName);
             context.commit('addAccount', account);
@@ -42,7 +43,7 @@ export default {
         ) => {
             context.commit('startAppLoading');
             context.commit('setLoadingMessage', {
-                message: `Generating account: ${walletName}`,
+                message: `Importing wallet: ${walletName}`,
             });
             const position = context.state.accounts.length;
             const account = await fetchAccount({
@@ -51,6 +52,7 @@ export default {
                 tags: ['imported'],
                 seedPhrase,
                 position: position,
+                isConverted: false
             });
             context.dispatch('fetchPayments', account.id);
             context.commit('addAccount', account);

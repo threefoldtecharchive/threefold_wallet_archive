@@ -17,6 +17,7 @@ export default {
                 position: account.position,
                 index: account.index,
                 stellar: true,
+                isConverted: account.isConverted
             }));
             if (appAccounts.length <= 0) {
                 // should be a mistake
@@ -29,6 +30,7 @@ export default {
                 walletName: account.name,
                 seed: account.seed,
                 stellar: true,
+                isConverted: account.isConverted
             }));
             const importedPromise = dispatch(
                 'persistPkidImportedAccounts',

@@ -3,9 +3,7 @@ const { IgnorePlugin } = require('webpack');
 module.exports = {
     transpileDependencies: ['vuetify'],
     configureWebpack: {
-        plugins: [
-            new IgnorePlugin(/^\.\/locale$/, /moment$/),
-        ],
+        plugins: [new IgnorePlugin(/^\.\/locale$/, /moment$/)],
         optimization: {
             splitChunks: {
                 chunks: 'initial',
@@ -43,4 +41,7 @@ module.exports = {
         devtool: 'source-map',
     },
     lintOnSave: false,
+    css: {
+        sourceMap: true,
+    },
 };

@@ -2,25 +2,28 @@
     <v-row class="fill-height" align="center" justify="center">
         <v-col align="center" justify="center">
             <p class="headline">
-                To activate your account please send an sms to
-                <b>{{ $route.params.tel }}</b> with code
-                <b>{{ $route.params.code }}</b>
+                Please wait while your account is activated.
             </p>
+            <span class="code">{{$route.params.code}}</span>
             <p class="subtitle-1">for more info go to support</p>
         </v-col>
     </v-row>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+    .code {
+        display: none;
+    }
+</style>
 
 <script>
     import { Server } from 'stellar-sdk';
     import config from '../../../public/config';
-    import { mapAccount } from '../../services/AccountService';
+    import { mapMutations } from 'vuex';
 
     export default {
         mounted() {
             const server = new Server(config.stellarServerUrl);
-            server
+            const stream = server
                 .accounts()
                 .accountId(this.$route.params.address)
                 .cursor('now')
@@ -29,10 +32,11 @@
                         console.log({ message });
                         window.location = '/init';
                     },
-                    onerror: e => {
-                        console.error(e);
-                    },
                 });
+            this.setAccountEventStreams(stream);
+        },
+        methods: {
+            ...mapMutations(['setAccountEventStreams']),
         },
     };
 </script>

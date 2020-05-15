@@ -23,13 +23,13 @@
       </v-btn>
     </v-row>
 
-    <v-row dense>
-      <v-col dense>
+    <v-row >
+      <v-col>
         <v-select
           class="mt-1 pt-0"
           :label="selectedTab == 1 ? 'From' : 'To'"
           @change="selectAccount"
-          :items="accounts"
+          :items="availableAccounts"
           v-model="selectedAccount"
           return-object
           append-icon="fas fa-caret-down"
@@ -38,21 +38,29 @@
             <div style="width: 100%; display: flex;">
               <span class="text-capitalize">{{ data.item.name }}</span>
               <v-spacer></v-spacer>
-              {{ data.item.balances[0].balance | formatBalance }} {{data.item.balances[0].asset_code }}
+              {{balanceForCurrency(data.item.balances) | formatBalance}}
             </div>
           </template>
           <template v-slot:item="data">
             <v-row class="text-capitalize">
-              <v-col cols="7">
                 {{ data.item.name }}
-              </v-col>
               <v-spacer></v-spacer>
-              <v-col cols="5" align="end">
-                {{ data.item.balances[0].balance | formatBalance  }} {{data.item.balances[0].asset_code }}
-              </v-col>
+              {{balanceForCurrency(data.item.balances) | formatBalance}}
             </v-row>
           </template>
         </v-select>
+      </v-col>
+      <v-col cols="4">
+        <v-select
+          class="mt-1 pt-0"
+          label="Currency"
+          :items="currencies"
+          v-model="selectedCurrency"
+          item-value="TFT"
+          return-object
+          append-icon="fas fa-caret-down"
+        >
+      </v-select>
       </v-col>
     </v-row>
 
@@ -62,20 +70,22 @@
       :selectedTab="selectedTab"
       :accounts="accounts"
       :selectedAccount="selectedAccount"
+      :selectedCurrency="selectedCurrency"
     >
     </FormComponent>
 
     <v-row>
       <v-col>
         <span v-if="$route.query.tab != 'receive'"
-          >Fee: 0.1 TFT</span
+          >Fee: 0.1 {{selectedCurrency}}</span
         >
         <v-btn
           class="mx-0 mt-3"
           style="width: 100%;"
           color="accent"
           @click="transferConfirmed"
-          :disabled="!formObject.amount"
+          :loading="$route.query.tab === 'send' && !this.accountsReady"
+          :disabled="!formObject.amount || ($route.query.tab === 'send' && !this.accountsReady)"
         >
           <div v-if="$route.query.tab === 'receive'">
             Generate QR
@@ -95,6 +105,7 @@
     :accounts="accounts"
     :send="send"
     :selectedAccount="selectedAccount"
+    :selectedCurrency="selectedCurrency"
     :formObject="formObject"
   >
   </TransactionInfoDialog>
@@ -105,6 +116,7 @@
     :closeDialog="closeQrDialog"
     :formObject="formObject"
     :selectedAccount="selectedAccount"
+    :selectedCurrency="selectedCurrency"
     :selectedTab="selectedTab"
   ></QrDialog>
 </section>

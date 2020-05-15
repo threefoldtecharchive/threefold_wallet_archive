@@ -9,6 +9,9 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 import moment from 'moment';
 import InfiniteLoading from 'vue-infinite-loading';
 import { fetchPayments } from '../../services/PaymentService';
+import {
+    isValidWalletName
+} from '@/services/AccountManagementService';
 
 export default {
     name: 'Details',
@@ -26,6 +29,8 @@ export default {
             selectedPayment: null,
             name: null,
             tab: 0,
+            selectedCurrency: 'All',
+            fetchingPayments: false,
         };
     },
     beforeMount() {
@@ -39,8 +44,13 @@ export default {
         this.id = account.id;
     },
     methods: {
-        ...mapActions(['fetchPayments', 'changeWalletName', 'deleteAccount']),
+        ...mapActions(['fetchPayments', 'changeWalletName', 'deleteAccount', 'updateAccount','initializeAccountEventStreams']),
         ...mapMutations(['addPayments']),
+        seeTransactionsFor(asset_code) {
+            this.selectedCurrency = asset_code;
+            this.tab = 1
+
+        },
         openPayment(payment) {
             this.selectedPayment = payment;
         },
@@ -55,10 +65,15 @@ export default {
         },
         change() {
             const name = this.name.charAt(0).toUpperCase() + this.name.substring(1);
-
-            if (this.accounts.find(a => a.name === name)) {
+            this.name = this.name.trim();
+            
+            const walletValidation = isValidWalletName(
+                this.name,
+                this.accounts
+            );
+            if (!walletValidation.success) {
                 this.$flashMessage.error(
-                    `Can't rename wallet to ${name}, name already in use.`
+                    walletValidation.message
                 );
                 return;
             }
@@ -101,8 +116,9 @@ export default {
             this.$flashMessage.info(`Deleted wallet ${this.name}.`);
         },
         async infiniteHandler($state) {
+            const initialLength = this.accountPayments.length;
             const lastPayment = this.accountPayments[
-                this.accountPayments.length - 1
+                initialLength - 1
             ];
             const id = lastPayment ? lastPayment.id : 'now';
             const payments = await fetchPayments(this.id, id);
@@ -112,7 +128,17 @@ export default {
             }
 
             this.addPayments({ payments, id: this.id });
+
+            if (this.accountPayments === initialLength) {
+                $state.complete();
+            }
+
             $state.loaded();
+        },
+        async updatePayments(){
+            this.fetchingPayments = true
+            await this.fetchPayments(this.account.id);
+            this.fetchingPayments = false
         },
     },
     computed: {
@@ -121,6 +147,7 @@ export default {
             'payments',
             'accounts',
             'isPaymentLoading',
+            'currencies'
         ]),
         account() {
             return this.accounts.find(a => a.id === this.id);
@@ -128,14 +155,24 @@ export default {
         accountPayments() {
             return this.payments(this.id);
         },
+        filteredAccountPayments() {
+            return this.payments(this.id).filter(payment => {
+                return this.selectedCurrency === 'All' || payment.asset_code === this.selectedCurrency;
+            });
+        },
         getHumanWalletAddress() {
             return `${this.account.name.replace(/\s/g, '')}@${
                 this.threeBotName
             }`;
         },
+        filterOptions(){
+            return ["All", ...this.currencies]
+        }
     },
     mounted() {
-        // this.fetchPayments(this.account.id);
+        this.fetchPayments(this.account.id);
+        this.updateAccount(this.account.id);
+        this.initializeAccountEventStreams([this.account]);
         this.name = this.account.name;
     },
 };

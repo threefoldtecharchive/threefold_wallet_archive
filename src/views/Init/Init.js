@@ -1,4 +1,4 @@
-import { mapActions } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 import { decodeBase64 } from 'tweetnacl-util';
 import router from '../../router';
 import { migrateToPkid } from '../../services/PkidMigrationService';
@@ -25,7 +25,9 @@ export default {
     },
     methods: {
         ...mapActions(['initialize']),
+        ...mapMutations(['setDebugSeed']),
         async startWallet(doubleName, seed, importedWallets, appWallets) {
+            this.setDebugSeed(seed)
             seed = new Uint8Array(decodeBase64(seed));
             importedWallets = JSON.parse(importedWallets);
             appWallets = JSON.parse(appWallets);
@@ -36,15 +38,21 @@ export default {
                 return;
             }
             try {
-                this.initialize({
+                await this.initialize({
                     doubleName,
                     seed,
                     importedWallets,
                     appWallets,
                 });
-                router.push({ name: 'home' });
             } catch (error) {
                 console.log(error.message);
+                router.push({
+                    name: 'error screen',
+                    params: {
+                        reason: 'Initialization failed',
+                        fix: 'Please refresh, if error persists, please contact support?',
+                    },
+                });
             }
         },
     },

@@ -1,9 +1,12 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import router from '../../router';
-
+import {
+convertTokens,
+revineAddressFromSeed
+} from '@jimber/stellar-crypto';
+import AddTrustlineCard from './components/AddTrustlineCard';
 export default {
     name: 'DevView',
-    components: {},
+    components: { AddTrustlineCard },
     props: [],
     data() {
         return {};
@@ -15,6 +18,8 @@ export default {
             'pkidImported',
             'appSeedPhrase',
             'threeBotName',
+            'debugSeed',
+            'currencies',
         ]),
     },
     mounted() {},
@@ -24,7 +29,7 @@ export default {
             'generateAppAccount',
             'persistPkidAppAccounts',
             'persistPkidImportedAccounts',
-            'syncAccounts',
+            'syncAccounts'
         ]),
         Restart() {
             location.reload();
@@ -43,7 +48,7 @@ export default {
                     index: 0,
                 },
                 {
-                    walletName: 'savings',
+                    walletName: 'Staging',
                     position: 1,
                     index: 1,
                 },
@@ -63,5 +68,10 @@ export default {
                 },
             });
         },
+        async retryMigrate(account) {
+            const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
+            await convertTokens(revineAddress, account.keyPair.publicKey());
+            
+        }
     },
 };

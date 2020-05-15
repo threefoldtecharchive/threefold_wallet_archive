@@ -24,20 +24,50 @@ export const mapAccount = async ({
     seed,
     keyPair,
     seedPhrase,
+    lockedTransactions,
     lockedBalances,
-    lockedBalance,
+    isConverted
 }) => ({
     name: name,
     tags: tags,
     id: accountResponse.id,
-    balances: accountResponse.balances,
+    balances: accountResponse.balances.sort((b, a) => {
+        if (a.asset_code < b.asset_code) {
+            return -1;
+        }
+        if (a.asset_code > b.asset_code) {
+            return 1;
+        }
+        return 0;
+    }),
     index,
     position,
     seed,
     keyPair,
     seedPhrase,
+    lockedTransactions: lockedTransactions.sort((a, b) => {
+        if (!a.unlockTransaction) {
+            return 0;
+        }
+        if (!b.unlockTransaction) {
+            return 0;
+        }
+        if (
+            a.unlockTransaction.timeBounds.minTime <
+            b.unlockTransaction.timeBounds.minTime
+        ) {
+            return -1;
+        }
+        if (
+            a.unlockTransaction.timeBounds.minTime >
+            b.unlockTransaction.timeBounds.minTime
+        ) {
+            return 1;
+        }
+        return 0;
+    }),
     lockedBalances,
-    lockedBalance,
+    isConverted
 });
 
 // todo: make this an interval loop
@@ -72,7 +102,8 @@ async function lockedTokenSubRoutine(lockedBalances) {
             await transferLockedTokens(
                 lockedBalance.keyPair,
                 lockedBalance.id,
-                Number(lockedBalance.balance)
+                lockedBalance.balance.asset_code,
+                Number(lockedBalance.balance.balance)
             );
         }
     }
@@ -84,6 +115,7 @@ export const fetchAccount = async ({
     name,
     tags,
     position,
+    isConverted,
     retry = 0,
 }) => {
     if (retry > 3) {
@@ -115,16 +147,26 @@ export const fetchAccount = async ({
             name,
             tags,
             position,
+            isConverted,
             retry: retry + 1,
         });
     }
 
-    const lockedBalances = await getLockedBalances(keyPair);
-    lockedTokenSubRoutine(lockedBalances);
+    const lockedTransactions = await getLockedBalances(keyPair);
+    lockedTokenSubRoutine(lockedTransactions);
 
-    const lockedBalance = lockedBalances.reduce((total, lockedBalance) => {
-        return total + Number(lockedBalance.balance);
-    }, 0);
+    let lockedBalances = {};
+    lockedTransactions.forEach(transaction => {
+        if (lockedBalances[transaction.balance.asset_code]) {
+            lockedBalances[transaction.balance.asset_code] += Number(
+                transaction.balance.balance
+            );
+        } else {
+            lockedBalances[transaction.balance.asset_code] = Number(
+                transaction.balance.balance
+            );
+        }
+    });
 
     return mapAccount({
         accountResponse,
@@ -135,8 +177,9 @@ export const fetchAccount = async ({
         seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex'),
         keyPair,
         seedPhrase,
+        lockedTransactions,
         lockedBalances,
-        lockedBalance,
+        isConverted
     });
 };
 

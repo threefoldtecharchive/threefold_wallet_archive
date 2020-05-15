@@ -40,7 +40,9 @@ export default {
             },
         },
     },
-    mounted() {},
+    mounted() {
+        this.disableCopy();
+    },
     methods: {
         ...mapActions(['syncAccounts']),
         seeDetails: account => {
@@ -50,6 +52,12 @@ export default {
                     account: account.id,
                 },
             });
+        },
+        disableCopy() {
+            window.noCopyPaste = true;
+        },
+        enableCopy() {
+            window.noCopyPaste = false;
         },
     },
 };

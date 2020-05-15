@@ -1,11 +1,13 @@
 import { fetchAccount, mapAccount } from '../../services/AccountService';
-import { mapPayment } from '../../services/PaymentService';
+import { fetchPayments, mapPayment } from '../../services/PaymentService';
 import { entropyToMnemonic } from 'bip39';
 import {
     calculateWalletEntropyFromAccount,
     convertTfAccount,
     generateActivationCode,
     keypairFromAccount,
+    convertTokens,
+    revineAddressFromSeed
 } from '@jimber/stellar-crypto';
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
@@ -20,11 +22,29 @@ export default {
         position: 0,
         initialized: false,
         fee: StellarSdk.BASE_FEE,
+        currencies: config.currencies,
         appLoadingStack: 0,
         loadingTitle: null,
         loadingSubTitle: null,
+        accountEventStreams: null,
+        debugSeed: null,
     },
     actions: {
+        async updateAccount({ getters, commit }, accountId) {
+            const server = new Server(config.stellarServerUrl);
+            const message = await server
+                .accounts()
+                .accountId(accountId)
+                .cursor('now')
+                .call();
+
+            const newAccount = await mapAccount({
+                ...getters.accounts.find(a => a.id === accountId),
+                accountResponse: message,
+                // seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
+            });
+            commit('addAccount', newAccount);
+        },
         async initializeTransactionWatcher({ commit, dispatch }, account) {
             const server = new Server(config.stellarServerUrl);
             server
@@ -60,6 +80,52 @@ export default {
                     },
                 });
         },
+        disableAccountEventStreams({ commit, getters }) {
+            const eventStreams = getters.accountEventStreams;
+            commit('setAccountEventStreams', null);
+            try {
+                if (!eventStreams) {
+                    return;
+                }
+                eventStreams.forEach(close => close());
+            } catch (e) {
+                console.error(e);
+            }
+        },
+        async initializeAccountEventStreams(
+            { dispatch, commit, getters },
+            accounts
+        ) {
+            dispatch('disableAccountEventStreams');
+            const server = new Server(config.stellarServerUrl);
+
+            const accountEventStreams = accounts.map(account =>
+                server
+                    .accounts()
+                    .accountId(account.id)
+                    .cursor('now')
+                    .stream({
+                        onmessage: message => {
+                            dispatch('fetchPayments', account.id);
+                            mapAccount({
+                                ...getters.accounts.find(
+                                    a => a.id === account.id
+                                ),
+                                accountResponse: message,
+                                // seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
+                            }).then(newAccount => {
+                                dispatch('fetchPayments', account.id);
+                                commit('addAccount', newAccount);
+                            });
+                        },
+                        onerror: e => {
+                            console.error(e);
+                        },
+                    })
+            );
+
+            commit('setAccountEventStreams', accountEventStreams);
+        },
         async initializeAccountWatcher({ commit, getters }, account) {
             const server = new Server(config.stellarServerUrl);
             server
@@ -91,24 +157,86 @@ export default {
             if (!pkidAccount.stellar) {
                 try {
                     await convertTfAccount(seedPhrase, 1, index);
+                    pkidAccount.isConverted = true
                 } catch (error) {
-                    console.log("couldn't convert account");
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error &&
+                        (error.response.data.error.includes(
+                            'GET: no content available (code: 204)'
+                        ) ||
+                            error.response.data.error ===
+                                'Tfchain address has 0 balance, no need to activate an account')
+                    ) {
+                        pkidAccount.isConverted = true
+                        console.log(error.response.data.error);
+                        commit(
+                            'removeAccountThombstone',
+                            pkidAccount.walletName
+                        );
+                        return;
+                    }
                 }
             }
-            const account = await fetchAccount({
+            let account = await fetchAccount({
                 index: index,
                 name: pkidAccount.walletName,
                 tags: [type],
                 seedPhrase,
                 position: pkidAccount.position,
+                isConverted: pkidAccount.isConverted
             });
+
+            if (!account.isConverted) {
+                console.log("retrying conversion ... ")
+                const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
+                try{
+                    await convertTokens(revineAddress, account.keyPair.publicKey())
+                    account = await fetchAccount({
+                        index: index,
+                        name: pkidAccount.walletName,
+                        tags: [type],
+                        seedPhrase,
+                        position: pkidAccount.position,
+                        isConverted: true
+                    });
+                }
+                catch (error) {
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error &&
+                        (error.response.data.error.includes(
+                            'GET: no content available (code: 204)'
+                        ) ||
+                            error.response.data.error ===
+                                'Tfchain address has 0 balance, no need to activate an account' 
+                          ||
+                            error.response.data.error === 'Migration already executed for address')
+                    ) {
+                        account = await fetchAccount({
+                            index: index,
+                            name: pkidAccount.walletName,
+                            tags: [type],
+                            seedPhrase,
+                            position: pkidAccount.position,
+                            isConverted: true
+                        });
+                    }
+                }
+            }
             commit('removeAccountThombstone', pkidAccount.walletName);
-            dispatch('fetchPayments', account.id);
+            // dispatch('fetchPayments', account.id);
 
             commit('addAccount', account);
 
-            dispatch('initializeTransactionWatcher', account);
-            dispatch('initializeAccountWatcher', account);
+            if (config.watchersEnabled) {
+                dispatch('initializeAccountWatcher', account);
+                dispatch('initializeTransactionWatcher', account);
+            }
         },
         async initializePkidAppAccounts({ dispatch, commit }, seedPhrase) {
             const pkidAccounts = await dispatch('fetchPkidAppAccounts');
@@ -123,6 +251,9 @@ export default {
                     ? pkidAccount.position
                     : pkidAccount.index;
                 commit('incrementPosition');
+                pkidAccount.isConverted = pkidAccount.isConverted 
+                ? pkidAccount.isConverted
+                : false
                 return dispatch('initializeSingleAccount', {
                     pkidAccount,
                     seedPhrase,
@@ -140,7 +271,10 @@ export default {
                 pkidImportedAccount.position = pkidImportedAccount.position
                     ? pkidImportedAccount.position
                     : getters.position;
-                commit('incrementPosition');
+                    commit('incrementPosition');
+                pkidImportedAccount.isConverted = pkidImportedAccount.isConverted 
+                    ? pkidImportedAccount.isConverted
+                    : false
                 return dispatch('initializeSingleAccount', {
                     pkidAccount: pkidImportedAccount,
                     seedPhrase,
@@ -151,18 +285,34 @@ export default {
         async generateInitialAccount({}, seedPhrase) {
             const entropy = calculateWalletEntropyFromAccount(seedPhrase, 0);
             const keyPair = keypairFromAccount(entropy);
-            return await generateActivationCode(keyPair);
+            try {
+                return await generateActivationCode(keyPair);
+            } catch (e) {
+                await router.push({
+                    name: 'error screen',
+                    params: {
+                        reason: 'Activation mistake',
+                        fix:
+                            'Please retry, if this error persists, please contact support',
+                    },
+                });
+                throw e;
+            }
         },
-        async initialize({ commit, dispatch, state }, { seed, doubleName }) {
+        async initialize(
+            { commit, dispatch, state, getters },
+            { seed, doubleName }
+        ) {
             commit('startAppLoading');
             commit('setLoadingMessage', { message: 'Initializing wallet' });
             state.initialized = true;
+            await router.push({ name: 'home' });
             await dispatch('setPkidClient', seed);
             commit('setThreebotName', doubleName);
-
+            
             const seedPhrase = entropyToMnemonic(seed);
             commit('setAppSeedPhrase', seedPhrase);
-
+            
             let op1 = await dispatch('initializePkidAppAccounts', seedPhrase);
 
             if (!op1) {
@@ -173,6 +323,7 @@ export default {
                         name: 'Daily',
                         tags: ['app'],
                         position: 0,
+                        isConverted:false,
                         retry: 0,
                     });
                     await dispatch('persistPkidAppAccounts', [
@@ -219,8 +370,33 @@ export default {
                 });
                 return;
             }
-            await dispatch('saveToPkid');
 
+            if (!getters.appAccounts.length) {
+                const response = await dispatch(
+                    'generateInitialAccount',
+                    seedPhrase
+                );
+                await router.push({
+                    name: 'sms',
+                    params: {
+                        tel: response.phonenumbers[0],
+                        code: response.activation_code,
+                        address: response.address,
+                    },
+                });
+                return;
+            }
+
+            await dispatch('saveToPkid');
+            dispatch('initializeAccountEventStreams', getters.accounts);
+            if (getters.accounts.length === 1) {
+                await router.push({
+                    name: 'details',
+                    params: {
+                        account: getters.accounts[0].id,
+                    },
+                });
+            }
             commit('stopAppLoading');
             commit('stopLoadingWallets');
         },
@@ -239,6 +415,10 @@ export default {
             state.isLoadingWallets = false;
         },
         startAppLoading: state => {
+            if (state.appLoadingStack === 0) {
+                state.loadingTitle = null;
+                state.loadingSubTitle = null;
+            }
             state.appLoadingStack++;
         },
         stopAppLoading: state => {
@@ -261,6 +441,12 @@ export default {
             state.loadingTitle = message;
             state.loadingSubTitle = additional;
         },
+        setAccountEventStreams: (state, accountEventStreams) => {
+            state.accountEventStreams = accountEventStreams;
+        },
+        setDebugSeed: (state, debugSeed) => {
+            state.debugSeed = debugSeed;
+        },
     },
     getters: {
         loadingSubTitle: state => state.loadingSubTitle,
@@ -272,6 +458,9 @@ export default {
         position: state => state.position,
         initialized: state => state.initialized,
         fee: state => state.fee,
+        currencies: state => Object.keys(state.currencies),
         isAppLoading: state => state.appLoadingStack > 0,
+        accountEventStreams: state => state.accountEventStreams,
+        debugSeed: state => state.debugSeed,
     },
 };

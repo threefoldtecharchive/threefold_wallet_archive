@@ -14,10 +14,10 @@ import config from '../public/config';
 const initializeStellarCryptoConfig = () => {
     window.stellarServerUrl = config.stellarServerUrl;
     window.stellarNetwork = config.stellarNetwork;
-    window.tftIssuer = config.tftIssuer;
     window.serviceUrl = config.serviceUrl;
     window.feeDestination = config.feeDestination;
     window.feeAmount = config.feeAmount;
+    window.currencies = config.currencies;
 };
 
 const initializeFlutterInappwebviewPolyfill = () => {

@@ -1,5 +1,6 @@
 import { fetchPayments } from '../../services/PaymentService';
 import moment from 'moment';
+import config from '../../../public/config';
 
 export default {
     state: {
@@ -28,9 +29,9 @@ export default {
             const id = payload.id;
 
             const payments = payload.payments.filter(p => {
-                if (p.asset_code !== 'TFT') {
+                if (!config.currencies[p.asset_code]) {
                     console.log(
-                        'Non TFT transactions not yet supported so will be skipped'
+                        p.asset_code, ' is not supported'
                     );
                     return false;
                 }
@@ -59,14 +60,13 @@ export default {
                     currentPayments.push(payment);
                     continue;
                 }
-
-                currentPayments[index] = payment;
+                currentPayments.splice(index,1,payment)
             }
             currentPayments.sort((a, b) =>
                 moment(b.created_at).isBefore(a.created_at) ? -1 : 1
             );
 
-            state.payments[index] = { id, payments: currentPayments };
+            state.payments.splice(index, 1,{ id, payments: currentPayments })
         },
     },
     getters: {

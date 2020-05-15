@@ -26,12 +26,12 @@ export const formatBalanceHumanReadable = value => {
     const scaled = number / scale;
 
     // format number and add suffix
-    return scaled.toFixed(2) + ' ' + suffix;
+    return scaled.toFixed(2) + '\u00a0' + suffix;
 };
 
 export const formatBalance = value => {
     if (!value) {
         return;
     }
-    return Number(value).toFixed(3);
+    return Number(value).toFixed(3).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1\u00a0');
 };

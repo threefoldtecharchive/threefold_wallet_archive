@@ -8,9 +8,9 @@
         {{ item.unlockTransaction.timeBounds.minTime | formatUnlockTime}}
       </v-list-item-subtitle>
       <v-list-item-subtitle class="amount"  style="overflow: visible;">
-        {{ item.balance | formatBalance }}
-        <sup class="currency font-weight-light text-uppercase">
-          TFT
+        {{ item.balance.balance | formatBalance }}
+        <sup class="currency font-weight-light">
+          {{ item.balance.asset_code }}
         </sup>
       </v-list-item-subtitle>
     </v-list-item-content>

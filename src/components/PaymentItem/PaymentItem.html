@@ -6,7 +6,7 @@
       </v-list-item-subtitle>
       <v-list-item-subtitle class="amount"  style="overflow: visible;">
         {{payment.outgoing ? '-' : '+ ' }} {{ payment.amount | formatBalance }}
-        <sup class="currency font-weight-light text-uppercase">
+        <sup class="currency font-weight-light">
           {{
             payment.asset_code || ((payment.asset_type === 'native')
             ? 'xlm'

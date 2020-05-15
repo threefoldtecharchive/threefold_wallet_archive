@@ -30,15 +30,27 @@ export default {
             selectedTab: 1,
             selectedAccount: {},
             qrReadingError: false,
+            selectedCurrency: 'TFTA',
+            fee: 0.1,
+            accountsReady: false,
         };
     },
     mounted() {
+        this.disableAccountEventStreams();
+        const updatePromises = this.accounts.map(account =>
+            this.updateAccount(account.id)
+        );
+
+        Promise.all(updatePromises).then(() => {
+            this.accountsReady = true;
+        });
+
         this.$router.replace({
             query: { tab: this.tabs[this.tabs.length - 1] },
         });
         if (this.$route.params.account) {
             this.selectedAccount = this.accounts.find(
-                x => x.name === this.$route.params.account
+                x => x.id === this.$route.params.account
             );
             return;
         }
@@ -46,13 +58,28 @@ export default {
             this.selectedAccount = this.accounts[0];
     },
     computed: {
-        ...mapGetters(['accounts', 'fee']),
+        ...mapGetters(['accounts', 'currencies']),
         active() {
             return this.$route.query.tab;
         },
+        availableAccounts() {
+            // Filter accounts based on the selected currency
+            const accounts =  this.accounts.filter(account => {
+                // Check if account has balance for the selected currency
+                return account.balances.find(balance =>
+                  (
+                    balance.asset_code === this.selectedCurrency &&
+                    Number(balance.balance) > 0.1
+                  ));
+            });
+            return accounts.sort(
+                (account, otherAccount) =>
+                    account.position - otherAccount.position
+            );
+        },
     },
     methods: {
-        ...mapActions(['sendCoins', 'updateAccounts']),
+        ...mapActions(['updateAccount', 'disableAccountEventStreams']),
         ...mapMutations(['startAppLoading', 'stopAppLoading']),
         scanQR() {
             window.vueInstance = this; //Don't remove this for flutter app
@@ -66,10 +93,15 @@ export default {
         onDecode(code) {
             var url = new URL(code);
             var tftAddress = url.hostname;
+            var currency = url.protocol.match(/[a-zA-Z]+/g)[0];
 
             if (tftAddress === '') {
                 tftAddress = url.pathname.replace('//', '');
             }
+            const currencyIndex = this.currencies.findIndex(c => {
+                return c.toLowerCase() == currency;
+            });
+            this.selectedCurrency = this.currencies[currencyIndex];
             this.formObject.to.address = tftAddress;
             this.formObject.amount =
                 url.searchParams.get('amount') == 'null'
@@ -100,7 +132,7 @@ export default {
                 return;
             }
 
-            const ASSET_CODE = 'TFT';
+            const ASSET_CODE = this.$refs.formComponent.selectedCurrency;
             const form = this.$refs.formComponent;
             const fromAccount = form.selectedAccount;
             const balance = Number(
@@ -108,7 +140,8 @@ export default {
                     .balance
             );
             const amountToTransfer = Number(form.formObject.amount);
-            if (balance < amountToTransfer) {
+
+            if (this.selectedTab && balance < amountToTransfer + this.fee) {
                 this.$flashMessage.error('not enough funds');
                 return;
             }
@@ -118,6 +151,7 @@ export default {
             } else if (this.active == 'send') {
                 this.transactionInfoDialog = true;
             }
+            // this.$refs.formComponent.$refs.form.inputs.forEach( input => input.blur() )
         },
         async send() {
             try {
@@ -125,7 +159,8 @@ export default {
                     this.selectedAccount.keyPair,
                     this.formObject.to.address,
                     new Number(this.formObject.amount),
-                    this.formObject.message
+                    this.formObject.message,
+                    this.selectedCurrency
                 );
 
                 await submitFundedTransaction(
@@ -134,11 +169,12 @@ export default {
                 );
 
                 this.$flashMessage.info(
-                    `Successfully transferred ${this.formObject.amount} to ${this.formObject.to.address}.`
+                    `Successfully transferred ${this.formObject.amount} ${this.selectedCurrency} to ${this.formObject.to.address}.`
                 );
-            } catch {
+            } catch (e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"
-
+                console.log(e);
+                window.e = e;
                 this.$flashMessage.error(`Payment failed.`);
             }
 
@@ -171,6 +207,10 @@ export default {
         },
         closeQrDialog() {
             this.qrDialog = false;
+        },
+        balanceForCurrency(balances) {
+            return balances.find(x => x.asset_code == this.selectedCurrency)
+                .balance;
         },
     },
     watch: {},

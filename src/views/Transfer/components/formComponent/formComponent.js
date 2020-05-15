@@ -1,4 +1,5 @@
-import ToDialog from '../toDialog';
+import ToDialog from '../toDialog'
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'form-component',
@@ -24,6 +25,10 @@ export default {
         fee: {
             type: Number,
         },
+        selectedCurrency: {
+            type: String,
+            default: "TFT"
+        }
     },
     data() {
         return {
@@ -34,6 +39,9 @@ export default {
         };
     },
     computed: {
+        ...mapGetters([
+            'currencies'
+        ]),
         toRules() {
             const rules = [
                 v => !!v || 'Wallet address is required!',
@@ -45,6 +53,7 @@ export default {
         },
         messageRules() {
             const rules = [
+                v => !!v || 'Message is required!',
                 v =>
                     typeof v == 'undefined' ||
                     (typeof v === 'string' &&
