@@ -16,12 +16,14 @@ export default {
     },
     data() {
         return {
-            tabs: ['import'], // create is disabled
+            tabs: ['import', 'load'], // create is disabled
             currentTab: 'import',
             walletName: null,
             words: null,
+            stellarSecret: null,
             walletNameErrors: [],
             wordsErrors: [],
+            stellarSecretErrors: []
         };
     },
     computed: {
@@ -39,6 +41,7 @@ export default {
         clearErrors() {
             this.walletNameErrors = [];
             this.wordsErrors = [];
+            this.stellarSecretErrors = []
         },
         createNewWallet() {
             this.clearErrors();
@@ -116,5 +119,21 @@ export default {
 
             this.clearForm();
         },
+        importStellarSeed(){
+            this.clearErrors();
+
+            // Todo add removing of spaces in between words
+            this.walletName = this.walletName.trim();
+
+            const walletValidation = isValidWalletName(
+                this.walletName,
+                this.accounts
+            );
+
+            if (!walletValidation.success) {
+                this.walletNameErrors.push(walletValidation.message);
+                return;
+            }
+        }
     },
 };
