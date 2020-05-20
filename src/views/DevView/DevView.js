@@ -1,8 +1,5 @@
 import { mapGetters, mapActions, mapMutations } from 'vuex';
-import {
-convertTokens,
-revineAddressFromSeed
-} from '@jimber/stellar-crypto';
+import { convertTokens, revineAddressFromSeed } from '@jimber/stellar-crypto';
 import AddTrustlineCard from './components/AddTrustlineCard';
 export default {
     name: 'DevView',
@@ -20,6 +17,7 @@ export default {
             'threeBotName',
             'debugSeed',
             'currencies',
+            'logs',
         ]),
     },
     mounted() {},
@@ -29,7 +27,7 @@ export default {
             'generateAppAccount',
             'persistPkidAppAccounts',
             'persistPkidImportedAccounts',
-            'syncAccounts'
+            'syncAccounts',
         ]),
         Restart() {
             location.reload();
@@ -38,6 +36,21 @@ export default {
             this.generateAppAccount(
                 `dev wallet #${Math.random().toString(36).substr(2, 5)}`
             );
+        },
+        copyLogs(){
+            console.log(this.$refs.logcard.innerText )
+            this.$root.$emit('copy', {
+                title: 'Copy logs to clipboard',
+                toCopy: this.$refs.logcard.innerText,
+                callback: () => {
+                    this.$flashMessage.info(
+                      `logs has been copied to clipboard (${this.$refs.logcard.innerText.substring(
+                        0,
+                        8
+                      )}...).`
+                    );
+                },
+            });
         },
         async ResetAppWallets() {
             this.removeAppAccounts();
@@ -69,9 +82,11 @@ export default {
             });
         },
         async retryMigrate(account) {
-            const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
+            const revineAddress = revineAddressFromSeed(
+                account.seedPhrase,
+                account.index
+            );
             await convertTokens(revineAddress, account.keyPair.publicKey());
-            
-        }
+        },
     },
 };

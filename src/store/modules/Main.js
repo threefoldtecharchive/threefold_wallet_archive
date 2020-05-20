@@ -12,6 +12,7 @@ import {
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
 import router from '../../router';
+import Logger from 'js-logger';
 
 export default {
     state: {
@@ -159,6 +160,8 @@ export default {
                     await convertTfAccount(seedPhrase, 1, index);
                     pkidAccount.isConverted = true
                 } catch (error) {
+                    Logger.error('error convertTfAccount failed', {error})
+
                     if (
                         error &&
                         error.response &&
@@ -191,6 +194,8 @@ export default {
 
             if (!account.isConverted) {
                 console.log("retrying conversion ... ")
+                Logger.info('retrying conversion')
+
                 const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
                 try{
                     await convertTokens(revineAddress, account.keyPair.publicKey())
@@ -204,6 +209,7 @@ export default {
                     });
                 }
                 catch (error) {
+                    Logger.error('error retrying conversion failed', {e})
                     if (
                         error &&
                         error.response &&
@@ -213,7 +219,7 @@ export default {
                             'GET: no content available (code: 204)'
                         ) ||
                             error.response.data.error ===
-                                'Tfchain address has 0 balance, no need to activate an account' 
+                                'Tfchain address has 0 balance, no need to activate an account'
                           ||
                             error.response.data.error === 'Migration already executed for address')
                     ) {
@@ -251,7 +257,7 @@ export default {
                     ? pkidAccount.position
                     : pkidAccount.index;
                 commit('incrementPosition');
-                pkidAccount.isConverted = pkidAccount.isConverted 
+                pkidAccount.isConverted = pkidAccount.isConverted
                 ? pkidAccount.isConverted
                 : false
                 return dispatch('initializeSingleAccount', {
@@ -272,7 +278,7 @@ export default {
                     ? pkidImportedAccount.position
                     : getters.position;
                     commit('incrementPosition');
-                pkidImportedAccount.isConverted = pkidImportedAccount.isConverted 
+                pkidImportedAccount.isConverted = pkidImportedAccount.isConverted
                     ? pkidImportedAccount.isConverted
                     : false
                 return dispatch('initializeSingleAccount', {
@@ -288,6 +294,8 @@ export default {
             try {
                 return await generateActivationCode(keyPair);
             } catch (e) {
+                Logger.error('error generateActivationCode failed', {e})
+
                 await router.push({
                     name: 'error screen',
                     params: {
@@ -309,10 +317,10 @@ export default {
             await router.push({ name: 'home' });
             await dispatch('setPkidClient', seed);
             commit('setThreebotName', doubleName);
-            
+
             const seedPhrase = entropyToMnemonic(seed);
             commit('setAppSeedPhrase', seedPhrase);
-            
+
             let op1 = await dispatch('initializePkidAppAccounts', seedPhrase);
 
             if (!op1) {
@@ -340,6 +348,8 @@ export default {
                         seedPhrase
                     );
                 } catch (e) {
+                    Logger.error('error fetchAccount', {e})
+
                     dispatch('generateInitialAccount', seedPhrase).then(
                         response => {
                             router.push({
@@ -360,6 +370,8 @@ export default {
             try {
                 await Promise.all([...op1, ...op2]);
             } catch (error) {
+                Logger.error('error initializeImportedPkidAccounts', {error})
+
                 console.error(error);
                 router.push({
                     name: 'error screen',
@@ -372,6 +384,8 @@ export default {
             }
 
             if (!getters.appAccounts.length) {
+                Logger.info('start Sms Flow')
+
                 const response = await dispatch(
                     'generateInitialAccount',
                     seedPhrase

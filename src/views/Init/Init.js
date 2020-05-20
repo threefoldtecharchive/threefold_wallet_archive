@@ -3,6 +3,7 @@ import { decodeBase64 } from 'tweetnacl-util';
 import router from '../../router';
 import { migrateToPkid } from '../../services/PkidMigrationService';
 import config from '../../../public/config';
+import Logger from 'js-logger';
 
 export default {
     name: 'Init',
@@ -31,13 +32,18 @@ export default {
             seed = new Uint8Array(decodeBase64(seed));
             importedWallets = JSON.parse(importedWallets);
             appWallets = JSON.parse(appWallets);
+            Logger.info("startedWallet");
             try {
                 await migrateToPkid({ seed, importedWallets, appWallets });
             } catch (error) {
+                Logger.error("fatal error migrateToPkid");
+
                 // add fatal error
                 return;
             }
             try {
+                Logger.info("initialize");
+
                 await this.initialize({
                     doubleName,
                     seed,
@@ -46,6 +52,7 @@ export default {
                 });
             } catch (error) {
                 console.log(error.message);
+                Logger.error('init error', {error})
                 router.push({
                     name: 'error screen',
                     params: {

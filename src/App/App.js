@@ -5,6 +5,7 @@ import Loader from '../components/Loader';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import config from '../../public/config';
 import version from '../../public/version';
+import Logger from 'js-logger';
 
 export default {
     name: 'app',
@@ -71,6 +72,8 @@ export default {
             }
         },
         fatalError(val) {
+            Logger.error('ERROR', {val})
+
             console.error(`ERROR`, val);
             this.$router.push({
                 name: 'error',

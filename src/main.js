@@ -11,6 +11,21 @@ import clipboardHack from './utils/clipboardhack';
 
 import config from '../public/config';
 
+import Logger from 'js-logger';
+Logger.useDefaults();
+
+const consoleHandler = Logger.createDefaultHandler();
+const myHandler = function (messages, context) {
+    const [message, ctxUnformated] = messages;
+
+    store.commit('addLog', { timestamp: new Date().toUTCString(), message, ctx:ctxUnformated, level: context.level.name });
+};
+
+Logger.setHandler(function (messages, context) {
+    consoleHandler(messages, context);
+    myHandler(messages, context);
+});
+
 const initializeStellarCryptoConfig = () => {
     window.stellarServerUrl = config.stellarServerUrl;
     window.stellarNetwork = config.stellarNetwork;
@@ -57,6 +72,7 @@ async function startVueApp() {
                     clipboardHack();
                 }, 1000);
             }
+            Logger.info("I'm a debug message!");
         },
         filters,
         router,
