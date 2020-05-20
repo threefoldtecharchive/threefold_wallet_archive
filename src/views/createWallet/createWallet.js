@@ -3,6 +3,7 @@ import {
     isValidWalletName,
     validateAndGenerateSeed,
 } from '@/services/AccountManagementService';
+import {seedPhraseFromStellarSecret} from '@jimber/stellar-crypto'
 import router from '../../router';
 import config from '../../../public/config';
 
@@ -90,12 +91,13 @@ export default {
             }
 
             const seedPhrase = seedValidation.seedPhrase;
-
             const walletName = this.walletName;
+            const index = 0
 
             this.generateImportedAccount({
                 seedPhrase,
                 walletName,
+                index
             })
                 .then((account) => {
                     this.$flashMessage.info(
@@ -134,6 +136,36 @@ export default {
                 this.walletNameErrors.push(walletValidation.message);
                 return;
             }
+            const seedPhrase = seedPhraseFromStellarSecret(this.stellarSecret)
+            const walletName = this.walletName;
+            const index = -1
+
+            this.generateImportedAccount({
+                seedPhrase,
+                walletName,
+                index
+            })
+                .then((account) => {
+                    this.$flashMessage.info(
+                        `Successfully imported ${account.name}.`
+                    );
+                    if(config.watchersEnabled){
+                        this.initializeAccountWatcher(account)
+                        this.initializeTransactionWatcher(account)
+                    }
+                })
+                .catch(e => {
+                    router.push({
+                        name: 'error screen',
+                        params: {
+                            reason: 'Failed to import account.',
+                            fix:
+                                'Try again later, if that doesn\'t work contact support',
+                        },
+                    });
+                });
+
+            this.clearForm();
         }
     },
 };
