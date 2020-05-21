@@ -198,6 +198,9 @@ export default {
 
                 const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
                 try{
+                    const stellarPubKey = account.keyPair.publicKey()
+                    Logger.info('stellar pub key', {stellarPubKey})
+                    Logger.info('revine pub key', {revineAddress})
                     await convertTokens(revineAddress, account.keyPair.publicKey())
                     account = await fetchAccount({
                         index: index,
