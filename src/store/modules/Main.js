@@ -214,6 +214,14 @@ export default {
                         error &&
                         error.response &&
                         error.response.data &&
+                        error.response.data.error){
+                            const error = error.response.data.error
+                            Logger.error('Conversion service error ', {error})
+                        }
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
                         error.response.data.error &&
                         (error.response.data.error.includes(
                             'GET: no content available (code: 204)'
