@@ -192,6 +192,9 @@ export default {
                 isConverted: pkidAccount.isConverted
             });
 
+            const stellarPubKey = account.keyPair.publicKey()
+            Logger.info('fetchedAccount', {revineAddress,stellarPubKey})
+
             if (!account.isConverted) {
                 console.log("retrying conversion ... ")
                 Logger.info('retrying conversion')
