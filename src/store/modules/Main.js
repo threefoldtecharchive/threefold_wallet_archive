@@ -218,8 +218,8 @@ export default {
                         error.response &&
                         error.response.data &&
                         error.response.data.error){
-                            const error = error.response.data.error
-                            Logger.error('Conversion service error ', {error})
+                            const errorlog = error.response.data.error
+                            Logger.error('Conversion service error ', {errorlog})
                         }
                     if (
                         error &&
