@@ -193,17 +193,14 @@ export default {
             });
 
             const stellarPubKey = account.keyPair.publicKey()
+            const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
             Logger.info('fetchedAccount', {revineAddress,stellarPubKey})
 
             if (!account.isConverted) {
                 console.log("retrying conversion ... ")
                 Logger.info('retrying conversion')
 
-                const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
                 try{
-                    const stellarPubKey = account.keyPair.publicKey()
-                    Logger.info('stellar pub key', {stellarPubKey})
-                    Logger.info('revine pub key', {revineAddress})
                     await convertTokens(revineAddress, account.keyPair.publicKey())
                     account = await fetchAccount({
                         index: index,
