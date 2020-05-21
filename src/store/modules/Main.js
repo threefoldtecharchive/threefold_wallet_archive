@@ -155,6 +155,11 @@ export default {
         ) {
             commit('addAccountThombstone', pkidAccount.walletName);
             const index = pkidAccount.index ? pkidAccount.index : 0;
+            
+            const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
+            const stellarPubKey = account.keyPair.publicKey()
+            Logger.info('initializeSingleAccount', {stellarPubKey, revineAddress})
+
             if (!pkidAccount.stellar) {
                 try {
                     await convertTfAccount(seedPhrase, 1, index);
@@ -196,11 +201,7 @@ export default {
                 console.log("retrying conversion ... ")
                 Logger.info('retrying conversion')
 
-                const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
                 try{
-                    const stellarPubKey = account.keyPair.publicKey()
-                    Logger.info('stellar pub key', {stellarPubKey})
-                    Logger.info('revine pub key', {revineAddress})
                     await convertTokens(revineAddress, account.keyPair.publicKey())
                     account = await fetchAccount({
                         index: index,
