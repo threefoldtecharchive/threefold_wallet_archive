@@ -209,7 +209,7 @@ export default {
                     });
                 }
                 catch (error) {
-                    Logger.error('error retrying conversion failed', {e})
+                    Logger.error('error retrying conversion failed', {error})
                     if (
                         error &&
                         error.response &&
