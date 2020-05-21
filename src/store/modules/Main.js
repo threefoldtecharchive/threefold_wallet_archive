@@ -161,6 +161,14 @@ export default {
                     pkidAccount.isConverted = true
                 } catch (error) {
                     Logger.error('error convertTfAccount failed', {error})
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error ) {
+                            const errorlog = error.response.data.error
+                            Logger.error('Conversion TF Account error ', {errorlog})  
+                    }
 
                     if (
                         error &&
