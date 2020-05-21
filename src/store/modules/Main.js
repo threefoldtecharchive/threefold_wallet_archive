@@ -154,7 +154,13 @@ export default {
             { pkidAccount, seedPhrase, type }
         ) {
             commit('addAccountThombstone', pkidAccount.walletName);
+
             const index = pkidAccount.index ? pkidAccount.index : 0;
+            const revine = revineAddressFromSeed(seedPhrase, index);
+            const walletEntropy = calculateWalletEntropyFromAccount(seedPhrase, index);
+            const stellar = keypairFromAccount(walletEntropy).publicKey();
+            Logger.info('initializeSingleAccount', {index,revine,stellar})
+
             if (!pkidAccount.stellar) {
                 try {
                     await convertTfAccount(seedPhrase, 1, index);
@@ -167,7 +173,7 @@ export default {
                         error.response.data &&
                         error.response.data.error ) {
                             const errorlog = error.response.data.error
-                            Logger.error('Conversion TF Account error ', {errorlog})  
+                            Logger.error('Conversion TF Account error ', {errorlog})
                     }
 
                     if (
