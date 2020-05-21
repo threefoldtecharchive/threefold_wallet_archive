@@ -10,7 +10,9 @@ export default {
     components: {},
     props: [],
     data() {
-        return {};
+        return {
+            initialized: false
+        };
     },
     computed: {},
     mounted() {
@@ -28,6 +30,12 @@ export default {
         ...mapActions(['initialize']),
         ...mapMutations(['setDebugSeed']),
         async startWallet(doubleName, seed, importedWallets, appWallets) {
+            if (this.initialized){
+                return
+            }
+
+            this.initialized = true
+
             this.setDebugSeed(seed)
             seed = new Uint8Array(decodeBase64(seed));
             importedWallets = JSON.parse(importedWallets);
