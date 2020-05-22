@@ -1074,10 +1074,10 @@
     tweetnacl "^1.0.1"
     tweetnacl-util "^0.15.0"
 
-"@jimber/stellar-crypto@^0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-0.13.1.tgz#5d3d6b8975c2d2cea45df62acfdfdf09ab2ec721"
-  integrity sha512-2OjovvOEuJe0iJFhJGihgr/E8FKBX6Hp4/ZK634tUYG+rmkMbp6lq/frabqreSjWpiC9P4b89/3cxevMThUJRw==
+"@jimber/stellar-crypto@^0.14.1":
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-0.14.1.tgz#cc8de503a66c7b3c5ad4a15f146d350fee237c4b"
+  integrity sha512-YZXMpptugP7oCOIvKC6rMW4AycUy+y6yrat2z4kWj5IaFfJX36osrlvqt77qkZSc91XJuROrTmpo+B3w8Sohxg==
   dependencies:
     "@jimber/stellar-crypto" "^0.4.0"
     "@waves/ts-lib-crypto" "^1.4.2"
