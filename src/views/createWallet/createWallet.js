@@ -3,7 +3,7 @@ import {
     isValidWalletName,
     validateAndGenerateSeed,
 } from '@/services/AccountManagementService';
-import {seedPhraseFromStellarSecret} from '@jimber/stellar-crypto'
+import { seedPhraseFromStellarSecret } from '@jimber/stellar-crypto';
 import router from '../../router';
 import config from '../../../public/config';
 
@@ -21,10 +21,11 @@ export default {
             currentTab: 'import',
             walletName: null,
             words: null,
+            index: 0,
             stellarSecret: null,
             walletNameErrors: [],
             wordsErrors: [],
-            stellarSecretErrors: []
+            stellarSecretErrors: [],
         };
     },
     computed: {
@@ -32,7 +33,12 @@ export default {
     },
     mounted() {},
     methods: {
-        ...mapActions(['generateAppAccount', 'generateImportedAccount', 'initializeAccountWatcher', 'initializeTransactionWatcher']),
+        ...mapActions([
+            'generateAppAccount',
+            'generateImportedAccount',
+            'initializeAccountWatcher',
+            'initializeTransactionWatcher',
+        ]),
         clearForm() {
             this.$router.push({ name: 'home' });
             this.clearErrors();
@@ -42,7 +48,7 @@ export default {
         clearErrors() {
             this.walletNameErrors = [];
             this.wordsErrors = [];
-            this.stellarSecretErrors = []
+            this.stellarSecretErrors = [];
         },
         createNewWallet() {
             this.clearErrors();
@@ -92,20 +98,19 @@ export default {
 
             const seedPhrase = seedValidation.seedPhrase;
             const walletName = this.walletName;
-            const index = 0
 
             this.generateImportedAccount({
                 seedPhrase,
                 walletName,
-                index
+                index: this.index,
             })
-                .then((account) => {
+                .then(account => {
                     this.$flashMessage.info(
                         `Successfully imported ${account.name}.`
                     );
-                    if(config.watchersEnabled){
-                        this.initializeAccountWatcher(account)
-                        this.initializeTransactionWatcher(account)
+                    if (config.watchersEnabled) {
+                        this.initializeAccountWatcher(account);
+                        this.initializeTransactionWatcher(account);
                     }
                 })
                 .catch(e => {
@@ -114,14 +119,14 @@ export default {
                         params: {
                             reason: 'Failed to import account.',
                             fix:
-                                'Try again later, if that doesn\'t work contact support',
+                                "Try again later, if that doesn't work contact support",
                         },
                     });
                 });
 
             this.clearForm();
         },
-        importStellarSeed(){
+        importStellarSeed() {
             this.clearErrors();
 
             // Todo add removing of spaces in between words
@@ -136,22 +141,22 @@ export default {
                 this.walletNameErrors.push(walletValidation.message);
                 return;
             }
-            const seedPhrase = seedPhraseFromStellarSecret(this.stellarSecret)
+            const seedPhrase = seedPhraseFromStellarSecret(this.stellarSecret);
             const walletName = this.walletName;
-            const index = -1
+            const index = -1;
 
             this.generateImportedAccount({
                 seedPhrase,
                 walletName,
-                index
+                index,
             })
-                .then((account) => {
+                .then(account => {
                     this.$flashMessage.info(
                         `Successfully imported ${account.name}.`
                     );
-                    if(config.watchersEnabled){
-                        this.initializeAccountWatcher(account)
-                        this.initializeTransactionWatcher(account)
+                    if (config.watchersEnabled) {
+                        this.initializeAccountWatcher(account);
+                        this.initializeTransactionWatcher(account);
                     }
                 })
                 .catch(e => {
@@ -160,12 +165,12 @@ export default {
                         params: {
                             reason: 'Failed to import account.',
                             fix:
-                                'Try again later, if that doesn\'t work contact support',
+                                "Try again later, if that doesn't work contact support",
                         },
                     });
                 });
 
             this.clearForm();
-        }
+        },
     },
 };

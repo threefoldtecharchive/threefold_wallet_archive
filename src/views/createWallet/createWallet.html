@@ -60,7 +60,16 @@
         >
         </v-textarea>
       </v-row>
-
+      <v-divider></v-divider>
+      <v-row>
+        <v-col>
+          <h3>Advanced</h3>
+          <v-text-field
+            v-model.number="index"
+            label="Address index">
+          </v-text-field>
+        </v-col>
+      </v-row>
       <v-row dense class="mt-2 warning">
         <v-col cols="1">
           <v-icon small>fas fa-exclamation-triangle</v-icon>
