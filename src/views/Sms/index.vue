@@ -19,9 +19,11 @@
     import { Server } from 'stellar-sdk';
     import config from '../../../public/config';
     import { mapMutations } from 'vuex';
+    import Logger from 'js-logger';
 
     export default {
         mounted() {
+            Logger.info("initializeing sms flow");
             const server = new Server(config.stellarServerUrl);
             const stream = server
                 .accounts()

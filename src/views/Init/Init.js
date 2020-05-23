@@ -59,7 +59,7 @@ export default {
                     appWallets,
                 });
             } catch (error) {
-                console.log(error.message);
+                console.error(error)
                 Logger.error('init error', {error})
                 router.push({
                     name: 'error screen',
