@@ -187,13 +187,26 @@ export default {
                             error.response.data.error ===
                                 'Tfchain address has 0 balance, no need to activate an account')
                     ) {
-                        pkidAccount.isConverted = true
-                        console.log(error.response.data.error);
-                        commit(
-                            'removeAccountThombstone',
-                            pkidAccount.walletName
-                        );
-                        return;
+
+                        // @todo: remove dirty fix
+                        try{
+                            await fetchAccount({
+                                index: index,
+                                name: pkidAccount.walletName,
+                                tags: [type],
+                                seedPhrase,
+                                position: pkidAccount.position,
+                                isConverted: true,
+                                retry:3
+                            })
+                        } catch (error) {
+                            pkidAccount.isConverted = true;
+                            commit(
+                                'removeAccountThombstone',
+                                pkidAccount.walletName
+                            );
+                            return;
+                        }
                     }
                 }
             }
@@ -321,6 +334,20 @@ export default {
             } catch (e) {
                 Logger.error('error generateActivationCode failed', {e})
 
+                if (
+                  e &&
+                  e.response &&
+                  e.response.data &&
+                  e.response.data.error &&
+                  e.response.data.error === 'This address is not new'
+                ) {
+                    return {
+                        phonenumbers: ['00000000'],
+                        activation_code: 'DUMMY',
+                        address: keyPair.publicKey(),
+                    };
+                }
+
                 await router.push({
                     name: 'error screen',
                     params: {
@@ -395,6 +422,7 @@ export default {
             try {
                 await Promise.all([...op1, ...op2]);
             } catch (error) {
+                throw error
                 Logger.error('error initializeImportedPkidAccounts', {error})
 
                 console.error(error);
