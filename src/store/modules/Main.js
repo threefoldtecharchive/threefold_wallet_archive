@@ -154,13 +154,27 @@ export default {
             { pkidAccount, seedPhrase, type }
         ) {
             commit('addAccountThombstone', pkidAccount.walletName);
+
             const index = pkidAccount.index ? pkidAccount.index : 0;
+            const revine = revineAddressFromSeed(seedPhrase, index);
+            const walletEntropy = calculateWalletEntropyFromAccount(seedPhrase, index);
+            const stellar = keypairFromAccount(walletEntropy).publicKey();
+            Logger.info('initializeSingleAccount', {index,revine,stellar})
+
             if (!pkidAccount.stellar) {
                 try {
                     await convertTfAccount(seedPhrase, 1, index);
                     pkidAccount.isConverted = true
                 } catch (error) {
                     Logger.error('error convertTfAccount failed', {error})
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error ) {
+                            const errorlog = error.response.data.error
+                            Logger.error('Conversion TF Account error ', {errorlog})
+                    }
 
                     if (
                         error &&
@@ -173,13 +187,26 @@ export default {
                             error.response.data.error ===
                                 'Tfchain address has 0 balance, no need to activate an account')
                     ) {
-                        pkidAccount.isConverted = true
-                        console.log(error.response.data.error);
-                        commit(
-                            'removeAccountThombstone',
-                            pkidAccount.walletName
-                        );
-                        return;
+
+                        // @todo: remove dirty fix
+                        try{
+                            await fetchAccount({
+                                index: index,
+                                name: pkidAccount.walletName,
+                                tags: [type],
+                                seedPhrase,
+                                position: pkidAccount.position,
+                                isConverted: true,
+                                retry:3
+                            })
+                        } catch (error) {
+                            pkidAccount.isConverted = true;
+                            commit(
+                                'removeAccountThombstone',
+                                pkidAccount.walletName
+                            );
+                            return;
+                        }
                     }
                 }
             }
@@ -192,11 +219,14 @@ export default {
                 isConverted: pkidAccount.isConverted
             });
 
+            const stellarPubKey = account.keyPair.publicKey()
+            const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
+            Logger.info('fetchedAccount', {revineAddress,stellarPubKey})
+
             if (!account.isConverted) {
                 console.log("retrying conversion ... ")
                 Logger.info('retrying conversion')
 
-                const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
                 try{
                     await convertTokens(revineAddress, account.keyPair.publicKey())
                     account = await fetchAccount({
@@ -209,7 +239,15 @@ export default {
                     });
                 }
                 catch (error) {
-                    Logger.error('error retrying conversion failed', {e})
+                    Logger.error('error retrying conversion failed', {error})
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error){
+                            const errorlog = error.response.data.error
+                            Logger.error('Conversion service error ', {errorlog})
+                        }
                     if (
                         error &&
                         error.response &&
@@ -296,6 +334,20 @@ export default {
             } catch (e) {
                 Logger.error('error generateActivationCode failed', {e})
 
+                if (
+                  e &&
+                  e.response &&
+                  e.response.data &&
+                  e.response.data.error &&
+                  e.response.data.error === 'This address is not new'
+                ) {
+                    return {
+                        phonenumbers: ['00000000'],
+                        activation_code: 'DUMMY',
+                        address: keyPair.publicKey(),
+                    };
+                }
+
                 await router.push({
                     name: 'error screen',
                     params: {
@@ -370,6 +422,7 @@ export default {
             try {
                 await Promise.all([...op1, ...op2]);
             } catch (error) {
+                throw error
                 Logger.error('error initializeImportedPkidAccounts', {error})
 
                 console.error(error);
