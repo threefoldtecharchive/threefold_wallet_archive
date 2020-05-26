@@ -56,6 +56,7 @@ export default {
                 position: position,
                 isConverted: false
             });
+            Logger.info('fetching payments imported wallet id', account.id)
             context.dispatch('fetchPayments', account.id);
             context.commit('addAccount', account);
             await context.dispatch('saveToPkid');
