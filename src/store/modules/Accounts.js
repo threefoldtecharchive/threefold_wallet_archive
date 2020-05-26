@@ -1,6 +1,7 @@
 import { mapGetters } from 'vuex';
 import { fetchAccount } from '../../services/AccountService';
 import { keypairFromAccount } from '@jimber/stellar-crypto';
+import Logger  from 'js-logger'
 
 export default {
     state: {
@@ -41,6 +42,7 @@ export default {
             context,
             { seedPhrase, walletName }
         ) => {
+            Logger.info('importing wallet', walletName)
             context.commit('startAppLoading');
             context.commit('setLoadingMessage', {
                 message: `Importing wallet: ${walletName}`,

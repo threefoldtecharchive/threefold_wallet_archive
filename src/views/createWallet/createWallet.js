@@ -5,6 +5,7 @@ import {
 } from '@/services/AccountManagementService';
 import router from '../../router';
 import config from '../../../public/config';
+import Logger from 'js-logger'
 
 export default {
     name: 'create-wallet',
@@ -104,6 +105,7 @@ export default {
                     }
                 })
                 .catch(e => {
+                    Logger.error('error generating imported wallet', {e})  
                     router.push({
                         name: 'error screen',
                         params: {
