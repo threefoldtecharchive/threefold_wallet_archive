@@ -27,6 +27,7 @@ export default {
             walletNameErrors: [],
             wordsErrors: [],
             stellarSecretErrors: [],
+            panel: null
         };
     },
     computed: {

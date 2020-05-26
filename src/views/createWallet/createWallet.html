@@ -60,15 +60,23 @@
         >
         </v-textarea>
       </v-row>
-      <v-divider></v-divider>
       <v-row>
-        <v-col>
-          <h3>Advanced</h3>
-          <v-text-field
-            v-model.number="index"
-            label="Address index">
-          </v-text-field>
-        </v-col>
+          <v-expansion-panels
+            v-model="panel"
+            flat
+          >
+            <v-expansion-panel flat >
+              <v-expansion-panel-header>
+                <h3>Advanced</h3>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-text-field
+                v-model.number="index"
+                label="Address index (default 0)">
+              </v-text-field>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
       </v-row>
       <v-row dense class="mt-2 warning">
         <v-col cols="1">

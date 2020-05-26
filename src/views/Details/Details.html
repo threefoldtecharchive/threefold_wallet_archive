@@ -149,18 +149,12 @@
                     @click:append-outer.stop="copyAddress"
                     readonly
                 ></v-text-field>
-                <v-btn @click="secretDialog = true" block class="mb-4" >
+                <v-btn @click="secretDialog = true"  class="mb-4" >
                     <v-row dense>
                         <v-col>
                             <v-row align="center">
                                 <v-icon class="mx-2 x-small" dense>fas fa-key</v-icon>
                                 Show secret
-                            </v-row>
-                        </v-col>
-                        <v-spacer></v-spacer>
-                        <v-col cols="1">
-                            <v-row justify="end">
-                                <v-icon class="x-small" dense>fas fa-eye</v-icon>
                             </v-row>
                         </v-col>
                     </v-row>
