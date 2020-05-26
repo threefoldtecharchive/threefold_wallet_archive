@@ -12,6 +12,7 @@ import {
 import config from '../../../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
 import router from '../../router';
+import Logger from 'js-logger';
 
 export default {
     state: {
@@ -153,12 +154,28 @@ export default {
             { pkidAccount, seedPhrase, type }
         ) {
             commit('addAccountThombstone', pkidAccount.walletName);
+
             const index = pkidAccount.index ? pkidAccount.index : 0;
+            const revine = revineAddressFromSeed(seedPhrase, index);
+            const walletEntropy = calculateWalletEntropyFromAccount(seedPhrase, index);
+            const stellar = keypairFromAccount(walletEntropy).publicKey();
+            Logger.info('initializeSingleAccount', {index,revine,stellar})
+
             if (!pkidAccount.stellar) {
                 try {
                     await convertTfAccount(seedPhrase, 1, index);
                     pkidAccount.isConverted = true
                 } catch (error) {
+                    Logger.error('error convertTfAccount failed', {error})
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error ) {
+                            const errorlog = error.response.data.error
+                            Logger.error('Conversion TF Account error ', {errorlog})
+                    }
+
                     if (
                         error &&
                         error.response &&
@@ -170,13 +187,26 @@ export default {
                             error.response.data.error ===
                                 'Tfchain address has 0 balance, no need to activate an account')
                     ) {
-                        pkidAccount.isConverted = true
-                        console.log(error.response.data.error);
-                        commit(
-                            'removeAccountThombstone',
-                            pkidAccount.walletName
-                        );
-                        return;
+
+                        // @todo: remove dirty fix
+                        try{
+                            await fetchAccount({
+                                index: index,
+                                name: pkidAccount.walletName,
+                                tags: [type],
+                                seedPhrase,
+                                position: pkidAccount.position,
+                                isConverted: true,
+                                retry:3
+                            })
+                        } catch (error) {
+                            pkidAccount.isConverted = true;
+                            commit(
+                                'removeAccountThombstone',
+                                pkidAccount.walletName
+                            );
+                            return;
+                        }
                     }
                 }
             }
@@ -189,9 +219,14 @@ export default {
                 isConverted: pkidAccount.isConverted
             });
 
+            const stellarPubKey = account.keyPair.publicKey()
+            const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
+            Logger.info('fetchedAccount', {revineAddress,stellarPubKey})
+
             if (!account.isConverted) {
                 console.log("retrying conversion ... ")
-                const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
+                Logger.info('retrying conversion')
+
                 try{
                     await convertTokens(revineAddress, account.keyPair.publicKey())
                     account = await fetchAccount({
@@ -204,6 +239,15 @@ export default {
                     });
                 }
                 catch (error) {
+                    Logger.error('error retrying conversion failed', {error})
+                    if (
+                        error &&
+                        error.response &&
+                        error.response.data &&
+                        error.response.data.error){
+                            const errorlog = error.response.data.error
+                            Logger.error('Conversion service error ', {errorlog})
+                        }
                     if (
                         error &&
                         error.response &&
@@ -213,7 +257,7 @@ export default {
                             'GET: no content available (code: 204)'
                         ) ||
                             error.response.data.error ===
-                                'Tfchain address has 0 balance, no need to activate an account' 
+                                'Tfchain address has 0 balance, no need to activate an account'
                           ||
                             error.response.data.error === 'Migration already executed for address')
                     ) {
@@ -251,7 +295,7 @@ export default {
                     ? pkidAccount.position
                     : pkidAccount.index;
                 commit('incrementPosition');
-                pkidAccount.isConverted = pkidAccount.isConverted 
+                pkidAccount.isConverted = pkidAccount.isConverted
                 ? pkidAccount.isConverted
                 : false
                 return dispatch('initializeSingleAccount', {
@@ -272,7 +316,7 @@ export default {
                     ? pkidImportedAccount.position
                     : getters.position;
                     commit('incrementPosition');
-                pkidImportedAccount.isConverted = pkidImportedAccount.isConverted 
+                pkidImportedAccount.isConverted = pkidImportedAccount.isConverted
                     ? pkidImportedAccount.isConverted
                     : false
                 return dispatch('initializeSingleAccount', {
@@ -288,6 +332,22 @@ export default {
             try {
                 return await generateActivationCode(keyPair);
             } catch (e) {
+                Logger.error('error generateActivationCode failed', {e})
+
+                if (
+                  e &&
+                  e.response &&
+                  e.response.data &&
+                  e.response.data.error &&
+                  e.response.data.error === 'This address is not new'
+                ) {
+                    return {
+                        phonenumbers: ['00000000'],
+                        activation_code: 'DUMMY',
+                        address: keyPair.publicKey(),
+                    };
+                }
+
                 await router.push({
                     name: 'error screen',
                     params: {
@@ -309,10 +369,10 @@ export default {
             await router.push({ name: 'home' });
             await dispatch('setPkidClient', seed);
             commit('setThreebotName', doubleName);
-            
+
             const seedPhrase = entropyToMnemonic(seed);
             commit('setAppSeedPhrase', seedPhrase);
-            
+
             let op1 = await dispatch('initializePkidAppAccounts', seedPhrase);
 
             if (!op1) {
@@ -340,6 +400,8 @@ export default {
                         seedPhrase
                     );
                 } catch (e) {
+                    Logger.error('error fetchAccount', {e})
+
                     dispatch('generateInitialAccount', seedPhrase).then(
                         response => {
                             router.push({
@@ -360,6 +422,9 @@ export default {
             try {
                 await Promise.all([...op1, ...op2]);
             } catch (error) {
+                throw error
+                Logger.error('error initializeImportedPkidAccounts', {error})
+
                 console.error(error);
                 router.push({
                     name: 'error screen',
@@ -372,6 +437,8 @@ export default {
             }
 
             if (!getters.appAccounts.length) {
+                Logger.info('start Sms Flow')
+
                 const response = await dispatch(
                     'generateInitialAccount',
                     seedPhrase

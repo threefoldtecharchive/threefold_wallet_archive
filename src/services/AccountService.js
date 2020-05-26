@@ -14,6 +14,7 @@ import moment from 'moment';
 import { Server } from 'stellar-sdk';
 import config from '../../public/config';
 import store from '../store';
+import Logger from 'js-logger';
 
 export const mapAccount = async ({
     accountResponse,
@@ -128,6 +129,8 @@ export const fetchAccount = async ({
     try {
         accountResponse = await loadAccount(keyPair);
     } catch (e) {
+        Logger.error('error Something went wrong while fetching account', {e})
+
         if (e.message !== 'Not Found') {
             throw Error('Something went wrong while fetching account');
         }
@@ -188,6 +191,8 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
         const revineAddress = revineAddressFromSeed(seedPhrase, index);
         await migrateAccount(keyPair, revineAddress);
     } catch (e) {
+        Logger.error('error Something went wrong while generating account', {e})
+
         throw Error('Something went wrong while generating account');
     }
     console.log('loading account');

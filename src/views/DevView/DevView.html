@@ -1,6 +1,23 @@
 <div class="fill-height dev-view">
   <v-tabs grow background-color="indigo" dark>
     <v-tab>
+      Logs
+    </v-tab>
+    <v-tab-item>
+      <v-card>
+        <p class="display-1 text--primary">
+          application logs
+        </p>
+        <v-btn @click="copyLogs">
+          copy logs
+        </v-btn>
+      </v-card>
+
+      <v-card flat tile>
+        <code ref="logcard" style="width: 98vw;">{{value}}</code>
+      </v-card>
+    </v-tab-item>
+    <v-tab>
       Data
     </v-tab>
     <v-tab-item>

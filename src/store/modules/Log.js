@@ -3,8 +3,8 @@ export default {
         logs: [],
     },
     mutations: {
-        addLog(state, log) {
-            state.logs.push(log);
+        addLog(state, { timestamp, message, ctx, level }) {
+            state.logs.push({timestamp, message, ctx, level});
         },
     },
     getters: {

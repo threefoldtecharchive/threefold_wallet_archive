@@ -6,6 +6,7 @@ import {
     buildFundedPaymentTransaction,
     submitFundedTransaction,
 } from '@jimber/stellar-crypto';
+import Logger from 'js-logger';
 
 export default {
     name: 'transfer',
@@ -173,8 +174,7 @@ export default {
                 );
             } catch (e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"
-                console.log(e);
-                window.e = e;
+                Logger.error('error Payment failed', {e})
                 this.$flashMessage.error(`Payment failed.`);
             }
 
