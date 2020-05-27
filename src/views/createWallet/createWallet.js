@@ -19,20 +19,21 @@ export default {
     },
     data() {
         return {
-            tabs: ['import', 'load'], // create is disabled
+            tabs: ['import'], // create is disabled
             currentTab: 'import',
             walletName: null,
-            words: null,
+            secret: null,
             index: 0,
-            stellarSecret: null,
             walletNameErrors: [],
-            wordsErrors: [],
-            stellarSecretErrors: [],
+            secretErrors: [],
             panel: null
         };
     },
     computed: {
         ...mapGetters(['accounts']),
+        secretIsStellarSecret(){
+            return this.secret?.length == "56"
+        }
     },
     mounted() {},
     methods: {
@@ -46,12 +47,11 @@ export default {
             this.$router.push({ name: 'home' });
             this.clearErrors();
             this.walletName = null;
-            this.words = null;
+            this.secret = null;
         },
         clearErrors() {
             this.walletNameErrors = [];
-            this.wordsErrors = [];
-            this.stellarSecretErrors = [];
+            this.secretErrors = [];
         },
         createNewWallet() {
             this.clearErrors();
@@ -72,7 +72,13 @@ export default {
             });
             this.clearForm();
         },
-
+        importWallet(){
+            if(this.secret.length === 56){
+                this.importStellarSeed()
+                return
+            }
+            this.importNewWallet()
+        },
         async importNewWallet() {
             this.clearErrors();
 
@@ -90,12 +96,12 @@ export default {
             }
 
             const seedValidation = validateAndGenerateSeed(
-                this.words,
+                this.secret,
                 this.accounts
             );
 
             if (!seedValidation.success) {
-                this.wordsErrors.push(seedValidation.message);
+                this.secretErrors.push(seedValidation.message);
                 return;
             }
 
@@ -145,14 +151,14 @@ export default {
                 return;
             }
 
-            const foundWallet = importedSecretFound(this.stellarSecret, this.accounts)
+            const foundWallet = importedSecretFound(this.secret, this.accounts)
             console.log(foundWallet)
             if(foundWallet){
-                this.stellarSecretErrors.push(`This stellar secret is used by ${foundWallet.name}`)
+                this.secretErrors.push(`This stellar secret is used by ${foundWallet.name}`)
                 return;
             }
 
-            const seedPhrase = seedPhraseFromStellarSecret(this.stellarSecret);
+            const seedPhrase = seedPhraseFromStellarSecret(this.secret);
             const walletName = this.walletName;
             const index = -1;
 
