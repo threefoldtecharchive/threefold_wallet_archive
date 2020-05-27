@@ -95,3 +95,8 @@ export const validateAndGenerateSeed = (seedPhrase, accounts) => {
         seedPhrase,
     };
 };
+
+export const importedSecretFound = (secret, accounts) => {
+    console.log('hello')
+    return accounts.find(x => x.keyPair.secret() === secret);
+}

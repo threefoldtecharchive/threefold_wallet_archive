@@ -2,6 +2,7 @@ import { mapGetters, mapActions } from 'vuex';
 import {
     isValidWalletName,
     validateAndGenerateSeed,
+    importedSecretFound
 } from '@/services/AccountManagementService';
 import { seedPhraseFromStellarSecret } from '@jimber/stellar-crypto';
 import router from '../../router';
@@ -143,6 +144,14 @@ export default {
                 this.walletNameErrors.push(walletValidation.message);
                 return;
             }
+
+            const foundWallet = importedSecretFound(this.stellarSecret, this.accounts)
+            console.log(foundWallet)
+            if(foundWallet){
+                this.stellarSecretErrors.push(`This stellar secret is used by ${foundWallet.name}`)
+                return;
+            }
+
             const seedPhrase = seedPhraseFromStellarSecret(this.stellarSecret);
             const walletName = this.walletName;
             const index = -1;
