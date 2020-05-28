@@ -73,13 +73,6 @@ export default {
             this.clearForm();
         },
         importWallet(){
-            if(this.secret.length === 56){
-                this.importStellarSeed()
-                return
-            }
-            this.importNewWallet()
-        },
-        async importNewWallet() {
             this.clearErrors();
 
             // Todo add removing of spaces in between words
@@ -95,6 +88,13 @@ export default {
                 return;
             }
 
+            if(this.secret.length === 56){
+                this.importStellarSeed()
+                return
+            }
+            this.importNewWallet()
+        },
+        async importNewWallet() {
             const seedValidation = validateAndGenerateSeed(
                 this.secret,
                 this.accounts
@@ -126,7 +126,7 @@ export default {
                     router.push({
                         name: 'error screen',
                         params: {
-                            reason: 'Failed to import account.',
+                            reason: 'Failed to import new account.',
                             fix:
                                 "Try again later, if that doesn't work contact support",
                         },
@@ -136,23 +136,8 @@ export default {
             this.clearForm();
         },
         importStellarSeed() {
-            this.clearErrors();
-
-            // Todo add removing of spaces in between words
-            this.walletName = this.walletName.trim();
-
-            const walletValidation = isValidWalletName(
-                this.walletName,
-                this.accounts
-            );
-
-            if (!walletValidation.success) {
-                this.walletNameErrors.push(walletValidation.message);
-                return;
-            }
-
             const foundWallet = importedSecretFound(this.secret, this.accounts)
-            console.log(foundWallet)
+            
             if(foundWallet){
                 this.secretErrors.push(`This stellar secret is used by ${foundWallet.name}`)
                 return;
