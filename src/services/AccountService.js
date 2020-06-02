@@ -85,9 +85,9 @@ async function lockedTokenSubRoutine(lockedBalances) {
             lockedBalance.unlockTransaction = await fetchUnlockTransaction(
                 unlockHash
                 );
-            const timestamp = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).toString()
-            const isBeforeNow = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).isBefore()
-            Logger.info('fetched unlocktransaction', {unlockHash, timestamp, isBeforeNow})
+            // const timestamp = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).toString()
+            // const isBeforeNow = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).isBefore()
+            // Logger.info('fetched unlocktransaction', {unlockHash, timestamp, isBeforeNow})
             if (
                 !moment
                     .unix(lockedBalance.unlockTransaction.timeBounds.minTime)
@@ -104,7 +104,7 @@ async function lockedTokenSubRoutine(lockedBalances) {
 
         // could be already changed to null
         if (!lockedBalance.unlockHash) {
-            Logger.info('Locked balance doesn\'t exist', {lockedBalance})
+            Logger.info('Locked balance unlockhash doesn\'t exist')
             console.log(lockedBalance);
             try{
                 await transferLockedTokens(
@@ -114,8 +114,9 @@ async function lockedTokenSubRoutine(lockedBalances) {
                     Number(lockedBalance.balance.balance)
                 );
             } catch(e){
-                console.log(e.message)
-                Logger.error('Transferring locked tokens failed ',e.message)
+                const message = e.message
+                console.log(message)
+                Logger.error('Transferring locked tokens failed ', {message})
             }
         }
     }
