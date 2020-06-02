@@ -82,6 +82,7 @@ async function lockedTokenSubRoutine(lockedBalances) {
             store.commit('setLoadingMessage', {
                 message: 'fetching locked tokens',
             });
+            Logger.info('fetching unlocktransaction', {unlockHash})
             lockedBalance.unlockTransaction = await fetchUnlockTransaction(
                 unlockHash
             );
@@ -92,6 +93,8 @@ async function lockedTokenSubRoutine(lockedBalances) {
             ) {
                 continue;
             }
+            const unlockTrans = lockedBalance.unlockTransaction
+            Logger.info('submitting unlocktransaction', {unlockTrans})
             await server.submitTransaction(lockedBalance.unlockTransaction);
             lockedBalance.unlockHash = null;
             lockedBalance.unlockTransaction = null;
