@@ -104,13 +104,19 @@ async function lockedTokenSubRoutine(lockedBalances) {
 
         // could be already changed to null
         if (!lockedBalance.unlockHash) {
+            Logger.info('Locked balance doesn\'t exist', {lockedBalance})
             console.log(lockedBalance);
-            await transferLockedTokens(
-                lockedBalance.keyPair,
-                lockedBalance.id,
-                lockedBalance.balance.asset_code,
-                Number(lockedBalance.balance.balance)
-            );
+            try{
+                await transferLockedTokens(
+                    lockedBalance.keyPair,
+                    lockedBalance.id,
+                    lockedBalance.balance.asset_code,
+                    Number(lockedBalance.balance.balance)
+                );
+            } catch(e){
+                console.log(e.message)
+                Logger.error('Transferring locked tokens failed ',e.message)
+            }
         }
     }
 }
