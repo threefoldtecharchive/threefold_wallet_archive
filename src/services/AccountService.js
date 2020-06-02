@@ -116,7 +116,7 @@ async function lockedTokenSubRoutine(lockedBalances) {
             } catch(e){
                 const message = e.message
                 console.log(message)
-                Logger.error('Transferring locked tokens failed ', {message})
+                Logger.error('Transferring locked tokens failed ', JSON.stringify(message))
             }
         }
     }
