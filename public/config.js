@@ -48,6 +48,7 @@ switch (window.location.host) {
                 },
             },
             watchersEnabled: false,
+            showInputWalletSeed: true
         };
 
         break;
