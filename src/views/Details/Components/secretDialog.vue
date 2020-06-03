@@ -52,7 +52,7 @@
                     toCopy: this.secret,
                     callback: () => {
                         this.$flashMessage.info(
-                            `Seedphrase has been copied to clipboard (${this.secret.substring(
+                            `Stellar secret has been copied to clipboard (${this.secret.substring(
                                 0,
                                 8
                             )}...).`
