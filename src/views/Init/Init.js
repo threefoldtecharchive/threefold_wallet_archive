@@ -78,6 +78,7 @@ export default {
             }
         },
         devInitWallet() {
+            this.initialized = false
             this.startWallet('TESTNAME', this.devWalletSeed, 'null', 'null');
         },
     },
