@@ -92,7 +92,11 @@ export default {
                 this.importStellarSeed()
                 return
             }
-            this.importNewWallet()
+            if(this.secret.split(' ').length == 24 ){
+                this.importNewWallet()
+                return
+            }
+            this.secretErrors.push('Please enter a valid stellar key or 24 word seed phrase.');
         },
         async importNewWallet() {
             const seedValidation = validateAndGenerateSeed(
@@ -142,8 +146,13 @@ export default {
                 this.secretErrors.push(`This stellar secret is used by ${foundWallet.name}`)
                 return;
             }
-
-            const seedPhrase = seedPhraseFromStellarSecret(this.secret);
+            let seedPhrase
+            try{
+                seedPhrase = seedPhraseFromStellarSecret(this.secret);
+            }catch(e){
+                this.secretErrors.push(`Please enter a valid stellar key.`)
+                return
+            }
             const walletName = this.walletName;
             const index = -1;
 
