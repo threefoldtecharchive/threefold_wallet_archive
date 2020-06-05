@@ -6,7 +6,7 @@
                     style="background-color: #34495e; color: white;"
                     dense
                 >
-                    Wallet secret
+                    Stellar secret
                     <v-spacer></v-spacer>
                     <v-btn text icon @click="close">
                         <v-icon :color="$route.meta.accent">
