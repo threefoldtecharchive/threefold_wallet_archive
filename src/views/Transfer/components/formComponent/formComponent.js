@@ -32,7 +32,7 @@ export default {
     },
     data() {
         return {
-            maxMessageLength: 10,
+            maxMessageLength: 28,
             toDialog: false,
             valid: false,
             tooltip: false,
