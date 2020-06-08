@@ -23,7 +23,7 @@ switch (window.location.host) {
             stellarServerUrl: 'https://horizon-testnet.stellar.org',
             stellarNetwork: 'Test SDF Network ; September 2015',
             serviceUrl: 'https://testnet.threefold.io/threefoldfoundation',
-            devWallet: 'SsoeDx7TRjjc71PXmr413rCVtNAkDsJ7KCvZjglXcbc=',
+            // devWallet: 'SsoeDx7TRjjc71PXmr413rCVtNAkDsJ7KCvZjglXcbc=',
             tftFundAccount:
                 'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID',
             feeDestination:
@@ -48,6 +48,7 @@ switch (window.location.host) {
                 },
             },
             watchersEnabled: false,
+            showInputWalletSeed: true
         };
 
         break;

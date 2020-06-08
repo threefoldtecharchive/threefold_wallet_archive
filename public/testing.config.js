@@ -22,4 +22,5 @@ export default {
         }
     },
     watchersEnabled: false,
+    showInputWalletSeed: true
 };
