@@ -155,11 +155,15 @@ export default {
             }
             const walletName = this.walletName;
             const index = -1;
-
+            // @Todo rivine address calculation for an -1 index is wrong
+            // For now we don't try conversion on those acccounts
+            const isConverted = true
+            Logger.info('Importing stellar secret but not converting')  
             this.generateImportedAccount({
                 seedPhrase,
                 walletName,
                 index,
+                isConverted
             })
                 .then(account => {
                     this.$flashMessage.info(

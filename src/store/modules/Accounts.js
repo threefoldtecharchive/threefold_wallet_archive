@@ -40,7 +40,7 @@ export default {
         },
         generateImportedAccount: async (
             context,
-            { seedPhrase, walletName, index }
+            { seedPhrase, walletName, index, isConverted = false }
         ) => {
             Logger.info('importing wallet', walletName)
             context.commit('startAppLoading');
@@ -54,7 +54,7 @@ export default {
                 tags: ['imported'],
                 seedPhrase,
                 position: position,
-                isConverted: false
+                isConverted: isConverted
             });
             Logger.info('fetching payments imported wallet id', account.id)
             context.dispatch('fetchPayments', account.id);
