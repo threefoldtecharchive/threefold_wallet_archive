@@ -11,10 +11,15 @@ export default {
     props: [],
     data() {
         return {
-            initialized: false
+            initialized: false,
+            devWalletSeed: null,
         };
     },
-    computed: {},
+    computed: {
+        showInputWalletSeed() {
+            return !!config.showInputWalletSeed;
+        },
+    },
     mounted() {
         window.vueInstance = this;
         if (config.devWallet) {
@@ -30,27 +35,27 @@ export default {
         ...mapActions(['initialize']),
         ...mapMutations(['setDebugSeed']),
         async startWallet(doubleName, seed, importedWallets, appWallets) {
-            if (this.initialized){
-                return
+            if (this.initialized) {
+                return;
             }
 
-            this.initialized = true
+            this.initialized = true;
 
-            this.setDebugSeed(seed)
+            this.setDebugSeed(seed);
             seed = new Uint8Array(decodeBase64(seed));
             importedWallets = JSON.parse(importedWallets);
             appWallets = JSON.parse(appWallets);
-            Logger.info("startedWallet");
+            Logger.info('startedWallet');
             try {
                 await migrateToPkid({ seed, importedWallets, appWallets });
             } catch (error) {
-                Logger.error("fatal error migrateToPkid");
+                Logger.error('fatal error migrateToPkid');
 
                 // add fatal error
                 return;
             }
             try {
-                Logger.info("initialize");
+                Logger.info('initialize');
 
                 await this.initialize({
                     doubleName,
@@ -59,17 +64,22 @@ export default {
                     appWallets,
                 });
             } catch (error) {
-                throw error
-                console.error(error)
-                Logger.error('init error', {error})
+                throw error;
+                console.error(error);
+                Logger.error('init error', { error });
                 router.push({
                     name: 'error screen',
                     params: {
                         reason: 'Initialization failed',
-                        fix: 'Please refresh, if error persists, please contact support?',
+                        fix:
+                            'Please refresh, if error persists, please contact support?',
                     },
                 });
             }
+        },
+        devInitWallet() {
+            this.initialized = false
+            this.startWallet('TESTNAME', this.devWalletSeed, 'null', 'null');
         },
     },
 };
