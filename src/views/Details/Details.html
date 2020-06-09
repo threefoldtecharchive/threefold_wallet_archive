@@ -173,7 +173,7 @@
                     v-if="account.tags.includes('imported')"
                     color="error"
                     class="mr-4"
-                    @click.stop="deleteWallet"
+                    @click="deleteDialog = true"
                 >
                     <v-icon>fas fa-trash</v-icon>
                 </v-btn>
@@ -190,5 +190,13 @@
         :secret="account.keyPair.secret()"
         :secretDialog="secretDialog"
         @closed="secretDialog = false"
+    />
+
+    <deleteDialog
+        v-if="deleteDialog"
+        :deleteDialog="deleteDialog"
+        :walletName="account.name"
+        @closed="deleteDialog = false"
+        @deleteWallet="deleteWallet"
     />
 </section>

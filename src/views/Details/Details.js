@@ -4,6 +4,7 @@ import PaymentItem from '../../components/PaymentItem';
 import PaymentDialog from '../../components/PaymentDialog';
 import LockedItem from '../../components/LockedItem';
 import secretDialog from './Components/secretDialog'
+import deleteDialog from './Components/deleteDialog.vue'
 import store from '../../store';
 import router from '../../router';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
@@ -23,7 +24,8 @@ export default {
         PaymentDialog,
         LockedItem,
         InfiniteLoading,
-        secretDialog
+        secretDialog,
+        deleteDialog
     },
     props: [],
     data() {
@@ -33,7 +35,8 @@ export default {
             tab: 0,
             selectedCurrency: 'All',
             fetchingPayments: false,
-            secretDialog: false
+            secretDialog: false,
+            deleteDialog: false
         };
     },
     beforeMount() {
@@ -129,6 +132,10 @@ export default {
             await this.fetchPayments(this.account.id);
             this.fetchingPayments = false
         },
+        enabledialog(){
+            console.log("hell")
+            this.deleteDialog = true
+        }
     },
     computed: {
         ...mapGetters([
