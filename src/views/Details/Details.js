@@ -3,6 +3,7 @@ import Balance from '../../components/Balance';
 import PaymentItem from '../../components/PaymentItem';
 import PaymentDialog from '../../components/PaymentDialog';
 import LockedItem from '../../components/LockedItem';
+import secretDialog from './Components/secretDialog'
 import store from '../../store';
 import router from '../../router';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
@@ -22,6 +23,7 @@ export default {
         PaymentDialog,
         LockedItem,
         InfiniteLoading,
+        secretDialog
     },
     props: [],
     data() {
@@ -31,6 +33,7 @@ export default {
             tab: 0,
             selectedCurrency: 'All',
             fetchingPayments: false,
+            secretDialog: false
         };
     },
     beforeMount() {
@@ -89,20 +92,6 @@ export default {
                 callback: () => {
                     this.$flashMessage.info(
                         `Address has been copied to clipboard (${this.account.id.substring(
-                            0,
-                            8
-                        )}...).`
-                    );
-                },
-            });
-        },
-        copySeed() {
-            this.$root.$emit('copy', {
-                title: 'Copy seed to clipboard',
-                toCopy: this.account.seedPhrase,
-                callback: () => {
-                    this.$flashMessage.info(
-                        `Seedphrase has been copied to clipboard (${this.account.seedPhrase.substring(
                             0,
                             8
                         )}...).`

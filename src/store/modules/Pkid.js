@@ -30,7 +30,8 @@ export default {
                 walletName: account.name,
                 seed: account.seed,
                 stellar: true,
-                isConverted: account.isConverted
+                isConverted: account.isConverted,
+                index: account.index
             }));
             const importedPromise = dispatch(
                 'persistPkidImportedAccounts',

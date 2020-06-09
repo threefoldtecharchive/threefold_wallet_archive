@@ -40,7 +40,7 @@ export default {
         },
         generateImportedAccount: async (
             context,
-            { seedPhrase, walletName }
+            { seedPhrase, walletName, index, isConverted = false }
         ) => {
             Logger.info('importing wallet', walletName)
             context.commit('startAppLoading');
@@ -49,12 +49,12 @@ export default {
             });
             const position = context.state.accounts.length;
             const account = await fetchAccount({
-                index: 0,
+                index: index,
                 name: walletName,
                 tags: ['imported'],
                 seedPhrase,
                 position: position,
-                isConverted: false
+                isConverted: isConverted
             });
             Logger.info('fetching payments imported wallet id', account.id)
             context.dispatch('fetchPayments', account.id);

@@ -2,7 +2,9 @@ import { mapGetters, mapActions } from 'vuex';
 import {
     isValidWalletName,
     validateAndGenerateSeed,
+    importedSecretFound
 } from '@/services/AccountManagementService';
+import { seedPhraseFromStellarSecret } from '@jimber/stellar-crypto';
 import router from '../../router';
 import config from '../../../public/config';
 import Logger from 'js-logger'
@@ -20,26 +22,36 @@ export default {
             tabs: ['import'], // create is disabled
             currentTab: 'import',
             walletName: null,
-            words: null,
+            secret: null,
+            index: 0,
             walletNameErrors: [],
-            wordsErrors: [],
+            secretErrors: [],
+            panel: null
         };
     },
     computed: {
         ...mapGetters(['accounts']),
+        secretIsStellarSecret(){
+            return this.secret?.length == "56"
+        }
     },
     mounted() {},
     methods: {
-        ...mapActions(['generateAppAccount', 'generateImportedAccount', 'initializeAccountWatcher', 'initializeTransactionWatcher']),
+        ...mapActions([
+            'generateAppAccount',
+            'generateImportedAccount',
+            'initializeAccountWatcher',
+            'initializeTransactionWatcher',
+        ]),
         clearForm() {
             this.$router.push({ name: 'home' });
             this.clearErrors();
             this.walletName = null;
-            this.words = null;
+            this.secret = null;
         },
         clearErrors() {
             this.walletNameErrors = [];
-            this.wordsErrors = [];
+            this.secretErrors = [];
         },
         createNewWallet() {
             this.clearErrors();
@@ -60,8 +72,7 @@ export default {
             });
             this.clearForm();
         },
-
-        async importNewWallet() {
+        importWallet(){
             this.clearErrors();
 
             // Todo add removing of spaces in between words
@@ -77,31 +88,90 @@ export default {
                 return;
             }
 
+            if(this.secret.length === 56){
+                this.importStellarSeed()
+                return
+            }
+            if(this.secret.split(' ').length == 24 ){
+                this.importNewWallet()
+                return
+            }
+            this.secretErrors.push('Please enter a valid stellar key or 24 word seed phrase.');
+        },
+        async importNewWallet() {
             const seedValidation = validateAndGenerateSeed(
-                this.words,
+                this.secret,
                 this.accounts
             );
 
             if (!seedValidation.success) {
-                this.wordsErrors.push(seedValidation.message);
+                this.secretErrors.push(seedValidation.message);
                 return;
             }
 
             const seedPhrase = seedValidation.seedPhrase;
-
             const walletName = this.walletName;
 
             this.generateImportedAccount({
                 seedPhrase,
                 walletName,
+                index: this.index,
             })
-                .then((account) => {
+                .then(account => {
                     this.$flashMessage.info(
                         `Successfully imported ${account.name}.`
                     );
-                    if(config.watchersEnabled){
-                        this.initializeAccountWatcher(account)
-                        this.initializeTransactionWatcher(account)
+                    if (config.watchersEnabled) {
+                        this.initializeAccountWatcher(account);
+                        this.initializeTransactionWatcher(account);
+                    }
+                })
+                .catch(e => {
+                    router.push({
+                        name: 'error screen',
+                        params: {
+                            reason: 'Failed to import new account.',
+                            fix:
+                                "Try again later, if that doesn't work contact support",
+                        },
+                    });
+                });
+
+            this.clearForm();
+        },
+        importStellarSeed() {
+            const foundWallet = importedSecretFound(this.secret, this.accounts)
+            
+            if(foundWallet){
+                this.secretErrors.push(`This stellar secret is used by ${foundWallet.name}`)
+                return;
+            }
+            let seedPhrase
+            try{
+                seedPhrase = seedPhraseFromStellarSecret(this.secret);
+            }catch(e){
+                this.secretErrors.push(`Please enter a valid stellar key.`)
+                return
+            }
+            const walletName = this.walletName;
+            const index = -1;
+            // @Todo rivine address calculation for an -1 index is wrong
+            // For now we don't try conversion on those acccounts
+            const isConverted = true
+            Logger.info('Importing stellar secret but not converting')  
+            this.generateImportedAccount({
+                seedPhrase,
+                walletName,
+                index,
+                isConverted
+            })
+                .then(account => {
+                    this.$flashMessage.info(
+                        `Successfully imported ${account.name}.`
+                    );
+                    if (config.watchersEnabled) {
+                        this.initializeAccountWatcher(account);
+                        this.initializeTransactionWatcher(account);
                     }
                 })
                 .catch(e => {
@@ -111,7 +181,7 @@ export default {
                         params: {
                             reason: 'Failed to import account.',
                             fix:
-                                'Try again later, if that doesn\'t work contact support',
+                                "Try again later, if that doesn't work contact support",
                         },
                     });
                 });
