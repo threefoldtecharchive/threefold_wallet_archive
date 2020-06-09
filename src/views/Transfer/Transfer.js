@@ -175,7 +175,7 @@ export default {
             } catch (e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"
                 Logger.error('error Payment failed', {e})
-                this.$flashMessage.error(`Payment failed.`);
+                this.$flashMessage.error(`Payment failed: ${e.message}`);
             }
 
             this.$router.push({
