@@ -36,7 +36,7 @@
     
     <v-container v-if="currentTab == 'import'">
       <v-row class="caption" justify="center">
-        <span>You can use this to import a wallet from the Threefold app or load a stellar secret.</span>
+        <span>You can use this to load a stellar secret or to import a wallet from the Threefold app.</span>
       </v-row>
 
       <v-row>
@@ -56,7 +56,7 @@
           name="input-7-1"
           label="Words (Seed phrase) or Stellar secret"
           value=""
-          hint="Please enter all words lowercased and separted by one space. Or enter the stellar secret without any spaces"
+          hint="Please enter a stellar secret without any spaces or a seed phrase with all words lowercased and separted by one space."
         >
         </v-textarea>
       </v-row>

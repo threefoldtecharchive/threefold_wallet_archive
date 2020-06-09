@@ -21,7 +21,7 @@ export const walletNameFound = (name, accounts) => {
 };
 
 export const importedSeedFound = (seed, accounts) => {
-    return accounts.find(x => x.toString() === seed.toString());
+    return !!accounts.find(x => x.toString() === seed.toString());
 };
 
 export const isValidWalletName = (walletName, accounts) => {
