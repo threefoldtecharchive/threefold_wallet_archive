@@ -31,7 +31,7 @@ export default {
     computed: {
         qrText() {
             // return { tft: '01ed90bee1d6d50b730a1aacf2890ac6fc0f7718849fba5f7c5719e3cfcc4641be09c5607b0210', amount: 0 }
-            return `${this.selectedCurrency}:${this.selectedAccount.id}?amount=${this.formObject.amount}&message=${this.formObject.message}&sender=me`;
+            return `${this.selectedCurrency}:${this.selectedAccount.id}?amount=${Number(this.formObject.amount).toFixed(7)}&message=${this.formObject.message}&sender=me`;
         },
     },
 };

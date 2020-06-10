@@ -33,5 +33,5 @@ export const formatBalance = value => {
     if (!value) {
         return;
     }
-    return new Intl.NumberFormat('de-DE',{minimumFractionDigits: 3, maximumFractionDigits: 7}).format(value)
+    return new Intl.NumberFormat('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 7}).format(value)
 };

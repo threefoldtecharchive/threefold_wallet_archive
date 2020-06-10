@@ -48,12 +48,12 @@ export default {
         ...mapGetters(['fee']),
         amount() {
             if (this.$route.query.tab == 'receive') {
-                return Number(this.formObject.amount).toFixed(2);
+                return Number(this.formObject.amount)
             }
 
             return (
                 Number(this.formObject.amount) + Number(this.fee / 1000)
-            ).toFixed(2);
+            );
         },
         toAccountIsOwn() {
             return this.accounts.find(
