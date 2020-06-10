@@ -24,7 +24,7 @@
                                 : 'payment-header in'
                         "
                     >
-                        <b class="my-1">
+                        <b class="my-1 title">
                             {{ payment.outgoing ? '-' : '+' }}
                             {{ payment.amount | formatBalance }}
                             <sup>{{
