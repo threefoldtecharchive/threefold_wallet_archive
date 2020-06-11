@@ -32,7 +32,10 @@ export const mapAccount = async ({
     name: name,
     tags: tags,
     id: accountResponse.id,
-    balances: accountResponse.balances.sort((b, a) => {
+    balances: accountResponse.balances.filter(b=> {
+        const currencies = Object.keys(config.currencies)
+        return currencies.includes(b.asset_code)
+        }).sort((b, a) => {
         if (a.asset_code < b.asset_code) {
             return -1;
         }
