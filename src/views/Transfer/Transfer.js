@@ -7,6 +7,7 @@ import {
     submitFundedTransaction,
 } from '@jimber/stellar-crypto';
 import Logger from 'js-logger';
+import { formatBalance } from '../../utils/filters/formatBalance';
 
 export default {
     name: 'transfer',
@@ -170,7 +171,7 @@ export default {
                 );
 
                 this.$flashMessage.info(
-                    `Successfully transferred ${this.formObject.amount} ${this.selectedCurrency} to ${this.formObject.to.address}.`
+                    `Successfully transferred ${this.formObject.amount | formatBalance} ${this.selectedCurrency} to ${this.formObject.to.address}.`
                 );
             } catch (e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"
