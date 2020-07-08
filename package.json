@@ -24,6 +24,7 @@
     "js-logger": "^1.6.0",
     "libsodium-wrappers": "^0.7.6",
     "lodash": "^4.17.15",
+    "mnemonicconversion2924": "^1.1.2",
     "stellar-sdk": "^4.0.2",
     "tweetnacl-util": "^0.15.1",
     "vue": "^2.6.10",

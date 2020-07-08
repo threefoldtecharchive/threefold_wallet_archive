@@ -4,10 +4,12 @@ import {
     validateAndGenerateSeed,
     importedSecretFound
 } from '@/services/AccountManagementService';
-import { seedPhraseFromStellarSecret } from '@jimber/stellar-crypto';
+import { seedPhraseFromStellarSecret, getSeedFromSeedPhrase } from '@jimber/stellar-crypto';
 import router from '../../router';
 import config from '../../../public/config';
 import Logger from 'js-logger'
+import { getEntropyFromPhrase } from "mnemonicconversion2924";
+import cryptoService from "../../services/cryptoService"
 
 export default {
     name: 'create-wallet',
@@ -91,6 +93,12 @@ export default {
             if(this.secret.length === 56){
                 this.importStellarSeed()
                 return
+            }
+            if(this.secret.split(' ').length == 29){
+                const entropy = getEntropyFromPhrase(this.secret)
+                const mnemonic = cryptoService.generateMnemonicFromSeed(entropy)
+                console.log(mnemonic)
+                this.secret = mnemonic
             }
             if(this.secret.split(' ').length == 24 ){
                 this.importNewWallet()
