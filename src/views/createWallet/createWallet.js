@@ -95,9 +95,8 @@ export default {
                 return
             }
             if(this.secret.split(' ').length == 29){
-                const entropy = getEntropyFromPhrase(this.secret)
+                const entropy = getEntropyFromPhrase(this.secret.split(' '))
                 const mnemonic = cryptoService.generateMnemonicFromSeed(entropy)
-                console.log(mnemonic)
                 this.secret = mnemonic
             }
             if(this.secret.split(' ').length == 24 ){
