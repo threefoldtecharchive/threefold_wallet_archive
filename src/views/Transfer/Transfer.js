@@ -65,19 +65,25 @@ export default {
             return this.$route.query.tab;
         },
         availableAccounts() {
-            // Filter accounts based on the selected currency
-            const accounts =  this.accounts.filter(account => {
-                // Check if account has balance for the selected currency
-                return account.balances.find(balance =>
-                  (
-                    balance.asset_code === this.selectedCurrency &&
-                    Number(balance.balance) > 0.1
-                  ));
-            });
-            return accounts.sort(
-                (account, otherAccount) =>
-                    account.position - otherAccount.position
-            );
+            switch (this.active) {
+                case 'receive':
+                    return this.accounts;
+                case 'send': // Filter accounts based on the selected currency
+                    const accounts = this.accounts.filter(account => {
+                        // Check if account has balance for the selected currency
+                        return account.balances.find(
+                            balance =>
+                                balance.asset_code === this.selectedCurrency &&
+                                Number(balance.balance) > 0.1,
+                        );
+                    });
+                    return accounts.sort(
+                        (account, otherAccount) =>
+                            account.position - otherAccount.position,
+                    );
+                default:
+                    return [];
+            }
         },
     },
     methods: {
@@ -175,7 +181,7 @@ export default {
                 );
             } catch (e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"
-                Logger.error('error Payment failed', {e})
+                Logger.error('error Payment failed', { e });
                 this.$flashMessage.error(`Payment failed: ${e.message}`);
             }
 
