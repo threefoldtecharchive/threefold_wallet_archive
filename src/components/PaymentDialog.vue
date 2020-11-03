@@ -24,7 +24,7 @@
                                 : 'payment-header in'
                         "
                     >
-                        <b class="my-1">
+                        <b class="my-1 title">
                             {{ payment.outgoing ? '-' : '+' }}
                             {{ payment.amount | formatBalance }}
                             <sup>{{
@@ -96,70 +96,6 @@
     };
 </script>
 <style scoped lang="scss">
-    .v-card {
-        position: fixed;
-        top: 10vh;
-        left: 50%;
-        transform: translate(-50%, 0);
-        width: 80vw;
-    }
-
-    .v-application .title {
-        font-size: 4vw !important;
-        line-height: 4vw !important;
-    }
-
-    .v-card__text {
-        font-size: 4vw;
-        line-height: 4vw;
-    }
-
-    .v-application .body-1 {
-        font-size: 3vw !important;
-    }
-
-    .v-btn--icon.v-size--default .v-icon {
-        font-size: 5vw !important;
-    }
-
-    @media screen and (min-width: 1000px) {
-        .v-btn--icon.v-size--default .v-icon {
-            font-size: 50px !important;
-        }
-    }
-
-    @media screen and (max-width: 500px) {
-        .v-card__text {
-            font-size: 1.25rem;
-            line-height: 1.5rem;
-        }
-        .v-application .title {
-            font-size: 1.25rem !important;
-            line-height: 1.25rem !important;
-        }
-        .v-application .body-1 {
-            font-size: 0.8rem !important;
-            line-height: 1rem !important;
-        }
-    }
-
-    @media screen and (min-width: 800px) {
-        .v-card__text {
-            font-size: 2rem;
-            line-height: 2rem;
-        }
-        .v-application .title {
-            font-size: 2rem !important;
-            line-height: 2rem !important;
-        }
-        .v-application .body-1 {
-            font-size: 1.5rem !important;
-            line-height: 2rem !important;
-        }
-    }
-    .payment-dialog {
-        padding: 0;
-    }
     .payment-header {
         background: #4a5c70;
         color: white;

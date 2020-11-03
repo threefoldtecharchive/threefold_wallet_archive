@@ -4,10 +4,12 @@ import {
     validateAndGenerateSeed,
     importedSecretFound
 } from '@/services/AccountManagementService';
-import { seedPhraseFromStellarSecret } from '@jimber/stellar-crypto';
+import { seedPhraseFromStellarSecret, getSeedFromSeedPhrase } from '@jimber/stellar-crypto';
 import router from '../../router';
 import config from '../../../public/config';
 import Logger from 'js-logger'
+import { getEntropyFromPhrase } from "mnemonicconversion2924";
+import cryptoService from "../../services/cryptoService"
 
 export default {
     name: 'create-wallet',
@@ -19,20 +21,21 @@ export default {
     },
     data() {
         return {
-            tabs: ['import', 'load'], // create is disabled
+            tabs: ['import'], // create is disabled
             currentTab: 'import',
             walletName: null,
-            words: null,
+            secret: null,
             index: 0,
-            stellarSecret: null,
             walletNameErrors: [],
-            wordsErrors: [],
-            stellarSecretErrors: [],
+            secretErrors: [],
             panel: null
         };
     },
     computed: {
         ...mapGetters(['accounts']),
+        secretIsStellarSecret(){
+            return this.secret?.length == "56"
+        }
     },
     mounted() {},
     methods: {
@@ -46,12 +49,11 @@ export default {
             this.$router.push({ name: 'home' });
             this.clearErrors();
             this.walletName = null;
-            this.words = null;
+            this.secret = null;
         },
         clearErrors() {
             this.walletNameErrors = [];
-            this.wordsErrors = [];
-            this.stellarSecretErrors = [];
+            this.secretErrors = [];
         },
         createNewWallet() {
             this.clearErrors();
@@ -72,8 +74,7 @@ export default {
             });
             this.clearForm();
         },
-
-        async importNewWallet() {
+        importWallet(){
             this.clearErrors();
 
             // Todo add removing of spaces in between words
@@ -89,13 +90,29 @@ export default {
                 return;
             }
 
+            if(this.secret.length === 56){
+                this.importStellarSeed()
+                return
+            }
+            if(this.secret.split(' ').length == 29){
+                const entropy = getEntropyFromPhrase(this.secret.split(' '))
+                const mnemonic = cryptoService.generateMnemonicFromSeed(entropy)
+                this.secret = mnemonic
+            }
+            if(this.secret.split(' ').length == 24 ){
+                this.importNewWallet()
+                return
+            }
+            this.secretErrors.push('Please enter a valid stellar key or 24 word seed phrase.');
+        },
+        async importNewWallet() {
             const seedValidation = validateAndGenerateSeed(
-                this.words,
+                this.secret,
                 this.accounts
             );
 
             if (!seedValidation.success) {
-                this.wordsErrors.push(seedValidation.message);
+                this.secretErrors.push(seedValidation.message);
                 return;
             }
 
@@ -120,7 +137,7 @@ export default {
                     router.push({
                         name: 'error screen',
                         params: {
-                            reason: 'Failed to import account.',
+                            reason: 'Failed to import new account.',
                             fix:
                                 "Try again later, if that doesn't work contact support",
                         },
@@ -130,36 +147,30 @@ export default {
             this.clearForm();
         },
         importStellarSeed() {
-            this.clearErrors();
-
-            // Todo add removing of spaces in between words
-            this.walletName = this.walletName.trim();
-
-            const walletValidation = isValidWalletName(
-                this.walletName,
-                this.accounts
-            );
-
-            if (!walletValidation.success) {
-                this.walletNameErrors.push(walletValidation.message);
-                return;
-            }
-
-            const foundWallet = importedSecretFound(this.stellarSecret, this.accounts)
-            console.log(foundWallet)
+            const foundWallet = importedSecretFound(this.secret, this.accounts)
+            
             if(foundWallet){
-                this.stellarSecretErrors.push(`This stellar secret is used by ${foundWallet.name}`)
+                this.secretErrors.push(`This stellar secret is used by ${foundWallet.name}`)
                 return;
             }
-
-            const seedPhrase = seedPhraseFromStellarSecret(this.stellarSecret);
+            let seedPhrase
+            try{
+                seedPhrase = seedPhraseFromStellarSecret(this.secret);
+            }catch(e){
+                this.secretErrors.push(`Please enter a valid stellar key.`)
+                return
+            }
             const walletName = this.walletName;
             const index = -1;
-
+            // @Todo rivine address calculation for an -1 index is wrong
+            // For now we don't try conversion on those acccounts
+            const isConverted = true
+            Logger.info('Importing stellar secret but not converting')  
             this.generateImportedAccount({
                 seedPhrase,
                 walletName,
                 index,
+                isConverted
             })
                 .then(account => {
                     this.$flashMessage.info(

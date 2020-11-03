@@ -32,7 +32,10 @@ export const mapAccount = async ({
     name: name,
     tags: tags,
     id: accountResponse.id,
-    balances: accountResponse.balances.sort((b, a) => {
+    balances: accountResponse.balances.filter(b=> {
+        const currencies = Object.keys(config.currencies)
+        return currencies.includes(b.asset_code)
+        }).sort((b, a) => {
         if (a.asset_code < b.asset_code) {
             return -1;
         }
@@ -84,7 +87,10 @@ async function lockedTokenSubRoutine(lockedBalances) {
             });
             lockedBalance.unlockTransaction = await fetchUnlockTransaction(
                 unlockHash
-            );
+                );
+            // const timestamp = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).toString()
+            // const isBeforeNow = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).isBefore()
+            // Logger.info('fetched unlocktransaction', {unlockHash, timestamp, isBeforeNow})
             if (
                 !moment
                     .unix(lockedBalance.unlockTransaction.timeBounds.minTime)
@@ -92,6 +98,8 @@ async function lockedTokenSubRoutine(lockedBalances) {
             ) {
                 continue;
             }
+            const unlockTrans = lockedBalance.unlockTransaction
+            Logger.info('submitting unlocktransaction', {unlockTrans})
             await server.submitTransaction(lockedBalance.unlockTransaction);
             lockedBalance.unlockHash = null;
             lockedBalance.unlockTransaction = null;
@@ -99,13 +107,20 @@ async function lockedTokenSubRoutine(lockedBalances) {
 
         // could be already changed to null
         if (!lockedBalance.unlockHash) {
+            Logger.info('Locked balance unlockhash doesn\'t exist')
             console.log(lockedBalance);
-            await transferLockedTokens(
-                lockedBalance.keyPair,
-                lockedBalance.id,
-                lockedBalance.balance.asset_code,
-                Number(lockedBalance.balance.balance)
-            );
+            try{
+                await transferLockedTokens(
+                    lockedBalance.keyPair,
+                    lockedBalance.id,
+                    lockedBalance.balance.asset_code,
+                    Number(lockedBalance.balance.balance)
+                );
+            } catch(e){
+                const message = e.message
+                console.log(message)
+                Logger.error('Transferring locked tokens failed ', JSON.stringify(message))
+            }
         }
     }
 }

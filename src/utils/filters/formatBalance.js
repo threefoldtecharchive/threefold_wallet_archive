@@ -33,5 +33,5 @@ export const formatBalance = value => {
     if (!value) {
         return;
     }
-    return Number(value).toFixed(3).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1\u00a0');
+    return new Intl.NumberFormat('de-DE',{minimumFractionDigits: 2, maximumFractionDigits: 7}).format(value)
 };

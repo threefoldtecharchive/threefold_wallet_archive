@@ -6,7 +6,7 @@
                     style="background-color: #34495e; color: white;"
                     dense
                 >
-                    Wallet secret
+                    Stellar secret
                     <v-spacer></v-spacer>
                     <v-btn text icon @click="close">
                         <v-icon :color="$route.meta.accent">
@@ -52,7 +52,7 @@
                     toCopy: this.secret,
                     callback: () => {
                         this.$flashMessage.info(
-                            `Seedphrase has been copied to clipboard (${this.secret.substring(
+                            `Stellar secret has been copied to clipboard (${this.secret.substring(
                                 0,
                                 8
                             )}...).`

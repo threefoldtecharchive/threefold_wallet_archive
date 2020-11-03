@@ -1,6 +1,6 @@
 import { mapGetters } from 'vuex';
 import { fetchAccount } from '../../services/AccountService';
-import { keypairFromAccount } from '@jimber/stellar-crypto';
+import { keypairFromAccount, revineAddressFromSeed } from '@jimber/stellar-crypto';
 import Logger  from 'js-logger'
 
 export default {
@@ -40,13 +40,15 @@ export default {
         },
         generateImportedAccount: async (
             context,
-            { seedPhrase, walletName, index }
+            { seedPhrase, walletName, index, isConverted = false }
         ) => {
             Logger.info('importing wallet', walletName)
             context.commit('startAppLoading');
             context.commit('setLoadingMessage', {
                 message: `Importing wallet: ${walletName}`,
             });
+            let revineAddress = revineAddressFromSeed(seedPhrase,index)
+            Logger.info("Importing revine address", revineAddress)
             const position = context.state.accounts.length;
             const account = await fetchAccount({
                 index: index,
@@ -54,7 +56,7 @@ export default {
                 tags: ['imported'],
                 seedPhrase,
                 position: position,
-                isConverted: false
+                isConverted: isConverted
             });
             Logger.info('fetching payments imported wallet id', account.id)
             context.dispatch('fetchPayments', account.id);

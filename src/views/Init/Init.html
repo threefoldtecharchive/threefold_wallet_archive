@@ -1,9 +1,15 @@
 <section class="init">
   <v-container fill-height>
     <v-layout fill-height>
-      <v-flex>
-        <h1>Loading wallet ...</h1>
-      </v-flex>
+      <v-col>
+        <v-row>
+          <h1>Loading wallet ...</h1>
+        </v-row>
+        <v-row v-if="showInputWalletSeed">
+          <v-text-field v-model="devWalletSeed" type="password" label="devWalletSeed"></v-text-field>
+          <v-btn @click="devInitWallet"> Start wallet</v-btn>
+        </v-row>
+      </v-col>
     </v-layout>
   </v-container>
 </section>

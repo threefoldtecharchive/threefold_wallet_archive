@@ -32,7 +32,7 @@ export default {
     },
     data() {
         return {
-            maxMessageLength: 10,
+            maxMessageLength: 28,
             toDialog: false,
             valid: false,
             tooltip: false,
@@ -53,7 +53,7 @@ export default {
         },
         messageRules() {
             const rules = [
-                v => !!v || 'Message is required!',
+                // v => !!v || 'Message is required!',
                 v =>
                     typeof v == 'undefined' ||
                     (typeof v === 'string' &&

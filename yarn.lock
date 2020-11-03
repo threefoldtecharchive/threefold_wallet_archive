@@ -1074,10 +1074,10 @@
     tweetnacl "^1.0.1"
     tweetnacl-util "^0.15.0"
 
-"@jimber/stellar-crypto@^0.14.3":
-  version "0.14.3"
-  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-0.14.3.tgz#5fa141120cafa0fd4c5c701074fbe9c22101001f"
-  integrity sha512-+MSz9EL1MYE4qC2v3LSOvedcwSsIvnbFeud/EndJ26JC48sl1PPqBy4ChiOMPp+xnzMJtDKoRa/IOnOQeolnDA==
+"@jimber/stellar-crypto@^0.15.1":
+  version "0.15.1"
+  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-0.15.1.tgz#b9790617c9c285418175f96965c393942f4bd57a"
+  integrity sha512-9USHCcc+bqq4XAGEEmw/hnPxcvX7/FXr6pO+YuprDFj/buj3FYou09DBLB0j12TqjdzKAQUXiqNTyWUAWq+hOQ==
   dependencies:
     "@jimber/stellar-crypto" "^0.4.0"
     "@waves/ts-lib-crypto" "^1.4.2"
@@ -11280,9 +11280,9 @@ websocket-driver@>=0.5.1:
     websocket-extensions ">=0.1.1"
 
 websocket-extensions@>=0.1.1:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.3.tgz#5d2ff22977003ec687a4b87073dfbbac146ccf29"
-  integrity sha512-nqHUnMXmBzT0w570r2JpJxfiSD1IzoI+HGVdd3aZ0yNi3ngvQ4jv1dtHt5VGxfI2yj5yqImPhOK4vmIh2xMbGg==
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.4.tgz#7f8473bc839dfd87608adb95d7eb075211578a42"
+  integrity sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==
 
 whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3, whatwg-encoding@^1.0.5:
   version "1.0.5"
