@@ -192,13 +192,6 @@ export default {
         },
         selectAccount(account) {
             this.selectedAccount = account;
-            this.formObject = {
-                to: { address: null },
-                amount: null,
-                message: null,
-                sender: null,
-            };
-            this.$refs.formComponent.$refs.form.reset();
         },
         checkForm() {
             return this.$refs.formComponent.$refs.form.validate();
