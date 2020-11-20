@@ -204,7 +204,17 @@ export const fetchAccount = async ({
 async function generateAndFetchAccount(keyPair, seedPhrase, index) {
     try {
         const revineAddress = revineAddressFromSeed(seedPhrase, index);
-        await migrateAccount(keyPair, revineAddress);
+        // tfchain testnet is discontinued
+        // Call friendbot to activate if not in prod
+        if(config.env == "production"){
+            await migrateAccount(keyPair, revineAddress);
+        }
+        else{
+            const Http = new XMLHttpRequest();
+            Http.open("GET", `https://friendbot.stellar.org/?addr=${keyPair.publicKey()}`,false);
+            Http.send();
+        }
+        
     } catch (e) {
         Logger.error('error Something went wrong while generating account', {e})
 
