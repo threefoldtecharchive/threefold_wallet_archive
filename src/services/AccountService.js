@@ -96,6 +96,8 @@ async function lockedTokenSubRoutine(lockedBalances) {
                     .unix(lockedBalance.unlockTransaction.timeBounds.minTime)
                     .isBefore()
             ) {
+                const mintimeTrans = lockedBalance.unlockTransaction.timeBounds.minTime;
+                Logger.info('Lockedtransaction mintime is not before now ', {mintimeTrans})
                 continue;
             }
             const unlockTrans = lockedBalance.unlockTransaction
