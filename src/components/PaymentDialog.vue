@@ -105,10 +105,10 @@
         justify-content: center;
         align-items: center;
         &.out {
-            background-image: linear-gradient(180deg, #e6926d 0%, #e67163 100%);
+            background-color: var(--accent-color);
         }
         &.in {
-            background-image: linear-gradient(180deg, #73e5c0 0%, #68c5d5 100%);
+            background-color: #ff4a4a;
         }
     }
 </style>

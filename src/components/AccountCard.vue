@@ -21,7 +21,7 @@
                         <span class="title text-capitalize">
                             {{account ? account.name : 'Wallet name'}}
                         </span>
-                        <span 
+                        <span
                             v-for="tag in account.tags"
                             class="font-weight-light fa-xs blue-grey--text ml-1"
                             :key="tag"
@@ -31,7 +31,7 @@
                     </v-row>
                     <v-row>
                         <v-col class="py-1" align="center" v-for="balance in allowedBalances" :key="balance.issuer">
-                            
+
                             <v-row class="subtitle-2 blue-grey--text font-weight-light">{{balance.asset_code}}</v-row>
                             <v-row class="body-2">{{balance.balance | formatBalanceHumanReadable }}</v-row>
                         </v-col>
@@ -193,7 +193,6 @@
             height: 4px;
             border-radius: 0 2px 2px 0;
             background: lightgrey;
-            background-image: linear-gradient(180deg, rgba(115, 229, 192, 0.4) 0%, rgba(104, 197, 213, 0.4) 100%);
         }
     }
 </style>
