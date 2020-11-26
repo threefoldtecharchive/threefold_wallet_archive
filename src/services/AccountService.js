@@ -85,9 +85,14 @@ async function lockedTokenSubRoutine(lockedBalances) {
             store.commit('setLoadingMessage', {
                 message: 'fetching locked tokens',
             });
+            try{
             lockedBalance.unlockTransaction = await fetchUnlockTransaction(
                 unlockHash
                 );
+            }catch{
+                Logger.info('failed to fetch unlock trans', unlockHash)
+                continue
+            }
             // const timestamp = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).toString()
             // const isBeforeNow = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).isBefore()
             // Logger.info('fetched unlocktransaction', {unlockHash, timestamp, isBeforeNow})
