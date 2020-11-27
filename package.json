@@ -23,7 +23,7 @@
     "core-js": "^3.4.4",
     "js-logger": "^1.6.0",
     "libsodium-wrappers": "^0.7.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mnemonicconversion2924": "^1.1.2",
     "stellar-sdk": "^4.0.2",
     "tweetnacl-util": "^0.15.1",
