@@ -1,13 +1,14 @@
 <template
-    ><section class="toolbar">
-        <v-app-bar color="primary" dark>
-            <v-btn v-if="showBack" text small fab dark :to="{ name: 'home' }">
-                <v-icon flatclass="white--text" icon>fas fa-wallet</v-icon>
+>
+    <section class='toolbar'>
+        <v-app-bar color='primary' dark height='90' elevation='0'>
+            <v-btn class='main-icon' v-if='showBack' icon small fab dark :to="{ name: 'home' }">
+                <v-icon>fas fa-wallet</v-icon>
             </v-btn>
 
             <v-toolbar-title
-                class="title text-capitalize ml-2"
-                @click="addDevClick"
+                class='subbatitle text-capitalize ml-2'
+                @click='addDevClick'
             >
                 {{ $route.meta.title || $route.name || '3Bot' }}
             </v-toolbar-title>
@@ -20,7 +21,7 @@
                 text
                 fab
                 dark
-                class="accent"
+                class='accent'
                 v-if="$route.name === 'home'"
                 :to="{ name: 'addwallet' }"
             >
@@ -33,10 +34,10 @@
                 x-small
                 fab
                 dark
-                @click="restartWallet"
+                @click='restartWallet'
                 v-if="$route.name === 'error screen'"
             >
-                <v-icon flatclass="white--text">fas fa-sync</v-icon>
+                <v-icon flatclass='white--text'>fas fa-sync</v-icon>
             </v-btn>
         </v-app-bar>
     </section>
@@ -74,8 +75,25 @@
         },
     };
 </script>
-<style scoped lang="scss">
-    .toolbar{
+<style scoped lang='scss'>
+    .subbatitle{
+        font-size: 36px;
+    }
+    .main-icon {
+        padding-left: 20px;
+        &:before {
+            opacity: 0 !important;
+        }
+        .v-icon {
+            font-size: 37px !important;
+        }
+    }
+
+    .toolbar {
+        height: 90px;
+    }
+
+    .toolbar {
         position: sticky;
         top: 0;
         z-index: 99;

@@ -48,8 +48,8 @@ export default new Vuetify({
     theme: {
         themes: {
             light: {
-                primary: '#31404F',
-                accent: '#68C5D5',
+                primary: '#0A73B8',
+                accent: '#57BE8E',
                 gold: '#dea600',
                 error: '#CE796B',
             },
