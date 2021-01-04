@@ -14,6 +14,19 @@
                     <span>{{getHumanWalletAddress}}</span>
                     <br />
                 </v-col>
+                <v-col >
+                    <v-btn
+                        align-self='end'
+                        color="primary"
+                        fab
+                        @click="updatePayments"
+                        :loading="fetchingPayments"
+                        v-if='!hasMultipleTrustlines'
+                    >
+                        <v-icon>fas fa-sync-alt</v-icon>
+                    </v-btn>
+                    <br />
+                </v-col>
             </v-row>
         </v-container>
         <v-tabs
@@ -70,7 +83,8 @@
             </v-col>
         </v-tab-item>
         <v-tab-item :key="1">
-            <div class="input white align-center pa-6 pb-0 layout">
+            <div class="input white align-center pa-6 pb-0 layout"
+                 v-if='hasMultipleTrustlines'>
                 <v-select
                     class="ma-0"
                     background-color="white"

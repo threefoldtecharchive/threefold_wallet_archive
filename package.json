@@ -15,7 +15,7 @@
     "@chenfengyuan/vue-qrcode": "^1.0.2",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@jimber/pkid": "^1.0.4",
-    "@jimber/stellar-crypto": "^1.0.0",
+    "@jimber/stellar-crypto": "^1.1.1",
     "axios": "^0.19.2",
     "bip39": "latest",
     "circular-json": "^0.5.9",
