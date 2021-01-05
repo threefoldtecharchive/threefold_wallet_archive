@@ -14,6 +14,7 @@ import { fetchPayments } from '../../services/PaymentService';
 import {
     isValidWalletName
 } from '@/services/AccountManagementService';
+import StellarSdk from 'stellar-sdk';
 
 export default {
     name: 'Details',
@@ -72,7 +73,7 @@ export default {
         change() {
             const name = this.name.charAt(0).toUpperCase() + this.name.substring(1);
             this.name = this.name.trim();
-            
+
             const walletValidation = isValidWalletName(
                 this.name,
                 this.accounts
@@ -145,6 +146,9 @@ export default {
             'isPaymentLoading',
             'currencies'
         ]),
+        hasMultipleTrustlines() {
+            return this.account.balances > 1;
+        },
         account() {
             return this.accounts.find(a => a.id === this.id);
         },
@@ -162,7 +166,7 @@ export default {
             }`;
         },
         filterOptions(){
-            return ["All", ...this.currencies]
+            return ["All", ...this.account.balances.map(b => b.asset_code)]
         }
     },
     mounted() {
