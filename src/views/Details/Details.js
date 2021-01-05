@@ -166,7 +166,7 @@ export default {
             }`;
         },
         filterOptions(){
-            return ["All", ...this.currencies]
+            return ["All", ...this.account.balances.map(b => b.asset_code)]
         }
     },
     mounted() {
