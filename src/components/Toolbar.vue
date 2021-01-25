@@ -3,7 +3,7 @@
     <section class='toolbar'>
         <v-app-bar color='primary' dark height='90' elevation='0'>
             <v-btn class='main-icon' v-if='showBack' icon small fab dark :to="{ name: 'home' }">
-                <v-icon>fas fa-wallet</v-icon>
+                <v-icon>fas fa-arrow-left</v-icon>
             </v-btn>
 
             <v-toolbar-title
