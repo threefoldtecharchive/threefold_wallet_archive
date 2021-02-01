@@ -42,6 +42,11 @@ export default {
                 x => x.name != this.selectedAccount.name
             );
         },
+        isBtcAddress() {
+            return this.accounts.filter(
+                x => x.name != this.selectedAccount.name
+            );
+        },
     },
     mounted() {},
     methods: {

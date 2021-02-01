@@ -8,6 +8,7 @@ import {
 } from '@jimber/stellar-crypto';
 import Logger from 'js-logger';
 import { formatBalance } from '../../utils/filters/formatBalance';
+import validate from 'bitcoin-address-validation';
 
 export default {
     name: 'transfer',
@@ -40,7 +41,7 @@ export default {
     mounted() {
         this.disableAccountEventStreams();
         const updatePromises = this.accounts.map(account =>
-            this.updateAccount(account.id)
+            this.updateAccount(account.id),
         );
 
         Promise.all(updatePromises).then(() => {
@@ -52,7 +53,7 @@ export default {
         });
         if (this.$route.params.account) {
             this.selectedAccount = this.accounts.find(
-                x => x.id === this.$route.params.account
+                x => x.id === this.$route.params.account,
             );
             return;
         }
@@ -63,6 +64,19 @@ export default {
         ...mapGetters(['accounts', 'currencies']),
         active() {
             return this.$route.query.tab;
+        },
+        isValidBtcAddress() {
+            if (this.selectedCurrency !== 'BTC'){
+                return false;
+            }
+            if (!this.formObject || !this.formObject.to || !this.formObject.to.address) {
+                return false;
+            }
+            try {
+                return validate(this.formObject.to.address, 'mainnet');
+            } catch (e) {
+                return false;
+            }
         },
         availableAccounts() {
             switch (this.active) {
@@ -94,7 +108,7 @@ export default {
             const self = this;
             window.flutter_inappwebview
                 .callHandler('SCAN_QR')
-                .then(function (result) {
+                .then(function(result) {
                     self.onDecode(result);
                 });
         },
@@ -145,7 +159,7 @@ export default {
             const fromAccount = form.selectedAccount;
             const balance = Number(
                 fromAccount.balances.find(b => b.asset_code === ASSET_CODE)
-                    .balance
+                    .balance,
             );
             const amountToTransfer = Number(form.formObject.amount);
 
@@ -168,16 +182,16 @@ export default {
                     this.formObject.to.address,
                     new Number(this.formObject.amount),
                     this.formObject.message,
-                    this.selectedCurrency
+                    this.selectedCurrency,
                 );
 
                 await submitFundedTransaction(
                     fundedTransaction,
-                    this.selectedAccount.keyPair
+                    this.selectedAccount.keyPair,
                 );
 
                 this.$flashMessage.info(
-                    `Successfully transferred ${this.formObject.amount | formatBalance} ${this.selectedCurrency} to ${this.formObject.to.address}.`
+                    `Successfully transferred ${this.formObject.amount | formatBalance} ${this.selectedCurrency} to ${this.formObject.to.address}.`,
                 );
             } catch (e) {
                 //@todo show correct error message for multiple errors eg: "reason": "invalid address"

@@ -26,13 +26,14 @@
 
             <p class="subtitle mb-0 grey--text">Amount</p>
             <v-layout class="pb-2" justify-space-between>
-              <span class="title mt-0">{{amount | formatBalance}} {{selectedAccount.currency}}</span>
-              <span class="text-xs-right caption">{{0.1}} {{selectedCurrency}} fee included</span>
+              <span class="title mt-0">{{amount | formatBalance}} {{selectedCurrency}}</span>
+              <span class="text-xs-right caption" v-if='selectedCurrency !=="BTC" '>{{0.1}} {{selectedCurrency}} fee included</span>
             </v-layout>
-
-            <p class="subtitle mb-0 grey--text">Message</p>
-            <p class="title mt-0">{{formObject.message}}</p>
-          </v-layout>
+            <template v-if='formObject.message'>
+                <p class="subtitle mb-0 grey--text">Message</p>
+                <p class="title mt-0">{{formObject.message}}</p>
+            </template>
+            </v-layout>
         </v-layout>
         <v-btn @click="closeDialog(true)" dark :color="$route.meta.accent" style="margin-left: 0px; margin-right: 0px;"
           block>

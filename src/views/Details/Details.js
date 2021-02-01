@@ -3,8 +3,8 @@ import Balance from '../../components/Balance';
 import PaymentItem from '../../components/PaymentItem';
 import PaymentDialog from '../../components/PaymentDialog';
 import LockedItem from '../../components/LockedItem';
-import secretDialog from './Components/secretDialog'
-import deleteDialog from './Components/deleteDialog.vue'
+import secretDialog from './Components/secretDialog';
+import deleteDialog from './Components/deleteDialog.vue';
 import store from '../../store';
 import router from '../../router';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
@@ -12,9 +12,11 @@ import moment from 'moment';
 import InfiniteLoading from 'vue-infinite-loading';
 import { fetchPayments } from '../../services/PaymentService';
 import {
-    isValidWalletName
+    isValidWalletName,
 } from '@/services/AccountManagementService';
-import StellarSdk from 'stellar-sdk';
+import AssetCard from '@/components/AssetCard';
+import ActivatCard from '@/components/ActivateCard';
+import CopyField from '@/components/CopyField';
 
 export default {
     name: 'Details',
@@ -26,7 +28,10 @@ export default {
         LockedItem,
         InfiniteLoading,
         secretDialog,
-        deleteDialog
+        deleteDialog,
+        AssetCard,
+        ActivatCard,
+        CopyField,
     },
     props: [],
     data() {
@@ -37,12 +42,12 @@ export default {
             selectedCurrency: 'All',
             fetchingPayments: false,
             secretDialog: false,
-            deleteDialog: false
+            deleteDialog: false,
         };
     },
     beforeMount() {
         const account = store.getters.accounts.find(
-            x => x.id === this.$route.params.account
+            x => x.id === this.$route.params.account,
         );
         if (!account) {
             router.push({ name: 'home' });
@@ -51,11 +56,11 @@ export default {
         this.id = account.id;
     },
     methods: {
-        ...mapActions(['fetchPayments', 'changeWalletName', 'deleteAccount', 'updateAccount','initializeAccountEventStreams']),
+        ...mapActions(['fetchPayments', 'changeWalletName', 'deleteAccount', 'updateAccount', 'initializeAccountEventStreams']),
         ...mapMutations(['addPayments']),
         seeTransactionsFor(asset_code) {
             this.selectedCurrency = asset_code;
-            this.tab = 1
+            this.tab = 1;
 
         },
         openPayment(payment) {
@@ -76,11 +81,11 @@ export default {
 
             const walletValidation = isValidWalletName(
                 this.name,
-                this.accounts
+                this.accounts,
             );
             if (!walletValidation.success) {
                 this.$flashMessage.error(
-                    walletValidation.message
+                    walletValidation.message,
                 );
                 return;
             }
@@ -88,20 +93,6 @@ export default {
             this.changeWalletName({ account: this.account, name });
             router.push({ name: 'home' });
             this.$flashMessage.info(`Renamed wallet to ${name}.`);
-        },
-        copyAddress() {
-            this.$root.$emit('copy', {
-                title: 'Copy address to clipboard',
-                toCopy: this.account.id,
-                callback: () => {
-                    this.$flashMessage.info(
-                        `Address has been copied to clipboard (${this.account.id.substring(
-                            0,
-                            8
-                        )}...).`
-                    );
-                },
-            });
         },
         async deleteWallet() {
             await this.deleteAccount(this.account);
@@ -128,15 +119,15 @@ export default {
 
             $state.loaded();
         },
-        async updatePayments(){
-            this.fetchingPayments = true
+        async updatePayments() {
+            this.fetchingPayments = true;
             await this.fetchPayments(this.account.id);
-            this.fetchingPayments = false
+            this.fetchingPayments = false;
         },
-        enabledialog(){
-            console.log("hell")
-            this.deleteDialog = true
-        }
+        enabledialog() {
+            console.log('hell');
+            this.deleteDialog = true;
+        },
     },
     computed: {
         ...mapGetters([
@@ -144,7 +135,7 @@ export default {
             'payments',
             'accounts',
             'isPaymentLoading',
-            'currencies'
+            'currencies',
         ]),
         hasMultipleTrustlines() {
             return this.account.balances > 1;
@@ -165,9 +156,9 @@ export default {
                 this.threeBotName
             }`;
         },
-        filterOptions(){
-            return ["All", ...this.account.balances.map(b => b.asset_code)]
-        }
+        filterOptions() {
+            return ['All', ...this.account.balances.map(b => b.asset_code)];
+        },
     },
     mounted() {
         this.fetchPayments(this.account.id);

@@ -45,28 +45,18 @@
 
     <v-tabs-items v-model="tab" class="flex-fill">
         <v-tab-item :key="0">
-            <v-col>
-                <v-card
-                    class="pa-2 mb-2"
+            <v-col class='asset-list'>
+                <AssetCard
                     v-for="balance in account.balances"
-                    v-if="balance.asset_type != 'native'"
                     v-bind:key="balance.asset_code"
-                    @click="seeTransactionsFor(balance.asset_code)"
-                >
-                    <h1>
-                        {{balance.asset_code}}
-                    </h1>
-                    <div class="subtitle-1">
-                        Balance {{balance.balance | formatBalance}}
-                    </div>
-                    <div
-                        class="subtitle-2"
-                        v-if="account.lockedBalances[balance.asset_code]"
-                    >
-                        Locked {{account.lockedBalances[balance.asset_code] |
-                        formatBalance}}
-                    </div>
-                </v-card>
+                    v-on:showDetails="seeTransactionsFor(balance.asset_code)"
+                    v-on:buy="$router.push({name: 'buy', params: {account: account.id, asset_code: balance.asset_code}})"
+                    v-on:deposit="$router.push({name: 'deposit', params: {account: account.id, asset_code: balance.asset_code}})"
+                    :balance='balance'
+                    :locked-balance='account.lockedBalances[balance.asset_code]'
+                    :id='account.id'
+                />
+<!--                <ActivatCard v-if='!account.balances.find(b => b.asset_code === "BTC")' asset='BTC' class='grey theme&#45;&#45;dark' />-->
             </v-col>
         </v-tab-item>
         <v-tab-item :key="1">
@@ -142,13 +132,7 @@
 
         <v-tab-item :key="3">
             <div class="px-3 mt-4">
-                <v-text-field
-                    label="Address"
-                    :value="account.id"
-                    append-outer-icon="fas fa-copy"
-                    @click:append-outer.stop="copyAddress"
-                    readonly
-                ></v-text-field>
+                <CopyField label='Address' :value='account.id' :message='`Address has been copied to clipboard (${account.id.substring(0,8)}...).`' title='Copy address to clipboard' />
                 <v-btn @click="secretDialog = true"  class="mb-4" >
                     <v-row dense>
                         <v-col>

@@ -18,6 +18,7 @@
     "@jimber/stellar-crypto": "^1.1.1",
     "axios": "^0.19.2",
     "bip39": "latest",
+    "bitcoin-address-validation": "^1.0.2",
     "circular-json": "^0.5.9",
     "clipboard-copy": "^3.1.0",
     "core-js": "^3.4.4",

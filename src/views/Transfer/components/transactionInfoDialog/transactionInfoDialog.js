@@ -50,6 +50,9 @@ export default {
             if (this.$route.query.tab == 'receive') {
                 return Number(this.formObject.amount)
             }
+            if (this.selectedCurrency ==='BTC'){
+                return Number(this.formObject.amount)
+            }
 
             return (
                 Number(this.formObject.amount) + Number(this.fee / 1000)

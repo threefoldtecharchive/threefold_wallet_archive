@@ -9,6 +9,8 @@ import Transfer from '@/views/Transfer';
 import DevView from '@/views/DevView';
 import store from '../store';
 import errorScreen from '@/views/errorScreen';
+import Buy from '@/views/Buy';
+import Deposit from '@/views/Deposit';
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -82,6 +84,26 @@ const routes = [
             accent: 'accent',
         },
         component: Details,
+    },
+    {
+        path: '/buy/:asset/:account',
+        name: 'buy',
+        meta: {
+            title: 'buy',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Buy,
+    },
+    {
+        path: '/deposit/:asset/:account',
+        name: 'deposit',
+        meta: {
+            title: 'deposit',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Deposit,
     },
     {
         path: '/transfer/:account?',

@@ -28,6 +28,9 @@ export default {
         selectedCurrency: {
             type: String,
             default: "TFT"
+        },
+        isBtcAddress: {
+            type: Boolean
         }
     },
     data() {
@@ -46,7 +49,7 @@ export default {
             const rules = [
                 v => !!v || 'Wallet address is required!',
                 v =>
-                    (!!v && v.length >= 56 && v.length <= 56) ||
+                    (!!v && ((v.length >= 56 && v.length <= 56) || ( this.selectedCurrency === 'BTC' && v.length >= 26 && v.length <= 35))) ||
                     'Wallet address length is not valid!',
             ];
             return rules;

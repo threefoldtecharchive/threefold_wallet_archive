@@ -43,7 +43,7 @@
                 v-if="selected === 1"
                 clearable
                 prepend-icon="fas fa-user"
-                label="To (Wallet Address)"
+                :label="selectedCurrency === 'BTC' ? 'To (BTC or Wallet Address)':'To (Wallet Address)'"
                 v-model="externAddress"
                 :rules="toRules"
                 autofocus
@@ -52,7 +52,7 @@
                 v-else
                 clearable
                 prepend-icon="fas fa-user"
-                label="To (Wallet Address)"
+                :label="selectedCurrency === 'BTC' ? 'To (BTC or Wallet Address)':'To (Wallet Address)'"
                 v-model="externAddress"
                 :rules="toRules"
               />

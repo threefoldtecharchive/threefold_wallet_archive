@@ -59,6 +59,7 @@
           item-value="TFT"
           return-object
           append-icon="fas fa-caret-down"
+          @change='$nextTick(() => $refs.formComponent.$refs.toField.validate())'
         >
       </v-select>
       </v-col>
@@ -71,12 +72,13 @@
       :accounts="accounts"
       :selectedAccount="selectedAccount"
       :selectedCurrency="selectedCurrency"
+      :is-btc-address='isValidBtcAddress'
     >
     </FormComponent>
 
     <v-row>
       <v-col>
-        <span v-if="$route.query.tab != 'receive'"
+        <span v-if="$route.query.tab != 'receive' && selectedCurrency !== 'BTC' "
           >Fee: 0.1 {{selectedCurrency}}</span
         >
         <v-btn
@@ -91,7 +93,7 @@
             Generate QR
           </div>
           <div v-if="$route.query.tab === 'send'">
-            Send Tokens
+              {{ isValidBtcAddress ? 'Withdraw BTC' : 'Send Tokens' }}
           </div>
         </v-btn>
       </v-col>

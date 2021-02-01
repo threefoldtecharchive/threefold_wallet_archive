@@ -32,18 +32,9 @@ export const mapAccount = async ({
     name: name,
     tags: tags,
     id: accountResponse.id,
-    balances: accountResponse.balances.filter(b=> {
-        const currencies = Object.keys(config.currencies)
-        return currencies.includes(b.asset_code)
-        }).sort((b, a) => {
-        if (a.asset_code < b.asset_code) {
-            return -1;
-        }
-        if (a.asset_code > b.asset_code) {
-            return 1;
-        }
-        return 0;
-    }),
+    balances: Object.keys(config.currencies)
+        .filter(c => accountResponse.balances.find(b => b.asset_code === c ))
+        .map(c => accountResponse.balances.find(b => b.asset_code === c)),
     index,
     position,
     seed,
@@ -221,7 +212,7 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
             Http.open("GET", `https://friendbot.stellar.org/?addr=${keyPair.publicKey()}`,false);
             Http.send();
         }
-        
+
     } catch (e) {
         Logger.error('error Something went wrong while generating account', {e})
 
