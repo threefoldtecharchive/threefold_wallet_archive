@@ -19,7 +19,7 @@
                         justify="center"
                         align="center"
                         :class="
-                            payment.outgoing
+                            !payment.outgoing
                                 ? 'payment-header out'
                                 : 'payment-header in'
                         "
