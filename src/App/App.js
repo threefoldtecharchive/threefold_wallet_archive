@@ -1,7 +1,7 @@
 import Toolbar from '../components/Toolbar';
 import BottomNavigation from '../components/BottomNavigation.vue';
 import CopyDialog from '../components/CopyDialog.vue';
-import Loader from '../components/Loader';
+import Loader from '../components/Loader.vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import config from '../../public/config';
 import version from '../../public/version';
