@@ -2,7 +2,7 @@ import AccountCard from '../../components/AccountCard';
 import Balance from '../../components/Balance.vue';
 import PaymentItem from '../../components/PaymentItem.vue';
 import PaymentDialog from '../../components/PaymentDialog';
-import LockedItem from '../../components/LockedItem';
+import LockedItem from '../../components/LockedItem.vue';
 import secretDialog from './Components/secretDialog';
 import deleteDialog from './Components/deleteDialog.vue';
 import store from '../../store';
