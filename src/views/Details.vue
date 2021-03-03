@@ -86,8 +86,20 @@
                 </v-col>
             </v-tab-item>
             <v-tab-item :key="1">
-                <div class="accent dark align-center layout">
-                    <h3 class="text--white">check vesting oppurtunity</h3>
+                <div
+                    class="dark align-center layout px-4 py-6 layout justify-space-between"
+                    v-if="
+                        selectedCurrency === 'TFT' && false //@TODO: enable when vesting
+                    "
+                    style="background-color: #cfecff; color: #0972b8;"
+                    @click="$router.push({ name: 'vesting' })"
+                >
+                    <span class="d-block">
+                        Check vesting opportunity
+                    </span>
+                    <v-icon color="#0972B8" class="d-block"
+                        >fa-chevron-right</v-icon
+                    >
                 </div>
                 <div class="input white align-center pa-6 pb-0 layout">
                     <v-select
