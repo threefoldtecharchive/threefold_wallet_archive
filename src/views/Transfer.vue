@@ -74,7 +74,13 @@
                     <v-select
                         class="mt-1 pt-0"
                         label="Currency"
-                        :items="selectedAccount.balances.map(b => b.asset_code)"
+                        :items="
+                            selectedAccount && selectedAccount.balances
+                                ? selectedAccount.balances.map(
+                                      b => b.asset_code
+                                  )
+                                : []
+                        "
                         v-model="selectedCurrency"
                         item-value="TFT"
                         return-object
