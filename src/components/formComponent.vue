@@ -57,6 +57,7 @@
 <script>
     import ToDialog from './toDialog.vue';
     import { mapGetters } from 'vuex';
+    import validate from 'bitcoin-address-validation';
 
     export default {
         name: 'form-component',
@@ -107,8 +108,10 @@
                         (!!v &&
                             ((v.length >= 56 && v.length <= 56) ||
                                 (this.selectedCurrency === 'BTC' &&
-                                    v.length >= 26 &&
-                                    v.length <= 35))) ||
+                                    validate(
+                                        this.formObject.to.address,
+                                        'mainnet'
+                                    )))) ||
                         'Wallet address length is not valid!',
                 ];
                 return rules;
@@ -160,9 +163,11 @@
 <style scoped lang="scss">
     .form-component {
     }
+
     .inputPrice input[type='number'] {
         -moz-appearance: textfield;
     }
+
     .inputPrice input::-webkit-outer-spin-button,
     .inputPrice input::-webkit-inner-spin-button {
         -webkit-appearance: none;
