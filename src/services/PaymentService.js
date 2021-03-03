@@ -1,4 +1,4 @@
-import config from '../../public/config';
+import config from '@/../public/config';
 import StellarSdk from 'stellar-sdk';
 
 export const mapPayment = ({

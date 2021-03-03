@@ -1,6 +1,6 @@
-import { fetchPayments } from '../../services/PaymentService';
+import { fetchPayments } from '@/services/PaymentService';
 import moment from 'moment';
-import config from '../../../public/config';
+import config from '@/../public/config';
 
 export default {
     state: {

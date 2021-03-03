@@ -21,13 +21,13 @@
 
 </template>
 <script>
-  import Toolbar from '../components/Toolbar';
-  import BottomNavigation from '../components/BottomNavigation.vue';
-  import CopyDialog from '../components/CopyDialog.vue';
-  import Loader from '../components/Loader.vue';
+  import Toolbar from '@/components/Toolbar.vue';
+  import BottomNavigation from '@/components/BottomNavigation.vue';
+  import CopyDialog from '@/components/CopyDialog.vue';
+  import Loader from '@/components/Loader.vue';
   import { mapActions, mapGetters, mapMutations } from 'vuex';
-  import config from '../../public/config';
-  import version from '../../public/version';
+  import config from '@/../public/config';
+  import version from '@/../public/version';
   import Logger from 'js-logger';
 
   export default {
@@ -119,7 +119,7 @@
   };
 </script>
 <style lang='scss'>
-  @import "../scss/variables";
+  @import "./scss/variables";
 
   .theme--light.v-application {
     background-color: #f5f5f5 !important;

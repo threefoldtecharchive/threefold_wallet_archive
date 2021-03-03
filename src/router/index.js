@@ -1,21 +1,21 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '@/views/Home';
-import Init from '@/views/Init';
-import Sms from '@/views/Sms';
-import createWallet from '@/views/createWallet';
-import Details from '@/views/Details';
-import Transfer from '@/views/Transfer';
-import DevView from '@/views/DevView';
-import store from '../store';
-import errorScreen from '@/views/errorScreen';
-import Buy from '@/views/Buy';
-import Deposit from '@/views/Deposit';
+import Home from '@/views/Home.vue';
+import Init from '@/views/Init.vue';
+import Sms from '@/views/Sms.vue';
+import createWallet from '@/views/createWallet.vue';
+import Details from '@/views/Details.vue';
+import Transfer from '@/views/Transfer.vue';
+import DevView from '@/views/DevView.vue';
+import store from '@/store';
+import errorScreen from '@/views/errorScreen.vue';
+import Buy from '@/views/Buy.vue';
+import Deposit from '@/views/Deposit.vue';
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
     return originalPush.call(this, location).catch(err => err);
-}
+};
 Vue.use(VueRouter);
 
 const routes = [

@@ -1,5 +1,5 @@
-import { fetchAccount, mapAccount } from '../../services/AccountService';
-import { fetchPayments, mapPayment } from '../../services/PaymentService';
+import { fetchAccount, mapAccount } from '@/services/AccountService';
+import { fetchPayments, mapPayment } from '@/services/PaymentService';
 import { entropyToMnemonic } from 'bip39';
 import {
     calculateWalletEntropyFromAccount,
@@ -9,9 +9,9 @@ import {
     convertTokens,
     revineAddressFromSeed
 } from '@jimber/stellar-crypto';
-import config from '../../../public/config';
+import config from '@/../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
-import router from '../../router';
+import router from '@/router';
 import Logger from 'js-logger';
 
 export default {

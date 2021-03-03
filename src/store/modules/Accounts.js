@@ -1,5 +1,5 @@
 import { mapGetters } from 'vuex';
-import { fetchAccount } from '../../services/AccountService';
+import { fetchAccount } from '@/services/AccountService';
 import { keypairFromAccount, revineAddressFromSeed } from '@jimber/stellar-crypto';
 import Logger  from 'js-logger'
 

@@ -1,5 +1,4 @@
-<template
->
+<template>
     <section class='toolbar'>
         <v-app-bar color='primary' dark height='90' elevation='0'>
             <v-btn class='main-icon' v-if='showBack' icon small fab dark @click='$router.back()'>

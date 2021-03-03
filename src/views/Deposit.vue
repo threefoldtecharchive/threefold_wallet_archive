@@ -22,7 +22,7 @@
   import store from '@/store';
   import router from '@/router';
   import { getDepositAddress } from '@/services/DepositService';
-  import CopyField from '@/components/CopyField';
+  import CopyField from '@/components/CopyField.vue';
 
   export default {
     name: 'Deposit',

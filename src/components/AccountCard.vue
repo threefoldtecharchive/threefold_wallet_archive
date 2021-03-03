@@ -47,9 +47,9 @@
     </v-card>
 </template>
 <script>
-    import Balance from './Balance';
+    import Balance from './Balance.vue';
     import { mapGetters } from 'vuex';
-    import router from '../router';
+    import router from '@/router';
 
     export default {
         name: 'account-card',
