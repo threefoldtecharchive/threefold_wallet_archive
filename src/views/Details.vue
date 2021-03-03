@@ -42,8 +42,8 @@
                     <!--Info-->
                     <v-icon small>fa-info-circle</v-icon>
                 </v-tab>
-                <v-tab>
-                    <!--Info-->
+                <v-tab v-if="false">
+                    <!--Vesting-->
                     <v-icon small>fa-chart-line</v-icon>
                 </v-tab>
             </v-tabs>
@@ -92,7 +92,7 @@
                         selectedCurrency === 'TFT' && false //@TODO: enable when vesting
                     "
                     style="background-color: #cfecff; color: #0972b8;"
-                    @click="$router.push({ name: 'vesting' })"
+                    @click="tab = 3"
                 >
                     <span class="d-block">
                         Check vesting opportunity
