@@ -9,6 +9,8 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import global from './components/global';
 import clipboardHack from './utils/clipboardhack';
 
+import './scss/misc.scss';
+
 import config from '../public/config';
 
 import Logger from 'js-logger';
