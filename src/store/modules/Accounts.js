@@ -1,7 +1,10 @@
 import { mapGetters } from 'vuex';
 import { fetchAccount } from '@/services/AccountService';
-import { keypairFromAccount, revineAddressFromSeed } from '@jimber/stellar-crypto';
-import Logger  from 'js-logger'
+import {
+    keypairFromAccount,
+    revineAddressFromSeed,
+} from '@jimber/stellar-crypto';
+import Logger from 'js-logger';
 
 export default {
     state: {
@@ -29,7 +32,7 @@ export default {
                 tags: ['app'],
                 seedPhrase,
                 position: position,
-                isConverted: false
+                isConverted: false,
             });
             context.commit('removeAccountThombstone', walletName);
             context.commit('addAccount', account);
@@ -42,13 +45,13 @@ export default {
             context,
             { seedPhrase, walletName, index, isConverted = false }
         ) => {
-            Logger.info('importing wallet', walletName)
+            Logger.info('importing wallet', walletName);
             context.commit('startAppLoading');
             context.commit('setLoadingMessage', {
                 message: `Importing wallet: ${walletName}`,
             });
-            let revineAddress = revineAddressFromSeed(seedPhrase,index)
-            Logger.info("Importing revine address", revineAddress)
+            let revineAddress = revineAddressFromSeed(seedPhrase, index);
+            Logger.info('Importing revine address', revineAddress);
             const position = context.state.accounts.length;
             const account = await fetchAccount({
                 index: index,
@@ -56,9 +59,9 @@ export default {
                 tags: ['imported'],
                 seedPhrase,
                 position: position,
-                isConverted: isConverted
+                isConverted: isConverted,
             });
-            Logger.info('fetching payments imported wallet id', account.id)
+            Logger.info('fetching payments imported wallet id', account.id);
             context.dispatch('fetchPayments', account.id);
             context.commit('addAccount', account);
             await context.dispatch('saveToPkid');

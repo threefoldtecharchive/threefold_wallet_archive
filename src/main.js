@@ -18,7 +18,12 @@ const consoleHandler = Logger.createDefaultHandler();
 const myHandler = function (messages, context) {
     const [message, ctxUnformated] = messages;
 
-    store.commit('addLog', { timestamp: new Date().toUTCString(), message, ctx:ctxUnformated, level: context.level.name });
+    store.commit('addLog', {
+        timestamp: new Date().toUTCString(),
+        message,
+        ctx: ctxUnformated,
+        level: context.level.name,
+    });
 };
 
 Logger.setHandler(function (messages, context) {

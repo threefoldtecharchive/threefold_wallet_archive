@@ -37,7 +37,7 @@ export const isValidWalletName = (walletName, accounts) => {
             message: 'The length of the name should not exceed 15 characters.',
         };
     }
-    if (!walletName.match(/^[0-9a-zA-Z]+$/)){
+    if (!walletName.match(/^[0-9a-zA-Z]+$/)) {
         return {
             success: false,
             message: 'The name can only contain letters and numbers',
@@ -98,4 +98,4 @@ export const validateAndGenerateSeed = (seedPhrase, accounts) => {
 
 export const importedSecretFound = (secret, accounts) => {
     return accounts.find(x => x.keyPair.secret() === secret);
-}
+};

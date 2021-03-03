@@ -33,5 +33,8 @@ export const formatBalance = value => {
     if (!value) {
         return;
     }
-    return new Intl.NumberFormat('en-US',{minimumFractionDigits: 2, maximumFractionDigits: 7}).format(value)
+    return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 7,
+    }).format(value);
 };

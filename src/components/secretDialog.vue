@@ -1,6 +1,6 @@
 <template>
     <section class="secretDialog">
-       <v-dialog v-model="secretDialog" @input="close">
+        <v-dialog v-model="secretDialog" @input="close">
             <v-card class="secret-dialog">
                 <v-card-title
                     style="background-color: #34495e; color: white;"
@@ -24,12 +24,12 @@
                         </v-col>
                     </v-row>
                     <v-text-field
-                    label="Secret"
-                    :value="secret"
-                    append-outer-icon="fas fa-copy"
-                    @click:append-outer.stop="copySecret"
-                    readonly
-                ></v-text-field>
+                        label="Secret"
+                        :value="secret"
+                        append-outer-icon="fas fa-copy"
+                        @click:append-outer.stop="copySecret"
+                        readonly
+                    ></v-text-field>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -59,11 +59,9 @@
                         );
                     },
                 });
-            }
+            },
         },
     };
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

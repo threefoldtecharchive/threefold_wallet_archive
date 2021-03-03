@@ -17,18 +17,18 @@ import store from '@/store';
 import Logger from 'js-logger';
 
 export const mapAccount = async ({
-                                     accountResponse,
-                                     name,
-                                     tags,
-                                     index,
-                                     position,
-                                     seed,
-                                     keyPair,
-                                     seedPhrase,
-                                     lockedTransactions,
-                                     lockedBalances,
-                                     isConverted,
-                                 }) => ({
+    accountResponse,
+    name,
+    tags,
+    index,
+    position,
+    seed,
+    keyPair,
+    seedPhrase,
+    lockedTransactions,
+    lockedBalances,
+    isConverted,
+}) => ({
     name: name,
     tags: tags,
     id: accountResponse.id,
@@ -78,7 +78,7 @@ async function lockedTokenSubRoutine(lockedBalances) {
             });
             try {
                 lockedBalance.unlockTransaction = await fetchUnlockTransaction(
-                    unlockHash,
+                    unlockHash
                 );
             } catch {
                 Logger.info('failed to fetch unlock trans', unlockHash);
@@ -92,8 +92,11 @@ async function lockedTokenSubRoutine(lockedBalances) {
                     .unix(lockedBalance.unlockTransaction.timeBounds.minTime)
                     .isBefore()
             ) {
-                const mintimeTrans = lockedBalance.unlockTransaction.timeBounds.minTime;
-                Logger.info('Lockedtransaction mintime is not before now ', { mintimeTrans });
+                const mintimeTrans =
+                    lockedBalance.unlockTransaction.timeBounds.minTime;
+                Logger.info('Lockedtransaction mintime is not before now ', {
+                    mintimeTrans,
+                });
                 continue;
             }
             const unlockTrans = lockedBalance.unlockTransaction;
@@ -105,33 +108,36 @@ async function lockedTokenSubRoutine(lockedBalances) {
 
         // could be already changed to null
         if (!lockedBalance.unlockHash) {
-            Logger.info('Locked balance unlockhash doesn\'t exist');
+            Logger.info("Locked balance unlockhash doesn't exist");
             console.log(lockedBalance);
             try {
                 await transferLockedTokens(
                     lockedBalance.keyPair,
                     lockedBalance.id,
                     lockedBalance.balance.asset_code,
-                    Number(lockedBalance.balance.balance),
+                    Number(lockedBalance.balance.balance)
                 );
             } catch (e) {
                 const message = e.message;
                 console.log(message);
-                Logger.error('Transferring locked tokens failed ', JSON.stringify(message));
+                Logger.error(
+                    'Transferring locked tokens failed ',
+                    JSON.stringify(message)
+                );
             }
         }
     }
 }
 
 export const fetchAccount = async ({
-                                       seedPhrase,
-                                       index,
-                                       name,
-                                       tags,
-                                       position,
-                                       isConverted,
-                                       retry = 0,
-                                   }) => {
+    seedPhrase,
+    index,
+    name,
+    tags,
+    position,
+    isConverted,
+    retry = 0,
+}) => {
     if (retry > 3) {
         console.error('too many retries');
         throw new Error('too many retries');
@@ -142,7 +148,9 @@ export const fetchAccount = async ({
     try {
         accountResponse = await loadAccount(keyPair);
     } catch (e) {
-        Logger.error('error Something went wrong while fetching account', { e });
+        Logger.error('error Something went wrong while fetching account', {
+            e,
+        });
 
         if (e.message !== 'Not Found') {
             throw Error('Something went wrong while fetching account');
@@ -150,7 +158,7 @@ export const fetchAccount = async ({
         accountResponse = await generateAndFetchAccount(
             keyPair,
             seedPhrase,
-            index,
+            index
         );
     }
 
@@ -175,11 +183,11 @@ export const fetchAccount = async ({
     lockedTransactions.forEach(transaction => {
         if (lockedBalances[transaction.balance.asset_code]) {
             lockedBalances[transaction.balance.asset_code] += Number(
-                transaction.balance.balance,
+                transaction.balance.balance
             );
         } else {
             lockedBalances[transaction.balance.asset_code] = Number(
-                transaction.balance.balance,
+                transaction.balance.balance
             );
         }
     });
@@ -208,12 +216,17 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
             await migrateAccount(keyPair, revineAddress);
         } else {
             const Http = new XMLHttpRequest();
-            Http.open('GET', `https://friendbot.stellar.org/?addr=${keyPair.publicKey()}`, false);
+            Http.open(
+                'GET',
+                `https://friendbot.stellar.org/?addr=${keyPair.publicKey()}`,
+                false
+            );
             Http.send();
         }
-
     } catch (e) {
-        Logger.error('error Something went wrong while generating account', { e });
+        Logger.error('error Something went wrong while generating account', {
+            e,
+        });
 
         throw Error('Something went wrong while generating account');
     }

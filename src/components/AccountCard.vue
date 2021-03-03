@@ -6,10 +6,14 @@
             :style="clickable ? 'cursor:pointer' : ''"
             @click="clicked"
         >
-            <v-btn dark small icon text
-            @click.stop="copyAddress"
-            class="copybutton"
-            :class="$route.meta.accent"
+            <v-btn
+                dark
+                small
+                icon
+                text
+                @click.stop="copyAddress"
+                class="copybutton"
+                :class="$route.meta.accent"
             >
                 <v-icon size="15">
                     fas fa-copy
@@ -19,21 +23,30 @@
                 <v-col>
                     <v-row>
                         <span class="title text-capitalize">
-                            {{account ? account.name : 'Wallet name'}}
+                            {{ account ? account.name : 'Wallet name' }}
                         </span>
                         <span
                             v-for="tag in account.tags"
                             class="font-weight-light fa-xs blue-grey--text ml-1"
                             :key="tag"
-                            >
+                        >
                             {{ tag }}
                         </span>
                     </v-row>
                     <v-row>
-                        <v-col class="py-1" align="center" v-for="balance in allowedBalances" :key="balance.issuer">
-
-                            <v-row class="subtitle-2 blue-grey--text font-weight-light">{{balance.asset_code}}</v-row>
-                            <v-row class="body-2">{{balance.balance | formatBalanceHumanReadable }}</v-row>
+                        <v-col
+                            class="py-1"
+                            align="center"
+                            v-for="balance in allowedBalances"
+                            :key="balance.issuer"
+                        >
+                            <v-row
+                                class="subtitle-2 blue-grey--text font-weight-light"
+                                >{{ balance.asset_code }}</v-row
+                            >
+                            <v-row class="body-2">{{
+                                balance.balance | formatBalanceHumanReadable
+                            }}</v-row>
                         </v-col>
                     </v-row>
                 </v-col>
@@ -85,9 +98,11 @@
                     this.threeBotName
                 }`;
             },
-            allowedBalances () {
-                return this.account.balances.filter(b => this.currencies.includes(b.asset_code))
-            }
+            allowedBalances() {
+                return this.account.balances.filter(b =>
+                    this.currencies.includes(b.asset_code)
+                );
+            },
         },
         mounted() {},
         methods: {
@@ -173,9 +188,9 @@
             white-space: normal;
         }
     }
-    .copybutton{
+    .copybutton {
         position: absolute;
-        right:0px;
+        right: 0px;
         border-radius: 0 $borderradius;
         z-index: 1;
     }

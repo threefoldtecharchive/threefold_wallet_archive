@@ -22,4 +22,4 @@ export const formatUnlockTime = value => {
         return;
     }
     return moment.unix(value).format('DD MMMM YYYY hh:mm:ss');
-}
+};

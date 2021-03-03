@@ -85,13 +85,17 @@ export default () => {
         document.addEventListener(
             'contextmenu',
             function (evt) {
-                if(!window.noCopyPaste){
+                if (!window.noCopyPaste) {
                     webview_selected_item = evt.path[0];
                     webview_copy_value = window.getSelection().toString();
                     let cbh_menu = document.getElementById('cbh-custom-menu');
 
                     const y = clamp(evt.clientY - 60, 0, window.innerHeight);
-                    const x = clamp(evt.clientX - 75, 0, window.innerWidth - 150);
+                    const x = clamp(
+                        evt.clientX - 75,
+                        0,
+                        window.innerWidth - 150
+                    );
 
                     cbh_menu.style.top = `${y}px`;
                     cbh_menu.style.left = `${x}px`;

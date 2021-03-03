@@ -4,7 +4,7 @@
             <p class="headline">
                 Please wait while your account is activated.
             </p>
-            <span class="code">{{$route.params.code}}</span>
+            <span class="code">{{ $route.params.code }}</span>
             <p class="subtitle-1">for more info go to support</p>
         </v-col>
     </v-row>
@@ -23,7 +23,7 @@
 
     export default {
         mounted() {
-            Logger.info("initializeing sms flow");
+            Logger.info('initializeing sms flow');
             const server = new Server(config.stellarServerUrl);
             const stream = server
                 .accounts()
