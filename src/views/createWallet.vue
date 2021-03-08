@@ -1,7 +1,7 @@
 <template>
     <section class="create-wallet fill-height">
         <v-col>
-            <v-row justify="center pb-2">
+            <v-row justify="center">
                 <v-btn-toggle dense mandatory class="round">
                     <v-btn
                         text
