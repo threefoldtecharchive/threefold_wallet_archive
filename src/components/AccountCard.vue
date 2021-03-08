@@ -1,5 +1,8 @@
 <template>
-    <v-card :class="`pr-0 min ${selected ? 'border' : ''}`" v-bind="$attrs">
+    <v-card
+        :class="`pr-0 pb-4 min ${selected ? 'border' : ''}`"
+        v-bind="$attrs"
+    >
         <div
             ref="card"
             class="content"
