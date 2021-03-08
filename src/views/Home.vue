@@ -18,15 +18,6 @@
                         @click="seeDetails(account)"
                         humanReadable
                     />
-                    <AccountCard
-                        class="px-1 mb-4"
-                        clickable
-                        v-for="account in accounts"
-                        :key="`Home_${account.name}_${account.balances[0].balance}`"
-                        :account="account"
-                        @click="seeDetails(account)"
-                        humanReadable
-                    />
                 </draggable>
                 <SkeletonAccountCard
                     :name="name"
