@@ -1,8 +1,5 @@
 <template>
-    <v-card
-        :class="`pr-0 pb-4 min ${selected ? 'border' : ''}`"
-        v-bind="$attrs"
-    >
+    <v-card :class="`pr-0 min ${selected ? 'border' : ''}`" v-bind="$attrs">
         <div
             ref="card"
             class="content"
@@ -43,13 +40,16 @@
                             v-for="balance in allowedBalances"
                             :key="balance.issuer"
                         >
-                            <v-row
+                            <div
                                 class="subtitle-2 blue-grey--text font-weight-light"
-                                >{{ balance.asset_code }}</v-row
                             >
-                            <v-row class="body-2">{{
-                                balance.balance | formatBalanceHumanReadable
-                            }}</v-row>
+                                {{ balance.asset_code }}
+                            </div>
+                            <div class="body-2">
+                                {{
+                                    balance.balance | formatBalanceHumanReadable
+                                }}
+                            </div>
                         </v-col>
                     </v-row>
                 </v-col>
@@ -63,13 +63,11 @@
     </v-card>
 </template>
 <script>
-    import Balance from './Balance.vue';
     import { mapGetters } from 'vuex';
     import router from '@/router';
 
     export default {
         name: 'account-card',
-        components: { Balance },
         props: {
             account: {
                 type: Object,

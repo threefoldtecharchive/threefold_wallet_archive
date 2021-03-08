@@ -1,3 +1,8 @@
 div.v-slide-group__prev.v-slide-group__prev--disabled{
   display: none !important;
 }
+.vts .v-snack__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

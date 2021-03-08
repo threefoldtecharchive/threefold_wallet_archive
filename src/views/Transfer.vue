@@ -1,26 +1,28 @@
 <template>
     <section class="transfer fill-height" ref="transfer">
-        <v-col>
-            <v-row class="div-toggle-buttons" justify="center">
-                <v-btn-toggle
-                    dense
-                    v-model="selectedTab"
-                    mandatory
-                    class="round"
-                >
-                    <v-btn
-                        text
-                        v-for="tab in tabs"
-                        :key="tab"
-                        class="px-3 my-1 mx-1 round"
-                        exact
-                        :to="{ query: { tab: tab } }"
-                        >{{ tab }}
-                    </v-btn>
-                </v-btn-toggle>
-            </v-row>
+        <div class="px-2">
+            <div class="py-2">
+                <div class="div-toggle-buttons layout justify-center">
+                    <v-btn-toggle
+                        dense
+                        v-model="selectedTab"
+                        mandatory
+                        class="round"
+                    >
+                        <v-btn
+                            text
+                            v-for="tab in tabs"
+                            :key="tab"
+                            class="px-3 my-1 mx-1 round"
+                            exact
+                            :to="{ query: { tab: tab } }"
+                            >{{ tab }}
+                        </v-btn>
+                    </v-btn-toggle>
+                </div>
+            </div>
 
-            <v-row dense class="pr-2 pt-1" justify="end">
+            <div dense class="pa-2 pt-1 layout justify-end">
                 <v-btn v-if="active == 'send'" small text @click="scanQR()">
                     Scan QR
                     <v-icon class="ml-2">fas fa-qrcode</v-icon>
@@ -33,7 +35,7 @@
                     style="visibility: hidden;"
                 >
                 </v-btn>
-            </v-row>
+            </div>
 
             <v-row>
                 <v-col>
@@ -151,7 +153,7 @@
                     </v-btn>
                 </v-col>
             </v-row>
-        </v-col>
+        </div>
 
         <TransactionInfoDialog
             v-if="transactionInfoDialog"

@@ -1,7 +1,7 @@
 <template>
     <section class="create-wallet fill-height">
         <v-col>
-            <v-row justify="center">
+            <div class="layout justify-center">
                 <v-btn-toggle dense mandatory class="round">
                     <v-btn
                         text
@@ -12,8 +12,8 @@
                         >{{ tab }}</v-btn
                     >
                 </v-btn-toggle>
-            </v-row>
-            <v-container v-if="currentTab == 'create'">
+            </div>
+            <v-container v-if="currentTab === 'create'">
                 <v-text-field
                     :error-messages="walletNameErrors"
                     @input="walletNameErrors = []"
@@ -35,15 +35,15 @@
                 </div>
             </v-container>
 
-            <v-container v-if="currentTab == 'import'">
-                <v-row class="caption" justify="center">
+            <v-container v-if="currentTab === 'import'">
+                <div class="caption layout justify-center">
                     <span
                         >You can use this to load a stellar secret or to import
                         a wallet from the Threefold app.</span
                     >
-                </v-row>
+                </div>
 
-                <v-row>
+                <div>
                     <v-text-field
                         :error-messages="walletNameErrors"
                         @input="walletNameErrors = []"
@@ -51,8 +51,8 @@
                         class="red--text"
                         label="Wallet name"
                     ></v-text-field>
-                </v-row>
-                <v-row>
+                </div>
+                <div>
                     <v-textarea
                         :error-messages="secretErrors"
                         @input="secretErrors = []"
@@ -63,8 +63,8 @@
                         hint="Please enter a stellar secret without any spaces or a seed phrase with all words lowercased and separted by one space."
                     >
                     </v-textarea>
-                </v-row>
-                <v-row>
+                </div>
+                <div>
                     <v-expansion-panels v-model="panel" flat>
                         <v-expansion-panel flat>
                             <v-expansion-panel-header>
@@ -80,16 +80,16 @@
                             </v-expansion-panel-content>
                         </v-expansion-panel>
                     </v-expansion-panels>
-                </v-row>
-                <v-row dense class="mt-2 warning">
+                </div>
+                <div class="my-4 warning layout">
                     <v-col cols="1">
                         <v-icon small>fas fa-exclamation-triangle</v-icon>
                     </v-col>
-                    <v-col class="body-2">
+                    <v-col class="body-2" style="line-height: 2rem;">
                         Make sure to keep this seed written down and stored in a
                         safe place.
                     </v-col>
-                </v-row>
+                </div>
 
                 <v-row>
                     <v-btn
@@ -146,7 +146,7 @@
         computed: {
             ...mapGetters(['accounts']),
             secretIsStellarSecret() {
-                return this.secret?.length == '56';
+                return this.secret?.length === '56';
             },
         },
         mounted() {},
@@ -206,7 +206,7 @@
                     this.importStellarSeed();
                     return;
                 }
-                if (this.secret.split(' ').length == 29) {
+                if (this.secret.split(' ').length === 29) {
                     const entropy = getEntropyFromPhrase(
                         this.secret.split(' ')
                     );
@@ -215,7 +215,7 @@
                     );
                     this.secret = mnemonic;
                 }
-                if (this.secret.split(' ').length == 24) {
+                if (this.secret.split(' ').length === 24) {
                     this.importNewWallet();
                     return;
                 }

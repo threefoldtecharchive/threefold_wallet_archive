@@ -29,6 +29,7 @@
                         append-outer-icon="fas fa-copy"
                         @click:append-outer.stop="copySecret"
                         readonly
+                        ref="field"
                     ></v-text-field>
                 </v-card-text>
             </v-card>
@@ -47,6 +48,8 @@
                 this.$emit('closed');
             },
             copySecret() {
+                this.$refs.field.$refs.input.select();
+                document.execCommand('copy');
                 this.$root.$emit('copy', {
                     title: 'Copy seed to clipboard',
                     toCopy: this.secret,

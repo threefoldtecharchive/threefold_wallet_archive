@@ -5,6 +5,7 @@
         append-outer-icon="fas fa-copy"
         @click:append-outer.stop="copy"
         readonly
+        ref="field"
     ></v-text-field>
 </template>
 <script>
@@ -18,6 +19,9 @@
         },
         methods: {
             copy() {
+                this.$refs.field.$refs.input.select();
+                document.execCommand('copy');
+                this.$refs.field.$refs.input.select();
                 this.$root.$emit('copy', {
                     title: this.title ? this.title : 'Copy',
                     toCopy: this.value,

@@ -1,21 +1,17 @@
 <template>
     <section class="details fill-height">
         <header class="accent">
-            <v-container class="pb-0">
-                <v-row>
-                    <v-col>
-                        <h2 class="text-capitalize">
-                            {{ account.name }}
-                            <span
-                                v-for="tag in account.tags"
-                                class="font-weight-light fa-xs ml-1"
-                                >{{ tag }}</span
-                            >
-                        </h2>
-                        <span>{{ getHumanWalletAddress }}</span>
-                        <br />
-                    </v-col>
-                </v-row>
+            <v-container>
+                <h2 class="text-capitalize">
+                    {{ account.name }}
+                    <span
+                        v-for="tag in account.tags"
+                        class="font-weight-light fa-xs ml-1"
+                        >{{ tag }}</span
+                    >
+                </h2>
+                <span>{{ getHumanWalletAddress }}</span>
+                <br />
             </v-container>
             <v-tabs
                 class="fill-height"

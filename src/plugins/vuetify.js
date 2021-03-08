@@ -36,14 +36,7 @@ Vue.use(Vuetify, {
     },
 });
 
-Vue.use(VuetifyToast, {
-    queueable: true,
-    showClose: true,
-    closeIcon: 'fa-times',
-    property: '$flashMessage',
-});
-
-export default new Vuetify({
+let veutifyObj = new Vuetify({
     iconfont: 'fa',
     theme: {
         themes: {
@@ -56,3 +49,13 @@ export default new Vuetify({
         },
     },
 });
+
+Vue.use(VuetifyToast, {
+    queueable: true,
+    showClose: true,
+    closeIcon: 'fa-times',
+    property: '$flashMessage',
+    $vuetify: veutifyObj.framework,
+});
+
+export default veutifyObj;

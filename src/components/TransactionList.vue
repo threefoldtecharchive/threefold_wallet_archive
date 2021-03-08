@@ -3,7 +3,7 @@
         <div
             class="dark align-center layout px-4 py-6 layout justify-space-between"
             v-if="
-                selectedCurrency === 'TFT' && true //@TODO: enable when vesting
+                selectedCurrency === 'TFT' && false //@TODO: enable when vesting
             "
             style="background-color: #cfecff; color: #0972b8;"
             @click="$emit('pressVesting')"
@@ -58,8 +58,8 @@
             </v-row>
         </v-container>
         <v-list three-line class="pa-0 payment-list">
-            <template v-for="payment in filteredAccountPayments">
-                <div class="date" v-if="showDate">
+            <template v-for="(payment, i) in filteredAccountPayments">
+                <div class="date" v-if="showDate(payment, i)">
                     <span>
                         {{ payment.created_at | formatDay }}
                     </span>
@@ -94,6 +94,7 @@
     import { isValidWalletName } from '@/services/AccountManagementService';
     import router from '@/router';
     import { fetchPayments } from '@/services/PaymentService';
+    import moment from 'moment';
 
     export default {
         name: 'TransactionList',

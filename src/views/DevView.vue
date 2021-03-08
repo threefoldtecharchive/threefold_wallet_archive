@@ -28,9 +28,25 @@
                     </p>
                     <v-card-text>
                         <ul>
-                            <li>appSeedPhrase : <br />{{ appSeedPhrase }}</li>
-                            <li>devSeed: <br />{{ debugSeed }}</li>
-                            <li>threeBotName = {{ threeBotName }}</li>
+                            <li>
+                                <copy-field
+                                    label="appSeedPhrase"
+                                    :value="appSeedPhrase"
+                                ></copy-field>
+                            </li>
+                            <li>
+                                <copy-field
+                                    label="appSeedPhrase"
+                                    :value="debugSeed"
+                                ></copy-field>
+                            </li>
+
+                            <li>
+                                <copy-field
+                                    label="threeBotName"
+                                    :value="threeBotName"
+                                ></copy-field>
+                            </li>
                         </ul>
                     </v-card-text>
                 </v-card>
@@ -86,8 +102,8 @@
                                     text
                                     color="deep-purple"
                                     @click="retryMigrate(account)"
-                                    >Retry</v-btn
-                                >
+                                    >Retry
+                                </v-btn>
                             </v-row>
                         </v-col>
                     </v-card-text>
@@ -153,9 +169,11 @@
         revineAddressFromSeed,
     } from '@jimber/stellar-crypto';
     import AddTrustlineCard from '@/components/AddTrustlineCard.vue';
+    import CopyField from '@/components/CopyField';
+
     export default {
         name: 'DevView',
-        components: { AddTrustlineCard },
+        components: { CopyField, AddTrustlineCard },
         props: [],
         data() {
             return {};

@@ -2,6 +2,7 @@
     <v-dialog v-model="payment" @input="close">
         <v-card class="payment-dialog">
             <v-card-title
+                class="pb-6"
                 style="background-color: #34495e; color: white;"
                 dense
             >
