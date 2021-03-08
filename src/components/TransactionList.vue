@@ -80,8 +80,8 @@
             >
                 <div slot="no-more">
                     No
-                    {{ accountPayments.length ? 'more ' : '' }}payments
-                    {{ accountPayments.length ? ' ' : 'yet' }}
+                    {{ filteredAccountPayments.length ? 'more ' : '' }}payments
+                    {{ filteredAccountPayments.length ? ' ' : 'yet' }}
                 </div>
             </infinite-loading>
         </v-list>
