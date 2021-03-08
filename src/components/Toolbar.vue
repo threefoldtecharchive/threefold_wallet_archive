@@ -8,7 +8,7 @@
                 small
                 fab
                 dark
-                @click="$router.back()"
+                @click.stop="$router.back()"
             >
                 <v-icon>fas fa-arrow-left</v-icon>
             </v-btn>
@@ -29,7 +29,7 @@
                 dark
                 class="accent"
                 v-if="$route.name === 'home'"
-                :to="{ name: 'addwallet' }"
+                @click.stop="$router.push({ name: 'addwallet' })"
             >
                 <v-icon>
                     fas fa-plus
