@@ -79,7 +79,6 @@ async function startVueApp() {
                     clipboardHack();
                 }, 1000);
             }
-            Logger.info("I'm a debug message!");
         },
         filters,
         router,

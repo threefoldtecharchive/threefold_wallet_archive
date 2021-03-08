@@ -10016,7 +10016,7 @@ stellar-base@^2.1.4:
   optionalDependencies:
     sodium-native "^2.3.0"
 
-stellar-base@^4.0.0:
+stellar-base@^4.0.0, stellar-base@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-4.0.3.tgz#03a55fd8ebbd32804d94e87f41bdc56af2a6747b"
   integrity sha512-Tf1Ko86j4CgUtaiTC6H6qPZ97EziXN6SVokH4FGv5+XvBhFg4V+u9ySMlgPjFbHQumplkHiw8JQx1IZRHnrT3A==

@@ -3,15 +3,28 @@
         <div
             class="dark align-center layout px-4 py-6 layout justify-space-between"
             v-if="
-                selectedCurrency === 'TFT' && false //@TODO: enable when vesting
+                selectedCurrency === 'TFT' && true //@TODO: enable when vesting
             "
             style="background-color: #cfecff; color: #0972b8;"
-            @click="tab = 3"
+            @click="$emit('pressVesting')"
         >
             <span class="d-block">
                 Check vesting opportunity
             </span>
             <v-icon color="#0972B8" class="d-block">fa-chevron-right</v-icon>
+        </div>
+
+        <div
+            class="dark align-center layout px-4 py-6 layout justify-space-between"
+            v-if="
+                selectedCurrency === 'BTC' && false // @todo: link this to transfer screen
+            "
+            style="background-color: #cfffd5; color: #09b812;"
+        >
+            <span class="d-block">
+                withdraw your btc
+            </span>
+            <v-icon color="#09b812" class="d-block">fa-chevron-right</v-icon>
         </div>
         <div class="input white align-center pa-6 pb-0 layout">
             <v-select

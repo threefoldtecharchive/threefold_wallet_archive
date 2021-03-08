@@ -43,6 +43,7 @@
                         @change="selectAccount"
                         :items="availableAccounts"
                         v-model="selectedAccount"
+                        v-if="availableAccounts.length"
                         return-object
                         append-icon="fas fa-caret-down"
                     >
@@ -68,6 +69,15 @@
                                 }}
                             </v-row>
                         </template>
+                    </v-select>
+                    <v-select
+                        v-else
+                        class="mt-1 pt-0"
+                        :label="selectedTab == 1 ? 'From' : 'To'"
+                        :items="[`No ${selectedCurrency} balance`]"
+                        :value="`No ${selectedCurrency} balance`"
+                        disabled
+                    >
                     </v-select>
                 </v-col>
                 <v-col cols="4">
@@ -413,16 +423,19 @@
         .v-btn-toggle {
             background-color: transparent;
         }
+
         .v-btn--active {
             background-color: var(--accent-color) !important;
             color: white !important;
             border: none;
         }
+
         input {
             // display: none;
             background-color: green;
         }
     }
+
     .v-select__selections > input[type='text'] {
         display: none;
     }

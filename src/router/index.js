@@ -11,6 +11,7 @@ import store from '@/store';
 import errorScreen from '@/views/errorScreen.vue';
 import Buy from '@/views/Buy.vue';
 import Deposit from '@/views/Deposit.vue';
+import Activate from '@/views/Activate.vue';
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -104,6 +105,16 @@ const routes = [
             accent: 'accent',
         },
         component: Deposit,
+    },
+    {
+        path: '/activate/:asset/:account',
+        name: 'activate',
+        meta: {
+            title: 'activate',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Activate,
     },
     {
         path: '/transfer/:account?',

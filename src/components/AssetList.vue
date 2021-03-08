@@ -26,15 +26,21 @@
             :locked-balance="account.lockedBalances[balance.asset_code]"
             :id="account.id"
         />
-        <!--                <ActivatCard v-if='!account.balances.find(b => b.asset_code === "BTC")' asset='BTC' class='grey theme&#45;&#45;dark' />-->
+        <ActivatCard
+            v-if="!account.balances.find(b => b.asset_code === 'BTC')"
+            asset="BTC"
+            class="grey theme--dark"
+            :account="account"
+        />
     </v-col>
 </template>
 <script>
     import AssetCard from '@/components/AssetCard.vue';
+    import ActivatCard from '@/components/ActivateCard';
 
     export default {
         name: 'AssetList',
-        components: { AssetCard },
+        components: { ActivatCard, AssetCard },
         props: {
             account: {},
         },

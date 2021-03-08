@@ -17,8 +17,8 @@
                         account.balances.find(b => b.asset_code === 'BTC')
                             .balance * 0.25
                 "
-                >25%</v-btn
-            >
+                >25%
+            </v-btn>
             <v-btn
                 class="pa-1 mr-2"
                 small
@@ -29,8 +29,8 @@
                         account.balances.find(b => b.asset_code === 'BTC')
                             .balance * 0.5
                 "
-                >50%</v-btn
-            >
+                >50%
+            </v-btn>
             <v-btn
                 class="pa-1 mr-2"
                 small
@@ -41,8 +41,8 @@
                         account.balances.find(b => b.asset_code === 'BTC')
                             .balance * 0.75
                 "
-                >75%</v-btn
-            >
+                >75%
+            </v-btn>
             <v-btn
                 class="pa-1 mr-2"
                 small
@@ -53,8 +53,8 @@
                         b => b.asset_code === 'BTC'
                     ).balance
                 "
-                >100%</v-btn
-            >
+                >100%
+            </v-btn>
         </div>
         <v-text-field
             :value="Math.round(btcAmount * 33691.77 * 10)"
@@ -81,6 +81,22 @@
             );
             if (!this.account) {
                 router.push({ name: 'error screen' });
+                return;
+            }
+
+            if (!this.account.balances.find(b => b.asset_code === 'BTC')) {
+                this.$router.push({
+                    name: 'activate',
+                    params: {
+                        account: this.account.id,
+                        asset: 'BTC',
+                    },
+                });
+
+                this.$flashMessage.error(
+                    `BTC is not yet activated, please activate it before continuing.`
+                );
+
                 return;
             }
         },

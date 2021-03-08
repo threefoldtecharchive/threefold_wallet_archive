@@ -1,5 +1,5 @@
 <template>
-    <div class="Buy pa-4">
+    <div class="Deposit pa-4">
         <div class="status">
             Btc status on your account :
             <b

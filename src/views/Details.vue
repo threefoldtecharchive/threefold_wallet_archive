@@ -64,6 +64,7 @@
                     :tab="tab"
                     :id="id"
                     v-on:selectPayment="openPayment"
+                    v-on:pressVesting="tab = 3"
                 />
             </v-tab-item>
 
