@@ -60,12 +60,10 @@
                 <TransactionList
                     :account="account"
                     :account-payments="accountPayments"
-                    :filter-options="filterOptions"
-                    :filtered-account-payments="filteredAccountPayments"
                     :selected-currency="selectedCurrency"
-                    :selected-payment="selectedPayment"
                     :tab="tab"
                     :id="id"
+                    v-on:selectPayment="openPayment"
                 />
             </v-tab-item>
 

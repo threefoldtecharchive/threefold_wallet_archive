@@ -45,7 +45,7 @@
             </v-row>
         </v-container>
         <v-list three-line class="pa-0 payment-list">
-            <template v-for="(payment, i) in filteredAccountPayments">
+            <template v-for="payment in filteredAccountPayments">
                 <div class="date" v-if="showDate">
                     <span>
                         {{ payment.created_at | formatDay }}
@@ -57,7 +57,7 @@
                     :key="payment.id"
                     :payment="payment"
                     class="payment-item"
-                    @click.stop="selectedPayment = payment"
+                    @click.stop="$emit('selectPayment', payment)"
                 />
             </template>
             <infinite-loading
@@ -88,7 +88,6 @@
         props: {
             account: {},
             selectedCurrency: {},
-            selectedPayment: {},
             accountPayments: {},
             id: {},
             tab: {},
