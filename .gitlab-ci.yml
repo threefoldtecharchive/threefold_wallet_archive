@@ -2,14 +2,14 @@
     - echo "Deploying image with tag $DOCKER_IMAGE_TAG -- https://hub.docker.com/r/jimber/wallet"
     - docker pull jimber/wallet:$DOCKER_IMAGE_TAG
     - docker rm -f wallet || true
-    - docker run -d -it --network=$DOCKER_NETWORK --name wallet jimber/wallet:$DOCKER_IMAGE_TAG
+    - docker run -d -it --restart=unless-stopped --network=$DOCKER_NETWORK --name wallet jimber/wallet:$DOCKER_IMAGE_TAG
     - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="Deployed $ENVIROMENT_NAME wallet version:$CI_COMMIT_REF_NAME commit:$CI_COMMIT_SHORT_SHA"
 
 .deploy_wallet_beta: &deploy_wallet_beta
     - echo "Deploying image with tag $DOCKER_IMAGE_TAG -- https://hub.docker.com/r/jimber/wallet"
     - docker pull jimber/wallet:$DOCKER_IMAGE_TAG
     - docker rm -f wallet_beta || true
-    - docker run -d -it --network=jimber_proxy_net --name wallet_beta -p 8888:80 jimber/wallet:$DOCKER_IMAGE_TAG
+    - docker run -d -it --restart=unless-stopped --network=jimber_proxy_net --name wallet_beta -p 8888:80 jimber/wallet:$DOCKER_IMAGE_TAG
     - curl -s -X POST "https://api.telegram.org/bot868129294:AAGLGOySYvJJxvIcMHY3XHFaPEPq2MpdGys/sendMessage" -d parse_mode=markdown -d chat_id=-1001186043363 -d parse_mode=markdown -d text="(Beta)Deployed $ENVIROMENT_NAME wallet version:$CI_COMMIT_REF_NAME commit:$CI_COMMIT_SHORT_SHA"
 
 .set_ci_version: &set_ci_version

@@ -51,118 +51,22 @@
 
         <v-tabs-items v-model="tab" class="flex-fill">
             <v-tab-item :key="0">
-                <v-col class="asset-list">
-                    <AssetCard
-                        v-for="balance in account.balances"
-                        v-bind:key="balance.asset_code"
-                        v-on:showDetails="
-                            seeTransactionsFor(balance.asset_code)
-                        "
-                        v-on:buy="
-                            $router.push({
-                                name: 'buy',
-                                params: {
-                                    account: account.id,
-                                    asset_code: balance.asset_code,
-                                },
-                            })
-                        "
-                        v-on:deposit="
-                            $router.push({
-                                name: 'deposit',
-                                params: {
-                                    account: account.id,
-                                    asset_code: balance.asset_code,
-                                },
-                            })
-                        "
-                        :balance="balance"
-                        :locked-balance="
-                            account.lockedBalances[balance.asset_code]
-                        "
-                        :id="account.id"
-                    />
-                    <!--                <ActivatCard v-if='!account.balances.find(b => b.asset_code === "BTC")' asset='BTC' class='grey theme&#45;&#45;dark' />-->
-                </v-col>
+                <AssetList
+                    :account="account"
+                    v-on:showDetails="seeTransactionsFor"
+                />
             </v-tab-item>
             <v-tab-item :key="1">
-                <div
-                    class="dark align-center layout px-4 py-6 layout justify-space-between"
-                    v-if="
-                        selectedCurrency === 'TFT' && false //@TODO: enable when vesting
-                    "
-                    style="background-color: #cfecff; color: #0972b8;"
-                    @click="tab = 3"
-                >
-                    <span class="d-block">
-                        Check vesting opportunity
-                    </span>
-                    <v-icon color="#0972B8" class="d-block"
-                        >fa-chevron-right</v-icon
-                    >
-                </div>
-                <div class="input white align-center pa-6 pb-0 layout">
-                    <v-select
-                        class="ma-0"
-                        background-color="white"
-                        label="Filter by currency"
-                        :items="filterOptions"
-                        v-model="selectedCurrency"
-                        item-value="All"
-                        return-object
-                        append-icon="fas fa-caret-down"
-                    >
-                    </v-select>
-                    <v-btn
-                        class="ml-8"
-                        color="primary"
-                        icon
-                        @click="updatePayments"
-                        :loading="fetchingPayments"
-                    >
-                        <v-icon>fas fa-sync-alt</v-icon>
-                    </v-btn>
-                </div>
-
-                <v-container
-                    v-if="
-                        !accountPayments.length && isPaymentLoading(account.id)
-                    "
-                >
-                    <v-row align-content="center" justify="center">
-                        <v-col class="subtitle-1 text-center" cols="12">
-                            Getting payments
-                        </v-col>
-                    </v-row>
-                </v-container>
-                <v-list three-line class="pa-0 payment-list">
-                    <template v-for="(payment, i) in filteredAccountPayments">
-                        <div class="date" v-if="showDate(payment, i)">
-                            <span>
-                                {{ payment.created_at | formatDay }}
-                            </span>
-                            <v-divider></v-divider>
-                        </div>
-
-                        <paymentItem
-                            :key="payment.id"
-                            :payment="payment"
-                            class="payment-item"
-                            @click.stop="selectedPayment = payment"
-                        />
-                    </template>
-                    <infinite-loading
-                        class="py-4"
-                        @infinite="infiniteHandler"
-                        spinner="waveDots"
-                    >
-                        <div slot="no-more">
-                            No
-                            {{ accountPayments.length ? 'more ' : '' }}payments
-                            {{ accountPayments.length ? ' ' : 'yet' }}
-                        </div>
-                    </infinite-loading>
-                </v-list>
+                <TransactionList
+                    :account="account"
+                    :account-payments="accountPayments"
+                    :filter-options="filterOptions"
+                    :filtered-account-payments="filteredAccountPayments"
+                    :selected-currency="selectedCurrency"
+                    :selected-payment="selectedPayment"
+                    :tab="tab"
+                    :id="id"
+                />
             </v-tab-item>
 
             <v-tab-item :key="2" v-if="account.lockedTransactions.length">
@@ -245,9 +149,6 @@
     </section>
 </template>
 <script>
-    import AccountCard from '@/components/AccountCard.vue';
-    import Balance from '@/components/Balance.vue';
-    import PaymentItem from '@/components/PaymentItem.vue';
     import PaymentDialog from '@/components/PaymentDialog.vue';
     import LockedItem from '@/components/LockedItem.vue';
     import secretDialog from '@/components/secretDialog.vue';
@@ -256,26 +157,21 @@
     import router from '@/router';
     import { mapActions, mapGetters, mapMutations } from 'vuex';
     import moment from 'moment';
-    import InfiniteLoading from 'vue-infinite-loading';
     import { fetchPayments } from '@/services/PaymentService';
     import { isValidWalletName } from '@/services/AccountManagementService';
-    import AssetCard from '@/components/AssetCard.vue';
-    import ActivatCard from '@/components/ActivateCard.vue';
     import CopyField from '@/components/CopyField.vue';
+    import AssetList from '@/components/AssetList.vue';
+    import TransactionList from '@/components/TransactionList.vue';
 
     export default {
         name: 'Details',
         components: {
-            AccountCard,
-            Balance,
-            PaymentItem,
+            TransactionList,
+            AssetList,
             PaymentDialog,
             LockedItem,
-            InfiniteLoading,
             secretDialog,
             deleteDialog,
-            AssetCard,
-            ActivatCard,
             CopyField,
         },
         props: [],

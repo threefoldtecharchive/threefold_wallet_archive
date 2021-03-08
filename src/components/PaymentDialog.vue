@@ -19,7 +19,7 @@
                         justify="center"
                         align="center"
                         :class="
-                            payment.outgoing
+                            !payment.outgoing
                                 ? 'payment-header out'
                                 : 'payment-header in'
                         "
@@ -38,7 +38,7 @@
                             style="font-size: small;"
                             v-if="payment.outgoing"
                         >
-                            0.1 <sup>TFT</sup> fee excluded
+                            <!-- <= 0.1 <sup>TFT</sup> fee excluded -->
                         </small>
                     </v-col>
                 </v-row>

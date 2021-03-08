@@ -1,0 +1,122 @@
+<section class="transfer fill-height" ref="transfer">
+  <v-col>
+    <v-row class="div-toggle-buttons" justify="center">
+      <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
+        <v-btn
+          text
+          v-for="tab in tabs"
+          :key="tab"
+          class="px-3 my-1 mx-1 round"
+          exact
+          :to="{query:{tab: tab}}"
+          >{{tab}}
+        </v-btn>
+      </v-btn-toggle>
+    </v-row>
+
+    <v-row dense class="pr-2 pt-1" justify="end">
+      <v-btn v-if="active == 'send'" small text @click="scanQR()">
+        Scan QR
+        <v-icon class="ml-2">fas fa-qrcode</v-icon>
+      </v-btn>
+      <v-btn v-else small text @click="scanQR()" style="visibility: hidden">
+      </v-btn>
+    </v-row>
+
+    <v-row >
+      <v-col>
+        <v-select
+          class="mt-1 pt-0"
+          :label="selectedTab == 1 ? 'From' : 'To'"
+          @change="selectAccount"
+          :items="availableAccounts"
+          v-model="selectedAccount"
+          return-object
+          append-icon="fas fa-caret-down"
+        >
+          <template v-slot:selection="data">
+            <div style="width: 100%; display: flex;">
+              <span class="text-capitalize">{{ data.item.name }}</span>
+              <v-spacer></v-spacer>
+              {{balanceForCurrency(data.item.balances) | formatBalance}}
+            </div>
+          </template>
+          <template v-slot:item="data">
+            <v-row class="text-capitalize">
+                {{ data.item.name }}
+              <v-spacer></v-spacer>
+              {{balanceForCurrency(data.item.balances) | formatBalance}}
+            </v-row>
+          </template>
+        </v-select>
+      </v-col>
+      <v-col cols="4">
+        <v-select
+          class="mt-1 pt-0"
+          label="Currency"
+          :items="selectedAccount.balances.map(b => b.asset_code)"
+          v-model="selectedCurrency"
+          item-value="TFT"
+          return-object
+          append-icon="fas fa-caret-down"
+        >
+      </v-select>
+      </v-col>
+    </v-row>
+
+    <FormComponent
+      ref="formComponent"
+      :formObject="formObject"
+      :selectedTab="selectedTab"
+      :accounts="accounts"
+      :selectedAccount="selectedAccount"
+      :selectedCurrency="selectedCurrency"
+    >
+    </FormComponent>
+
+    <v-row>
+      <v-col>
+        <span v-if="$route.query.tab != 'receive'"
+          >Fee: max 0.1 {{selectedCurrency}}</span
+        >
+        <v-btn
+          class="mx-0 mt-3"
+          style="width: 100%;"
+          color="accent"
+          @click="transferConfirmed"
+          :loading="$route.query.tab === 'send' && !this.accountsReady"
+          :disabled="!formObject.amount || ($route.query.tab === 'send' && !this.accountsReady)"
+        >
+          <div v-if="$route.query.tab === 'receive'">
+            Generate QR
+          </div>
+          <div v-if="$route.query.tab === 'send'">
+            Send Tokens
+          </div>
+        </v-btn>
+      </v-col>
+    </v-row>
+  </v-col>
+
+  <TransactionInfoDialog
+    v-if="transactionInfoDialog"
+    :dialog="transactionInfoDialog"
+    :closeDialog="closeTransactionInfoDialog"
+    :accounts="accounts"
+    :send="send"
+    :selectedAccount="selectedAccount"
+    :selectedCurrency="selectedCurrency"
+    :formObject="formObject"
+  >
+  </TransactionInfoDialog>
+
+  <QrDialog
+    v-if="qrDialog"
+    :dialog="qrDialog"
+    :closeDialog="closeQrDialog"
+    :formObject="formObject"
+    :selectedAccount="selectedAccount"
+    :selectedCurrency="selectedCurrency"
+    :selectedTab="selectedTab"
+  ></QrDialog>
+</section>
