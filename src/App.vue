@@ -9,12 +9,12 @@
             >
                 {{ env }}
             </div>
-            <div class="version">{{ version }}</div>
+            <div class="version" @click="addDevClick">{{ version }}</div>
             <Toolbar />
             <v-content class="mt-0">
                 <v-container
                     class="pa-0 content fill-height"
-                    style="overflow: hidden;"
+                    style="overflow: hidden"
                     justify-start
                 >
                     <router-view />
@@ -91,7 +91,7 @@
                 'setInformationMessage',
                 'setImportingWallets',
             ]),
-            ...mapMutations(['resetDevClicks']),
+            ...mapMutations(['resetDevClicks', 'addDevClick']),
         },
         watch: {
             informationMessage(val) {

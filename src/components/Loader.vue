@@ -1,5 +1,5 @@
 <template>
-    <v-overlay class="overlay" style="z-index: 900;">
+    <v-overlay class="overlay" style="z-index: 900">
         <v-progress-circular
             indeterminate
             color="amber"
@@ -30,9 +30,9 @@
     .devv {
         position: fixed;
         top: 0;
-        right: 0;
-        height: 2rem;
-        width: 2rem;
+        left: 0;
+        height: 8rem;
+        width: 12rem;
         color: #f5f5f5;
     }
 
