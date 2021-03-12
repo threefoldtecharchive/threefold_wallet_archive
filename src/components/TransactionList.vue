@@ -5,12 +5,10 @@
             v-if="
                 selectedCurrency === 'TFT' && false //@TODO: enable when vesting
             "
-            style="background-color: #cfecff; color: #0972b8;"
+            style="background-color: #cfecff; color: #0972b8"
             @click="$emit('pressVesting')"
         >
-            <span class="d-block">
-                Check vesting opportunity
-            </span>
+            <span class="d-block"> Check vesting opportunity </span>
             <v-icon color="#0972B8" class="d-block">fa-chevron-right</v-icon>
         </div>
 
@@ -19,11 +17,9 @@
             v-if="
                 selectedCurrency === 'BTC' && false // @todo: link this to transfer screen
             "
-            style="background-color: #cfffd5; color: #09b812;"
+            style="background-color: #cfffd5; color: #09b812"
         >
-            <span class="d-block">
-                withdraw your btc
-            </span>
+            <span class="d-block"> withdraw your btc </span>
             <v-icon color="#09b812" class="d-block">fa-chevron-right</v-icon>
         </div>
         <div class="input white align-center pa-6 pb-0 layout">
