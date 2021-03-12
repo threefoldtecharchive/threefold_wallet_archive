@@ -1,25 +1,13 @@
 <template>
     <v-card class="activate_card pa-0 mb-2">
-        <v-row>
-            <v-col cols="6">
-                <v-card-text class="pa-2">
-                    <h1>
-                        {{ asset }}
-                    </h1>
-                </v-card-text>
-            </v-col>
-            <v-col cols="6" class="pr-6">
-                <v-btn
-                    color="accent"
-                    height="100%"
-                    @click="activateAsset"
-                    block
-                    elevation="0"
-                >
-                    Activate
-                </v-btn>
-            </v-col>
-        </v-row>
+        <v-card-text class="d-flex justify-space-between align-center">
+            <h1 style="color: #fff">
+                {{ asset }}
+            </h1>
+            <v-btn color="accent" @click="activateAsset" elevation="0">
+                Activate
+            </v-btn>
+        </v-card-text>
     </v-card>
 </template>
 

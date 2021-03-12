@@ -1,31 +1,29 @@
 <template>
     <div class="fill-height dev-view">
         <v-tabs grow background-color="indigo" dark>
-            <v-tab>
-                Logs
-            </v-tab>
-            <v-tab-item>
-                <v-card>
-                    <p class="display-1 text--primary">
-                        application logs
-                    </p>
-                    <v-btn @click="copyLogs">
+            <v-tab> Logs</v-tab>
+            <v-tab-item class="pa-4">
+                <v-card class="my-2 pa-2">
+                    <p class="display-1 text--primary">application logs</p>
+                    <v-btn @click="copyLogs" color="primary" elevation="0">
                         copy logs
                     </v-btn>
-                </v-card>
-
-                <v-card flat tile>
-                    <code ref="logcard" style="width: 98vw;">{{ value }}</code>
+                    <pre
+                        ref="logcard"
+                        class="pa-2"
+                        style="
+                            width: 100%;
+                            white-space: pre-wrap;
+                            background-color: #f3f3f3;
+                        "
+                        >{{ value }}</pre
+                    >
                 </v-card>
             </v-tab-item>
-            <v-tab>
-                Data
-            </v-tab>
-            <v-tab-item>
-                <v-card>
-                    <p class="display-1 text--primary">
-                        main data
-                    </p>
+            <v-tab> Data</v-tab>
+            <v-tab-item class="pa-4">
+                <v-card class="pa-2 my-2">
+                    <p class="display-1 text--primary">main data</p>
                     <v-card-text>
                         <ul>
                             <li>
@@ -50,27 +48,25 @@
                         </ul>
                     </v-card-text>
                 </v-card>
-                <v-card>
+                <v-card class="pa-2 my-2">
                     <rawDisplayer title="accounts data" :value="accounts" />
                 </v-card>
-                <v-card flat tile>
+                <v-card class="pa-2 my-2">
                     <rawDisplayer
                         title="pkid app accounts data"
                         :value="pkidApp"
                     />
                 </v-card>
-                <v-card flat tile>
+                <v-card class="pa-2 my-2">
                     <rawDisplayer
                         title="pkid imported accounts data"
                         :value="pkidImported"
                     />
                 </v-card>
             </v-tab-item>
-            <v-tab>
-                Actions
-            </v-tab>
-            <v-tab-item>
-                <v-card>
+            <v-tab> Actions</v-tab>
+            <v-tab-item class="pa-4">
+                <v-card class="pa-2 my-2">
                     <v-card-title>Restart wallet</v-card-title>
                     <v-card-text>
                         <p>Restarts the 3bot_connect wallet</p>
@@ -81,10 +77,8 @@
                         </v-btn>
                     </v-card-actions>
                 </v-card>
-                <v-card>
-                    <v-card-title>
-                        Retry migration
-                    </v-card-title>
+                <v-card class="pa-2 my-2">
+                    <v-card-title> Retry migration</v-card-title>
                     <v-card-text>
                         <p>
                             Retry the conversion from TFChain to Stellar network
@@ -108,8 +102,8 @@
                         </v-col>
                     </v-card-text>
                 </v-card>
-                <addTrustlineCard />
-                <v-card>
+                <addTrustlineCard class="pa-2 my-2" />
+                <v-card class="pa-2 my-2">
                     <v-card-title>Reset app wallets</v-card-title>
                     <v-card-text>
                         <p>Resets app wallets</p>
@@ -125,10 +119,8 @@
                         </v-btn>
                     </v-card-actions>
                 </v-card>
-                <v-card>
-                    <v-card-title>
-                        Remove imported wallets
-                    </v-card-title>
+                <v-card class="pa-2 my-2">
+                    <v-card-title> Remove imported wallets</v-card-title>
                     <v-card-actions>
                         <v-btn
                             dark
@@ -140,10 +132,8 @@
                         </v-btn>
                     </v-card-actions>
                 </v-card>
-                <v-card>
-                    <v-card-title>
-                        Show error page
-                    </v-card-title>
+                <v-card class="pa-2 my-2">
+                    <v-card-title> Show error page</v-card-title>
                     <v-card-text>
                         <p>Show the error screen</p>
                     </v-card-text>

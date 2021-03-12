@@ -32,7 +32,7 @@
                     small
                     text
                     @click="scanQR()"
-                    style="visibility: hidden;"
+                    style="visibility: hidden"
                 >
                 </v-btn>
             </div>
@@ -50,7 +50,7 @@
                         append-icon="fas fa-caret-down"
                     >
                         <template v-slot:selection="data">
-                            <div style="width: 100%; display: flex;">
+                            <div style="width: 100%; display: flex">
                                 <span class="text-capitalize">{{
                                     data.item.name
                                 }}</span>
@@ -129,7 +129,7 @@
                     >
                     <v-btn
                         class="mx-0 mt-3"
-                        style="width: 100%;"
+                        style="width: 100%"
                         color="accent"
                         @click="transferConfirmed"
                         :loading="
@@ -190,6 +190,7 @@
     import Logger from 'js-logger';
     import { formatBalance } from '@/utils/filters/formatBalance';
     import validate from 'bitcoin-address-validation';
+    import { withdrawBTC } from '@/services/BtcService';
 
     export default {
         name: 'transfer',
@@ -274,7 +275,8 @@
                                 balance =>
                                     balance.asset_code ===
                                         this.selectedCurrency &&
-                                    Number(balance.balance) > 0.1
+                                    (this.selectedCurrency === 'BTC' ||
+                                        Number(balance.balance) > 0.1)
                             );
                         });
                         return accounts.sort(
@@ -349,7 +351,11 @@
                 );
                 const amountToTransfer = Number(form.formObject.amount);
 
-                if (this.selectedTab && balance < amountToTransfer + this.fee) {
+                //@todo: fix this
+                let fee = validate(this.formObject.to.address, 'mainnet')
+                    ? 0
+                    : this.fee;
+                if (this.selectedTab && balance < amountToTransfer + fee) {
                     this.$flashMessage.error('not enough funds');
                     return;
                 }
@@ -362,6 +368,20 @@
                 // this.$refs.formComponent.$refs.form.inputs.forEach( input => input.blur() )
             },
             async send() {
+                if (validate(this.formObject.to.address, 'mainnet')) {
+                    await withdrawBTC(
+                        this.selectedAccount.keyPair,
+                        this.formObject.to.address,
+                        new Number(this.formObject.amount)
+                    );
+
+                    this.$router.push({
+                        name: 'details',
+                        params: { account: this.selectedAccount.id },
+                    });
+                    return;
+                }
+
                 try {
                     const fundedTransaction = await buildFundedPaymentTransaction(
                         this.selectedAccount.keyPair,

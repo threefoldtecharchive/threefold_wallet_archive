@@ -1,7 +1,16 @@
 <template>
     <div class="rawDisplayer">
         <h3>{{ title || 'raw value' }}</h3>
-        <code>{{ valueString }}</code>
+        <pre
+            ref="logcard"
+            class="pa-2"
+            style="
+                width: 100%;
+                white-space: pre-wrap;
+                background-color: #f3f3f3;
+            "
+            >{{ valueString }}</pre
+        >
     </div>
 </template>
 <script>

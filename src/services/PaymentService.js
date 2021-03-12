@@ -35,10 +35,20 @@ export const fetchPayments = async (id, cursor = 'now') => {
         .order('desc')
         .call();
 
-    return paymentPayloadObj.records
+    const mappedPayments = paymentPayloadObj.records
         .filter(p => p.type === 'payment')
         .filter(p => p.to !== config.tftFundAccount)
         .map(p => mapPayment({ ...p, account_id: id, rawPayment: p }));
+
+    const allPayloadObj = await server
+        .payments()
+        .forAccount(id)
+        .cursor(cursor)
+        .limit(100)
+        .order('desc')
+        .call();
+
+    return mappedPayments;
 };
 
 const getMemoClosure = rawPayment => {

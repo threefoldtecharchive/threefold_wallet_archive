@@ -15,9 +15,7 @@
                 class="copybutton"
                 :class="$route.meta.accent"
             >
-                <v-icon size="15">
-                    fas fa-copy
-                </v-icon>
+                <v-icon size="15"> fas fa-copy</v-icon>
             </v-btn>
             <v-card-text class="py-1">
                 <v-col>
@@ -45,10 +43,16 @@
                             >
                                 {{ balance.asset_code }}
                             </div>
-                            <div class="body-2">
+                            <div
+                                class="body-2"
+                                v-if="balance.asset_code !== 'BTC'"
+                            >
                                 {{
                                     balance.balance | formatBalanceHumanReadable
                                 }}
+                            </div>
+                            <div class="body-2" v-else>
+                                {{ balance.balance }}
                             </div>
                         </v-col>
                     </v-row>
@@ -136,10 +140,12 @@
 </script>
 <style scoped lang="scss">
     @import '../scss/variables';
+
     .v-card {
         border-radius: $borderradius !important;
         user-select: none;
     }
+
     .account-card {
         .content {
             height: 100%;
@@ -154,13 +160,16 @@
                 height: 100%;
                 filter: opacity(0.5);
             }
+
             .content-inner {
                 position: relative;
             }
         }
+
         .turn {
             transform: rotate(-45deg);
         }
+
         .min {
             // min-width: 275px;
         }
@@ -179,6 +188,7 @@
             box-sizing: border-box;
             border-radius: $borderradius;
         }
+
         .overlay-card {
             position: absolute;
             width: 100%;
@@ -189,12 +199,14 @@
             white-space: normal;
         }
     }
+
     .copybutton {
         position: absolute;
         right: 0px;
         border-radius: 0 $borderradius;
         z-index: 1;
     }
+
     .drag {
         position: absolute;
         top: 50%;
@@ -204,6 +216,7 @@
         display: flex;
         justify-content: space-around;
         margin-left: -4px;
+
         div {
             width: 8px;
             height: 4px;
