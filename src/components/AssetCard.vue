@@ -97,7 +97,7 @@
             },
             shouldShowBuy() {
                 //@todo: enable when buying should be enabled
-                // return false;
+                return false;
                 return this.balance.asset_code === 'TFT';
             },
         },
