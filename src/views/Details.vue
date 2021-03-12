@@ -56,7 +56,7 @@
                 <TransactionList
                     :account="account"
                     :account-payments="accountPayments"
-                    :selected-currency="selectedCurrency"
+                    :start-selected-currency="selectedCurrency"
                     :tab="tab"
                     :id="id"
                     v-on:selectPayment="openPayment"

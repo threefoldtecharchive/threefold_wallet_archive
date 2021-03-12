@@ -11,7 +11,7 @@
             </div>
             <div class="version" @click="addDevClick">{{ version }}</div>
             <Toolbar />
-            <v-content class="mt-0">
+            <v-main class="mt-0">
                 <v-container
                     class="pa-0 content fill-height"
                     style="overflow: hidden"
@@ -19,7 +19,7 @@
                 >
                     <router-view />
                 </v-container>
-            </v-content>
+            </v-main>
             <BottomNavigation />
             <CopyDialog />
         </v-app>
@@ -228,7 +228,7 @@
             overflow: hidden;
         }
 
-        .v-content > .content {
+        .v-main > .content {
             min-height: 100%;
         }
 

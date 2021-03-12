@@ -107,7 +107,7 @@
         components: { InfiniteLoading, PaymentItem },
         props: {
             account: {},
-            selectedCurrency: {},
+            startSelectedCurrency: {},
             accountPayments: {},
             id: {},
             tab: {},
@@ -115,7 +115,13 @@
         data() {
             return {
                 fetchingPayments: false,
+                selectedCurrency: null,
             };
+        },
+        watch: {
+            startSelectedCurrency(value) {
+                this.selectedCurrency = value;
+            },
         },
         computed: {
             ...mapGetters([
