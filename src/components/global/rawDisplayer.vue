@@ -1,6 +1,7 @@
 <template>
     <div class="rawDisplayer">
         <h3>{{ title || 'raw value' }}</h3>
+        <copy-field :label="title || 'raw value'" :value="valueString" />
         <pre
             ref="logcard"
             class="pa-2"
@@ -14,6 +15,7 @@
     </div>
 </template>
 <script>
+    import CopyField from '@/components/CopyField';
     const props = {
         name: 'raw-displayer',
         title: {
@@ -24,6 +26,7 @@
         },
     };
     export default {
+        components: { CopyField },
         props,
         computed: {
             valueString() {

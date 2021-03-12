@@ -15,7 +15,7 @@
             </v-container>
             <v-tabs
                 class="fill-height"
-                style="width: 100vw;"
+                style="width: 100vw"
                 centered
                 color="accent"
                 slider-color="accent"
@@ -85,17 +85,13 @@
                         )}...).`"
                         title="Copy address to clipboard"
                     />
-                    <v-btn @click="secretDialog = true" class="mb-4">
-                        <v-row dense>
-                            <v-col>
-                                <v-row align="center">
-                                    <v-icon class="mx-2 x-small" dense
-                                        >fas fa-key</v-icon
-                                    >
-                                    Show secret
-                                </v-row>
-                            </v-col>
-                        </v-row>
+                    <v-btn
+                        @click="secretDialog = true"
+                        class="mb-4"
+                        color="primary"
+                    >
+                        <v-icon class="mx-2 x-small" dense>fas fa-key </v-icon>
+                        Show secret
                     </v-btn>
                     <v-text-field
                         label="Wallet name"
@@ -106,8 +102,8 @@
                         color="success"
                         class="accent mr-4"
                         @click.stop="change"
-                        >Change wallet name</v-btn
-                    >
+                        >Change wallet name
+                    </v-btn>
                     <v-btn
                         v-if="account.tags.includes('imported')"
                         color="error"
@@ -119,7 +115,7 @@
                 </div>
             </v-tab-item>
             <v-tab-item :key="4">
-                <v-list class="pa-0"> </v-list>
+                <v-list class="pa-0"></v-list>
             </v-tab-item>
         </v-tabs-items>
         <paymentDialog
@@ -357,10 +353,12 @@
             border-width: 2px 0 0 0;
         }
     }
+
     .details {
         display: flex;
         flex-direction: column;
     }
+
     .v-tabs {
         display: flex;
         flex-direction: column;

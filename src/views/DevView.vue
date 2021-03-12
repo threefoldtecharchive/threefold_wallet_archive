@@ -8,6 +8,7 @@
                     <v-btn @click="copyLogs" color="primary" elevation="0">
                         copy logs
                     </v-btn>
+                    <copy-field label="logs" :value="value" />
                     <pre
                         ref="logcard"
                         class="pa-2"

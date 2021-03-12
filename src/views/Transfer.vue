@@ -22,8 +22,8 @@
                 </div>
             </div>
 
-            <div dense class="pa-2 pt-1 layout justify-end">
-                <v-btn v-if="active == 'send'" small text @click="scanQR()">
+            <div class="pa-2 pt-1 layout justify-end">
+                <v-btn v-if="active === 'send'" small text @click="scanQR()">
                     Scan QR
                     <v-icon class="ml-2">fas fa-qrcode</v-icon>
                 </v-btn>
@@ -41,7 +41,7 @@
                 <v-col>
                     <v-select
                         class="mt-1 pt-0"
-                        :label="selectedTab == 1 ? 'From' : 'To'"
+                        :label="selectedTab === 1 ? 'From' : 'To'"
                         @change="selectAccount"
                         :items="availableAccounts"
                         v-model="selectedAccount"
@@ -75,7 +75,7 @@
                     <v-select
                         v-else
                         class="mt-1 pt-0"
-                        :label="selectedTab == 1 ? 'From' : 'To'"
+                        :label="selectedTab === 1 ? 'From' : 'To'"
                         :items="[`No ${selectedCurrency} balance`]"
                         :value="`No ${selectedCurrency} balance`"
                         disabled
@@ -122,7 +122,7 @@
                 <v-col>
                     <span
                         v-if="
-                            $route.query.tab != 'receive' &&
+                            $route.query.tab !== 'receive' &&
                             selectedCurrency !== 'BTC'
                         "
                         >Fee: 0.1 {{ selectedCurrency }}</span
@@ -215,7 +215,7 @@
                 selectedTab: 1,
                 selectedAccount: {},
                 qrReadingError: false,
-                selectedCurrency: 'TFTA',
+                selectedCurrency: 'TFT',
                 fee: 0.1,
                 accountsReady: false,
             };
@@ -237,7 +237,10 @@
                 this.selectedAccount = this.accounts.find(
                     x => x.id === this.$route.params.account
                 );
-                return;
+                if (this.$route.params.asset_code) {
+                    this.selectedCurrency = this.$route.params.asset_code;
+                    return;
+                }
             }
             if (!this.selectedAccount.address)
                 this.selectedAccount = this.accounts[0];
@@ -309,20 +312,20 @@
                     tftAddress = url.pathname.replace('//', '');
                 }
                 const currencyIndex = this.currencies.findIndex(c => {
-                    return c.toLowerCase() == currency;
+                    return c.toLowerCase() === currency;
                 });
                 this.selectedCurrency = this.currencies[currencyIndex];
                 this.formObject.to.address = tftAddress;
                 this.formObject.amount =
-                    url.searchParams.get('amount') == 'null'
+                    url.searchParams.get('amount') === 'null'
                         ? ''
                         : url.searchParams.get('amount');
                 this.formObject.message =
-                    url.searchParams.get('message') == 'null'
+                    url.searchParams.get('message') === 'null'
                         ? ''
                         : url.searchParams.get('message');
                 this.formObject.sender =
-                    url.searchParams.get('sender') == 'null'
+                    url.searchParams.get('sender') === 'null'
                         ? ''
                         : url.searchParams.get('sender');
             },
@@ -362,7 +365,7 @@
 
                 if (this.active === 'receive') {
                     this.qrDialog = true;
-                } else if (this.active == 'send') {
+                } else if (this.active === 'send') {
                     this.transactionInfoDialog = true;
                 }
                 // this.$refs.formComponent.$refs.form.inputs.forEach( input => input.blur() )
@@ -433,8 +436,9 @@
                 this.qrDialog = false;
             },
             balanceForCurrency(balances) {
-                return balances.find(x => x.asset_code == this.selectedCurrency)
-                    .balance;
+                return balances.find(
+                    x => x.asset_code === this.selectedCurrency
+                ).balance;
             },
         },
         watch: {},

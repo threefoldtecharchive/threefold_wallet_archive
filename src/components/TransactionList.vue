@@ -15,9 +15,19 @@
         <div
             class="dark align-center layout px-4 py-6 layout justify-space-between"
             v-if="
-                selectedCurrency === 'BTC' && false // @todo: link this to transfer screen
+                selectedCurrency === 'BTC' &&
+                account.balances.find(b => b.asset_code === 'BTC').balance > 0 // @todo: link this to transfer screen
             "
-            style="background-color: #cfffd5; color: #09b812"
+            @click="
+                $router.push({
+                    name: 'transfer',
+                    params: {
+                        account: account.id,
+                        asset_code: 'BTC',
+                    },
+                })
+            "
+            style="background-color: #e1ffe5; color: #09b812"
         >
             <span class="d-block"> withdraw your btc </span>
             <v-icon color="#09b812" class="d-block">fa-chevron-right</v-icon>
