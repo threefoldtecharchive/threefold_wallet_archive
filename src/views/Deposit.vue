@@ -27,6 +27,7 @@
                     title="Copy address to clipboard"
                 />
                 <qrcode
+                    v-if="address !== '...'"
                     :value="`bitcoin:${address}`"
                     :options="{
                         color: {
@@ -34,6 +35,13 @@
                             dark: $vuetify.theme.primary,
                         },
                     }"
+                />
+                <img
+                    height="148"
+                    width="148"
+                    v-if="address === '...'"
+                    src="/loading.gif"
+                    alt=""
                 />
             </v-card-text>
         </v-card>

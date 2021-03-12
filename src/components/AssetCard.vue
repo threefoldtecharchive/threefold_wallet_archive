@@ -3,7 +3,9 @@
         class="asset_card pa-0 mb-2"
         :class="{
             blue: balance.asset_code === 'BTC',
-            'white--text': balance.asset_code === 'BTC',
+            accent: balance.asset_code === 'TFT',
+            'white--text':
+                balance.asset_code === 'BTC' || balance.asset_code === 'TFT',
         }"
     >
         <v-row>
@@ -32,7 +34,8 @@
             >
                 <v-btn
                     v-if="shouldShowDeposit"
-                    color="accent"
+                    color="white"
+                    style="color: #0972b8"
                     @click.stop="$emit('deposit')"
                     elevation="0"
                     block
@@ -41,7 +44,8 @@
                 </v-btn>
                 <v-btn
                     v-if="shouldShowBuy"
-                    color="accent"
+                    color="white"
+                    style="color: var(--accent-color)"
                     @click.stop="$emit('buy')"
                     elevation="0"
                     block
@@ -93,7 +97,7 @@
             },
             shouldShowBuy() {
                 //@todo: enable when buying should be enabled
-                return false;
+                // return false;
                 return this.balance.asset_code === 'TFT';
             },
         },
