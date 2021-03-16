@@ -37,9 +37,7 @@ test:
     tags:
         - builder
     script:
-        - docker build -t wallet-test -f test.dockerfile .
-        - docker run --rm wallet-test
-
+        - echo "Testing image with tag $DOCKER_IMAGE_TAG"
 build:
     stage: build
     dependencies:
