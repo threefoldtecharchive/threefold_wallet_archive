@@ -73,10 +73,27 @@
                 </div>
 
                 <paymentItem
+                    v-if="payment.type === 'payment'"
                     :key="payment.id"
                     :payment="payment"
                     class="payment-item"
                     @click.stop="$emit('selectPayment', payment)"
+                />
+                <buy-item
+                    v-else-if="payment.type === 'buy'"
+                    @click.stop="
+                        $flashMessage.info(`Buy ${payment.asset_code}.`)
+                    "
+                    :key="payment.id"
+                    :payment="payment"
+                />
+                <combi-trust-item
+                    :key="payment.id"
+                    :payments="getPreviousAndCurrentTrusts(payment, i)"
+                    @click.stop="$flashMessage.info(`asset(s) added`)"
+                    v-else-if="
+                        payment.type === 'trust' && showCombiBuyItem(payment, i)
+                    "
                 />
             </template>
             <infinite-loading
@@ -86,7 +103,9 @@
             >
                 <div slot="no-more">
                     No
-                    {{ filteredAccountPayments.length ? 'more ' : '' }}payments
+                    {{
+                        filteredAccountPayments.length ? 'more ' : ''
+                    }}operations
                     {{ filteredAccountPayments.length ? ' ' : 'yet' }}
                 </div>
             </infinite-loading>
@@ -101,10 +120,17 @@
     import router from '@/router';
     import { fetchPayments } from '@/services/PaymentService';
     import moment from 'moment';
+    import BuyItem from '@/components/BuyItem';
+    import CombiTrustItem from '@/components/CombiTrustItem';
 
     export default {
         name: 'TransactionList',
-        components: { InfiniteLoading, PaymentItem },
+        components: {
+            CombiTrustItem,
+            BuyItem,
+            InfiniteLoading,
+            PaymentItem,
+        },
         props: {
             account: {},
             startSelectedCurrency: {},
@@ -123,6 +149,9 @@
                 this.selectedCurrency = value;
             },
         },
+        mounted() {
+            this.selectedCurrency = this.$props.startSelectedCurrency;
+        },
         computed: {
             ...mapGetters([
                 'threeBotName',
@@ -135,12 +164,19 @@
                 return this.account.balances > 1;
             },
             filteredAccountPayments() {
-                return this.payments(this.id).filter(payment => {
-                    return (
-                        this.selectedCurrency === 'All' ||
-                        payment.asset_code === this.selectedCurrency
-                    );
-                });
+                return (
+                    this.payments(this.id)
+                        // .filter(p => p.type === 'payment')
+                        .filter(payment => {
+                            return (
+                                this.selectedCurrency === 'All' ||
+                                payment.asset_code === this.selectedCurrency ||
+                                (payment.type === 'buy' &&
+                                    payment.rawPayment.selling_asset_type ===
+                                        this.selectedCurrency)
+                            );
+                        })
+                );
             },
             getHumanWalletAddress() {
                 return `${this.account.name.replace(/\s/g, '')}@${
@@ -225,6 +261,29 @@
             enabledialog() {
                 console.log('hell');
                 this.deleteDialog = true;
+            },
+            getPreviousAndCurrentTrusts(payment, index) {
+                const acc = [];
+                let i = 0;
+                while (true) {
+                    const operation = this.filteredAccountPayments[index - i];
+                    if (!operation || operation.type !== 'trust') {
+                        return acc;
+                    }
+                    acc.push(operation);
+                    i++;
+                }
+            },
+            showCombiBuyItem(payment, i) {
+                const currentLength = this.getPreviousAndCurrentTrusts(
+                    payment,
+                    i
+                ).length;
+                const nextLength = this.getPreviousAndCurrentTrusts(
+                    payment,
+                    i + 1
+                ).length;
+                return !(currentLength > 0 && nextLength > 0);
             },
         },
     };

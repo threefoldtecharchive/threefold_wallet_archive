@@ -90,7 +90,7 @@
                         class="mb-4"
                         color="primary"
                     >
-                        <v-icon class="mx-2 x-small" dense>fas fa-key </v-icon>
+                        <v-icon class="mx-2 x-small" dense>fas fa-key</v-icon>
                         Show secret
                     </v-btn>
                     <v-text-field
@@ -119,7 +119,12 @@
             </v-tab-item>
         </v-tabs-items>
         <paymentDialog
-            v-if="selectedPayment"
+            v-if="selectedPayment && selectedPayment.type === 'payment'"
+            :payment="selectedPayment"
+            @closed="selectedPayment = null"
+        />
+        <buy-dialog
+            v-if="selectedPayment && selectedPayment.type === 'buy'"
             :payment="selectedPayment"
             @closed="selectedPayment = null"
         />
@@ -153,10 +158,12 @@
     import CopyField from '@/components/CopyField.vue';
     import AssetList from '@/components/AssetList.vue';
     import TransactionList from '@/components/TransactionList.vue';
+    import BuyDialog from '@/components/BuyDialog';
 
     export default {
         name: 'Details',
         components: {
+            BuyDialog,
             TransactionList,
             AssetList,
             PaymentDialog,
