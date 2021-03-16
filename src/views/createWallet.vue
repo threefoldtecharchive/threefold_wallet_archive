@@ -25,7 +25,7 @@
                 <div>
                     <v-btn
                         class="mx-0 mt-3"
-                        style="width: 100%;"
+                        style="width: 100%"
                         color="accent"
                         @click="createNewWallet"
                         :disabled="!walletName"
@@ -85,7 +85,7 @@
                     <v-col cols="1">
                         <v-icon small>fas fa-exclamation-triangle</v-icon>
                     </v-col>
-                    <v-col class="body-2" style="line-height: 2rem;">
+                    <v-col class="body-2" style="line-height: 2rem">
                         Make sure to keep this seed written down and stored in a
                         safe place.
                     </v-col>
@@ -95,7 +95,7 @@
                     <v-btn
                         color="accent"
                         class="mt-3"
-                        style="width: 100%;"
+                        style="width: 100%"
                         @click="importWallet"
                         :disabled="!walletName"
                     >
@@ -187,6 +187,7 @@
                 this.clearForm();
             },
             importWallet() {
+                console.log('test');
                 this.clearErrors();
 
                 // Todo add removing of spaces in between words
@@ -292,7 +293,7 @@
                 this.generateImportedAccount({
                     seedPhrase,
                     walletName,
-                    createWallet,
+                    index: this.index,
                     isConverted,
                 })
                     .then(account => {

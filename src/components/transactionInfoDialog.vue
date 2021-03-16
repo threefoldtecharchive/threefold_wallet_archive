@@ -3,15 +3,11 @@
         <v-dialog v-model="dialog" fullscreen persistent scrollable>
             <v-card class="no-radius">
                 <v-card-title
-                    style="background-color: #34495e; color: white;"
+                    style="background-color: #34495e; color: white"
                     dense
                 >
-                    <span v-if="isValidBtcAddress">
-                        Withdraw BTC info
-                    </span>
-                    <span v-else>
-                        Transaction info
-                    </span>
+                    <span v-if="isValidBtcAddress"> Withdraw BTC info </span>
+                    <span v-else> Transaction info </span>
                     <v-spacer></v-spacer>
                     <v-btn text icon @click="closeDialog(false)">
                         <v-icon :color="$route.meta.accent">
@@ -20,7 +16,7 @@
                     </v-btn>
                 </v-card-title>
 
-                <v-card-text>
+                <v-card-text style="background-color: #f5f5f5 !important">
                     <v-layout fill-height column>
                         <!-- {{selectedAccount}} -->
                         <v-layout justify-space-between fill-height column>
@@ -42,36 +38,52 @@
                                 {{ formObject.to.address }}
                             </p>
 
-                            <p class="subtitle mb-0 grey--text">Amount</p>
-                            <v-layout class="pb-2" justify-space-between>
-                                <span class="title mt-0"
-                                    >{{ amount | formatBalance }}
-                                    {{ selectedCurrency }}</span
-                                >
-                                <span
-                                    class="text-xs-right caption"
-                                    v-if="selectedCurrency !== 'BTC'"
-                                    >{{ 0.1 }} {{ selectedCurrency }} fee
-                                    included</span
-                                >
-                            </v-layout>
                             <template v-if="formObject.message">
                                 <p class="subtitle mb-0 grey--text">Message</p>
                                 <p class="title mt-0">
                                     {{ formObject.message }}
                                 </p>
                             </template>
+                            <template v-if="calcultaingFee">
+                                <p class="subtitle mb-0 grey--text">Amount</p>
+                                <v-layout class="pb-2" justify-space-between>
+                                    <v-skeleton-loader
+                                        class="mt-2 d-inline-block"
+                                        type="text"
+                                        width="56"
+                                    ></v-skeleton-loader>
+                                    <span class="text-xs-right caption"
+                                        >calculating fee ...</span
+                                    >
+                                </v-layout>
+                            </template>
+                            <template v-else>
+                                <p class="subtitle mb-0 grey--text">Amount</p>
+                                <v-layout class="pb-2" justify-space-between>
+                                    <span class="title mt-0"
+                                        >{{ amount | formatBalance }}
+                                        {{ selectedCurrency }}</span
+                                    >
+                                    <span class="text-xs-right caption"
+                                        >{{ fee }} {{ selectedCurrency }} fee
+                                        included</span
+                                    >
+                                </v-layout>
+                            </template>
+
+                            <div class="action">
+                                <v-btn
+                                    @click="closeDialog(true)"
+                                    color="accent"
+                                    style="margin-left: 0px; margin-right: 0px"
+                                    block
+                                    :disabled="true"
+                                >
+                                    Confirm
+                                </v-btn>
+                            </div>
                         </v-layout>
                     </v-layout>
-                    <v-btn
-                        @click="closeDialog(true)"
-                        dark
-                        :color="$route.meta.accent"
-                        style="margin-left: 0px; margin-right: 0px;"
-                        block
-                    >
-                        Confirm
-                    </v-btn>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -81,6 +93,8 @@
     import accountCard from './AccountCard';
     import { mapGetters } from 'vuex';
     import validate from 'bitcoin-address-validation';
+    import { fetchFundDetails, getConfig } from '@jimber/stellar-crypto';
+    import { Asset } from 'stellar-base';
 
     export default {
         name: 'transaction-info-dialog',
@@ -115,6 +129,16 @@
             },
         },
         mounted() {
+            const { currencies } = getConfig();
+            const asset = new Asset(
+                this.selectedCurrency,
+                currencies[this.selectedCurrency].issuer
+            );
+            fetchFundDetails(asset).then(condition => {
+                this.fee = condition.fee_fixed;
+                this.calcultaingFee = false;
+            });
+
             var field = document.createElement('input');
             field.setAttribute('type', 'text');
             document.body.appendChild(field);
@@ -126,8 +150,13 @@
                 }, 50);
             }, 50);
         },
+        data() {
+            return {
+                fee: null,
+                calcultaingFee: true,
+            };
+        },
         computed: {
-            ...mapGetters(['fee']),
             amount() {
                 if (this.$route.query.tab == 'receive') {
                     return Number(this.formObject.amount);
@@ -136,7 +165,7 @@
                     return Number(this.formObject.amount);
                 }
 
-                return Number(this.formObject.amount) + Number(this.fee / 1000);
+                return Number(this.formObject.amount) + Number(this.fee);
             },
             toAccountIsOwn() {
                 return this.accounts.find(

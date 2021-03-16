@@ -127,6 +127,13 @@
                         "
                         >Fee: 0.1 {{ selectedCurrency }}</span
                     >
+                    <span
+                        v-else-if="
+                            $route.query.tab !== 'receive' &&
+                            selectedCurrency === 'BTC'
+                        "
+                        >Fee: 0.0001 {{ selectedCurrency }}</span
+                    >
                     <v-btn
                         class="mx-0 mt-3"
                         style="width: 100%"
