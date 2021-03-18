@@ -1,11 +1,17 @@
 <template>
-    <v-card class="activate_card pa-0 mb-2">
+    <v-card class="activate_card pa-0 mb-2" @click="activateAsset">
         <v-card-text class="d-flex justify-space-between align-center">
             <h1 style="color: #fff">
                 {{ asset }}
             </h1>
-            <v-btn color="accent" @click="activateAsset" elevation="0">
+            <v-btn
+                text
+                @click.stop.prevent="activateAsset"
+                elevation="0"
+                class="white--text"
+            >
                 Activate
+                <v-icon small right>fa-chevron-right</v-icon>
             </v-btn>
         </v-card-text>
     </v-card>

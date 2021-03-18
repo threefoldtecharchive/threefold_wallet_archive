@@ -29,8 +29,9 @@
             <v-col
                 cols="6"
                 v-if="shouldShowExtra"
-                class="pr-6"
+                class="pr-6 pa-4"
                 align-self="center"
+                style="display: grid; gap: 0.5rem"
             >
                 <v-btn
                     v-if="shouldShowDeposit"
@@ -49,8 +50,12 @@
                     @click.stop="$emit('buy')"
                     elevation="0"
                     block
+                    :text="shouldShowVest"
                 >
                     Buy
+                    <v-icon x-small right v-if="shouldShowVest"
+                        >fa-chevron-right
+                    </v-icon>
                 </v-btn>
                 <v-btn
                     v-if="shouldShowVest"
@@ -111,7 +116,7 @@
             },
             shouldShowBuy() {
                 //@todo: enable when buying should be enabled
-                return false;
+                // return false;
                 return this.balance.asset_code === 'TFT';
             },
             shouldShowVest() {

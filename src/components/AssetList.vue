@@ -33,7 +33,7 @@
                 currencies.indexOf('BTC') !== -1
             "
             asset="BTC"
-            class="grey theme--dark"
+            class="lighten-1 grey theme--dark"
             :account="account"
         />
     </v-col>

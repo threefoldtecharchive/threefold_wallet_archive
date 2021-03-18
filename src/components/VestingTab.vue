@@ -1,5 +1,11 @@
 <template>
-    <div v-if="loading" class="pa-0 fill-height">loading</div>
+    <div v-if="loading" class="pa-0 fill-height">
+        <div class="container">
+            <v-progress-circular color="accent" size="100" indeterminate>
+                <h3>Loading</h3>
+            </v-progress-circular>
+        </div>
+    </div>
     <div v-else-if="!vestingAccount" class="pa-0 fill-height">
         no vesting <br />
         <v-btn color="accent" @click="onActivateVesting"
@@ -112,4 +118,11 @@
         },
     };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+    .container {
+        display: flex;
+        justify-items: center;
+        justify-content: center;
+        padding: 10vw;
+    }
+</style>

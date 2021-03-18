@@ -1,47 +1,61 @@
 <template>
-    <div class="Activate pa-4">
-        <div class="status">
-            {{ asset }} status on your account :
-            <b
-                class="green--text"
-                v-if="account.balances.find(b => b.asset_code === asset)"
-            >
-                ok
-            </b>
-            <b class="red--text" v-else>
-                not activated
-            </b>
-        </div>
-        <h3>Do you want to activate {{ asset }} on this wallet?</h3>
-        <v-form ref="form" v-model="valid" lazy-validation>
-            <v-checkbox
-                v-model="terms"
-                :rules="[v => !!v || 'You must agree to continue!']"
-                required
-            >
-                <template v-slot:label>
-                    <div>
-                        I agree to the
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{ on }">
-                                <a
-                                    target="_blank"
-                                    href="http://example.com"
-                                    @click.stop
-                                    v-on="on"
-                                >
-                                    Terms and conditions.
-                                </a>
-                            </template>
-                            Opens in new window
-                        </v-tooltip>
-                    </div>
-                </template>
-            </v-checkbox>
-            <v-btn color="accent" :disabled="!valid" @click="onActivateClick">
-                activate
-            </v-btn>
-        </v-form>
+    <div class="Activate pa-2" style="width: 100%">
+        <v-card class="pa-2" style="width: 100%">
+            <v-card-title> Activate {{ asset }} Now</v-card-title>
+            <v-card-text>
+                <div class="status">
+                    {{ asset }} status on your account :
+                    <b
+                        class="green--text"
+                        v-if="
+                            account.balances.find(b => b.asset_code === asset)
+                        "
+                    >
+                        ok
+                    </b>
+                    <b class="red--text" v-else> not activated </b>
+                </div>
+                <h3>Do you want to activate {{ asset }} on this wallet?</h3>
+                <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-checkbox
+                        v-model="terms"
+                        :rules="[v => !!v || 'You must agree to continue!']"
+                        required
+                    >
+                        <template v-slot:label>
+                            <div>
+                                I agree to the
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <a
+                                            target="_blank"
+                                            href="http://example.com"
+                                            @click.stop
+                                            v-on="on"
+                                        >
+                                            Terms and conditions.
+                                        </a>
+                                    </template>
+                                    Opens in new window
+                                </v-tooltip>
+                            </div>
+                        </template>
+                    </v-checkbox>
+                </v-form>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    elevation="0"
+                    color="accent"
+                    :disabled="!valid"
+                    style="text-align: right"
+                    @click="onActivateClick"
+                >
+                    activate
+                </v-btn>
+            </v-card-actions>
+        </v-card>
     </div>
 </template>
 
@@ -91,8 +105,8 @@
                 this.startAppLoading();
                 try {
                     this.setLoadingMessage({
-                        message: `activating ${this.asset}`,
-                        additional: `trying to self-activate ${this.asset}`,
+                        message: `Activating ${this.asset}`,
+                        additional: `Trying to self-activate ${this.asset}`,
                     });
 
                     await this.selfActivateAsset();
@@ -111,8 +125,6 @@
                 const { server, currencies, network } = getConfig();
                 console.log({ server, currencies, network });
                 const fee = String(await server.fetchBaseFee());
-
-                console.log(this.account.keyPair);
 
                 const transactionAccount = await server.loadAccount(
                     this.account.keyPair.publicKey()
@@ -136,8 +148,6 @@
                 transaction.setTimeout(3000);
                 const tx = transaction.build();
                 tx.sign(this.account.keyPair);
-
-                console.log(tx);
 
                 await server.submitTransaction(tx);
 
