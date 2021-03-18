@@ -115,6 +115,7 @@
                 :selectedAccount="selectedAccount"
                 :selectedCurrency="selectedCurrency"
                 :is-btc-address="isValidBtcAddress"
+                :fee="fee"
             >
             </FormComponent>
 
@@ -125,7 +126,7 @@
                             $route.query.tab !== 'receive' &&
                             selectedCurrency !== 'BTC'
                         "
-                        >Fee: 0.1 {{ selectedCurrency }}</span
+                        >Fee: {{ fee }} {{ selectedCurrency }}</span
                     >
                     <span
                         v-else-if="
@@ -214,7 +215,7 @@
                 qrScannerDialog: false,
                 qrDialog: false,
                 formObject: {
-                    to: { address: null },
+                    to: { address: this.$route.params?.to },
                     amount: null,
                     message: '',
                     sender: null,
@@ -223,7 +224,7 @@
                 selectedAccount: {},
                 qrReadingError: false,
                 selectedCurrency: 'TFT',
-                fee: 0.1,
+                fee: 0.01,
                 accountsReady: false,
             };
         },

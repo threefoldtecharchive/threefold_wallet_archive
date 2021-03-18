@@ -30,6 +30,40 @@
                 :suffix="selectedCurrency"
             >
             </v-text-field>
+            <div class="btns">
+                <v-btn
+                    class="pa-1 mr-2"
+                    small
+                    elevation="0"
+                    color="#e0e0e0"
+                    @click="setAmount(0.25)"
+                    >25%
+                </v-btn>
+                <v-btn
+                    class="pa-1 mr-2"
+                    small
+                    elevation="0"
+                    color="#e0e0e0"
+                    @click="setAmount(0.5)"
+                    >50%
+                </v-btn>
+                <v-btn
+                    class="pa-1 mr-2"
+                    small
+                    elevation="0"
+                    color="#e0e0e0"
+                    @click="setAmount(0.75)"
+                    >75%
+                </v-btn>
+                <v-btn
+                    class="pa-1 mr-2"
+                    small
+                    elevation="0"
+                    color="#e0e0e0"
+                    @click="setAmount(1)"
+                    >100%
+                </v-btn>
+            </div>
 
             <v-text-field
                 label="Message"
@@ -82,6 +116,7 @@
             },
             fee: {
                 type: Number,
+                required: true,
             },
             selectedCurrency: {
                 type: String,
@@ -156,6 +191,17 @@
                     holder: wallet.holder,
                     totalAmount: wallet.totalAmount,
                 };
+            },
+            setAmount(percentage) {
+                let availableBalanceWithoutfee =
+                    Number(
+                        this.selectedAccount.balances.find(
+                            b => b.asset_code === this.selectedCurrency
+                        ).balance
+                    ) - Number(this.$props.fee);
+                console.log(availableBalanceWithoutfee);
+                this.formObject.amount =
+                    availableBalanceWithoutfee * percentage;
             },
         },
     };

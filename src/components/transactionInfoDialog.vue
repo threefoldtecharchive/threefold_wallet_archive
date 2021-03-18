@@ -77,7 +77,7 @@
                                     color="accent"
                                     style="margin-left: 0px; margin-right: 0px"
                                     block
-                                    :disabled="true"
+                                    :disabled="calcultaingFee"
                                 >
                                     Confirm
                                 </v-btn>

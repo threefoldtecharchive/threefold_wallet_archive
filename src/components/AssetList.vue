@@ -22,12 +22,16 @@
                     },
                 })
             "
+            v-on:vest="$emit('vest')"
             :balance="balance"
             :locked-balance="account.lockedBalances[balance.asset_code]"
             :id="account.id"
         />
         <ActivatCard
-            v-if="!account.balances.find(b => b.asset_code === 'BTC')"
+            v-if="
+                !account.balances.find(b => b.asset_code === 'BTC') &&
+                currencies.indexOf('BTC') !== -1
+            "
             asset="BTC"
             class="grey theme--dark"
             :account="account"
@@ -37,12 +41,16 @@
 <script>
     import AssetCard from '@/components/AssetCard.vue';
     import ActivatCard from '@/components/ActivateCard';
+    import { mapGetters } from 'vuex';
 
     export default {
         name: 'AssetList',
         components: { ActivatCard, AssetCard },
         props: {
             account: {},
+        },
+        computed: {
+            ...mapGetters(['currencies']),
         },
     };
 </script>

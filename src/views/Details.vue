@@ -38,7 +38,7 @@
                     <!--Info-->
                     <v-icon small>fa-info-circle</v-icon>
                 </v-tab>
-                <v-tab v-if="false">
+                <v-tab>
                     <!--Vesting-->
                     <v-icon small>fa-chart-line</v-icon>
                 </v-tab>
@@ -50,6 +50,7 @@
                 <AssetList
                     :account="account"
                     v-on:showDetails="seeTransactionsFor"
+                    v-on:vest="tab = account.lockedTransactions.length ? 4 : 3"
                 />
             </v-tab-item>
             <v-tab-item :key="1">
@@ -60,7 +61,9 @@
                     :tab="tab"
                     :id="id"
                     v-on:selectPayment="openPayment"
-                    v-on:pressVesting="tab = 3"
+                    v-on:pressVesting="
+                        tab = account.lockedTransactions.length ? 4 : 3
+                    "
                 />
             </v-tab-item>
 
@@ -114,8 +117,8 @@
                     </v-btn>
                 </div>
             </v-tab-item>
-            <v-tab-item :key="4">
-                <v-list class="pa-0"></v-list>
+            <v-tab-item key="4">
+                <VestingTab :account="account" />
             </v-tab-item>
         </v-tabs-items>
         <paymentDialog
@@ -159,10 +162,12 @@
     import AssetList from '@/components/AssetList.vue';
     import TransactionList from '@/components/TransactionList.vue';
     import BuyDialog from '@/components/BuyDialog';
+    import VestingTab from '@/components/VestingTab.vue';
 
     export default {
         name: 'Details',
         components: {
+            VestingTab,
             BuyDialog,
             TransactionList,
             AssetList,
@@ -210,15 +215,6 @@
             openPayment(payment) {
                 this.selectedPayment = payment;
             },
-            showDate(payment, i) {
-                const previousPayment = this.accountPayments[i - 1];
-                if (!previousPayment) {
-                    return true;
-                }
-                const time = moment(String(payment.created_at));
-
-                return !time.isSame(String(previousPayment.created_at), 'day');
-            },
             change() {
                 const name =
                     this.name.charAt(0).toUpperCase() + this.name.substring(1);
@@ -242,33 +238,6 @@
                 router.push({ name: 'home' });
                 this.$flashMessage.info(`Deleted wallet ${this.name}.`);
             },
-            async infiniteHandler($state) {
-                const initialLength = this.accountPayments.length;
-                const lastPayment = this.accountPayments[initialLength - 1];
-                const id = lastPayment ? lastPayment.id : 'now';
-                const payments = await fetchPayments(this.id, id);
-
-                if (payments.length === 0) {
-                    $state.complete();
-                }
-
-                this.addPayments({ payments, id: this.id });
-
-                if (this.accountPayments === initialLength) {
-                    $state.complete();
-                }
-
-                $state.loaded();
-            },
-            async updatePayments() {
-                this.fetchingPayments = true;
-                await this.fetchPayments(this.account.id);
-                this.fetchingPayments = false;
-            },
-            enabledialog() {
-                console.log('hell');
-                this.deleteDialog = true;
-            },
         },
         computed: {
             ...mapGetters([
@@ -278,30 +247,16 @@
                 'isPaymentLoading',
                 'currencies',
             ]),
-            hasMultipleTrustlines() {
-                return this.account.balances > 1;
-            },
             account() {
                 return this.accounts.find(a => a.id === this.id);
             },
             accountPayments() {
                 return this.payments(this.id);
             },
-            filteredAccountPayments() {
-                return this.payments(this.id).filter(payment => {
-                    return (
-                        this.selectedCurrency === 'All' ||
-                        payment.asset_code === this.selectedCurrency
-                    );
-                });
-            },
             getHumanWalletAddress() {
                 return `${this.account.name.replace(/\s/g, '')}@${
                     this.threeBotName
                 }`;
-            },
-            filterOptions() {
-                return ['All', ...this.account.balances.map(b => b.asset_code)];
             },
         },
         mounted() {

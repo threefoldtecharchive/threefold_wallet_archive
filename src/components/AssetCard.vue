@@ -52,6 +52,16 @@
                 >
                     Buy
                 </v-btn>
+                <v-btn
+                    v-if="shouldShowVest"
+                    color="white"
+                    style="color: var(--accent-color)"
+                    @click.stop="$emit('vest')"
+                    elevation="0"
+                    block
+                >
+                    Vest
+                </v-btn>
             </v-col>
         </v-row>
     </v-card>
@@ -87,7 +97,11 @@
         },
         computed: {
             shouldShowExtra() {
-                return this.shouldShowDeposit || this.shouldShowBuy;
+                return (
+                    this.shouldShowDeposit ||
+                    this.shouldShowBuy ||
+                    this.shouldShowVest
+                );
             },
             shouldShowDeposit() {
                 return (
@@ -99,6 +113,12 @@
                 //@todo: enable when buying should be enabled
                 return false;
                 return this.balance.asset_code === 'TFT';
+            },
+            shouldShowVest() {
+                return (
+                    this.balance.asset_code === 'TFT' &&
+                    this.balance.balance > 0
+                );
             },
         },
     };

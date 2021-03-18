@@ -117,7 +117,7 @@ const routes = [
         component: Activate,
     },
     {
-        path: '/transfer/:account?/:asset_code?',
+        path: '/transfer/:account?/:asset_code?/:to?',
         name: 'transfer',
         meta: {
             accent: 'accent',

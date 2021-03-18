@@ -36,11 +36,6 @@ switch (window.location.host) {
                     issuer:
                         'GA47YZA3PKFUZMPLQ3B5F2E3CJIB57TGGU7SPCQT2WAEYKN766PWIMB3',
                 },
-                BTC: {
-                    asset_code: 'BTC',
-                    issuer:
-                        'GD4DJ6ZKFHOIV5RDU2RWT3HXDTWFJG6M77WWKQEKABD73TG6T45TOYCA',
-                },
                 TFTA: {
                     asset_code: 'TFTA',
                     issuer:
