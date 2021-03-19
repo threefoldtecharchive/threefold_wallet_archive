@@ -293,7 +293,7 @@
                 this.generateImportedAccount({
                     seedPhrase,
                     walletName,
-                    index: this.index,
+                    index,
                     isConverted,
                 })
                     .then(account => {
