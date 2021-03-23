@@ -68,9 +68,17 @@
                             </v-col>
                         </v-row>
                     </v-col>
+                    <v-col class="pt-8">
+                        <v-row>
+                            <div>
+                                Transfer <b>TFT</b> to the
+                                <b>Vesting Wallet</b> in order to vest them.
+                            </div>
+                        </v-row>
+                    </v-col>
                 </v-card-text>
             </div>
-            <v-card-actions>
+            <v-card-actions class="pa-4">
                 <v-btn elevation="0" color="accent" @click="onVestTokens"
                     >vest TFT
                 </v-btn>
