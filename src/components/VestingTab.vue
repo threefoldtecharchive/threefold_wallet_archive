@@ -6,11 +6,23 @@
             </v-progress-circular>
         </div>
     </div>
-    <div v-else-if="!vestingAccount" class="pa-0 fill-height">
-        no vesting <br />
-        <v-btn color="accent" @click="onActivateVesting"
-            >activate Vesting
-        </v-btn>
+    <div v-else-if="!vestingAccount" class="pa-4 fill-height">
+        <v-card class="pa-2" style="width: 100%">
+            <v-card-title>
+                Activate Vesting for
+                <b class="ml-1">{{ account.name }}</b></v-card-title
+            >
+            <v-card-text
+                >Activate vesting to be able to join the vesting program.
+                <br />This is an investment opportunity which will benefit every
+                TFT owner.
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="accent" elevation="0" @click="onActivateVesting"
+                    >activate Vesting
+                </v-btn>
+            </v-card-actions>
+        </v-card>
     </div>
     <div v-else class="pa-4 fill-height">
         <v-card class="pr-0 min border">
