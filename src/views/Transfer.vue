@@ -116,6 +116,7 @@
                 :selectedCurrency="selectedCurrency"
                 :is-btc-address="isValidBtcAddress"
                 :fee="fee"
+                :isSend="$route.query.tab === 'send'"
             >
             </FormComponent>
 

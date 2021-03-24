@@ -30,7 +30,7 @@
                 :suffix="selectedCurrency"
             >
             </v-text-field>
-            <div class="btns">
+            <div class="btns" v-if="isSend">
                 <v-btn
                     class="pa-1 mr-2"
                     small
@@ -125,6 +125,9 @@
             isBtcAddress: {
                 type: Boolean,
             },
+            isSend: {
+                type: Boolean,
+            },
         },
         data() {
             return {
@@ -193,15 +196,20 @@
                 };
             },
             setAmount(percentage) {
-                let availableBalanceWithoutfee =
+                const availableBalanceWithoutfee =
                     Number(
                         this.selectedAccount.balances.find(
                             b => b.asset_code === this.selectedCurrency
                         ).balance
                     ) - Number(this.$props.fee);
                 console.log(availableBalanceWithoutfee);
-                this.formObject.amount =
-                    availableBalanceWithoutfee * percentage;
+                const amount = availableBalanceWithoutfee * percentage;
+
+                if (amount <= 0) {
+                    this.$flashMessage.error('balance is too low');
+                    return;
+                }
+                this.formObject.amount = amount;
             },
         },
     };
