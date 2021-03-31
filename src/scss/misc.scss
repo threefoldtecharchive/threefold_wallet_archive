@@ -1,8 +1,31 @@
-div.v-slide-group__prev.v-slide-group__prev--disabled{
+div.v-slide-group__prev.v-slide-group__prev--disabled {
   display: none !important;
 }
+
 .vts .v-snack__content {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+}
+
+.v-snack__wrapper {
+  min-width: unset !important;
+  max-width: calc(100vw - 16px) !important;
+
+  .vts__close {
+    margin-left: 12px !important;
+  }
+
+  .vts__message {
+    margin-right: auto;
+    width: 85%;
+
+
+    & > div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+  }
 }
