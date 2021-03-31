@@ -7,7 +7,7 @@ export const formatBalanceHumanReadable = value => {
     const number = Number(value);
 
     if (number < 10000) {
-        return number.toFixed(2);
+        return formatBalance(number.toFixed(2));
     }
 
     // what tier? (determines SI symbol)
@@ -15,7 +15,7 @@ export const formatBalanceHumanReadable = value => {
 
     // if zero, we don't need a suffix
     if (tier == 0) {
-        return number.toFixed(3);
+        return formatBalance(number.toFixed(3));
     }
 
     // get suffix and determine scale
@@ -26,7 +26,7 @@ export const formatBalanceHumanReadable = value => {
     const scaled = number / scale;
 
     // format number and add suffix
-    return scaled.toFixed(2) + '\u00a0' + suffix;
+    return formatBalance(scaled.toFixed(2)) + '\u00a0' + suffix;
 };
 
 export const formatBalance = value => {
