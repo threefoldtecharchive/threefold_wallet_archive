@@ -251,8 +251,7 @@
                     return;
                 }
             }
-            if (!this.selectedAccount.address)
-                this.selectedAccount = this.accounts[0];
+            if (!this.selectedAccount) this.selectedAccount = this.accounts[0];
         },
         computed: {
             ...mapGetters(['accounts', 'currencies']),
