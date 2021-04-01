@@ -14,8 +14,6 @@
             >
             <v-card-text
                 >Activate vesting to be able to join the vesting program.
-                <br />This is an investment opportunity which will benefit every
-                TFT owner.
             </v-card-text>
             <v-card-actions>
                 <v-btn color="accent" elevation="0" @click="onActivateVesting"
