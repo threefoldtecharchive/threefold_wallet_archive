@@ -25,6 +25,9 @@
             v-on:vest="$emit('vest')"
             :balance="balance"
             :locked-balance="account.lockedBalances[balance.asset_code]"
+            :vested-balance="
+                balance.asset_code === 'TFT' ? account.vestedBalance : 0
+            "
             :id="account.id"
         />
         <ActivatCard

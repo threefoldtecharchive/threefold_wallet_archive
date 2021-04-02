@@ -24,6 +24,9 @@
                     <div class="subtitle-2" v-if="lockedBalance">
                         Locked {{ lockedBalance | formatBalance }}
                     </div>
+                    <div class="subtitle-2" v-if="vestedBalance">
+                        vested {{ vestedBalance | formatBalance }}
+                    </div>
                 </v-card-text>
             </v-col>
             <v-col
@@ -80,6 +83,7 @@
         props: {
             balance: { required: true },
             lockedBalance: { required: false },
+            vestedBalance: { required: false },
             id: { required: true },
         },
         data() {

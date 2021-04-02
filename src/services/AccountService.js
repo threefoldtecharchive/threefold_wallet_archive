@@ -8,6 +8,7 @@ import {
     fetchUnlockTransaction,
     getLockedBalances,
     transferLockedTokens,
+    checkVesting,
 } from '@jimber/stellar-crypto';
 import { mnemonicToEntropy } from 'bip39';
 import moment from 'moment';
@@ -27,6 +28,7 @@ export const mapAccount = async ({
     seedPhrase,
     lockedTransactions,
     lockedBalances,
+    vestedBalance,
     isConverted,
 }) => ({
     name: name,
@@ -62,6 +64,7 @@ export const mapAccount = async ({
         return 0;
     }),
     lockedBalances,
+    vestedBalance,
     isConverted,
 });
 
@@ -192,6 +195,34 @@ export const fetchAccount = async ({
         }
     });
 
+    let vestedBalance = 0;
+    const vestingAccount = await checkVesting(accountResponse.id);
+    if (vestingAccount) {
+        vestedBalance = vestingAccount.balances.find(
+            b => b.asset_code === 'TFT'
+        ).balance;
+        const server = new Server(config.stellarServerUrl);
+        server
+            .accounts()
+            .accountId(vestingAccount.id)
+            .cursor('now')
+            .stream({
+                onmessage: async message => {
+                    vestedBalance = message.balances.find(
+                        b => b.asset_code === 'TFT'
+                    ).balance;
+
+                    const newAccount = store.getters.accounts.find(
+                        a => a.id === accountResponse.id
+                    );
+
+                    newAccount.vestedBalance = vestedBalance;
+
+                    store.commit('addAccount', newAccount);
+                },
+            });
+    }
+
     return mapAccount({
         accountResponse,
         index,
@@ -204,6 +235,7 @@ export const fetchAccount = async ({
         lockedTransactions,
         lockedBalances,
         isConverted,
+        vestedBalance,
     });
 };
 
