@@ -1,10 +1,10 @@
 <template>
     <div class="VestingTab pa-0 fill-height">
         <VestingWarningDialog
-            v-bind:accept-dialog="acceptDialog"
+            @accepted="accepted = true"
             @declined="$emit('declined')"
         />
-        <div v-if="loading || acceptDialog" class="fill-height">
+        <div v-if="loading || !accepted" class="fill-height">
             <div class="container">
                 <v-progress-circular color="accent" size="100" indeterminate>
                     <h3>Loading</h3>
@@ -143,7 +143,7 @@
             return {
                 loading: true,
                 vestingAccount: null,
-                acceptDialog: true,
+                accepted: false,
             };
         },
     };

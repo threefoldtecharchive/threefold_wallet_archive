@@ -25,11 +25,7 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn
-                    color="accent"
-                    elevation="0"
-                    @click="acceptDialog = false"
-                >
+                <v-btn color="accent" elevation="0" @click="accept">
                     Agree
                 </v-btn>
                 <v-btn color="error" text @click="$emit('declined')">
@@ -42,8 +38,16 @@
 <script>
     export default {
         name: 'VestingWarningDialog',
-        props: {
-            acceptDialog: {},
+        methods: {
+            accept() {
+                this.acceptDialog = false;
+                this.$emit('accepted');
+            },
+        },
+        data() {
+            return {
+                acceptDialog: true,
+            };
         },
     };
 </script>
