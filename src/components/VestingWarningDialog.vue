@@ -36,7 +36,7 @@
             <v-card>
                 <v-card-title>
                     <v-row>
-                        Terms & conditions
+                        Vesting Pool
                         <v-spacer></v-spacer>
                         <v-btn icon @click="showDisclaimer = false">
                             <v-icon>fas fa-times</v-icon>
