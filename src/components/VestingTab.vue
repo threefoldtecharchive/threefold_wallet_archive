@@ -1,44 +1,9 @@
 <template>
     <div class="VestingTab pa-0 fill-height">
-        <v-dialog v-model="acceptDialog" width="500" persistent>
-            <v-card>
-                <v-card-title class="headline grey lighten-2">
-                    Vesting Policy
-                </v-card-title>
-
-                <v-card-text class="pt-6">
-                    I understand that by going through this process I
-                    voluntarily put my <b>ThreeFold Tokens</b> (<b>TFT</b>) into
-                    a vesting scheme that will result in my <b>TFT</b> being
-                    locked-up and inaccessible, and that these vested
-                    <b>TFT</b> will only unlock when 1 or more criteria of the
-                    vesting scheme have been met. More information can be found
-                    <b
-                        ><a
-                            href="https://wiki.threefold.io/#/threefold__vesting_pool"
-                            target="_blank"
-                            >here</a
-                        ></b
-                    >
-                </v-card-text>
-
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        color="accent"
-                        elevation="0"
-                        @click="acceptDialog = false"
-                    >
-                        Agree
-                    </v-btn>
-                    <v-btn color="error" text @click="$emit('declined')">
-                        Cancel
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <VestingWarningDialog
+            v-bind:accept-dialog="acceptDialog"
+            @declined="$emit('declined')"
+        />
         <div v-if="loading || acceptDialog" class="fill-height">
             <div class="container">
                 <v-progress-circular color="accent" size="100" indeterminate>
@@ -134,10 +99,11 @@
         checkVesting,
         generateVestingAccount,
     } from '@jimber/stellar-crypto';
-    import { mapAccount } from '@/services/AccountService';
+    import VestingWarningDialog from '@/components/VestingWarningDialog';
 
     export default {
         name: 'VestingTab',
+        components: { VestingWarningDialog },
         props: {
             account: { type: Object, required: true },
         },
