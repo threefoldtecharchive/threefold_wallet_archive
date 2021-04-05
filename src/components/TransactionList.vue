@@ -2,7 +2,9 @@
     <div class="transaction-list">
         <div
             class="dark align-center layout px-4 py-6 layout justify-space-between"
-            v-if="selectedCurrency === 'TFT'"
+            v-if="
+                selectedCurrency === 'TFT' && false // is disabled for now
+            "
             style="background-color: #cfecff; color: #0972b8"
             @click="$emit('pressVesting')"
         >

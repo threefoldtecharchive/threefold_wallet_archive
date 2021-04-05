@@ -118,7 +118,11 @@
                 </div>
             </v-tab-item>
             <v-tab-item key="4">
-                <VestingTab :account="account" />
+                <VestingTab
+                    :account="account"
+                    @declined="tab = 0"
+                    v-if="tab === (account.lockedTransactions.length ? 4 : 3)"
+                />
             </v-tab-item>
         </v-tabs-items>
         <paymentDialog
