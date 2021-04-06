@@ -1,5 +1,5 @@
-import { fetchAccount, mapAccount } from '../../services/AccountService';
-import { fetchPayments, mapPayment } from '../../services/PaymentService';
+import { fetchAccount, mapAccount } from '@/services/AccountService';
+import { fetchPayments, mapPayment } from '@/services/PaymentService';
 import { entropyToMnemonic } from 'bip39';
 import {
     calculateWalletEntropyFromAccount,
@@ -7,11 +7,11 @@ import {
     generateActivationCode,
     keypairFromAccount,
     convertTokens,
-    revineAddressFromSeed
+    revineAddressFromSeed,
 } from '@jimber/stellar-crypto';
-import config from '../../../public/config';
+import config from '@/../public/config';
 import StellarSdk, { Server } from 'stellar-sdk';
-import router from '../../router';
+import router from '@/router';
 import Logger from 'js-logger';
 
 export default {
@@ -157,23 +157,29 @@ export default {
 
             const index = pkidAccount.index ? pkidAccount.index : 0;
             const revine = revineAddressFromSeed(seedPhrase, index);
-            const walletEntropy = calculateWalletEntropyFromAccount(seedPhrase, index);
+            const walletEntropy = calculateWalletEntropyFromAccount(
+                seedPhrase,
+                index
+            );
             const stellar = keypairFromAccount(walletEntropy).publicKey();
-            Logger.info('initializeSingleAccount', {index,revine,stellar})
+            Logger.info('initializeSingleAccount', { index, revine, stellar });
 
             if (!pkidAccount.stellar) {
                 try {
                     await convertTfAccount(seedPhrase, 1, index);
-                    pkidAccount.isConverted = true
+                    pkidAccount.isConverted = true;
                 } catch (error) {
-                    Logger.error('error convertTfAccount failed', {error})
+                    Logger.error('error convertTfAccount failed', { error });
                     if (
                         error &&
                         error.response &&
                         error.response.data &&
-                        error.response.data.error ) {
-                            const errorlog = error.response.data.error
-                            Logger.error('Conversion TF Account error ', {errorlog})
+                        error.response.data.error
+                    ) {
+                        const errorlog = error.response.data.error;
+                        Logger.error('Conversion TF Account error ', {
+                            errorlog,
+                        });
                     }
 
                     if (
@@ -187,9 +193,8 @@ export default {
                             error.response.data.error ===
                                 'Tfchain address has 0 balance, no need to activate an account')
                     ) {
-
                         // @todo: remove dirty fix
-                        try{
+                        try {
                             await fetchAccount({
                                 index: index,
                                 name: pkidAccount.walletName,
@@ -197,8 +202,8 @@ export default {
                                 seedPhrase,
                                 position: pkidAccount.position,
                                 isConverted: true,
-                                retry:3
-                            })
+                                retry: 3,
+                            });
                         } catch (error) {
                             pkidAccount.isConverted = true;
                             commit(
@@ -216,38 +221,44 @@ export default {
                 tags: [type],
                 seedPhrase,
                 position: pkidAccount.position,
-                isConverted: pkidAccount.isConverted
+                isConverted: pkidAccount.isConverted,
             });
 
-            const stellarPubKey = account.keyPair.publicKey()
-            const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
-            Logger.info('fetchedAccount', {revineAddress,stellarPubKey})
+            const stellarPubKey = account.keyPair.publicKey();
+            const revineAddress = revineAddressFromSeed(
+                account.seedPhrase,
+                account.index
+            );
+            Logger.info('fetchedAccount', { revineAddress, stellarPubKey });
 
             if (!account.isConverted) {
-                console.log("retrying conversion ... ")
-                Logger.info('retrying conversion')
+                console.log('retrying conversion ... ');
+                Logger.info('retrying conversion');
 
-                try{
-                    await convertTokens(revineAddress, account.keyPair.publicKey())
+                try {
+                    await convertTokens(
+                        revineAddress,
+                        account.keyPair.publicKey()
+                    );
                     account = await fetchAccount({
                         index: index,
                         name: pkidAccount.walletName,
                         tags: [type],
                         seedPhrase,
                         position: pkidAccount.position,
-                        isConverted: true
+                        isConverted: true,
                     });
-                }
-                catch (error) {
-                    Logger.error('error retrying conversion failed', {error})
+                } catch (error) {
+                    Logger.error('error retrying conversion failed', { error });
                     if (
                         error &&
                         error.response &&
                         error.response.data &&
-                        error.response.data.error){
-                            const errorlog = error.response.data.error
-                            Logger.error('Conversion service error ', {errorlog})
-                        }
+                        error.response.data.error
+                    ) {
+                        const errorlog = error.response.data.error;
+                        Logger.error('Conversion service error ', { errorlog });
+                    }
                     if (
                         error &&
                         error.response &&
@@ -257,9 +268,9 @@ export default {
                             'GET: no content available (code: 204)'
                         ) ||
                             error.response.data.error ===
-                                'Tfchain address has 0 balance, no need to activate an account'
-                          ||
-                            error.response.data.error === 'Migration already executed for address')
+                                'Tfchain address has 0 balance, no need to activate an account' ||
+                            error.response.data.error ===
+                                'Migration already executed for address')
                     ) {
                         account = await fetchAccount({
                             index: index,
@@ -267,7 +278,7 @@ export default {
                             tags: [type],
                             seedPhrase,
                             position: pkidAccount.position,
-                            isConverted: true
+                            isConverted: true,
                         });
                     }
                 }
@@ -296,8 +307,8 @@ export default {
                     : pkidAccount.index;
                 commit('incrementPosition');
                 pkidAccount.isConverted = pkidAccount.isConverted
-                ? pkidAccount.isConverted
-                : false
+                    ? pkidAccount.isConverted
+                    : false;
                 return dispatch('initializeSingleAccount', {
                     pkidAccount,
                     seedPhrase,
@@ -315,10 +326,10 @@ export default {
                 pkidImportedAccount.position = pkidImportedAccount.position
                     ? pkidImportedAccount.position
                     : getters.position;
-                    commit('incrementPosition');
+                commit('incrementPosition');
                 pkidImportedAccount.isConverted = pkidImportedAccount.isConverted
                     ? pkidImportedAccount.isConverted
-                    : false
+                    : false;
                 return dispatch('initializeSingleAccount', {
                     pkidAccount: pkidImportedAccount,
                     seedPhrase,
@@ -332,14 +343,14 @@ export default {
             try {
                 return await generateActivationCode(keyPair);
             } catch (e) {
-                Logger.error('error generateActivationCode failed', {e})
+                Logger.error('error generateActivationCode failed', { e });
 
                 if (
-                  e &&
-                  e.response &&
-                  e.response.data &&
-                  e.response.data.error &&
-                  e.response.data.error === 'This address is not new'
+                    e &&
+                    e.response &&
+                    e.response.data &&
+                    e.response.data.error &&
+                    e.response.data.error === 'This address is not new'
                 ) {
                     return {
                         phonenumbers: ['00000000'],
@@ -383,7 +394,7 @@ export default {
                         name: 'Daily',
                         tags: ['app'],
                         position: 0,
-                        isConverted:false,
+                        isConverted: false,
                         retry: 0,
                     });
                     await dispatch('persistPkidAppAccounts', [
@@ -400,7 +411,7 @@ export default {
                         seedPhrase
                     );
                 } catch (e) {
-                    Logger.error('error fetchAccount', {e})
+                    Logger.error('error fetchAccount', { e });
 
                     dispatch('generateInitialAccount', seedPhrase).then(
                         response => {
@@ -422,8 +433,8 @@ export default {
             try {
                 await Promise.all([...op1, ...op2]);
             } catch (error) {
-                throw error
-                Logger.error('error initializeImportedPkidAccounts', {error})
+                throw error;
+                Logger.error('error initializeImportedPkidAccounts', { error });
 
                 console.error(error);
                 router.push({
@@ -437,7 +448,7 @@ export default {
             }
 
             if (!getters.appAccounts.length) {
-                Logger.info('start Sms Flow')
+                Logger.info('start Sms Flow');
 
                 const response = await dispatch(
                     'generateInitialAccount',

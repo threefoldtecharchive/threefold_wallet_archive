@@ -1,4 +1,4 @@
-import rawDisplayer from './rawDisplayer';
+import rawDisplayer from './rawDisplayer.vue';
 
 export default {
     install(Vue) {

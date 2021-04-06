@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import App from './App';
+import App from './App.vue';
 import router from './router';
 import store from './store';
 import vuetify from './plugins/vuetify';
@@ -7,6 +7,8 @@ import sodium from 'libsodium-wrappers';
 import filters from './utils/filters';
 import '@fortawesome/fontawesome-free/css/all.css';
 import global from './components/global';
+
+import './scss/misc.scss';
 
 import config from '../public/config';
 
@@ -17,7 +19,12 @@ const consoleHandler = Logger.createDefaultHandler();
 const myHandler = function(messages, context) {
     const [message, ctxUnformated] = messages;
 
-    store.commit('addLog', { timestamp: new Date().toUTCString(), message, ctx: ctxUnformated, level: context.level.name });
+    store.commit('addLog', {
+        timestamp: new Date().toUTCString(),
+        message,
+        ctx: ctxUnformated,
+        level: context.level.name,
+    });
 };
 
 Logger.setHandler(function(messages, context) {

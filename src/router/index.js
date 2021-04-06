@@ -1,19 +1,22 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '@/views/Home';
-import Init from '@/views/Init';
-import Sms from '@/views/Sms';
-import createWallet from '@/views/createWallet';
-import Details from '@/views/Details';
-import Transfer from '@/views/Transfer';
-import DevView from '@/views/DevView';
-import store from '../store';
-import errorScreen from '@/views/errorScreen';
+import Home from '@/views/Home.vue';
+import Init from '@/views/Init.vue';
+import Sms from '@/views/Sms.vue';
+import createWallet from '@/views/createWallet.vue';
+import Details from '@/views/Details.vue';
+import Transfer from '@/views/Transfer.vue';
+import DevView from '@/views/DevView.vue';
+import store from '@/store';
+import errorScreen from '@/views/errorScreen.vue';
+import Buy from '@/views/Buy.vue';
+import Deposit from '@/views/Deposit.vue';
+import Activate from '@/views/Activate.vue';
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
     return originalPush.call(this, location).catch(err => err);
-}
+};
 Vue.use(VueRouter);
 
 const routes = [
@@ -84,7 +87,37 @@ const routes = [
         component: Details,
     },
     {
-        path: '/transfer/:account?',
+        path: '/buy/:asset/:account',
+        name: 'buy',
+        meta: {
+            title: 'buy',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Buy,
+    },
+    {
+        path: '/deposit/:asset/:account',
+        name: 'deposit',
+        meta: {
+            title: 'deposit',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Deposit,
+    },
+    {
+        path: '/activate/:asset/:account',
+        name: 'activate',
+        meta: {
+            title: 'activate',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Activate,
+    },
+    {
+        path: '/transfer/:account?/:asset_code?/:to?',
         name: 'transfer',
         meta: {
             accent: 'accent',

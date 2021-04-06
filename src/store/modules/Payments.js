@@ -1,6 +1,6 @@
-import { fetchPayments } from '../../services/PaymentService';
+import { fetchPayments } from '@/services/PaymentService';
 import moment from 'moment';
-import config from '../../../public/config';
+import config from '@/../public/config';
 
 export default {
     state: {
@@ -28,15 +28,9 @@ export default {
         addPayments: (state, payload) => {
             const id = payload.id;
 
-            const payments = payload.payments.filter(p => {
-                if (!config.currencies[p.asset_code]) {
-                    console.log(
-                        p.asset_code, ' is not supported'
-                    );
-                    return false;
-                }
-                return true;
-            });
+            const payments = payload.payments.filter(
+                p => config.currencies[p.asset_code]
+            );
 
             payload = { id, payments };
 
@@ -60,18 +54,18 @@ export default {
                     currentPayments.push(payment);
                     continue;
                 }
-                currentPayments.splice(index,1,payment)
+                currentPayments.splice(index, 1, payment);
             }
             currentPayments.sort((a, b) =>
                 moment(b.created_at).isBefore(a.created_at) ? -1 : 1
             );
 
-            state.payments.splice(index, 1,{ id, payments: currentPayments })
+            state.payments.splice(index, 1, { id, payments: currentPayments });
         },
     },
     getters: {
         payments: state => id => {
-            const payload = state.payments.find(obj => obj.id == id);
+            const payload = state.payments.find(obj => obj.id === id);
             if (!payload) {
                 return [];
             }

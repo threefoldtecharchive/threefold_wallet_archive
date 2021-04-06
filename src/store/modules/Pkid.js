@@ -1,7 +1,7 @@
-import config from '../../../public/config';
+import config from '@/../public/config';
 import Pkid from '@jimber/pkid';
 import sodium from 'libsodium-wrappers';
-import router from '../../router';
+import router from '@/router';
 
 export default {
     state: {
@@ -17,7 +17,7 @@ export default {
                 position: account.position,
                 index: account.index,
                 stellar: true,
-                isConverted: account.isConverted
+                isConverted: account.isConverted,
             }));
             if (appAccounts.length <= 0) {
                 // should be a mistake
@@ -31,7 +31,7 @@ export default {
                 seed: account.seed,
                 stellar: true,
                 isConverted: account.isConverted,
-                index: account.index
+                index: account.index,
             }));
             const importedPromise = dispatch(
                 'persistPkidImportedAccounts',
