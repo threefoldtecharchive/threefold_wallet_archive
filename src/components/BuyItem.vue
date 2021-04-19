@@ -7,29 +7,20 @@
                     {{
                         payment.rawPayment.selling_asset_type === 'native'
                             ? 'XLM'
-                            : payment.rawPayment.selling_asset_type
+                            : payment.rawPayment.selling_asset_code
                     }}
                     for
-                    {{
-                        payment.asset_code ||
-                        (payment.asset_type === 'native'
-                            ? 'xlm'
-                            : payment.asset_type)
-                    }}
+                    {{ payment.asset_code || (payment.asset_type === 'native' ? 'xlm' : payment.asset_code) }}
                 </v-list-item-subtitle>
                 <v-list-item-subtitle class="amount" style="overflow: visible">
                     <span class="sell">
                         -
-                        {{
-                            (payment.amount * payment.rawPayment.price)
-                                | formatBalance
-                        }}
+                        {{ (payment.amount * payment.rawPayment.price) | formatBalance }}
                         <sup class="currency font-weight-light">
                             {{
-                                payment.rawPayment.selling_asset_type ===
-                                'native'
+                                payment.rawPayment.selling_asset_type === 'native'
                                     ? 'XLM'
-                                    : payment.rawPayment.selling_asset_type
+                                    : payment.rawPayment.selling_asset_code
                             }}
                         </sup>
                     </span>
@@ -37,12 +28,7 @@
                         >+
                         {{ payment.amount | formatBalance }}
                         <sup class="currency font-weight-light">
-                            {{
-                                payment.asset_code ||
-                                (payment.asset_type === 'native'
-                                    ? 'xlm'
-                                    : payment.asset_type)
-                            }}
+                            {{ payment.asset_code || (payment.asset_type === 'native' ? 'xlm' : payment.asset_type) }}
                         </sup></span
                     >
                 </v-list-item-subtitle>

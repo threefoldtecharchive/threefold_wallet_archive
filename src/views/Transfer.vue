@@ -3,12 +3,7 @@
         <div class="px-2">
             <div class="py-2">
                 <div class="div-toggle-buttons layout justify-center">
-                    <v-btn-toggle
-                        dense
-                        v-model="selectedTab"
-                        mandatory
-                        class="round"
-                    >
+                    <v-btn-toggle dense v-model="selectedTab" mandatory class="round">
                         <v-btn
                             text
                             v-for="tab in tabs"
@@ -27,14 +22,7 @@
                     Scan QR
                     <v-icon class="ml-2">fas fa-qrcode</v-icon>
                 </v-btn>
-                <v-btn
-                    v-else
-                    small
-                    text
-                    @click="scanQR()"
-                    style="visibility: hidden"
-                >
-                </v-btn>
+                <v-btn v-else small text @click="scanQR()" style="visibility: hidden"> </v-btn>
             </div>
 
             <v-row>
@@ -51,24 +39,16 @@
                     >
                         <template v-slot:selection="data">
                             <div style="width: 100%; display: flex">
-                                <span class="text-capitalize">{{
-                                    data.item.name
-                                }}</span>
+                                <span class="text-capitalize">{{ data.item.name }}</span>
                                 <v-spacer></v-spacer>
-                                {{
-                                    balanceForCurrency(data.item.balances)
-                                        | formatBalance
-                                }}
+                                {{ balanceForCurrency(data.item.balances) | formatBalance }}
                             </div>
                         </template>
                         <template v-slot:item="data">
                             <v-row class="text-capitalize">
                                 {{ data.item.name }}
                                 <v-spacer></v-spacer>
-                                {{
-                                    balanceForCurrency(data.item.balances)
-                                        | formatBalance
-                                }}
+                                {{ balanceForCurrency(data.item.balances) | formatBalance }}
                             </v-row>
                         </template>
                     </v-select>
@@ -88,20 +68,14 @@
                         label="Currency"
                         :items="
                             selectedAccount && selectedAccount.balances
-                                ? selectedAccount.balances.map(
-                                      b => b.asset_code
-                                  )
+                                ? selectedAccount.balances.map(b => b.asset_code)
                                 : []
                         "
                         v-model="selectedCurrency"
                         item-value="TFT"
                         return-object
                         append-icon="fas fa-caret-down"
-                        @change="
-                            $nextTick(() =>
-                                $refs.formComponent.$refs.toField.validate()
-                            )
-                        "
+                        @change="$nextTick(() => $refs.formComponent.$refs.toField.validate())"
                     >
                     </v-select>
                 </v-col>
@@ -122,18 +96,10 @@
 
             <v-row>
                 <v-col>
-                    <span
-                        v-if="
-                            $route.query.tab !== 'receive' &&
-                            selectedCurrency !== 'BTC'
-                        "
+                    <span v-if="$route.query.tab !== 'receive' && selectedCurrency !== 'BTC'"
                         >Fee: {{ fee }} {{ selectedCurrency }}</span
                     >
-                    <span
-                        v-else-if="
-                            $route.query.tab !== 'receive' &&
-                            selectedCurrency === 'BTC'
-                        "
+                    <span v-else-if="$route.query.tab !== 'receive' && selectedCurrency === 'BTC'"
                         >Fee: 0.0001 {{ selectedCurrency }}</span
                     >
                     <v-btn
@@ -141,23 +107,12 @@
                         style="width: 100%"
                         color="accent"
                         @click="transferConfirmed"
-                        :loading="
-                            $route.query.tab === 'send' && !this.accountsReady
-                        "
-                        :disabled="
-                            !formObject.amount ||
-                            ($route.query.tab === 'send' && !this.accountsReady)
-                        "
+                        :loading="$route.query.tab === 'send' && !this.accountsReady"
+                        :disabled="!formObject.amount || ($route.query.tab === 'send' && !this.accountsReady)"
                     >
-                        <div v-if="$route.query.tab === 'receive'">
-                            Generate QR
-                        </div>
+                        <div v-if="$route.query.tab === 'receive'">Generate QR</div>
                         <div v-if="$route.query.tab === 'send'">
-                            {{
-                                isValidBtcAddress
-                                    ? 'Withdraw BTC'
-                                    : 'Send Tokens'
-                            }}
+                            {{ isValidBtcAddress ? 'Withdraw BTC' : 'Send Tokens' }}
                         </div>
                     </v-btn>
                 </v-col>
@@ -192,10 +147,7 @@
     import QrDialog from '@/components/qrDialog.vue';
     import TransactionInfoDialog from '@/components/transactionInfoDialog';
     import { mapGetters, mapActions, mapMutations } from 'vuex';
-    import {
-        buildFundedPaymentTransaction,
-        submitFundedTransaction,
-    } from '@jimber/stellar-crypto';
+    import { buildFundedPaymentTransaction, submitFundedTransaction } from '@jimber/stellar-crypto';
     import Logger from 'js-logger';
     import { formatBalance } from '@/utils/filters/formatBalance';
     import validate from 'bitcoin-address-validation';
@@ -231,11 +183,9 @@
         },
         mounted() {
             this.disableAccountEventStreams();
-            const updatePromises = this.accounts.map(account =>
-                this.updateAccount(account.id)
-            );
+            const updatePromises = this.accounts.map(account => this.updateAccount(account.id));
 
-            Promise.all(updatePromises).then(() => {
+            Promise.all(updatePromises).finally(() => {
                 this.accountsReady = true;
             });
 
@@ -243,9 +193,7 @@
                 query: { tab: this.tabs[this.tabs.length - 1] },
             });
             if (this.$route.params.account) {
-                this.selectedAccount = this.accounts.find(
-                    x => x.id === this.$route.params.account
-                );
+                this.selectedAccount = this.accounts.find(x => x.id === this.$route.params.account);
                 if (this.$route.params.asset_code) {
                     this.selectedCurrency = this.$route.params.asset_code;
                     return;
@@ -262,11 +210,7 @@
                 if (this.selectedCurrency !== 'BTC') {
                     return false;
                 }
-                if (
-                    !this.formObject ||
-                    !this.formObject.to ||
-                    !this.formObject.to.address
-                ) {
+                if (!this.formObject || !this.formObject.to || !this.formObject.to.address) {
                     return false;
                 }
                 try {
@@ -284,16 +228,11 @@
                             // Check if account has balance for the selected currency
                             return account.balances.find(
                                 balance =>
-                                    balance.asset_code ===
-                                        this.selectedCurrency &&
-                                    (this.selectedCurrency === 'BTC' ||
-                                        Number(balance.balance) > 0.1)
+                                    balance.asset_code === this.selectedCurrency &&
+                                    (this.selectedCurrency === 'BTC' || Number(balance.balance) > 0.1)
                             );
                         });
-                        return accounts.sort(
-                            (account, otherAccount) =>
-                                account.position - otherAccount.position
-                        );
+                        return accounts.sort((account, otherAccount) => account.position - otherAccount.position);
                     default:
                         return [];
                 }
@@ -305,11 +244,9 @@
             scanQR() {
                 window.vueInstance = this; //Don't remove this for flutter app
                 const self = this;
-                window.flutter_inappwebview
-                    .callHandler('SCAN_QR')
-                    .then(function (result) {
-                        self.onDecode(result);
-                    });
+                window.flutter_inappwebview.callHandler('SCAN_QR').then(function (result) {
+                    self.onDecode(result);
+                });
             },
             onDecode(code) {
                 var url = new URL(code);
@@ -325,17 +262,11 @@
                 this.selectedCurrency = this.currencies[currencyIndex];
                 this.formObject.to.address = tftAddress;
                 this.formObject.amount =
-                    url.searchParams.get('amount') === 'null'
-                        ? ''
-                        : url.searchParams.get('amount');
+                    url.searchParams.get('amount') === 'null' ? '' : url.searchParams.get('amount');
                 this.formObject.message =
-                    url.searchParams.get('message') === 'null'
-                        ? ''
-                        : url.searchParams.get('message');
+                    url.searchParams.get('message') === 'null' ? '' : url.searchParams.get('message');
                 this.formObject.sender =
-                    url.searchParams.get('sender') === 'null'
-                        ? ''
-                        : url.searchParams.get('sender');
+                    url.searchParams.get('sender') === 'null' ? '' : url.searchParams.get('sender');
             },
             getQueryVar(url, varName) {
                 var val;
@@ -356,16 +287,12 @@
                 const ASSET_CODE = this.$refs.formComponent.selectedCurrency;
                 const form = this.$refs.formComponent;
                 const fromAccount = form.selectedAccount;
-                const balance = Number(
-                    fromAccount.balances.find(b => b.asset_code === ASSET_CODE)
-                        .balance
-                );
+                const balance = Number(fromAccount.balances.find(b => b.asset_code === ASSET_CODE).balance);
                 const amountToTransfer = Number(form.formObject.amount);
 
                 //@todo: fix this
-                let fee = validate(this.formObject.to.address, 'mainnet')
-                    ? 0
-                    : this.fee;
+                let fee = validate(this.formObject.to.address, 'mainnet') || ASSET_CODE === 'BTC' ? 0 : this.fee;
+                debugger;
                 if (this.selectedTab && balance < amountToTransfer + fee) {
                     this.$flashMessage.error('not enough funds');
                     return;
@@ -402,17 +329,12 @@
                         this.selectedCurrency
                     );
 
-                    await submitFundedTransaction(
-                        fundedTransaction,
-                        this.selectedAccount.keyPair
-                    );
+                    await submitFundedTransaction(fundedTransaction, this.selectedAccount.keyPair);
 
                     this.$flashMessage.info(
-                        `Successfully transferred ${
-                            this.formObject.amount | formatBalance
-                        } ${this.selectedCurrency} to ${
-                            this.formObject.to.address
-                        }.`
+                        `Successfully transferred ${this.formObject.amount | formatBalance} ${
+                            this.selectedCurrency
+                        } to ${this.formObject.to.address}.`
                     );
                 } catch (e) {
                     //@todo show correct error message for multiple errors eg: "reason": "invalid address"
@@ -444,9 +366,7 @@
                 this.qrDialog = false;
             },
             balanceForCurrency(balances) {
-                return balances.find(
-                    x => x.asset_code === this.selectedCurrency
-                ).balance;
+                return balances.find(x => x.asset_code === this.selectedCurrency).balance;
             },
         },
         watch: {},

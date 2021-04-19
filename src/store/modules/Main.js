@@ -33,11 +33,7 @@ export default {
     actions: {
         async updateAccount({ getters, commit }, accountId) {
             const server = new Server(config.stellarServerUrl);
-            const message = await server
-                .accounts()
-                .accountId(accountId)
-                .cursor('now')
-                .call();
+            const message = await server.accounts().accountId(accountId).cursor('now').call();
 
             const newAccount = await mapAccount({
                 ...getters.accounts.find(a => a.id === accountId),
@@ -93,10 +89,7 @@ export default {
                 console.error(e);
             }
         },
-        async initializeAccountEventStreams(
-            { dispatch, commit, getters },
-            accounts
-        ) {
+        async initializeAccountEventStreams({ dispatch, commit, getters }, accounts) {
             dispatch('disableAccountEventStreams');
             const server = new Server(config.stellarServerUrl);
 
@@ -109,9 +102,7 @@ export default {
                         onmessage: message => {
                             dispatch('fetchPayments', account.id);
                             mapAccount({
-                                ...getters.accounts.find(
-                                    a => a.id === account.id
-                                ),
+                                ...getters.accounts.find(a => a.id === account.id),
                                 accountResponse: message,
                                 // seed: Buffer.from(mnemonicToEntropy(account.seedPhrase), 'hex'),
                             }).then(newAccount => {
@@ -149,20 +140,27 @@ export default {
                     },
                 });
         },
-        async initializeSingleAccount(
-            { dispatch, commit },
-            { pkidAccount, seedPhrase, type }
-        ) {
+        async initializeSingleAccount({ dispatch, commit }, { pkidAccount, seedPhrase, type }) {
             commit('addAccountThombstone', pkidAccount.walletName);
 
             const index = pkidAccount.index ? pkidAccount.index : 0;
-            const revine = revineAddressFromSeed(seedPhrase, index);
-            const walletEntropy = calculateWalletEntropyFromAccount(
-                seedPhrase,
-                index
-            );
+            console.log({ index, type });
+            let revine;
+
+            try {
+                revine = revineAddressFromSeed(seedPhrase, index);
+                console.log({ revine, type });
+            } catch (e) {
+                console.error({ e, type });
+
+                throw e;
+            }
+
+            const walletEntropy = calculateWalletEntropyFromAccount(seedPhrase, index);
+            console.log({ walletEntropy, type });
             const stellar = keypairFromAccount(walletEntropy).publicKey();
-            Logger.info('initializeSingleAccount', { index, revine, stellar });
+            console.log({ stellar, type });
+            Logger.info('initializeSingleAccount', { index, revine, stellar, type });
 
             if (!pkidAccount.stellar) {
                 try {
@@ -170,12 +168,7 @@ export default {
                     pkidAccount.isConverted = true;
                 } catch (error) {
                     Logger.error('error convertTfAccount failed', { error });
-                    if (
-                        error &&
-                        error.response &&
-                        error.response.data &&
-                        error.response.data.error
-                    ) {
+                    if (error && error.response && error.response.data && error.response.data.error) {
                         const errorlog = error.response.data.error;
                         Logger.error('Conversion TF Account error ', {
                             errorlog,
@@ -187,9 +180,7 @@ export default {
                         error.response &&
                         error.response.data &&
                         error.response.data.error &&
-                        (error.response.data.error.includes(
-                            'GET: no content available (code: 204)'
-                        ) ||
+                        (error.response.data.error.includes('GET: no content available (code: 204)') ||
                             error.response.data.error ===
                                 'Tfchain address has 0 balance, no need to activate an account')
                     ) {
@@ -206,10 +197,7 @@ export default {
                             });
                         } catch (error) {
                             pkidAccount.isConverted = true;
-                            commit(
-                                'removeAccountThombstone',
-                                pkidAccount.walletName
-                            );
+                            commit('removeAccountThombstone', pkidAccount.walletName);
                             return;
                         }
                     }
@@ -225,10 +213,7 @@ export default {
             });
 
             const stellarPubKey = account.keyPair.publicKey();
-            const revineAddress = revineAddressFromSeed(
-                account.seedPhrase,
-                account.index
-            );
+            const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
             Logger.info('fetchedAccount', { revineAddress, stellarPubKey });
 
             if (!account.isConverted) {
@@ -236,10 +221,7 @@ export default {
                 Logger.info('retrying conversion');
 
                 try {
-                    await convertTokens(
-                        revineAddress,
-                        account.keyPair.publicKey()
-                    );
+                    await convertTokens(revineAddress, account.keyPair.publicKey());
                     account = await fetchAccount({
                         index: index,
                         name: pkidAccount.walletName,
@@ -250,12 +232,7 @@ export default {
                     });
                 } catch (error) {
                     Logger.error('error retrying conversion failed', { error });
-                    if (
-                        error &&
-                        error.response &&
-                        error.response.data &&
-                        error.response.data.error
-                    ) {
+                    if (error && error.response && error.response.data && error.response.data.error) {
                         const errorlog = error.response.data.error;
                         Logger.error('Conversion service error ', { errorlog });
                     }
@@ -264,13 +241,10 @@ export default {
                         error.response &&
                         error.response.data &&
                         error.response.data.error &&
-                        (error.response.data.error.includes(
-                            'GET: no content available (code: 204)'
-                        ) ||
+                        (error.response.data.error.includes('GET: no content available (code: 204)') ||
                             error.response.data.error ===
                                 'Tfchain address has 0 balance, no need to activate an account' ||
-                            error.response.data.error ===
-                                'Migration already executed for address')
+                            error.response.data.error === 'Migration already executed for address')
                     ) {
                         account = await fetchAccount({
                             index: index,
@@ -297,18 +271,12 @@ export default {
             const pkidAccounts = await dispatch('fetchPkidAppAccounts');
             const type = 'app';
 
-            if (!pkidAccounts) {
-                return;
-            }
+            if (!pkidAccounts) return;
 
             return pkidAccounts.map(pkidAccount => {
-                pkidAccount.position = pkidAccount.position
-                    ? pkidAccount.position
-                    : pkidAccount.index;
+                pkidAccount.position = pkidAccount.position ? pkidAccount.position : pkidAccount.index;
                 commit('incrementPosition');
-                pkidAccount.isConverted = pkidAccount.isConverted
-                    ? pkidAccount.isConverted
-                    : false;
+                pkidAccount.isConverted = pkidAccount.isConverted ? pkidAccount.isConverted : false;
                 return dispatch('initializeSingleAccount', {
                     pkidAccount,
                     seedPhrase,
@@ -317,9 +285,7 @@ export default {
             });
         },
         async initializeImportedPkidAccounts({ dispatch, commit, getters }) {
-            const pkidImportedAccounts = await dispatch(
-                'fetchPkidImportedAccounts'
-            );
+            const pkidImportedAccounts = await dispatch('fetchPkidImportedAccounts');
             return pkidImportedAccounts.map(pkidImportedAccount => {
                 const seedPhrase = entropyToMnemonic(pkidImportedAccount.seed);
                 const type = 'imported';
@@ -363,17 +329,13 @@ export default {
                     name: 'error screen',
                     params: {
                         reason: 'Activation mistake',
-                        fix:
-                            'Please retry, if this error persists, please contact support',
+                        fix: 'Please retry, if this error persists, please contact support',
                     },
                 });
                 throw e;
             }
         },
-        async initialize(
-            { commit, dispatch, state, getters },
-            { seed, doubleName }
-        ) {
+        async initialize({ commit, dispatch, state, getters }, { seed, doubleName }) {
             commit('startAppLoading');
             commit('setLoadingMessage', { message: 'Initializing wallet' });
             state.initialized = true;
@@ -406,25 +368,20 @@ export default {
                     ]);
                     await dispatch('persistPkidImportedAccounts', []);
 
-                    op1 = await dispatch(
-                        'initializePkidAppAccounts',
-                        seedPhrase
-                    );
+                    op1 = await dispatch('initializePkidAppAccounts', seedPhrase);
                 } catch (e) {
                     Logger.error('error fetchAccount', { e });
 
-                    dispatch('generateInitialAccount', seedPhrase).then(
-                        response => {
-                            router.push({
-                                name: 'sms',
-                                params: {
-                                    tel: response.phonenumbers[0],
-                                    code: response.activation_code,
-                                    address: response.address,
-                                },
-                            });
-                        }
-                    );
+                    dispatch('generateInitialAccount', seedPhrase).then(response => {
+                        router.push({
+                            name: 'sms',
+                            params: {
+                                tel: response.phonenumbers[0],
+                                code: response.activation_code,
+                                address: response.address,
+                            },
+                        });
+                    });
                     return;
                 }
             }
@@ -433,9 +390,7 @@ export default {
             try {
                 await Promise.all([...op1, ...op2]);
             } catch (error) {
-                throw error;
                 Logger.error('error initializeImportedPkidAccounts', { error });
-
                 console.error(error);
                 router.push({
                     name: 'error screen',
@@ -450,10 +405,7 @@ export default {
             if (!getters.appAccounts.length) {
                 Logger.info('start Sms Flow');
 
-                const response = await dispatch(
-                    'generateInitialAccount',
-                    seedPhrase
-                );
+                const response = await dispatch('generateInitialAccount', seedPhrase);
                 await router.push({
                     name: 'sms',
                     params: {

@@ -30,6 +30,7 @@ export const mapAccount = async ({
     lockedBalances,
     vestedBalance,
     isConverted,
+    error,
 }) => ({
     name: name,
     tags: tags,
@@ -49,16 +50,10 @@ export const mapAccount = async ({
         if (!b.unlockTransaction) {
             return 0;
         }
-        if (
-            a.unlockTransaction.timeBounds.minTime <
-            b.unlockTransaction.timeBounds.minTime
-        ) {
+        if (a.unlockTransaction.timeBounds.minTime < b.unlockTransaction.timeBounds.minTime) {
             return -1;
         }
-        if (
-            a.unlockTransaction.timeBounds.minTime >
-            b.unlockTransaction.timeBounds.minTime
-        ) {
+        if (a.unlockTransaction.timeBounds.minTime > b.unlockTransaction.timeBounds.minTime) {
             return 1;
         }
         return 0;
@@ -66,6 +61,7 @@ export const mapAccount = async ({
     lockedBalances,
     vestedBalance,
     isConverted,
+    error,
 });
 
 // todo: make this an interval loop
@@ -80,23 +76,16 @@ async function lockedTokenSubRoutine(lockedBalances) {
                 message: 'fetching locked tokens',
             });
             try {
-                lockedBalance.unlockTransaction = await fetchUnlockTransaction(
-                    unlockHash
-                );
-            } catch {
+                lockedBalance.unlockTransaction = await fetchUnlockTransaction(unlockHash);
+            } catch (e) {
                 Logger.info('failed to fetch unlock trans', unlockHash);
                 continue;
             }
             // const timestamp = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).toString()
             // const isBeforeNow = moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).isBefore()
             // Logger.info('fetched unlocktransaction', {unlockHash, timestamp, isBeforeNow})
-            if (
-                !moment
-                    .unix(lockedBalance.unlockTransaction.timeBounds.minTime)
-                    .isBefore()
-            ) {
-                const mintimeTrans =
-                    lockedBalance.unlockTransaction.timeBounds.minTime;
+            if (!moment.unix(lockedBalance.unlockTransaction.timeBounds.minTime).isBefore()) {
+                const mintimeTrans = lockedBalance.unlockTransaction.timeBounds.minTime;
                 Logger.info('Lockedtransaction mintime is not before now ', {
                     mintimeTrans,
                 });
@@ -123,24 +112,13 @@ async function lockedTokenSubRoutine(lockedBalances) {
             } catch (e) {
                 const message = e.message;
                 console.log(message);
-                Logger.error(
-                    'Transferring locked tokens failed ',
-                    JSON.stringify(message)
-                );
+                Logger.error('Transferring locked tokens failed ', JSON.stringify(message));
             }
         }
     }
 }
 
-export const fetchAccount = async ({
-    seedPhrase,
-    index,
-    name,
-    tags,
-    position,
-    isConverted,
-    retry = 0,
-}) => {
+export const fetchAccount = async ({ seedPhrase, index, name, tags, position, isConverted, retry = 0 }) => {
     if (retry > 3) {
         console.error('too many retries');
         throw new Error('too many retries');
@@ -158,11 +136,32 @@ export const fetchAccount = async ({
         if (e.message !== 'Not Found') {
             throw Error('Something went wrong while fetching account');
         }
-        accountResponse = await generateAndFetchAccount(
-            keyPair,
-            seedPhrase,
-            index
-        );
+
+        try {
+            accountResponse = await generateAndFetchAccount(keyPair, seedPhrase, index);
+        } catch (e) {
+            console.log('here');
+
+            console.error(e);
+            return mapAccount({
+                accountResponse: {
+                    id: keyPair.publicKey(),
+                    balances: [],
+                },
+                index,
+                tags,
+                name,
+                position,
+                seed: Buffer.from(mnemonicToEntropy(seedPhrase), 'hex'),
+                keyPair,
+                seedPhrase,
+                lockedTransactions: [],
+                lockedBalances: [],
+                isConverted,
+                vestedBalance: 0,
+                error: true,
+            });
+        }
     }
 
     const valid = await validateAndFixAccountResponse(accountResponse, keyPair);
@@ -185,22 +184,16 @@ export const fetchAccount = async ({
     let lockedBalances = {};
     lockedTransactions.forEach(transaction => {
         if (lockedBalances[transaction.balance.asset_code]) {
-            lockedBalances[transaction.balance.asset_code] += Number(
-                transaction.balance.balance
-            );
+            lockedBalances[transaction.balance.asset_code] += Number(transaction.balance.balance);
         } else {
-            lockedBalances[transaction.balance.asset_code] = Number(
-                transaction.balance.balance
-            );
+            lockedBalances[transaction.balance.asset_code] = Number(transaction.balance.balance);
         }
     });
 
     let vestedBalance = 0;
     const vestingAccount = await checkVesting(accountResponse.id);
     if (vestingAccount) {
-        vestedBalance = vestingAccount.balances.find(
-            b => b.asset_code === 'TFT'
-        ).balance;
+        vestedBalance = vestingAccount.balances.find(b => b.asset_code === 'TFT').balance;
         const server = new Server(config.stellarServerUrl);
         server
             .accounts()
@@ -208,13 +201,9 @@ export const fetchAccount = async ({
             .cursor('now')
             .stream({
                 onmessage: async message => {
-                    vestedBalance = message.balances.find(
-                        b => b.asset_code === 'TFT'
-                    ).balance;
+                    vestedBalance = message.balances.find(b => b.asset_code === 'TFT').balance;
 
-                    const newAccount = store.getters.accounts.find(
-                        a => a.id === accountResponse.id
-                    );
+                    const newAccount = store.getters.accounts.find(a => a.id === accountResponse.id);
 
                     newAccount.vestedBalance = vestedBalance;
 
@@ -244,17 +233,8 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
         const revineAddress = revineAddressFromSeed(seedPhrase, index);
         // tfchain testnet is discontinued
         // Call friendbot to activate if not in prod
-        if (config.env == 'production') {
-            await migrateAccount(keyPair, revineAddress);
-        } else {
-            const Http = new XMLHttpRequest();
-            Http.open(
-                'GET',
-                `https://friendbot.stellar.org/?addr=${keyPair.publicKey()}`,
-                false
-            );
-            Http.send();
-        }
+
+        await migrateAccount(keyPair, revineAddress);
     } catch (e) {
         Logger.error('error Something went wrong while generating account', {
             e,

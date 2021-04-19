@@ -7,11 +7,7 @@
                         <h1>Loading wallet ...</h1>
                     </v-row>
                     <v-row v-if="showInputWalletSeed">
-                        <v-text-field
-                            v-model="devWalletSeed"
-                            type="password"
-                            label="devWalletSeed"
-                        ></v-text-field>
+                        <v-text-field v-model="devWalletSeed" type="password" label="devWalletSeed"></v-text-field>
                         <v-btn @click="devInitWallet"> Start wallet</v-btn>
                     </v-row>
                 </v-col>
@@ -45,12 +41,7 @@
         mounted() {
             window.vueInstance = this;
             if (config.devWallet) {
-                window.vueInstance.startWallet(
-                    'devWallet.3bot',
-                    config.devWallet,
-                    null,
-                    null
-                );
+                window.vueInstance.startWallet('devWallet.3bot', config.devWallet, null, null);
             }
         },
         methods: {
@@ -86,27 +77,20 @@
                         appWallets,
                     });
                 } catch (error) {
-                    throw error;
                     console.error(error);
                     Logger.error('init error', { error });
                     router.push({
                         name: 'error screen',
                         params: {
                             reason: 'Initialization failed',
-                            fix:
-                                'Please refresh, if error persists, please contact support?',
+                            fix: 'Please refresh, if error persists, please contact support?',
                         },
                     });
                 }
             },
             devInitWallet() {
                 this.initialized = false;
-                this.startWallet(
-                    'TESTNAME',
-                    this.devWalletSeed,
-                    'null',
-                    'null'
-                );
+                this.startWallet('TESTNAME', this.devWalletSeed, 'null', 'null');
             },
         },
     };

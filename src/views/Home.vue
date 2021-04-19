@@ -2,13 +2,7 @@
     <section class="home fill-height">
         <v-layout column fill-height pa-4>
             <div class="content">
-                <draggable
-                    v-model="accounts"
-                    group="accounts"
-                    @start="drag = true"
-                    @end="drag = false"
-                    delay="400"
-                >
+                <draggable v-model="accounts" group="accounts" @start="drag = true" @end="drag = false" delay="400">
                     <AccountCard
                         class="px-1 mb-4"
                         clickable
@@ -19,23 +13,21 @@
                         humanReadable
                     />
                 </draggable>
-                <SkeletonAccountCard
-                    :name="name"
-                    v-for="name in actualAccountThombstones"
-                    :key="name"
-                />
+                <SkeletonAccountCard :name="name" v-for="name in actualAccountThombstones" :key="name" />
+                <template v-if="errorAccounts.length >= 1">
+                    <hr class="mb-4" />
+                    <ErrorAccountCard
+                        :name="errorAccount.name"
+                        v-for="errorAccount in errorAccounts"
+                        :id="errorAccount.id"
+                        :key="errorAccount.id"
+                    />
+                </template>
             </div>
             <div v-if="isLoadingWallets && !isAppLoading" class="fill-height">
                 <v-layout justify-center align-center fill-height column>
-                    <v-progress-circular
-                        :size="70"
-                        :width="10"
-                        :color="$route.meta.accent"
-                        indeterminate
-                    />
-                    <p class="pt-3">
-                        Loading wallets...
-                    </p>
+                    <v-progress-circular :size="70" :width="10" :color="$route.meta.accent" indeterminate />
+                    <p class="pt-3">Loading wallets...</p>
                 </v-layout>
             </div>
         </v-layout>
@@ -47,32 +39,24 @@
     import draggable from 'vuedraggable';
     import store from '@/store';
     import SkeletonAccountCard from '@/components/SkeletonAccountCard';
+    import ErrorAccountCard from '@/components/ErrorAccountCard';
 
     export default {
         name: 'Home',
-        components: { AccountCard, draggable, SkeletonAccountCard },
+        components: { AccountCard, draggable, SkeletonAccountCard, ErrorAccountCard },
         props: [],
         data() {
             return {};
         },
         computed: {
-            ...mapGetters([
-                'isLoadingWallets',
-                'isAppLoading',
-                'accountThombstones',
-            ]),
+            ...mapGetters(['isLoadingWallets', 'isAppLoading', 'accountThombstones']),
             actualAccountThombstones() {
-                return this.accountThombstones.filter(
-                    name => !this.accounts.find(a => name === a.name)
-                );
+                return this.accountThombstones.filter(name => !this.accounts.find(a => name === a.name));
             },
             accounts: {
                 get() {
-                    const sortedAccounts = [...store.getters.accounts];
-                    sortedAccounts.sort(
-                        (account, otherAccount) =>
-                            account.position - otherAccount.position
-                    );
+                    const sortedAccounts = [...store.getters.accounts].filter(sa => !sa.error);
+                    sortedAccounts.sort((account, otherAccount) => account.position - otherAccount.position);
                     return sortedAccounts;
                 },
                 set(value) {
@@ -82,6 +66,11 @@
                     store.commit('setAccounts', value);
                     store.dispatch('saveToPkid');
                 },
+            },
+            errorAccounts() {
+                const sortedAccounts = [...store.getters.accounts].filter(sa => sa.error);
+                sortedAccounts.sort((account, otherAccount) => account.position - otherAccount.position);
+                return sortedAccounts;
             },
         },
         mounted() {
@@ -112,8 +101,7 @@
     }
 
     .sortable-chosen {
-        box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2),
-            0px 16px 24px 2px rgba(0, 0, 0, 0.14),
+        box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14),
             0px 6px 30px 5px rgba(0, 0, 0, 0.12) !important;
         z-index: 10;
     }

@@ -12,6 +12,8 @@ import errorScreen from '@/views/errorScreen.vue';
 import Buy from '@/views/Buy.vue';
 import Deposit from '@/views/Deposit.vue';
 import Activate from '@/views/Activate.vue';
+import BuyConfirmation from '@/views/BuyConfirmation';
+import Trading from '@/views/Trading';
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -50,7 +52,7 @@ const routes = [
         component: DevView,
     },
     {
-        path: '/errorscreen:reason?:fix?',
+        path: '/errorscreen/:reason?/:fix?',
         name: 'error screen',
         meta: {
             title: 'Error Screen',
@@ -97,6 +99,26 @@ const routes = [
         component: Buy,
     },
     {
+        path: '/buy',
+        name: 'buyConfirmation',
+        meta: {
+            title: 'Confirmation',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: BuyConfirmation,
+    },
+    {
+        path: '/trading',
+        name: 'trading',
+        meta: {
+            title: 'trading',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Trading,
+    },
+    {
         path: '/deposit/:asset/:account',
         name: 'deposit',
         meta: {
@@ -138,8 +160,7 @@ const routes = [
                 text: 'this is info',
             },
         },
-        component: () =>
-            import(/* webpackChunkName: "wallet-info" */ '../views/WalletInfo'),
+        component: () => import(/* webpackChunkName: "wallet-info" */ '../views/WalletInfo'),
     },
 ];
 
@@ -153,15 +174,18 @@ router.beforeEach((to, from, next) => {
     window.noCopyPaste = false;
 
     store.dispatch('disableAccountEventStreams');
-    if (
-        !store.getters.initialized &&
-        to.name !== 'error' &&
-        to.name !== 'init'
-    ) {
+    if (!store.getters.initialized && to.name !== 'error' && to.name !== 'init') {
         next({
             name: 'init',
         });
         return;
+    }
+    next();
+});
+
+router.beforeEach((to, from, next) => {
+    if (!(to.name === 'buyConfirmation' || to.name === 'trading')) {
+        store.commit('clearTradeInfo');
     }
     next();
 });
