@@ -1,6 +1,6 @@
 <template>
     <div class="Buy pa-2 fill-height">
-        <v-card class="pa-2" style="width: 100%">
+        <v-card class="pa-2" style="width: 100%" v-if="account">
             <v-card-title> Account: {{ account.name }}</v-card-title>
             <v-card-text>
                 <v-col>
@@ -44,7 +44,7 @@
         name: 'Trading',
         mounted() {
             if (!this.tradeInfo || !this.tradeInfo.accept) {
-                this.$router.push('home');
+                this.$router.push({ name: 'home' });
                 return;
             }
 

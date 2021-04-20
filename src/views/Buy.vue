@@ -141,6 +141,7 @@
                 this.currentBtcPrice = price;
                 this.price = price / this.usdPrice;
             });
+            this.btcAmount = this.account.balances.find(b => b.asset_code === 'BTC').balance;
         },
         computed: {
             amountTft() {

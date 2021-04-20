@@ -27,7 +27,7 @@
             :balance="balance"
             :locked-balance="account.lockedBalances[balance.asset_code]"
             :vested-balance="balance.asset_code === 'TFT' ? account.vestedBalance : 0"
-            :id="account.id"
+            :account="account"
         />
         <ActivatCard
             v-if="!account.balances.find(b => b.asset_code === 'BTC') && currencies.indexOf('BTC') !== -1"
@@ -63,7 +63,6 @@
                 const TFT = new Asset('TFT', currencies['TFT'].issuer);
                 /** @type {ServerApi.CollectionPage<ServerApi.OfferRecord>} */
                 const offers = await server.offers().forAccount(id).selling(BTC).buying(TFT).call();
-                console.log(offers);
                 this.offers = offers.records;
             },
         },

@@ -4,29 +4,18 @@
         :class="{
             blue: balance.asset_code === 'BTC',
             accent: balance.asset_code === 'TFT',
-            'white--text':
-                balance.asset_code === 'BTC' || balance.asset_code === 'TFT',
+            'white--text': balance.asset_code === 'BTC' || balance.asset_code === 'TFT',
         }"
     >
         <v-row>
-            <v-col
-                :cols="shouldShowExtra ? 6 : 12"
-                class="pl-4"
-                @click.stop="$emit('showDetails')"
-            >
+            <v-col :cols="shouldShowExtra ? 6 : 12" class="pl-4" @click.stop="$emit('showDetails')">
                 <v-card-text class="pa-2">
                     <h1>
                         {{ balance.asset_code }}
                     </h1>
-                    <div class="subtitle-1">
-                        Balance {{ balance.balance | formatBalance }}
-                    </div>
-                    <div class="subtitle-2" v-if="lockedBalance">
-                        Locked {{ lockedBalance | formatBalance }}
-                    </div>
-                    <div class="subtitle-2" v-if="vestedBalance">
-                        vested {{ vestedBalance | formatBalance }}
-                    </div>
+                    <div class="subtitle-1">Balance {{ balance.balance | formatBalance }}</div>
+                    <div class="subtitle-2" v-if="lockedBalance">Locked {{ lockedBalance | formatBalance }}</div>
+                    <div class="subtitle-2" v-if="vestedBalance">vested {{ vestedBalance | formatBalance }}</div>
                 </v-card-text>
             </v-col>
             <v-col
@@ -36,6 +25,18 @@
                 align-self="center"
                 style="display: grid; gap: 0.5rem"
             >
+                <v-btn
+                    v-if="shouldShowTrade"
+                    color="white"
+                    style="color: #0972b8; font-size: 12px"
+                    @click.stop="$emit('buy')"
+                    elevation="0"
+                    block
+                    :text="shouldShowDeposit"
+                >
+                    Trade BTC to TFT
+                    <v-icon x-small right v-if="shouldShowDeposit">fa-chevron-right </v-icon>
+                </v-btn>
                 <v-btn
                     v-if="shouldShowDeposit"
                     color="white"
@@ -56,9 +57,7 @@
                     :text="shouldShowVest"
                 >
                     Buy
-                    <v-icon x-small right v-if="shouldShowVest"
-                        >fa-chevron-right
-                    </v-icon>
+                    <v-icon x-small right v-if="shouldShowVest">fa-chevron-right </v-icon>
                 </v-btn>
                 <v-btn
                     v-if="shouldShowVest"
@@ -84,7 +83,7 @@
             balance: { required: true },
             lockedBalance: { required: false },
             vestedBalance: { required: false },
-            id: { required: true },
+            account: { required: true },
         },
         data() {
             return {
@@ -96,38 +95,33 @@
                 return;
             }
             axios
-                .get(
-                    `https://cryptoanchor.io/stellar/deposit?asset_code=BTC&account=${this.id}`,
-                    {}
-                )
+                .get(`https://cryptoanchor.io/stellar/deposit?asset_code=BTC&account=${this.account.id}`, {})
                 .then(response => {
                     this.address = response.data.how;
                 });
         },
         computed: {
             shouldShowExtra() {
-                return (
-                    this.shouldShowDeposit ||
-                    this.shouldShowBuy ||
-                    this.shouldShowVest
-                );
+                return this.shouldShowDeposit || this.shouldShowBuy || this.shouldShowVest || this.shouldShowTrade;
             },
             shouldShowDeposit() {
-                return (
-                    this.balance.asset_code === 'BTC' &&
-                    this.balance.balance <= 100
-                );
+                return this.balance.asset_code === 'BTC';
             },
             shouldShowBuy() {
-                //@todo: enable when buying should be enabled
-                // return false;
-                return this.balance.asset_code === 'TFT';
-            },
-            shouldShowVest() {
+                return false;
                 return (
                     this.balance.asset_code === 'TFT' &&
-                    this.balance.balance > 0
+                    this.account.balances.find(b => b.asset_code === 'BTC')?.balance >= 0.00001
                 );
+            },
+            shouldShowTrade() {
+                return (
+                    this.balance.asset_code === 'BTC' &&
+                    this.account.balances.find(b => b.asset_code === 'BTC')?.balance >= 0.00001
+                );
+            },
+            shouldShowVest() {
+                return this.balance.asset_code === 'TFT' && this.balance.balance > 0;
             },
         },
     };

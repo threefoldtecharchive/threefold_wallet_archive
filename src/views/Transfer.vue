@@ -292,7 +292,6 @@
 
                 //@todo: fix this
                 let fee = validate(this.formObject.to.address, 'mainnet') || ASSET_CODE === 'BTC' ? 0 : this.fee;
-                debugger;
                 if (this.selectedTab && balance < amountToTransfer + fee) {
                     this.$flashMessage.error('not enough funds');
                     return;

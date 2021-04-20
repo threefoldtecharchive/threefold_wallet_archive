@@ -68,12 +68,11 @@ export default {
 
                         // We need to relocate this or manage to get a reference to flashmessage in here which feels a bit dirty.
                         // this.$flashMessage.info(`Successfully received ${payment.amount} ${payment.asset_code} from ${account.id}.`);
-
-                        console.log(`${account.id} updated `);
                         // dispatch('reloadAccount', account.id);
                     },
                     onerror: e => {
                         console.error(e);
+                        Logger.error('initializeTransactionWatcher', e);
                     },
                 });
         },
@@ -87,6 +86,7 @@ export default {
                 eventStreams.forEach(close => close());
             } catch (e) {
                 console.error(e);
+                Logger.error('disableAccountEventStreams failed', { e });
             }
         },
         async initializeAccountEventStreams({ dispatch, commit, getters }, accounts) {
@@ -111,6 +111,7 @@ export default {
                             });
                         },
                         onerror: e => {
+                            Logger.error('initializeAccountEventStreams failed', { e });
                             console.error(e);
                         },
                     })
@@ -136,6 +137,8 @@ export default {
                         });
                     },
                     onerror: e => {
+                        Logger.error('initializeAccountWatcher failed', { e });
+
                         console.error(e);
                     },
                 });
@@ -144,22 +147,18 @@ export default {
             commit('addAccountThombstone', pkidAccount.walletName);
 
             const index = pkidAccount.index ? pkidAccount.index : 0;
-            console.log({ index, type });
             let revine;
 
             try {
                 revine = revineAddressFromSeed(seedPhrase, index);
-                console.log({ revine, type });
             } catch (e) {
                 console.error({ e, type });
-
+                Logger.error('initializeSingleAccount failed', { e, type });
                 throw e;
             }
 
             const walletEntropy = calculateWalletEntropyFromAccount(seedPhrase, index);
-            console.log({ walletEntropy, type });
             const stellar = keypairFromAccount(walletEntropy).publicKey();
-            console.log({ stellar, type });
             Logger.info('initializeSingleAccount', { index, revine, stellar, type });
 
             if (!pkidAccount.stellar) {
@@ -217,7 +216,6 @@ export default {
             Logger.info('fetchedAccount', { revineAddress, stellarPubKey });
 
             if (!account.isConverted) {
-                console.log('retrying conversion ... ');
                 Logger.info('retrying conversion');
 
                 try {
@@ -303,7 +301,7 @@ export default {
                 });
             });
         },
-        async generateInitialAccount({}, seedPhrase) {
+        async generateInitialAccount(_, seedPhrase) {
             const entropy = calculateWalletEntropyFromAccount(seedPhrase, 0);
             const keyPair = keypairFromAccount(entropy);
             try {
