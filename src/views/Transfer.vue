@@ -177,7 +177,6 @@
                 selectedAccount: {},
                 qrReadingError: false,
                 selectedCurrency: 'TFT',
-                fee: 0.01,
                 accountsReady: false,
             };
         },
@@ -236,6 +235,10 @@
                     default:
                         return [];
                 }
+            },
+            fee() {
+                if (this?.$refs?.formComponent?.selectedCurrency === 'BTC') return 0.0000001;
+                return 0.01;
             },
         },
         methods: {
