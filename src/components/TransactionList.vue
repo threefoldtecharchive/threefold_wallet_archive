@@ -69,7 +69,7 @@
                     @click.stop="$emit('selectPayment', payment)"
                 />
                 <buy-item
-                    v-else-if="payment.type === 'buy'"
+                    v-else-if="payment.type === 'buy' || payment.type === 'sell'"
                     @click.stop="$flashMessage.info(`Buy ${payment.asset_code}.`)"
                     :key="payment.id"
                     :payment="payment"

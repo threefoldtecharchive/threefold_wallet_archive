@@ -105,17 +105,22 @@
 
                 const fixedMaxUSDBlockSize = 200;
                 const BTCPriceInUSD = await getPairPrice('XBTUSDC');
-                const maxBTCInblock = fixedMaxUSDBlockSize / BTCPriceInUSD;
-                this.maxBTCInblock = maxBTCInblock;
+                this.maxBTCInblock = fixedMaxUSDBlockSize / BTCPriceInUSD;
 
-                this.blockAmount = Math.ceil(this.tradeInfo.amount / maxBTCInblock);
+                const normalBlockAmount = Math.ceil(this.tradeInfo.amount / this.maxBTCInblock);
+                this.blockAmount = normalBlockAmount;
+
+                if (normalBlockAmount > 100) {
+                    this.blockAmount = 100;
+                    this.maxBTCInblock = this.tradeInfo.amount / 100;
+                }
 
                 for (let i = 1; i <= this.blockAmount; i++) {
                     this.currentBlock = i;
                     let amountOfBTC =
                         this.currentBlock === this.blockAmount
-                            ? this.tradeInfo.amount - (this.blockAmount - 1) * maxBTCInblock
-                            : maxBTCInblock;
+                            ? this.tradeInfo.amount - (this.blockAmount - 1) * this.maxBTCInblock
+                            : this.maxBTCInblock;
 
                     await this.startBlockTrade(
                         amountOfBTC,

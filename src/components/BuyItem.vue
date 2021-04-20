@@ -15,7 +15,11 @@
                 <v-list-item-subtitle class="amount" style="overflow: visible">
                     <span class="sell">
                         -
-                        {{ (payment.amount * payment.rawPayment.price) | formatBalance }}
+                        {{
+                            payment.type === 'sell'
+                                ? payment.amount
+                                : (payment.amount * payment.rawPayment.price) | formatBalance
+                        }}
                         <sup class="currency font-weight-light">
                             {{
                                 payment.rawPayment.selling_asset_type === 'native'
@@ -26,7 +30,11 @@
                     </span>
                     <span class="buy ml-4"
                         >+
-                        {{ payment.amount | formatBalance }}
+                        {{
+                            payment.type === 'sell'
+                                ? payment.amount * payment.rawPayment.price
+                                : payment.amount | formatBalance
+                        }}
                         <sup class="currency font-weight-light">
                             {{ payment.asset_code || (payment.asset_type === 'native' ? 'xlm' : payment.asset_type) }}
                         </sup></span
