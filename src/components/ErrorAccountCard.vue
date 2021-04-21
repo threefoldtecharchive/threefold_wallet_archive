@@ -14,9 +14,16 @@
                 </v-flex>
             </v-layout>
         </div>
+        <v-card-actions v-if="config.stellarNetwork === 'Test SDF Network ; September 2015'">
+            <v-btn block @click="friendbot"
+                >Staging only: try to fix with friendbot <v-icon slot="right">fa-chevron-right</v-icon>
+            </v-btn>
+        </v-card-actions>
     </v-card>
 </template>
 <script>
+    import config from '@/../public/config';
+
     export default {
         props: {
             name: {
@@ -24,6 +31,16 @@
             },
             id: {
                 type: String,
+            },
+        },
+        data() {
+            return {
+                config,
+            };
+        },
+        methods: {
+            friendbot() {
+                fetch(`https://friendbot.stellar.org/?addr=${this.id}`).then(() => location.reload());
             },
         },
     };

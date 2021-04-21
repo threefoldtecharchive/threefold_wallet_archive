@@ -417,7 +417,7 @@ export default {
 
             await dispatch('saveToPkid');
             dispatch('initializeAccountEventStreams', getters.accounts);
-            if (getters.accounts.length === 1) {
+            if (getters.accounts.filter(a => !a.error).length === 1) {
                 await router.push({
                     name: 'details',
                     params: {
