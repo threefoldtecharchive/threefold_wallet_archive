@@ -216,10 +216,12 @@
             if (this.selectedCurrency) {
                 const { currencies } = getConfig();
                 const asset = new Asset(this.selectCurrency, currencies[this.selectCurrency].issuer);
-                fetchFundDetails(asset).then(condition => {
-                    this.fee = new Number(condition.fee_fixed);
-                    this.calcultaingFee = false;
-                });
+                fetchFundDetails(asset)
+                    .then(condition => {
+                        this.fee = new Number(condition.fee_fixed);
+                        this.calcultaingFee = false;
+                    })
+                    .catch(e => (this.calcultaingFee = false));
             }
         },
         computed: {
