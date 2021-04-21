@@ -82,6 +82,7 @@
             </v-row>
 
             <FormComponent
+                :key="`${selectedCurrency}-${selectedAccount.id}-${selectedTab}-${fee}`"
                 ref="formComponent"
                 :formObject="formObject"
                 :selectedTab="selectedTab"
@@ -96,19 +97,21 @@
 
             <v-row>
                 <v-col>
-                    <span v-if="$route.query.tab !== 'receive' && selectedCurrency !== 'BTC'"
-                        >Fee: {{ fee }} {{ selectedCurrency }}</span
-                    >
-                    <span v-else-if="$route.query.tab !== 'receive' && selectedCurrency === 'BTC'"
-                        >Fee: 0.0001 {{ selectedCurrency }}</span
+                    <span v-if="$route.query.tab !== 'receive'"
+                        >Fee: {{ fee.toFixed(selectedCurrency === 'BTC' ? 8 : 4) }} {{ selectedCurrency }}</span
                     >
                     <v-btn
                         class="mx-0 mt-3"
                         style="width: 100%"
                         color="accent"
                         @click="transferConfirmed"
-                        :loading="$route.query.tab === 'send' && !this.accountsReady"
-                        :disabled="!formObject.amount || ($route.query.tab === 'send' && !this.accountsReady)"
+                        :loading="$route.query.tab === 'send' && !this.accountsReady && !calcultaingFee"
+                        :disabled="
+                            !formObject.amount ||
+                            ($route.query.tab === 'send' && !accountsReady) ||
+                            calcultaingFee ||
+                            ($route.query.tab === 'send' && !formObject.to.address)
+                        "
                     >
                         <div v-if="$route.query.tab === 'receive'">Generate QR</div>
                         <div v-if="$route.query.tab === 'send'">
@@ -147,11 +150,17 @@
     import QrDialog from '@/components/qrDialog.vue';
     import TransactionInfoDialog from '@/components/transactionInfoDialog';
     import { mapGetters, mapActions, mapMutations } from 'vuex';
-    import { buildFundedPaymentTransaction, submitFundedTransaction } from '@jimber/stellar-crypto';
+    import {
+        buildFundedPaymentTransaction,
+        submitFundedTransaction,
+        fetchFundDetails,
+        getConfig,
+    } from '@jimber/stellar-crypto';
     import Logger from 'js-logger';
     import { formatBalance } from '@/utils/filters/formatBalance';
     import validate from 'bitcoin-address-validation';
     import { withdrawBTC } from '@/services/BtcService';
+    import { Asset } from 'stellar-base';
 
     export default {
         name: 'transfer',
@@ -178,6 +187,8 @@
                 qrReadingError: false,
                 selectedCurrency: 'TFT',
                 accountsReady: false,
+                fee: 0.01,
+                calcultaingFee: false,
             };
         },
         mounted() {
@@ -199,6 +210,17 @@
                 }
             }
             if (!this.selectedAccount) this.selectedAccount = this.accounts[0];
+
+            this.calcultaingFee = true;
+
+            if (this.selectedCurrency) {
+                const { currencies } = getConfig();
+                const asset = new Asset(this.selectCurrency, currencies[this.selectCurrency].issuer);
+                fetchFundDetails(asset).then(condition => {
+                    this.fee = new Number(condition.fee_fixed);
+                    this.calcultaingFee = false;
+                });
+            }
         },
         computed: {
             ...mapGetters(['accounts', 'currencies']),
@@ -236,10 +258,10 @@
                         return [];
                 }
             },
-            fee() {
-                if (this?.$refs?.formComponent?.selectedCurrency === 'BTC') return 0.0000001;
-                return 0.01;
-            },
+            // fee() {
+            //     if (this?.$refs?.formComponent?.selectedCurrency === 'BTC') return 0.0000001;
+            //     return 0.01;
+            // },
         },
         methods: {
             ...mapActions(['updateAccount', 'disableAccountEventStreams']),
@@ -371,7 +393,21 @@
                 return balances.find(x => x.asset_code === this.selectedCurrency).balance;
             },
         },
-        watch: {},
+        watch: {
+            selectedCurrency(newCurrency) {
+                this.calcultaingFee = true;
+                console.log(newCurrency);
+
+                const { currencies } = getConfig();
+                const asset = new Asset(newCurrency, currencies[newCurrency].issuer);
+                fetchFundDetails(asset).then(condition => {
+                    console.log(condition);
+
+                    this.fee = new Number(condition.fee_fixed);
+                    this.calcultaingFee = false;
+                });
+            },
+        },
     };
 </script>
 <style scoped lang="scss">

@@ -4,11 +4,7 @@
             <v-text-field
                 dense
                 v-if="selectedTab == 1"
-                :label="
-                    selectedCurrency === 'BTC'
-                        ? 'To (BTC or Wallet Address)'
-                        : 'To (Wallet Address)'
-                "
+                :label="selectedCurrency === 'BTC' ? 'To (BTC or Wallet Address)' : 'To (Wallet Address)'"
                 v-model="formObject.to.address"
                 :rules="toRules"
                 append-icon="far fa-address-book"
@@ -31,38 +27,10 @@
             >
             </v-text-field>
             <div class="btns" v-if="isSend">
-                <v-btn
-                    class="pa-1 mr-2"
-                    small
-                    elevation="0"
-                    color="#e0e0e0"
-                    @click="setAmount(0.25)"
-                    >25%
-                </v-btn>
-                <v-btn
-                    class="pa-1 mr-2"
-                    small
-                    elevation="0"
-                    color="#e0e0e0"
-                    @click="setAmount(0.5)"
-                    >50%
-                </v-btn>
-                <v-btn
-                    class="pa-1 mr-2"
-                    small
-                    elevation="0"
-                    color="#e0e0e0"
-                    @click="setAmount(0.75)"
-                    >75%
-                </v-btn>
-                <v-btn
-                    class="pa-1 mr-2"
-                    small
-                    elevation="0"
-                    color="#e0e0e0"
-                    @click="setAmount(1)"
-                    >100%
-                </v-btn>
+                <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(0.25)">25%</v-btn>
+                <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(0.5)">50%</v-btn>
+                <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(0.75)">75%</v-btn>
+                <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(1)">100%</v-btn>
             </div>
 
             <v-text-field
@@ -146,10 +114,7 @@
                         (!!v &&
                             ((v.length >= 56 && v.length <= 56) ||
                                 (this.selectedCurrency === 'BTC' &&
-                                    validate(
-                                        this.formObject.to.address,
-                                        'mainnet'
-                                    )))) ||
+                                    validate(this.formObject.to.address, 'mainnet')))) ||
                         'Wallet address length is not valid!',
                 ];
                 return rules;
@@ -159,8 +124,7 @@
                     // v => !!v || 'Message is required!',
                     v =>
                         typeof v == 'undefined' ||
-                        (typeof v === 'string' &&
-                            v.length <= this.maxMessageLength) ||
+                        (typeof v === 'string' && v.length <= this.maxMessageLength) ||
                         `Message cannot be more than ${this.maxMessageLength} characters long`,
                 ];
                 return rules;
@@ -168,9 +132,7 @@
             amountRules() {
                 const rules = [
                     v => !!v || 'The amount is required',
-                    v =>
-                        (!!v && Number(v) > 0) ||
-                        'The amount must be greater than 0',
+                    v => (!!v && Number(v) > 0) || 'The amount must be greater than 0',
                     // @TODO add this to validate the balance
                     // v => !!v && Number(v) <= Number((this.accounts.find(x => x.address == this.selectedWallet.address).totalAmount.replace(",", "") - 0.10).toFixed(9)) || 'Your balance is insufficient'
                 ];
@@ -196,12 +158,14 @@
                 };
             },
             setAmount(percentage) {
+                console.log(Number(this.fee));
+                console.log(
+                    Number(this.selectedAccount.balances.find(b => b.asset_code === this.selectedCurrency).balance)
+                );
+
                 const availableBalanceWithoutfee =
-                    Number(
-                        this.selectedAccount.balances.find(
-                            b => b.asset_code === this.selectedCurrency
-                        ).balance
-                    ) - Number(this.$props.fee);
+                    Number(this.selectedAccount.balances.find(b => b.asset_code === this.selectedCurrency).balance) -
+                    Number(this.fee);
                 console.log(availableBalanceWithoutfee);
                 const amount = availableBalanceWithoutfee * percentage;
 
