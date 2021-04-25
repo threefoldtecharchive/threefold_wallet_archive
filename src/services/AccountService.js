@@ -140,9 +140,10 @@ export const fetchAccount = async ({ seedPhrase, index, name, tags, position, is
         try {
             accountResponse = await generateAndFetchAccount(keyPair, seedPhrase, index);
         } catch (e) {
-            console.log('here');
+            if (e.message === 'Tfchain address has 0 balance, no need to activate an account') {
+                throw e;
+            }
 
-            console.error(e);
             return mapAccount({
                 accountResponse: {
                     id: keyPair.publicKey(),
@@ -233,12 +234,24 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
         const revineAddress = revineAddressFromSeed(seedPhrase, index);
         // tfchain testnet is discontinued
         // Call friendbot to activate if not in prod
-
-        await migrateAccount(keyPair, revineAddress);
+        if (config.env === 'production') {
+            await migrateAccount(keyPair, revineAddress);
+        } else {
+            const Http = new XMLHttpRequest();
+            Http.open('GET', `https://friendbot.stellar.org/?addr=${keyPair.publicKey()}`, false);
+            Http.send();
+        }
     } catch (e) {
         Logger.error('error Something went wrong while generating account', {
             e,
         });
+        if (
+            e.response &&
+            e.response.data &&
+            e.response.data.error === 'Tfchain address has 0 balance, no need to activate an account'
+        ) {
+            throw Error('Tfchain address has 0 balance, no need to activate an account'); // will initialize sms flow
+        }
 
         throw Error('Something went wrong while generating account');
     }
