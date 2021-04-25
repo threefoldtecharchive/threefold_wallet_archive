@@ -92,7 +92,7 @@ const routes = [
         path: '/buy/:asset/:account',
         name: 'buy',
         meta: {
-            title: 'buy',
+            title: 'Trade',
             overview: 'home',
             accent: 'accent',
         },

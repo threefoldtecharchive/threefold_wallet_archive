@@ -16,9 +16,7 @@
                                 I agree to the
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
-                                        <a target="_blank" href="http://example.com" @click.stop v-on="on">
-                                            Terms and conditions.
-                                        </a>
+                                        <a @click.prevent.stop="showTerms = true"> Terms and conditions. </a>
                                     </template>
                                     Opens in new window
                                 </v-tooltip>
@@ -40,6 +38,24 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
+        <v-dialog v-model="showTerms" fullscreen>
+            <v-card>
+                <v-card-title>
+                    <v-row>
+                        Terms & conditions
+                        <v-spacer></v-spacer>
+                        <v-btn icon @click="showTerms = false">
+                            <v-icon>fas fa-times</v-icon>
+                        </v-btn>
+                    </v-row>
+                </v-card-title>
+                <iframe
+                    style="height: calc(100vh - 62px); width: 100%"
+                    src="https://wiki.threefold.io/#/legal__legal"
+                    frameborder="0"
+                ></iframe>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -57,6 +73,7 @@
                 account: null,
                 terms: false,
                 valid: true,
+                showTerms: false,
             };
         },
         beforeMount() {

@@ -1,25 +1,42 @@
 <template>
     <div class="Buy pa-4 fill-height flex-column">
         <v-card v-if="tradeInfo">
-            <v-card-title> <h1>Buy Confirmation</h1> </v-card-title>
+            <v-card-title> <h1>Trade Confirmation</h1> </v-card-title>
             <v-card-text>
                 <span
-                    >"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum.</span
-                >
+                    >By clicking 'Confirm Trade', you confirm that you have read and agree with our
+                    <a class="pa-0" @click.prevent="showTerms = true">Terms and conditions </a>
+                </span>
                 <br />
-                {{ (1 / tradeInfo.price).toPrecision(8) }}
-                <br />
+                <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{
+                    (1 / tradeInfo.price).toPrecision(8)
+                }}</pre>
                 <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ tradeInfo }}</pre>
             </v-card-text>
             <v-card-actions class="flex-column">
-                <v-btn class="mb-2" @click="onAgreeClick" block color="accent" elevation="0">agree</v-btn>
+                <v-btn class="mb-2" @click="onAgreeClick" block color="accent" elevation="0">Confirm Trade</v-btn>
                 <v-btn @click="$router.push({ name: 'home' })" block text color="error" elevation="0">cancel</v-btn>
             </v-card-actions>
         </v-card>
+
+        <v-dialog v-model="showTerms" fullscreen>
+            <v-card>
+                <v-card-title>
+                    <v-row>
+                        Terms & conditions
+                        <v-spacer></v-spacer>
+                        <v-btn icon @click="showTerms = false">
+                            <v-icon>fas fa-times</v-icon>
+                        </v-btn>
+                    </v-row>
+                </v-card-title>
+                <iframe
+                    style="height: calc(100vh - 62px); width: 100%"
+                    src="https://threefold.io/info/threefold#/legal__terms_conditions_griduser"
+                    frameborder="0"
+                ></iframe>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -43,6 +60,11 @@
                 this.setTradeInfo({ ...this.tradeInfo, accept: true });
                 this.$router.push({ name: 'trading' });
             },
+        },
+        data() {
+            return {
+                showTerms: false,
+            };
         },
     };
 </script>

@@ -63,14 +63,14 @@
                         type="number"
                     ></v-text-field>
                     <hr class="my-4" />
-                    <pre>
-                {{ amountTft }}
-                  (1 / (btcAmount * price in tft)).toFixed(8)
+                    <!--                    <pre>-->
+                    <!--                {{ amountTft }}-->
+                    <!--                  (1 / (btcAmount * price in tft)).toFixed(8)-->
 
-                  price = this.currentBtcPrice / usdPrice
-                {{ (1 / price).toFixed(8) }}
-              </pre
-                    >
+                    <!--                  price = this.currentBtcPrice / usdPrice-->
+                    <!--                {{ (1 / price).toFixed(8) }}-->
+                    <!--              </pre-->
+                    <!--                    >-->
                     <!--                <v-text-field-->
                     <!--                    :value="priceInTFT"-->
                     <!--                    @change="onChangeTFTPrice"-->
@@ -102,7 +102,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-btn color="accent" block elevation="0" @click="onSubmit" :disabled="!valid"
-                        >Submit this buy order</v-btn
+                        >Submit this trade offer</v-btn
                     >
                 </v-card-actions>
             </v-form>
