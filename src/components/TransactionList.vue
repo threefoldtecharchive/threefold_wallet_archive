@@ -28,7 +28,7 @@
             "
             style="background-color: #e1ffe5; color: #09b812"
         >
-            <span class="d-block"> withdraw your btc </span>
+            <span class="d-block"> withdraw your BTC </span>
             <v-icon color="#09b812" class="d-block">fa-chevron-right</v-icon>
         </div>
         <div class="input white align-center pa-6 pb-0 layout">

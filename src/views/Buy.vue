@@ -1,6 +1,6 @@
 <template>
-    <div class="Buy pa-2 fill-height">
-        <v-card class="pa-2" style="width: 100%">
+    <div class="Buy fill-height">
+        <v-card class="pa-2 fill-height" style="width: 100%">
             <v-form ref="form" v-model="valid" lazy-validation>
                 <v-card-title> Account: {{ account.name }}</v-card-title>
                 <v-card-text>
@@ -58,7 +58,7 @@
                         v-model="priceUsd"
                         disabled
                         persistent-hint
-                        label="amount in usd"
+                        label="amount in USD"
                         class="mt-2"
                         type="number"
                     ></v-text-field>
@@ -85,8 +85,8 @@
                         @change="onChangeUSDPrice"
                         persistent-hint
                         color="black"
-                        label="Price in Usd"
-                        hint="The price you want (in USD) for 1 TFT"
+                        label="Maximum price in USD"
+                        hint="The maximum price you want (in USD) for 1 TFT"
                         type="number"
                         step="0.01"
                         min="0.1"
@@ -97,7 +97,7 @@
                     <hr class="my-4" />
 
                     <p>
-                        lorem ipsuim dolor sit amed <b>{{ amountTft }}</b> TFT
+                        If the trade is fully completed, you will receive an estimated <b>{{ amountTft }}</b> TFT
                     </p>
                 </v-card-text>
                 <v-card-actions>
@@ -197,6 +197,9 @@
                     buyAssetCode: 'TFT',
                     sellAssetCode: 'BTC',
                     amount: this.btcAmount,
+                    shownAmountInUsd: this.priceUsd,
+                    shownAmountTft: this.amountTft,
+                    shownPriceInUSD: this.priceInUSD,
                     price: Number(this.price.toFixed(8)),
                 });
                 this.$router.push({ name: 'buyConfirmation' });

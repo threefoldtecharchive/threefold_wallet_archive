@@ -1,27 +1,63 @@
 <template>
-    <div class="Buy pa-2 fill-height">
-        <v-card class="pa-2" style="width: 100%" v-if="account">
-            <v-card-title> Account: {{ account.name }}</v-card-title>
+    <div class="Buy fill-height">
+        <v-card class="pa-2 fill-height" style="width: 100%" v-if="account">
+            <v-card-title> Wallet: {{ account.name }}</v-card-title>
             <v-card-text>
                 <v-col>
-                    <v-row>
-                        <h2>CurrentTrade:</h2>
-                        <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ tradeInfo }}</pre>
-                        <br />
-                        <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ maxBTCInblock }}</pre>
-                        <br />
-                        <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ currentOffer }}</pre>
+                    <v-row class="pb-2">
+                        <h3 class="font-italic error--text">Keep this screen open to continue trading</h3>
                     </v-row>
-                    <v-row>
-                        <h2 class="dots">Trading</h2>
+                </v-col>
+                <v-col class="pb-2">
+                    <v-row class="pb-2">
+                        <span>
+                            <h2 class="dots pb-2">Trading</h2>
+                            <b>{{ tradeInfo.amount }} {{ tradeInfo.sellAssetCode }}</b> (<b
+                                >{{ tradeInfo.shownAmountInUsd.toFixed(3) }} USD</b
+                            >) <br />
+                            for an estimated <b>{{ tradeInfo.shownAmountTft }} {{ tradeInfo.buyAssetCode }}</b>
+                            <br /><br />
+                            At a maximum price of
+                            <b>{{ (1 / tradeInfo.price).toFixed(8) }} {{ tradeInfo.sellAssetCode }}</b> (<b
+                                >{{ tradeInfo.shownPriceInUSD }} USD</b
+                            >) per <b>1 {{ tradeInfo.buyAssetCode }}</b
+                            >.
+                        </span>
                     </v-row>
                     <v-row class="pa-8" justify="center">
-                        <v-progress-circular indeterminate color="amber" size="100"></v-progress-circular>
+                        <v-progress-circular indeterminate color="blue" size="100"></v-progress-circular>
                     </v-row>
                     <v-row justify="center">
                         <span>block {{ currentBlock }} / {{ blockAmount }}</span>
                     </v-row>
+                    <v-row justify="center">
+                        <span v-if="currentBlock >= 0"
+                            >trade
+                            {{ Math.round(((currentBlock - 1 > 0 ? currentBlock - 1 : 0) / blockAmount) * 100) }} %
+                            completed</span
+                        >
+                    </v-row>
                 </v-col>
+
+                <!--                <v-col>-->
+                <!--                    <v-row>-->
+                <!--                        <h2>CurrentTrade:</h2>-->
+                <!--                        <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ tradeInfo }}</pre>-->
+                <!--                        <br />-->
+                <!--                        <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ maxBTCInblock }}</pre>-->
+                <!--                        <br />-->
+                <!--                        <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ currentOffer }}</pre>-->
+                <!--                    </v-row>-->
+                <!--                    <v-row>-->
+                <!--                        <h2 class="dots">Trading</h2>-->
+                <!--                    </v-row>-->
+                <!--                    <v-row class="pa-8" justify="center">-->
+                <!--                        <v-progress-circular indeterminate color="amber" size="100"></v-progress-circular>-->
+                <!--                    </v-row>-->
+                <!--                    <v-row justify="center">-->
+                <!--                        <span>block {{ currentBlock }} / {{ blockAmount }}</span>-->
+                <!--                    </v-row>-->
+                <!--                </v-col>-->
             </v-card-text>
             <v-card-actions>
                 <v-btn block @click="onStopClick" color="error" elevation="0">Stop Trading</v-btn>

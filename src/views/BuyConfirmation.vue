@@ -1,21 +1,33 @@
 <template>
-    <div class="Buy pa-4 fill-height flex-column">
-        <v-card v-if="tradeInfo">
-            <v-card-title> <h1>Trade Confirmation</h1> </v-card-title>
+    <div class="Buy fill-height flex-column">
+        <v-card class="fill-height pt-4" v-if="tradeInfo" full>
+            <v-card-title><h1>Trade Confirmation</h1></v-card-title>
             <v-card-text>
                 <span
                     >By clicking 'Confirm Trade', you confirm that you have read and agree with our
                     <a class="pa-0" @click.prevent="showTerms = true">Terms and conditions </a>
                 </span>
                 <br />
-                <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{
-                    (1 / tradeInfo.price).toPrecision(8)
-                }}</pre>
-                <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ tradeInfo }}</pre>
+                <!--                <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{-->
+                <!--                    (1 / tradeInfo.price).toPrecision(8)-->
+                <!--                }}</pre>-->
+                <!--                <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ tradeInfo }}</pre>-->
+                <span>
+                    <h2>Trade:</h2>
+                    <b>{{ tradeInfo.amount }} {{ tradeInfo.sellAssetCode }}</b> (<b
+                        >{{ tradeInfo.shownAmountInUsd.toFixed(3) }} USD</b
+                    >) <br />
+                    for an estimated <b>{{ tradeInfo.shownAmountTft }} {{ tradeInfo.buyAssetCode }}</b> <br /><br />
+                    At a maximum price of
+                    <b>{{ (1 / tradeInfo.price).toFixed(8) }} {{ tradeInfo.sellAssetCode }}</b> (<b
+                        >{{ tradeInfo.shownPriceInUSD }} USD</b
+                    >) per <b>1 {{ tradeInfo.buyAssetCode }}</b
+                    >.
+                </span>
             </v-card-text>
             <v-card-actions class="flex-column">
                 <v-btn class="mb-2" @click="onAgreeClick" block color="accent" elevation="0">Confirm Trade</v-btn>
-                <v-btn @click="$router.push({ name: 'home' })" block text color="error" elevation="0">cancel</v-btn>
+                <v-btn @click="$router.push({ name: 'home' })" block text color="error" elevation="0">Cancel</v-btn>
             </v-card-actions>
         </v-card>
 
@@ -42,7 +54,7 @@
 
 <script>
     import { mapGetters, mapMutations } from 'vuex';
-    import { helloWorld } from '@jimber/stellar-crypto';
+    import { getPairPrice } from '@jimber/stellar-crypto';
 
     export default {
         name: 'BuyConfirmation',
@@ -50,6 +62,9 @@
             if (!this.tradeInfo) {
                 this.$router.push({ name: 'home' });
             }
+            getPairPrice('XBTUSDC').then(price => {
+                this.currentBtcPrice = price;
+            });
         },
         computed: {
             ...mapGetters(['tradeInfo']),
@@ -64,6 +79,7 @@
         data() {
             return {
                 showTerms: false,
+                currentBtcPrice: 0,
             };
         },
     };
