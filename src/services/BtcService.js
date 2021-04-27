@@ -33,6 +33,6 @@ export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
     );
     Logger.info('start withdraw');
 
-    await submitFundedTransaction(fundedTransaction, this.selectedAccount.keyPair);
+    await submitFundedTransaction(fundedTransaction, sourceKeyPair);
     Logger.info('successfully withdrawn');
 };
