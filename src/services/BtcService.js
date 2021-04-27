@@ -1,6 +1,6 @@
 import { Asset, Operation, TransactionBuilder, Keypair } from 'stellar-base';
 import axios from 'axios';
-import { getConfig } from '@jimber/stellar-crypto';
+import { getConfig, buildFundedPaymentTransaction, submitFundedTransaction } from '@jimber/stellar-crypto';
 
 /**
  * @param {Keypair} sourceKeyPair
@@ -18,43 +18,18 @@ export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
 
     console.log(response);
 
-    const {
-        account_id,
-        memo_type,
-        memo,
-        min_amount,
-        fee_fixed,
-    } = response.data;
+    const { account_id, memo_type, memo, min_amount, fee_fixed } = response.data;
 
     const { server, currencies, network } = getConfig();
     console.log({ server, currencies, network });
-    const fee = String(await server.fetchBaseFee());
 
-    console.log(sourceKeyPair.publicKey());
-
-    const transactionAccount = await server.loadAccount(
-        sourceKeyPair.publicKey()
+    const fundedTransaction = await buildFundedPaymentTransaction(
+        sourceKeyPair,
+        account_id,
+        amount,
+        `withdraw:${asset_code}`,
+        asset_code
     );
 
-    const transaction = new TransactionBuilder(transactionAccount, {
-        fee,
-        networkPassphrase: network,
-    });
-
-    const asset = new Asset(asset_code, currencies[asset_code].issuer);
-    transaction.addOperation(
-        Operation.payment({
-            destination: account_id,
-            asset: asset,
-            amount: amount.toFixed(7),
-            source: sourceKeyPair.publicKey(),
-        })
-    );
-
-    transaction.setTimeout(3000);
-    const tx = transaction.build();
-
-    console.log({ xdr: tx.toXDR() });
-
-    //@todo: fund transaction
+    await submitFundedTransaction(fundedTransaction, this.selectedAccount.keyPair);
 };
