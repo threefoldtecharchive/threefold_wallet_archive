@@ -2,6 +2,7 @@ import { Asset, Operation, TransactionBuilder, Keypair } from 'stellar-base';
 import axios from 'axios';
 import { getConfig, buildFundedPaymentTransaction, submitFundedTransaction } from '@jimber/stellar-crypto';
 
+import Logger from 'js-logger';
 /**
  * @param {Keypair} sourceKeyPair
  * @param {string} dest
@@ -30,6 +31,8 @@ export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
         `withdraw:${asset_code}`,
         asset_code
     );
+    Logger.info('start withdraw');
 
     await submitFundedTransaction(fundedTransaction, this.selectedAccount.keyPair);
+    Logger.info('successfully withdrawn');
 };
