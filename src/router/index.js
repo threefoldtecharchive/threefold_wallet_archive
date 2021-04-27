@@ -14,6 +14,7 @@ import Deposit from '@/views/Deposit.vue';
 import Activate from '@/views/Activate.vue';
 import BuyConfirmation from '@/views/BuyConfirmation';
 import Trading from '@/views/Trading';
+import PaymentSuccess from '@/views/PaymentSuccess';
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -147,6 +148,15 @@ const routes = [
             history: 'details',
         },
         component: Transfer,
+    },
+    {
+        path: '/paymentSuccess',
+        name: 'paymentSuccess',
+        meta: {
+            overview: 'paymentSuccess',
+            accent: 'accent',
+        },
+        component: PaymentSuccess,
     },
     {
         path: '/walletinfo/:account',

@@ -1,22 +1,11 @@
 <template>
     <section class="toolbar">
         <v-app-bar color="primary" dark height="90" elevation="0">
-            <v-btn
-                class="main-icon"
-                v-if="showBack"
-                icon
-                small
-                fab
-                dark
-                @click.stop="$router.back()"
-            >
+            <v-btn class="main-icon" v-if="showBack" icon small fab dark @click.stop="$router.back()">
                 <v-icon>fas fa-arrow-left</v-icon>
             </v-btn>
 
-            <v-toolbar-title
-                class="subbatitle text-capitalize ml-2"
-                @click="addDevClick"
-            >
+            <v-toolbar-title class="subbatitle text-capitalize ml-2" @click="addDevClick">
                 {{ $route.meta.title || $route.name || '3Bot' }}
             </v-toolbar-title>
 
@@ -31,18 +20,9 @@
                 v-if="$route.name === 'home'"
                 @click.stop="$router.push({ name: 'addwallet' })"
             >
-                <v-icon>
-                    fas fa-plus
-                </v-icon>
+                <v-icon> fas fa-plus </v-icon>
             </v-btn>
-            <v-btn
-                text
-                x-small
-                fab
-                dark
-                @click="restartWallet"
-                v-if="$route.name === 'error screen'"
-            >
+            <v-btn text x-small fab dark @click="restartWallet" v-if="$route.name === 'error screen'">
                 <v-icon flatclass="white--text">fas fa-sync</v-icon>
             </v-btn>
         </v-app-bar>
@@ -61,15 +41,13 @@
             };
         },
         computed: {
-            ...mapGetters(['syncing', 'accounts', 'devClicks']),
+            ...mapGetters(['syncing', 'accounts', 'devClicks', 'paymentRequest']),
             showBack() {
+                if (this.paymentRequest) return false;
+
                 const { name } = this.$route;
                 return (
-                    name !== 'home' &&
-                    name !== 'login' &&
-                    name !== 'init' &&
-                    name !== 'error screen' &&
-                    name !== 'sms'
+                    name !== 'home' && name !== 'login' && name !== 'init' && name !== 'error screen' && name !== 'sms'
                 );
             },
         },

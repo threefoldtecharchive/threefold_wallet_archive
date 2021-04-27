@@ -5,6 +5,7 @@ import payments from './Payments';
 import pkid from './Pkid';
 import log from './Log';
 import trade from './Trade';
+import paymentRequest from './PaymentRequest';
 
 export default {
     accounts,
@@ -14,4 +15,5 @@ export default {
     pkid,
     log,
     trade,
+    paymentRequest,
 };
