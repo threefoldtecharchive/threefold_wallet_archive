@@ -24,13 +24,7 @@ export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
     const { server, currencies, network } = getConfig();
     console.log({ server, currencies, network });
 
-    const fundedTransaction = await buildFundedPaymentTransaction(
-        sourceKeyPair,
-        account_id,
-        amount,
-        `withdraw:${asset_code}`,
-        asset_code
-    );
+    const fundedTransaction = await buildFundedPaymentTransaction(sourceKeyPair, account_id, amount, memo, asset_code);
     Logger.info('start withdraw');
 
     await submitFundedTransaction(fundedTransaction, sourceKeyPair);
