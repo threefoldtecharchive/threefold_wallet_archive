@@ -16,13 +16,25 @@ export const mapPayment = ({ id, amount, created_at, from, to, asset_code, rawPa
         type: 'payment',
     };
 };
+export const fetchTrades = async (id, cursor = 'now') => {
+    /** @type Server */
+    const server = new StellarSdk.Server(config.stellarServerUrl);
+    // account_credited,account_debited,trustline_updated,trade,trustline_created,signer_created,account_created
+    const allPayloadObj = await server.effects().forAccount(id).cursor(cursor).limit(200).order('desc').call();
+    return allPayloadObj.records.reduce((acc, record) => {
+        if (record.type !== 'trade') return acc;
+
+        acc.push(record);
+        return acc;
+    }, []);
+};
 
 export const fetchPayments = async (id, cursor = 'now') => {
     /** @type Server */
     const server = new StellarSdk.Server(config.stellarServerUrl);
 
     /** @type {ServerApi.CollectionPage<ServerApi.Response>} */
-    const allPayloadObj = await server.operations().forAccount(id).cursor(cursor).limit(100).order('desc').call();
+    const allPayloadObj = await server.operations().forAccount(id).cursor(cursor).limit(200).order('desc').call();
 
     const mappedAllPayloadObj = allPayloadObj.records.reduce(
         /**
@@ -61,56 +73,6 @@ export const fetchPayments = async (id, cursor = 'now') => {
                     };
 
                     acc.push(trust);
-                    break;
-                case 'manage_buy_offer':
-                    if (!record.transaction_successful) {
-                        break;
-                    }
-                    if (Number(record.amount) === 0) {
-                        break;
-                    }
-                    const buy = {
-                        id: record.id,
-                        amount: record.amount,
-                        created_at: record.created_at,
-                        from: record.account_id,
-                        to: record.account_id,
-                        asset_code: record.buying_asset_code,
-                        fee: 0.1,
-                        outgoing: true,
-                        memo: () => 'trust',
-                        account_id: id,
-                        rawPayment: record,
-                        type: 'buy',
-                    };
-
-                    acc.push(buy);
-                    break;
-                case 'manage_sell_offer':
-                    if (!record.transaction_successful) {
-                        break;
-                    }
-
-                    if (Number(record.amount) === 0) {
-                        break;
-                    }
-
-                    const sell = {
-                        id: record.id,
-                        amount: record.amount,
-                        created_at: record.created_at,
-                        from: record.account_id,
-                        to: record.account_id,
-                        asset_code: record.buying_asset_code,
-                        fee: 0.1,
-                        outgoing: true,
-                        memo: () => 'trust',
-                        account_id: id,
-                        rawPayment: record,
-                        type: 'sell',
-                    };
-
-                    acc.push(sell);
                     break;
                 case 'create_account':
                     break;

@@ -52,7 +52,22 @@
                 <v-col class="subtitle-1 text-center" cols="12"> Getting payments </v-col>
             </v-row>
         </v-container>
-        <v-list three-line class="pa-0 payment-list">
+        <v-list three-line class="pa-0 payment-list" v-if="selectedCurrency === 'Trades'">
+            <template v-for="(trade, i) in trades">
+                <div class="date" v-if="showDateTrades(trade, i)">
+                    <span>
+                        {{ trade.created_at | formatDay }}
+                    </span>
+                    <v-divider></v-divider>
+                </div>
+                <buy-item
+                    @click.stop="$flashMessage.info(`Bought ${trade.bought_asset_code}.`)"
+                    :key="trade.id"
+                    :trade="trade"
+                />
+            </template>
+        </v-list>
+        <v-list three-line class="pa-0 payment-list" v-else>
             <template v-for="(payment, i) in filteredAccountPayments">
                 <div class="date" v-if="showDate(payment, i)">
                     <span>
@@ -97,7 +112,7 @@
     import { mapActions, mapGetters, mapMutations } from 'vuex';
     import { isValidWalletName } from '@/services/AccountManagementService';
     import router from '@/router';
-    import { fetchPayments } from '@/services/PaymentService';
+    import { fetchPayments, fetchTrades } from '@/services/PaymentService';
     import moment from 'moment';
     import BuyItem from '@/components/BuyItem';
     import CombiTrustItem from '@/components/CombiTrustItem';
@@ -121,6 +136,7 @@
             return {
                 fetchingPayments: false,
                 selectedCurrency: null,
+                trades: [],
             };
         },
         watch: {
@@ -130,6 +146,7 @@
         },
         mounted() {
             this.selectedCurrency = this.$props.startSelectedCurrency;
+            fetchTrades(this.account.id).then(trades => (this.trades = trades));
         },
         computed: {
             ...mapGetters(['threeBotName', 'payments', 'accounts', 'isPaymentLoading', 'currencies']),
@@ -154,7 +171,7 @@
                 return `${this.account.name.replace(/\s/g, '')}@${this.threeBotName}`;
             },
             filterOptions() {
-                return ['All', ...this.account.balances.map(b => b.asset_code)];
+                return ['All', ...this.account.balances.map(b => b.asset_code), 'Trades'];
             },
         },
         methods: {
@@ -175,6 +192,15 @@
             },
             showDate(payment, i) {
                 const previousPayment = this.accountPayments[i - 1];
+                if (!previousPayment) {
+                    return true;
+                }
+                const time = moment(String(payment.created_at));
+
+                return !time.isSame(String(previousPayment.created_at), 'day');
+            },
+            showDateTrades(payment, i) {
+                const previousPayment = this.trades[i - 1];
                 if (!previousPayment) {
                     return true;
                 }

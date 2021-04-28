@@ -81,7 +81,7 @@
                     <!--                    type="number"-->
                     <!--                ></v-text-field>-->
                     <v-text-field
-                        :value="priceInUSD"
+                        v-model="priceInUSD"
                         @change="onChangeUSDPrice"
                         persistent-hint
                         color="black"
@@ -147,6 +147,7 @@
                 currentBtcPrice: 0,
                 price: 0,
                 usdPrice: 0.15,
+                shownPriceInUSD: 0.15,
                 valid: null,
             };
         },
@@ -184,14 +185,14 @@
             onChangeUSDPrice(value) {
                 const usdPrice = Number(value) > 0.1 ? Number(value) : 0.1;
 
-                const min = 0.1;
-                const max = 1000;
-                this.usdPrice = Math.min(Math.max(this.usdPrice, min), max);
+                debugger;
+                this.shownPriceInUSD = usdPrice;
                 this.price = this.currentBtcPrice / usdPrice ? this.currentBtcPrice / usdPrice : 0;
 
                 this.price = Number(this.price) > 1000 ? Number(this.price) : 1000;
             },
             onSubmit() {
+                debugger;
                 this.setTradeInfo({
                     id: this.account.id,
                     buyAssetCode: 'TFT',
@@ -199,7 +200,7 @@
                     amount: this.btcAmount,
                     shownAmountInUsd: this.priceUsd,
                     shownAmountTft: this.amountTft,
-                    shownPriceInUSD: this.priceInUSD,
+                    shownPriceInUSD: this.shownPriceInUSD,
                     price: Number(this.price.toFixed(8)),
                 });
                 this.$router.push({ name: 'buyConfirmation' });
