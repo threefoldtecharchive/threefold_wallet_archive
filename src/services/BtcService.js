@@ -3,13 +3,8 @@ import axios from 'axios';
 import { getConfig, buildFundedPaymentTransaction, submitFundedTransaction } from '@jimber/stellar-crypto';
 
 import Logger from 'js-logger';
-/**
- * @param {Keypair} sourceKeyPair
- * @param {string} dest
- * @param {number} amount
- */
-export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
-    const asset_code = 'BTC';
+
+export const getWithdrawInfo = async (asset_code, dest, amount) => {
     const response = await axios.get(
         `https://cryptoanchor.io/stellar/withdraw?asset_code=${asset_code}&dest=${dest}&amount=${amount}`,
         {
@@ -20,6 +15,17 @@ export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
     console.log(response);
 
     const { account_id, memo_type, memo, min_amount, fee_fixed } = response.data;
+    return { account_id, memo_type, memo, min_amount, fee_fixed };
+};
+
+/**
+ * @param {Keypair} sourceKeyPair
+ * @param {string} dest
+ * @param {number} amount
+ */
+export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
+    const asset_code = 'BTC';
+    const { account_id, memo } = await getWithdrawInfo(asset_code, dest, amount);
 
     const { server, currencies, network } = getConfig();
     console.log({ server, currencies, network });
