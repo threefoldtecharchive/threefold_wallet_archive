@@ -9,6 +9,7 @@
                     <b class="red--text" v-else> not activated </b>
                 </div>
                 <h3>Do you want to activate {{ asset }} on this wallet?</h3>
+                <span class="error--text">A high withdraw fee may be applicable.</span>
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <v-checkbox v-model="terms" :rules="[v => !!v || 'You must agree to continue!']" required>
                         <template v-slot:label>

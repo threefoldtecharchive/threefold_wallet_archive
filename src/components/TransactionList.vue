@@ -171,7 +171,11 @@
                 return `${this.account.name.replace(/\s/g, '')}@${this.threeBotName}`;
             },
             filterOptions() {
-                return ['All', ...this.account.balances.map(b => b.asset_code), 'Trades'];
+                let filters = ['All', ...this.account.balances.map(b => b.asset_code)];
+                if (this.trades.length > 0) {
+                    filters.push('Trades');
+                }
+                return filters;
             },
         },
         methods: {
