@@ -215,7 +215,7 @@
 
             if (this.selectedCurrency) {
                 const { currencies } = getConfig();
-                const asset = new Asset(this.selectCurrency, currencies[this.selectCurrency].issuer);
+                const asset = new Asset(this.selectedCurrency, currencies[this.selectedCurrency].issuer);
                 fetchFundDetails(asset)
                     .then(condition => {
                         this.fee = new Number(condition.fee_fixed);
