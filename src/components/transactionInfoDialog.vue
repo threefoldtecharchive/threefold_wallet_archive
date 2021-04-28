@@ -55,23 +55,30 @@
                                 <p class="subtitle mb-0 grey--text flex-grow-0">
                                     Withdraw fee <small class="font-weight-bold">(not included in amount)</small>
                                 </p>
-                                <v-layout class="pb-2" justify-space-between>
+                                <v-layout class="pb-2 flex-grow-0" justify-space-between>
                                     <span class="title mt-0"
                                         >{{ withdrawFee | formatBalance }} {{ selectedCurrency }}</span
                                     >
                                 </v-layout>
                             </template>
 
-                            <div class="action">
-                                <v-btn
-                                    @click="closeDialog(true)"
-                                    color="accent"
-                                    style="margin-left: 0px; margin-right: 0px"
-                                    block
-                                    :disabled="calcultaingFee"
-                                >
-                                    Confirm
-                                </v-btn>
+                            <div class="action flex-grow-1 d-flex align-end">
+                                <div style="width: 100%">
+                                    <template v-if="formObject.amount < withdrawFee">
+                                        <p class="subtitle mb-0 error--text flex-grow-0">
+                                            Withdraw fee is bigger than amount being sent.
+                                        </p>
+                                    </template>
+                                    <v-btn
+                                        @click="closeDialog(true)"
+                                        color="accent"
+                                        style="margin-left: 0px; margin-right: 0px"
+                                        block
+                                        :disabled="calcultaingFee || formObject.amount < withdrawFee"
+                                    >
+                                        Confirm
+                                    </v-btn>
+                                </div>
                             </div>
                         </v-layout>
                     </v-layout>
