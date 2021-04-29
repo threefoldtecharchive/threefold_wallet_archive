@@ -244,11 +244,13 @@ async function generateAndFetchAccount(keyPair, seedPhrase, index) {
     } catch (e) {
         Logger.error('error Something went wrong while generating account', {
             e,
+            error: e.response.data.error,
         });
         if (
             e.response &&
             e.response.data &&
-            e.response.data.error === 'Tfchain address has 0 balance, no need to activate an account'
+            (e.response.data.error === 'Tfchain address has 0 balance, no need to activate an account' ||
+                e.response.data.error.includes('GET: no content available (code: 204)'))
         ) {
             throw Error('Tfchain address has 0 balance, no need to activate an account'); // will initialize sms flow
         }
