@@ -52,7 +52,7 @@
                 </v-card-title>
                 <iframe
                     style="height: calc(100vh - 62px); width: 100%"
-                    src="https://wiki.threefold.io/#/legal__legal"
+                    src="https://threefold.io/info/threefold#/legal__terms_conditions_griduser"
                     frameborder="0"
                 ></iframe>
             </v-card>
