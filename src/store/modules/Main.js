@@ -421,7 +421,7 @@ export default {
                 await router.push({
                     name: 'details',
                     params: {
-                        account: getters.accounts[0].id,
+                        account: getters.accounts.filter(a => !a.error)[0].id,
                     },
                 });
             }

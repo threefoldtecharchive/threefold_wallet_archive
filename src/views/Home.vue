@@ -19,6 +19,7 @@
                     <ErrorAccountCard
                         :name="errorAccount.name"
                         v-for="errorAccount in errorAccounts"
+                        @click="seeDetails(errorAccounts)"
                         :id="errorAccount.id"
                         :key="errorAccount.id"
                     />
