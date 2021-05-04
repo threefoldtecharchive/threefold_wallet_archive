@@ -23,7 +23,7 @@ switch (window.location.host) {
             stellarServerUrl: 'https://horizon-testnet.stellar.org',
             stellarNetwork: 'Test SDF Network ; September 2015',
             serviceUrl: 'https://testnet.threefold.io/threefoldfoundation',
-            // devWallet: 'RaC+jPOPsNIyVmxvS2qbGkbnANJ2Vf/kqlD3WvQfP/A=',
+            devWallet: 'RaC+jPOPsNIyVmxvS2qbGkbnANJ2Vf/kqlD3WvQfP/A=',
             tftFundAccount: 'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID',
             feeDestination: 'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID',
             feeAmount: '0.1000000',
@@ -32,10 +32,6 @@ switch (window.location.host) {
                 TFT: {
                     asset_code: 'TFT',
                     issuer: 'GA47YZA3PKFUZMPLQ3B5F2E3CJIB57TGGU7SPCQT2WAEYKN766PWIMB3',
-                },
-                BTC: {
-                    asset_code: 'BTC',
-                    issuer: 'GBMDRYGRFNPCGNRYVTHOPFE7F7L566ZLZM7XFQ2UWWIE3NVSO7FA5MFY',
                 },
                 TFTA: {
                     asset_code: 'TFTA',

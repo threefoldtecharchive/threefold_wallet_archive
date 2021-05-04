@@ -41,11 +41,14 @@
         mounted() {
             window.vueInstance = this;
             if (config.devWallet) {
-                window.vueInstance.startWallet('devWallet.3bot', config.devWallet, null, null, {
-                    encodedAddress: btoa('GADPT2P3PXFTNRUSMOW2IGIWOTHGPQ2XF66G4Y4DENCNRZJVW4V7BUSJ'),
-                    encodedAmount: btoa('5'),
-                    encodedMessage: btoa('test.3bot'),
-                });
+                let paymentRequest = config.enablePaymentRequest
+                    ? {
+                          encodedAddress: btoa('GADPT2P3PXFTNRUSMOW2IGIWOTHGPQ2XF66G4Y4DENCNRZJVW4V7BUSJ'),
+                          encodedAmount: btoa('5'),
+                          encodedMessage: btoa('test.3bot'),
+                      }
+                    : null;
+                window.vueInstance.startWallet('devWallet.3bot', config.devWallet, null, null, paymentRequest);
             }
         },
         methods: {
