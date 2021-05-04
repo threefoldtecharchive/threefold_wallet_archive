@@ -20,6 +20,7 @@
                         :name="errorAccount.name"
                         v-for="errorAccount in errorAccounts"
                         @click="seeDetails(errorAccounts)"
+                        clickable
                         :id="errorAccount.id"
                         :key="errorAccount.id"
                     />

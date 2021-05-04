@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mb-4 errorcard">
+    <v-card class="mb-4 errorcard" @click="$router.push({ name: 'details', params: { account: id } })">
         <div>
             <v-layout class="content-inner">
                 <v-flex class="xs8">
@@ -16,7 +16,8 @@
         </div>
         <v-card-actions v-if="config.stellarNetwork === 'Test SDF Network ; September 2015'">
             <v-btn block @click="friendbot"
-                >Staging only: try to fix with friendbot <v-icon slot="right">fa-chevron-right</v-icon>
+                >Staging only: try to fix with friendbot
+                <v-icon slot="right">fa-chevron-right</v-icon>
             </v-btn>
         </v-card-actions>
     </v-card>
@@ -25,6 +26,7 @@
     import config from '@/../public/config';
 
     export default {
+        name: 'error-account-card',
         props: {
             name: {
                 type: String,
