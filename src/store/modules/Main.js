@@ -425,6 +425,13 @@ export default {
                     },
                 });
             }
+
+            if (getters.paymentRequest) {
+                await router.push({
+                    name: 'transfer',
+                });
+            }
+
             commit('stopAppLoading');
             commit('stopLoadingWallets');
         },

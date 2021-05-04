@@ -72,6 +72,7 @@
                                 : []
                         "
                         v-model="selectedCurrency"
+                        :disabled="!!paymentRequest"
                         item-value="TFT"
                         return-object
                         append-icon="fas fa-caret-down"
@@ -223,9 +224,17 @@
                     })
                     .catch(e => (this.calcultaingFee = false));
             }
+            if (this.paymentRequest) {
+                this.formObject.to.address = this.paymentRequest.address;
+                this.formObject.amount = this.paymentRequest.amount;
+                this.formObject.message = this.paymentRequest.message;
+                this.selectedCurrency = 'TFT';
+                this.from = 'TFT';
+                this.selectedAccount = this.availableAccounts[0];
+            }
         },
         computed: {
-            ...mapGetters(['accounts', 'currencies']),
+            ...mapGetters(['accounts', 'currencies', 'paymentRequest']),
             active() {
                 return this.$route.query.tab;
             },
@@ -366,6 +375,13 @@
                     //@todo show correct error message for multiple errors eg: "reason": "invalid address"
                     Logger.error('error Payment failed', { e });
                     this.$flashMessage.error(`Payment failed: ${e.message}`);
+                }
+
+                if (this.paymentRequest) {
+                    await this.$router.push({
+                        name: 'paymentSuccess',
+                    });
+                    return;
                 }
 
                 this.$router.push({

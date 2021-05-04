@@ -33,10 +33,6 @@ switch (window.location.host) {
                     asset_code: 'TFT',
                     issuer: 'GA47YZA3PKFUZMPLQ3B5F2E3CJIB57TGGU7SPCQT2WAEYKN766PWIMB3',
                 },
-                BTC: {
-                    asset_code: 'BTC',
-                    issuer: 'GBMDRYGRFNPCGNRYVTHOPFE7F7L566ZLZM7XFQ2UWWIE3NVSO7FA5MFY',
-                },
                 TFTA: {
                     asset_code: 'TFTA',
                     issuer: 'GB55A4RR4G2MIORJTQA4L6FENZU7K4W7ATGY6YOT2CW47M5SZYGYKSCT',

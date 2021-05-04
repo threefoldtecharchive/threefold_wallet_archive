@@ -41,15 +41,31 @@
         mounted() {
             window.vueInstance = this;
             if (config.devWallet) {
-                window.vueInstance.startWallet('devWallet.3bot', config.devWallet, null, null);
+                let paymentRequest = config.enablePaymentRequest
+                    ? {
+                          encodedAddress: btoa('GADPT2P3PXFTNRUSMOW2IGIWOTHGPQ2XF66G4Y4DENCNRZJVW4V7BUSJ'),
+                          encodedAmount: btoa('5'),
+                          encodedMessage: btoa('test.3bot'),
+                      }
+                    : null;
+                window.vueInstance.startWallet('devWallet.3bot', config.devWallet, null, null, paymentRequest);
             }
         },
         methods: {
             ...mapActions(['initialize']),
-            ...mapMutations(['setDebugSeed']),
-            async startWallet(doubleName, seed, importedWallets, appWallets) {
+            ...mapMutations(['setDebugSeed', 'setPaymentRequest']),
+            async startWallet(doubleName, seed, importedWallets, appWallets, encodedPaymentRequest = false) {
                 if (this.initialized) {
                     return;
+                }
+
+                if (encodedPaymentRequest) {
+                    const paymentRequest = {
+                        address: atob(encodedPaymentRequest.encodedAddress),
+                        amount: atob(encodedPaymentRequest.encodedAmount),
+                        message: atob(encodedPaymentRequest.encodedMessage),
+                    };
+                    this.setPaymentRequest(paymentRequest);
                 }
 
                 this.initialized = true;

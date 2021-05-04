@@ -6,6 +6,7 @@
                 v-if="selectedTab == 1"
                 :label="selectedCurrency === 'BTC' ? 'To (BTC or Wallet Address)' : 'To (Wallet Address)'"
                 v-model="formObject.to.address"
+                :disabled="!!paymentRequest"
                 :rules="toRules"
                 append-icon="far fa-address-book"
                 @click:append="toDialog = true"
@@ -20,13 +21,14 @@
                 v-model="formObject.amount"
                 type="number"
                 min="0.00"
+                :disabled="!!paymentRequest"
                 :rules="amountRules"
                 class="inputNumber mb-0"
                 clearable
                 :suffix="selectedCurrency"
             >
             </v-text-field>
-            <div class="btns" v-if="isSend">
+            <div class="btns" v-if="isSend && !paymentRequest">
                 <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(0.25)">25%</v-btn>
                 <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(0.5)">50%</v-btn>
                 <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(0.75)">75%</v-btn>
@@ -41,6 +43,7 @@
                 :counter="maxMessageLength"
                 clearable
                 :maxlength="maxMessageLength"
+                :disabled="!!paymentRequest"
             >
             </v-text-field>
 
@@ -106,7 +109,7 @@
             };
         },
         computed: {
-            ...mapGetters(['currencies']),
+            ...mapGetters(['currencies', 'paymentRequest']),
             toRules() {
                 const rules = [
                     v => !!v || 'Wallet address is required!',

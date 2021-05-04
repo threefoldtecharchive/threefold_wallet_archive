@@ -2,21 +2,13 @@
     <section class="app">
         <Loader v-if="showLoader" />
         <v-app :style="cssProps">
-            <div
-                class="banner"
-                v-if="!isProduction"
-                @click="$router.push({ name: 'devview' })"
-            >
+            <div class="banner" v-if="!isProduction" @click="$router.push({ name: 'devview' })">
                 {{ env }}
             </div>
             <div class="version" @click="addDevClick">{{ version }}</div>
             <Toolbar />
             <v-main class="mt-0">
-                <v-container
-                    class="pa-0 content fill-height"
-                    style="overflow: hidden"
-                    justify-start
-                >
+                <v-container class="pa-0 content fill-height" style="overflow: hidden" justify-start>
                     <router-view />
                 </v-container>
             </v-main>
@@ -59,9 +51,7 @@
                     '--accent-color': this.$vuetify.theme.themes.light.accent,
                     '--error-color': this.$vuetify.theme.themes.light.error,
                     '--gold-color': this.$vuetify.theme.themes.light.gold,
-                    '--active-color': this.$vuetify.theme[
-                        this.$route.meta.accent
-                    ],
+                    '--active-color': this.$vuetify.theme[this.$route.meta.accent],
                 };
             },
             isProduction() {
@@ -86,11 +76,7 @@
             },
         },
         methods: {
-            ...mapActions([
-                'createWallet',
-                'setInformationMessage',
-                'setImportingWallets',
-            ]),
+            ...mapActions(['createWallet', 'setInformationMessage', 'setImportingWallets']),
             ...mapMutations(['resetDevClicks', 'addDevClick']),
         },
         watch: {
