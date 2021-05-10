@@ -26,9 +26,10 @@
                 class="inputNumber mb-0"
                 clearable
                 :suffix="selectedCurrency"
+                v-if="!isValidBtcAddress"
             >
             </v-text-field>
-            <div class="btns" v-if="isSend && !paymentRequest">
+            <div class="btns" v-if="isSend && !paymentRequest && !isValidBtcAddress">
                 <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(0.25)">25%</v-btn>
                 <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(0.5)">50%</v-btn>
                 <v-btn class="pa-1 mr-2" small elevation="0" color="#e0e0e0" @click="setAmount(0.75)">75%</v-btn>
@@ -97,6 +98,9 @@
                 type: Boolean,
             },
             isSend: {
+                type: Boolean,
+            },
+            isValidBtcAddress: {
                 type: Boolean,
             },
         },

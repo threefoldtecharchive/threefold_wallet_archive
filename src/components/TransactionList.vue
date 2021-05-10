@@ -19,7 +19,7 @@
             "
             @click="
                 $router.push({
-                    name: 'transfer',
+                    name: 'withdraw',
                     params: {
                         account: account.id,
                         asset_code: 'BTC',

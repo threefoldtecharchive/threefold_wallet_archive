@@ -22,7 +22,7 @@
                     Scan QR
                     <v-icon class="ml-2">fas fa-qrcode</v-icon>
                 </v-btn>
-                <v-btn v-else small text @click="scanQR()" style="visibility: hidden"> </v-btn>
+                <v-btn v-else small text @click="scanQR()" style="visibility: hidden"></v-btn>
             </div>
 
             <v-row>
@@ -93,12 +93,13 @@
                 :is-btc-address="isValidBtcAddress"
                 :fee="fee"
                 :isSend="$route.query.tab === 'send'"
+                :isValidBtcAddress="isValidBtcAddress"
             >
             </FormComponent>
 
             <v-row>
                 <v-col>
-                    <span v-if="$route.query.tab !== 'receive'"
+                    <span v-if="$route.query.tab !== 'receive' && !isValidBtcAddress"
                         >Fee: {{ fee.toFixed(selectedCurrency === 'BTC' ? 8 : 4) }} {{ selectedCurrency }}</span
                     >
                     <v-btn
@@ -108,10 +109,11 @@
                         @click="transferConfirmed"
                         :loading="$route.query.tab === 'send' && !this.accountsReady && !calcultaingFee"
                         :disabled="
-                            !formObject.amount ||
-                            ($route.query.tab === 'send' && !accountsReady) ||
-                            calcultaingFee ||
-                            ($route.query.tab === 'send' && !formObject.to.address)
+                            (!formObject.amount ||
+                                ($route.query.tab === 'send' && !accountsReady) ||
+                                calcultaingFee ||
+                                ($route.query.tab === 'send' && !formObject.to.address)) &&
+                            !isValidBtcAddress
                         "
                     >
                         <div v-if="$route.query.tab === 'receive'">Generate QR</div>
@@ -239,6 +241,8 @@
                 return this.$route.query.tab;
             },
             isValidBtcAddress() {
+                // withdraw is currently disabled
+                // return false;
                 if (this.selectedCurrency !== 'BTC') {
                     return false;
                 }
@@ -315,14 +319,25 @@
                 return val;
             },
             transferConfirmed() {
+                const form = this.$refs.formComponent;
+                const fromAccount = form.selectedAccount;
+                if (this.isValidBtcAddress) {
+                    this.$router.push({
+                        name: 'withdraw',
+                        params: {
+                            account: fromAccount.id,
+                            asset_code: 'BTC',
+                        },
+                    });
+                    return this;
+                }
+
                 if (!this.checkForm()) {
                     console.log('form not valid');
                     return;
                 }
 
                 const ASSET_CODE = this.$refs.formComponent.selectedCurrency;
-                const form = this.$refs.formComponent;
-                const fromAccount = form.selectedAccount;
                 const balance = Number(fromAccount.balances.find(b => b.asset_code === ASSET_CODE).balance);
                 const amountToTransfer = Number(form.formObject.amount);
 

@@ -177,7 +177,8 @@
                 return this.accounts.find(x => x.id.toLowerCase() == this.formObject.to.address.toLowerCase());
             },
             isValidBtcAddress() {
-                return validate(this.formObject.to.address, 'mainnet');
+                // withdraw is currently disabled
+                return false && validate(this.formObject.to.address, 'mainnet');
             },
         },
     };

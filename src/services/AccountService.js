@@ -206,6 +206,9 @@ export const fetchAccount = async ({ seedPhrase, index, name, tags, position, is
 
                     const newAccount = store.getters.accounts.find(a => a.id === accountResponse.id);
 
+                    if (!newAccount) {
+                        return;
+                    }
                     newAccount.vestedBalance = vestedBalance;
 
                     store.commit('addAccount', newAccount);

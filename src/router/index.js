@@ -15,6 +15,7 @@ import Activate from '@/views/Activate.vue';
 import BuyConfirmation from '@/views/BuyConfirmation';
 import Trading from '@/views/Trading';
 import PaymentSuccess from '@/views/PaymentSuccess';
+import Withdraw from '@/views/Withdraw';
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -128,6 +129,16 @@ const routes = [
             accent: 'accent',
         },
         component: Deposit,
+    },
+    {
+        path: '/withdraw/:asset/:account',
+        name: 'withdraw',
+        meta: {
+            title: 'withdraw',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Withdraw,
     },
     {
         path: '/activate/:asset/:account',
