@@ -41,11 +41,9 @@
 <script>
     import store from '@/store';
     import router from '@/router';
-    import CopyField from '@/components/CopyField';
 
     export default {
-        name: 'Deposit',
-        components: { CopyField },
+        name: 'Withdraw',
         data() {
             return {
                 account: null,
