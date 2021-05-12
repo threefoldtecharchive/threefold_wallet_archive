@@ -7,7 +7,10 @@
             <v-card-text class="d-flex flex-column justify-center align-center">
                 <div class="status pb-2">
                     To withdraw your BTC, please use the manual procedure provided
-                    <a class="font-weight-bold v-size--large" @click="showManual = true"> here</a>
+                    <a class="font-weight-bold v-size--large" @click="showManual = true"> here</a>.
+                    <br />
+                    Or go to:
+                    <copy-field value="https://wiki.threefold.io/#/threefold__btc_withdrawal"></copy-field>
                 </div>
             </v-card-text>
             <v-card-actions>
@@ -30,7 +33,7 @@
                 </v-card-title>
                 <iframe
                     style="height: calc(100vh - 62px); width: 100%"
-                    src="https://threefold.io/info/threefold#/threefold__threefold_connect_btc"
+                    src="https://wiki.threefold.io/#/threefold__btc_withdrawal"
                     frameborder="0"
                 ></iframe>
             </v-card>
@@ -41,9 +44,11 @@
 <script>
     import store from '@/store';
     import router from '@/router';
+    import CopyField from '@/components/CopyField';
 
     export default {
         name: 'Withdraw',
+        components: { CopyField },
         data() {
             return {
                 account: null,
