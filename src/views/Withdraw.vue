@@ -30,7 +30,7 @@
                 </v-card-title>
                 <iframe
                     style="height: calc(100vh - 62px); width: 100%"
-                    src="https://threefold.io/info/threefold#/legal__terms_conditions_griduser"
+                    src="https://threefold.io/info/threefold#/threefold__threefold_connect_btc"
                     frameborder="0"
                 ></iframe>
             </v-card>
