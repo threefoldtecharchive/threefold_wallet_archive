@@ -32,7 +32,7 @@
                                 </p>
                             </v-flex>
                             <v-flex v-if="formObject.message">
-                                <p class="subtitle mb-0 grey--text">Message</p>
+                                <p class="subtitle mb-0 grey--text">Memo Text</p>
                                 <p class="title mt-0">
                                     {{ formObject.message }}
                                 </p>

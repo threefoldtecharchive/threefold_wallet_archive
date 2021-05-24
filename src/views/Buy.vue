@@ -67,12 +67,12 @@
                     disabled
                     color="black"
                     label="TFT"
-                    hint="minimum amount of of tft you will get"
+                    hint="Minimum amount of TFT you will get"
                 ></v-text-field>
             </v-card-text>
             <v-card-actions>
                 <v-btn color="accent" block elevation="0"
-                    >Submit this buy order
+                    >Submit Order
                 </v-btn>
             </v-card-actions>
         </v-card>

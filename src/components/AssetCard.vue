@@ -25,7 +25,7 @@
                         Locked {{ lockedBalance | formatBalance }}
                     </div>
                     <div class="subtitle-2" v-if="vestedBalance">
-                        vested {{ vestedBalance | formatBalance }}
+                        Vested {{ vestedBalance | formatBalance }}
                     </div>
                 </v-card-text>
             </v-col>

@@ -2,25 +2,18 @@
     <div class="Deposit fill-height pa-4">
         <v-card>
             <v-card-title>
-                <h3>Send btc to</h3>
+                <h3>Deposit BTC</h3>
             </v-card-title>
             <v-card-text class="d-flex flex-column justify-center align-center">
-                <div class="status">
-                    Btc status on your account :
-                    <b
-                        class="green--text"
-                        v-if="
-                            account.balances.find(b => b.asset_code === 'BTC')
-                        "
-                    >
-                        ok
-                    </b>
-                    <b class="red--text" v-else> not ok </b>
+                <div class="caption layout justify-center">
+                    <span>
+                        Send BTC to the following address by clicking the copy icon or scanning the QR code below.
+                    </span>
                 </div>
                 <CopyField
-                    label="BTC address"
+                    label="BTC Wallet Address"
                     :value="address"
-                    :message="`Btc address has been copied to clipboard (${address.substring(
+                    :message="`Address has been successfully copied to clipboard (${address.substring(
                         0,
                         8
                     )}...).`"

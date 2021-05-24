@@ -1,21 +1,8 @@
 <template>
     <div class="Activate pa-2" style="width: 100%">
         <v-card class="pa-2" style="width: 100%">
-            <v-card-title> Activate {{ asset }} Now</v-card-title>
+            <v-card-title> Activate {{ asset }} Asset</v-card-title>
             <v-card-text>
-                <div class="status">
-                    {{ asset }} status on your account :
-                    <b
-                        class="green--text"
-                        v-if="
-                            account.balances.find(b => b.asset_code === asset)
-                        "
-                    >
-                        ok
-                    </b>
-                    <b class="red--text" v-else> not activated </b>
-                </div>
-                <h3>Do you want to activate {{ asset }} on this wallet?</h3>
                 <v-form ref="form" v-model="valid" lazy-validation>
                     <v-checkbox
                         v-model="terms"
@@ -24,7 +11,7 @@
                     >
                         <template v-slot:label>
                             <div>
-                                I agree to the
+                                By clicking 'Activate', I acknowledge
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
                                         <a
@@ -33,7 +20,19 @@
                                             @click.stop
                                             v-on="on"
                                         >
-                                            Terms and conditions.
+                                            ThreeFold's {{ asset }}  Asset Guide
+                                        </a>
+                                    </template>
+                                and agree to the 
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <a
+                                            target="_blank"
+                                            href="http://example.com"
+                                            @click.stop
+                                            v-on="on"
+                                        >
+                                            Terms and Conditions
                                         </a>
                                     </template>
                                     Opens in new window
@@ -105,8 +104,7 @@
                 this.startAppLoading();
                 try {
                     this.setLoadingMessage({
-                        message: `Activating ${this.asset}`,
-                        additional: `Trying to self-activate ${this.asset}`,
+                        message: `Activating ${this.asset} Asset`,
                     });
 
                     await this.selfActivateAsset();
@@ -152,12 +150,12 @@
                 await server.submitTransaction(tx);
 
                 this.$flashMessage.info(
-                    `Successfully activated ${this.asset}, it could take a few moments before you see it.`
+                    `Successfully activated ${this.asset} Asset, it could take a few moments before you see it.`
                 );
             },
             async activateWithFunding() {
                 this.setLoadingMessage({
-                    message: `activating ${this.asset}`,
+                    message: `activating ${this.asset} Asset`,
                     additional: `trying to activate ${this.asset} with activation service`,
                 });
                 try {

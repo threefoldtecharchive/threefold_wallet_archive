@@ -18,14 +18,14 @@
                     <b class="ml-1">{{ account.name }}</b></v-card-title
                 >
                 <v-card-text
-                    >Activate vesting to be able to join the vesting program.
+                    >Activate Vesting to be able to join the vesting program.
                 </v-card-text>
                 <v-card-actions>
                     <v-btn
                         color="accent"
                         elevation="0"
                         @click="onActivateVesting"
-                        >activate Vesting
+                        >Activate Vesting
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -46,7 +46,7 @@
                                 <span
                                     class="font-weight-light fa-xs blue-grey--text ml-1"
                                 >
-                                    vesting
+                                    Vesting
                                 </span>
                             </v-row>
                             <v-row>
@@ -79,7 +79,7 @@
                             <v-row>
                                 <div>
                                     Transfer <b>TFT</b> to the
-                                    <b>Vesting Wallet</b> in order to vest them.
+                                    <b>Vesting Wallet</b> to start vesting.
                                 </div>
                             </v-row>
                         </v-col>
@@ -87,7 +87,7 @@
                 </div>
                 <v-card-actions class="pa-4">
                     <v-btn elevation="0" color="accent" @click="onVestTokens"
-                        >vest TFT
+                        >Vest TFT
                     </v-btn>
                 </v-card-actions>
             </v-card>

@@ -8,7 +8,7 @@
                             ? 'xlm'
                             : payments[0].asset_code
                     }}
-                    asset has been added
+                    Asset has been successfully added
                 </v-list-item-title>
                 <v-list-item-title v-else>
                     <span
@@ -23,7 +23,7 @@
                         {{ payments.length > i + 2 ? ',' : '' }}
                         {{ payments.length === i + 2 ? 'and' : '' }}
                     </span>
-                    assets have been added.
+                    Assets have been successfully added.
                 </v-list-item-title>
             </v-list-item-content>
         </v-list-item>
