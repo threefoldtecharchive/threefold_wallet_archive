@@ -34,7 +34,7 @@
                         indeterminate
                     />
                     <p class="pt-3">
-                        Loading wallets...
+                        Loading Wallets...
                     </p>
                 </v-layout>
             </div>
