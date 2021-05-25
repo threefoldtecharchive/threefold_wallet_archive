@@ -3,8 +3,12 @@
         <v-list-item class="system" v-bind="$attrs" v-on="$listeners">
             <v-list-item-content>
                 <v-list-item-title v-if="payments.length === 1">
-                    {{ payments[0].asset_code === 'native' ? 'xlm' : payments[0].asset_code }}
-                    asset has been added
+                    {{
+                        payments[0].asset_code === 'native'
+                            ? 'xlm'
+                            : payments[0].asset_code
+                    }}
+                    Asset has been successfully added
                 </v-list-item-title>
                 <v-list-item-title v-else>
                     <span v-for="(payment, i) in payments" :key="`${payment.id}-${payment.asset_code}`">
@@ -12,7 +16,7 @@
                         {{ payments.length > i + 2 ? ',' : '' }}
                         {{ payments.length === i + 2 ? 'and' : '' }}
                     </span>
-                    assets have been added.
+                    Assets have been successfully added.
                 </v-list-item-title>
             </v-list-item-content>
         </v-list-item>

@@ -51,11 +51,11 @@
                 this.$refs.field.$refs.input.select();
                 document.execCommand('copy');
                 this.$root.$emit('copy', {
-                    title: 'Copy seed to clipboard',
+                    title: 'Copy Seed Phrase to clipboard',
                     toCopy: this.secret,
                     callback: () => {
                         this.$flashMessage.info(
-                            `Stellar secret has been copied to clipboard (${this.secret.substring(
+                            `Seed Phrase copied successfully to clipboard (${this.secret.substring(
                                 0,
                                 8
                             )}...).`

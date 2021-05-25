@@ -1,9 +1,9 @@
 <template>
     <v-row class="fill-height" align="center" justify="center">
         <v-col align="center" justify="center">
-            <p class="headline">Please wait while your account is activated.</p>
+            <p class="headline">Please wait while your account is being activated.</p>
             <span class="code">{{ $route.params.code }}</span>
-            <p class="subtitle-1">for more info go to support</p>
+            <p class="subtitle-1">For more info, please go to Support</p>
         </v-col>
     </v-row>
 </template>

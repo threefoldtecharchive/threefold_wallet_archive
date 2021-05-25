@@ -63,10 +63,10 @@
                 disabled
                 color="black"
                 label="TFT"
-                hint="minimum amount of of tft you will get"
+                hint="Minimum amount of TFT you will get"
             ></v-text-field>
             <v-btn color="accent" block elevation="0"
-                >Submit this buy order
+                >Submit Order
             </v-btn>
         </v-card>
     </div>
@@ -98,7 +98,7 @@
                 });
 
                 this.$flashMessage.error(
-                    `BTC is not yet activated, please activate it before continuing.`
+                    `BTC Asset is not activated, please activate it before continuing.`
                 );
 
                 return;

@@ -132,14 +132,14 @@
                     v =>
                         typeof v == 'undefined' ||
                         (typeof v === 'string' && v.length <= this.maxMessageLength) ||
-                        `Message cannot be more than ${this.maxMessageLength} characters long`,
+                        `Memo Text cannot be more than ${this.maxMessageLength} characters long`,
                 ];
                 return rules;
             },
             amountRules() {
                 const rules = [
-                    v => !!v || 'The amount is required',
-                    v => (!!v && Number(v) > 0) || 'The amount must be greater than 0',
+                    v => !!v || 'Amount is required',
+                    v => (!!v && Number(v) > 0) || 'Amount must be greater than 0',
                     // @TODO add this to validate the balance
                     // v => !!v && Number(v) <= Number((this.accounts.find(x => x.address == this.selectedWallet.address).totalAmount.replace(",", "") - 0.10).toFixed(9)) || 'Your balance is insufficient'
                 ];
@@ -177,7 +177,7 @@
                 const amount = availableBalanceWithoutfee * percentage;
 
                 if (amount <= 0) {
-                    this.$flashMessage.error('balance is too low');
+                    this.$flashMessage.error('Balance is too low');
                     return;
                 }
                 this.formObject.amount = amount;
