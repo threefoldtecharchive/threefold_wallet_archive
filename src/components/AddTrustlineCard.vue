@@ -24,7 +24,7 @@
                         text
                         color="deep-purple"
                         @click="addTrustLines(account)"
-                        >Add Threefold trustlines</v-btn
+                        >Add Threefold Trustlines</v-btn
                     >
                 </v-row>
             </v-col>

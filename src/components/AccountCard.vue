@@ -21,7 +21,7 @@
                 <v-col>
                     <v-row>
                         <span class="title text-capitalize">
-                            {{ account ? account.name : 'Wallet name' }}
+                            {{ account ? account.name : 'Wallet Name' }}
                         </span>
                         <span
                             v-for="tag in account.tags"
@@ -117,7 +117,7 @@
                     toCopy: this.account.id,
                     callback: () => {
                         this.$flashMessage.info(
-                            `Address has been copied to clipboard (${this.account.id.substring(
+                            `Successfully copied address to clipboard (${this.account.id.substring(
                                 0,
                                 8
                             )}...).`
@@ -128,7 +128,7 @@
             clicked() {
                 if (this.clickable) {
                     router.push({
-                        name: 'details',
+                        name: 'Details',
                         params: {
                             account: this.account.id,
                         },

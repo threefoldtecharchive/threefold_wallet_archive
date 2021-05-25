@@ -30,7 +30,7 @@
                         @click="createNewWallet"
                         :disabled="!walletName"
                     >
-                        Create wallet</v-btn
+                        Create Wallet</v-btn
                     >
                 </div>
             </v-container>
@@ -39,7 +39,7 @@
                 <div class="caption layout justify-center">
                     <span
                         >You can use this to load a stellar secret or to import
-                        a wallet from the Threefold app.</span
+                        a wallet from the Threefold Connect App.</span
                     >
                 </div>
 
@@ -86,7 +86,7 @@
                         <v-icon small>fas fa-exclamation-triangle</v-icon>
                     </v-col>
                     <v-col class="body-2" style="line-height: 2rem">
-                        Make sure to keep this seed written down and stored in a
+                        Make sure to keep this seed phrase is written down and stored in a
                         safe place.
                     </v-col>
                 </div>
@@ -99,7 +99,7 @@
                         @click="importWallet"
                         :disabled="!walletName"
                     >
-                        Import wallet</v-btn
+                        Import Wallet</v-btn
                     >
                 </v-row>
             </v-container>
@@ -221,7 +221,7 @@
                     return;
                 }
                 this.secretErrors.push(
-                    'Please enter a valid stellar key or 24 word seed phrase.'
+                    'Please enter a valid Stellar key or 24 word seed phrase.'
                 );
             },
             async importNewWallet() {
@@ -258,7 +258,7 @@
                             params: {
                                 reason: 'Failed to import new account.',
                                 fix:
-                                    "Try again later, if that doesn't work contact support",
+                                    "Try again later, if that doesn't work, please contact support",
                             },
                         });
                     });
@@ -273,7 +273,7 @@
 
                 if (foundWallet) {
                     this.secretErrors.push(
-                        `This stellar secret is used by ${foundWallet.name}`
+                        `This Stellar secret is used by ${foundWallet.name}`
                     );
                     return;
                 }
@@ -281,7 +281,7 @@
                 try {
                     seedPhrase = seedPhraseFromStellarSecret(this.secret);
                 } catch (e) {
-                    this.secretErrors.push(`Please enter a valid stellar key.`);
+                    this.secretErrors.push(`Please enter a valid Stellar key.`);
                     return;
                 }
                 const walletName = this.walletName;
@@ -289,7 +289,7 @@
                 // @Todo rivine address calculation for an -1 index is wrong
                 // For now we don't try conversion on those acccounts
                 const isConverted = true;
-                Logger.info('Importing stellar secret but not converting');
+                Logger.info('Importing Stellar secret but not converting');
                 this.generateImportedAccount({
                     seedPhrase,
                     walletName,
@@ -312,7 +312,7 @@
                             params: {
                                 reason: 'Failed to import account.',
                                 fix:
-                                    "Try again later, if that doesn't work contact support",
+                                    "Try again later, if that doesn't work, please contact Support",
                             },
                         });
                     });

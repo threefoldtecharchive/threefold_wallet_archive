@@ -102,7 +102,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-btn color="accent" block elevation="0" @click="onSubmit" :disabled="!valid"
-                        >Submit this trade offer</v-btn
+                        >Submit Order</v-btn
                     >
                 </v-card-actions>
             </v-form>

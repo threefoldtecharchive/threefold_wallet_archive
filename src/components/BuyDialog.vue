@@ -6,7 +6,7 @@
                 style="background-color: #34495e; color: white"
                 dense
             >
-                Transaction details
+                Transaction Details
                 <v-spacer></v-spacer>
                 <v-btn text icon @click="close">
                     <v-icon :color="$route.meta.accent"> fa-times </v-icon>
@@ -57,7 +57,7 @@
                         </p>
 
                         <p v-if="memo" class="subtitle mb-0 grey--text">
-                            Message
+                            Memo Text
                         </p>
                         <p v-if="memo" class="title mt-0">{{ memo }}</p>
                     </v-col>

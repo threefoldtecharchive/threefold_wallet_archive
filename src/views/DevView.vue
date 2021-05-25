@@ -18,7 +18,7 @@
             <v-tab> Data</v-tab>
             <v-tab-item class="pa-4">
                 <v-card class="pa-2 my-2">
-                    <p class="display-1 text--primary">main data</p>
+                    <p class="display-1 text--primary">Main Data</p>
                     <v-card-text>
                         <ul>
                             <li>
@@ -47,18 +47,18 @@
             <v-tab> Actions</v-tab>
             <v-tab-item class="pa-4">
                 <v-card class="pa-2 my-2">
-                    <v-card-title>Restart wallet</v-card-title>
+                    <v-card-title>Restart Wallet</v-card-title>
                     <v-card-text>
-                        <p>Restarts the 3bot_connect wallet</p>
+                        <p>Restart ThreeFold Connect Wallet</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn dark text color="deep-purple" @click="Restart"> restart </v-btn>
+                        <v-btn dark text color="deep-purple" @click="Restart"> Restart </v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="pa-2 my-2">
-                    <v-card-title> Retry migration</v-card-title>
+                    <v-card-title> Retry Migration</v-card-title>
                     <v-card-text>
-                        <p>Retry the conversion from TFChain to Stellar network</p>
+                        <p>Retry the conversion from TFChain to Stellar Network</p>
                         <v-col>
                             <v-row v-for="account in accounts" :key="account.id">
                                 {{ account.name }}
@@ -72,22 +72,22 @@
                 </v-card>
                 <addTrustlineCard class="pa-2 my-2" />
                 <v-card class="pa-2 my-2">
-                    <v-card-title>Reset app wallets</v-card-title>
+                    <v-card-title>Reset App wallets</v-card-title>
                     <v-card-text>
-                        <p>Resets app wallets</p>
+                        <p>Resets App wallets</p>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn dark text color="deep-purple" @click="ResetAppWallets"> Reset </v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="pa-2 my-2">
-                    <v-card-title> Remove imported wallets</v-card-title>
+                    <v-card-title> Remove Imported Wallets</v-card-title>
                     <v-card-actions>
                         <v-btn dark text color="deep-purple" @click="RemoveImportedAccounts"> Remove </v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="pa-2 my-2">
-                    <v-card-title> Show error page</v-card-title>
+                    <v-card-title> Show Error Page</v-card-title>
                     <v-card-text>
                         <p>Show the error screen</p>
                     </v-card-text>

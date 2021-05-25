@@ -8,7 +8,7 @@
             style="background-color: #cfecff; color: #0972b8"
             @click="$emit('pressVesting')"
         >
-            <span class="d-block"> Check vesting opportunity </span>
+            <span class="d-block"> Check Vesting Opportunity </span>
             <v-icon color="#0972B8" class="d-block">fa-chevron-right</v-icon>
         </div>
 

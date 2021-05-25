@@ -15,7 +15,7 @@
                     </h1>
                     <div class="subtitle-1">Balance {{ balance.balance | formatBalance }}</div>
                     <div class="subtitle-2" v-if="lockedBalance">Locked {{ lockedBalance | formatBalance }}</div>
-                    <div class="subtitle-2" v-if="vestedBalance">vested {{ vestedBalance | formatBalance }}</div>
+                    <div class="subtitle-2" v-if="vestedBalance">Vested {{ vestedBalance | formatBalance }}</div>
                 </v-card-text>
             </v-col>
             <v-col

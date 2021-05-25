@@ -29,7 +29,7 @@
             <div v-if="isLoadingWallets && !isAppLoading" class="fill-height">
                 <v-layout justify-center align-center fill-height column>
                     <v-progress-circular :size="70" :width="10" :color="$route.meta.accent" indeterminate />
-                    <p class="pt-3">Loading wallets...</p>
+                    <p class="pt-3">Loading Wallets...</p>
                 </v-layout>
             </div>
         </v-layout>

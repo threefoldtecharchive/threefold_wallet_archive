@@ -3,8 +3,8 @@
         <v-dialog v-model="dialog" fullscreen persistent scrollable>
             <v-card class="no-radius">
                 <v-card-title style="background-color: #34495e; color: white" dense>
-                    <span v-if="isValidBtcAddress"> Withdraw BTC info </span>
-                    <span v-else> Transaction info </span>
+                    <span v-if="isValidBtcAddress"> Withdraw BTC Info </span>
+                    <span v-else> Transaction Info </span>
                     <v-spacer></v-spacer>
                     <v-btn text icon @click="closeDialog(false)">
                         <v-icon :color="$route.meta.accent"> fas fa-times </v-icon>
@@ -25,7 +25,7 @@
                             </p>
 
                             <template v-if="formObject.message">
-                                <p class="subtitle mb-0 grey--text">Message</p>
+                                <p class="subtitle mb-0 grey--text">Memo Text</p>
                                 <p class="title mt-0">
                                     {{ formObject.message }}
                                 </p>
