@@ -1,14 +1,10 @@
 import { Asset, Operation, TransactionBuilder, Keypair } from 'stellar-base';
 import axios from 'axios';
-import { getConfig } from '@jimber/stellar-crypto';
+import { getConfig, buildFundedPaymentTransaction, submitFundedTransaction } from '@jimber/stellar-crypto';
 
-/**
- * @param {Keypair} sourceKeyPair
- * @param {string} dest
- * @param {number} amount
- */
-export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
-    const asset_code = 'BTC';
+import Logger from 'js-logger';
+
+export const getWithdrawInfo = async (asset_code, dest, amount) => {
     const response = await axios.get(
         `https://cryptoanchor.io/stellar/withdraw?asset_code=${asset_code}&dest=${dest}&amount=${amount}`,
         {
@@ -18,43 +14,25 @@ export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
 
     console.log(response);
 
-    const {
-        account_id,
-        memo_type,
-        memo,
-        min_amount,
-        fee_fixed,
-    } = response.data;
+    const { account_id, memo_type, memo, min_amount, fee_fixed } = response.data;
+    return { account_id, memo_type, memo, min_amount, fee_fixed };
+};
+
+/**
+ * @param {Keypair} sourceKeyPair
+ * @param {string} dest
+ * @param {number} amount
+ */
+export const withdrawBTC = async (sourceKeyPair, dest, amount) => {
+    const asset_code = 'BTC';
+    const { account_id, memo } = await getWithdrawInfo(asset_code, dest, amount);
 
     const { server, currencies, network } = getConfig();
     console.log({ server, currencies, network });
-    const fee = String(await server.fetchBaseFee());
 
-    console.log(sourceKeyPair.publicKey());
+    const fundedTransaction = await buildFundedPaymentTransaction(sourceKeyPair, account_id, amount, memo, asset_code);
+    Logger.info('start withdraw');
 
-    const transactionAccount = await server.loadAccount(
-        sourceKeyPair.publicKey()
-    );
-
-    const transaction = new TransactionBuilder(transactionAccount, {
-        fee,
-        networkPassphrase: network,
-    });
-
-    const asset = new Asset(asset_code, currencies[asset_code].issuer);
-    transaction.addOperation(
-        Operation.payment({
-            destination: account_id,
-            asset: asset,
-            amount: amount.toFixed(7),
-            source: sourceKeyPair.publicKey(),
-        })
-    );
-
-    transaction.setTimeout(3000);
-    const tx = transaction.build();
-
-    console.log({ xdr: tx.toXDR() });
-
-    //@todo: fund transaction
+    await submitFundedTransaction(fundedTransaction, sourceKeyPair);
+    Logger.info('successfully withdrawn');
 };

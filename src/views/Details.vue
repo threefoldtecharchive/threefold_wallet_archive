@@ -4,11 +4,9 @@
             <v-container>
                 <h2 class="text-capitalize">
                     {{ account.name }}
-                    <span
-                        v-for="tag in account.tags"
-                        class="font-weight-light fa-xs ml-1"
-                        >{{ tag }}</span
-                    >
+                    <span v-for="tag in account.tags" class="font-weight-light fa-xs ml-1" v-bind:key="tag">{{
+                        tag
+                    }}</span>
                 </h2>
                 <span>{{ getHumanWalletAddress }}</span>
                 <br />
@@ -61,19 +59,13 @@
                     :tab="tab"
                     :id="id"
                     v-on:selectPayment="openPayment"
-                    v-on:pressVesting="
-                        tab = account.lockedTransactions.length ? 4 : 3
-                    "
+                    v-on:pressVesting="tab = account.lockedTransactions.length ? 4 : 3"
                 />
             </v-tab-item>
 
             <v-tab-item :key="2" v-if="account.lockedTransactions.length">
                 <v-list class="pa-0">
-                    <LockedItem
-                        v-for="(balance, i) in account.lockedTransactions"
-                        :item="balance"
-                        :key="i"
-                    />
+                    <LockedItem v-for="(balance, i) in account.lockedTransactions" :item="balance" :key="i" />
                 </v-list>
             </v-tab-item>
 
@@ -82,31 +74,15 @@
                     <CopyField
                         label="Address"
                         :value="account.id"
-                        :message="`Address has been copied to clipboard (${account.id.substring(
-                            0,
-                            8
-                        )}...).`"
+                        :message="`Address has been copied to clipboard (${account.id.substring(0, 8)}...).`"
                         title="Copy address to clipboard"
                     />
-                    <v-btn
-                        @click="secretDialog = true"
-                        class="mb-4"
-                        color="primary"
-                    >
+                    <v-btn @click="secretDialog = true" class="mb-4" color="primary">
                         <v-icon class="mx-2 x-small" dense>fas fa-key</v-icon>
                         Show secret
                     </v-btn>
-                    <v-text-field
-                        label="Wallet name"
-                        v-model.trim="name"
-                        :value="account.name"
-                    ></v-text-field>
-                    <v-btn
-                        color="success"
-                        class="accent mr-4"
-                        @click.stop="change"
-                        >Change wallet name
-                    </v-btn>
+                    <v-text-field label="Wallet name" v-model.trim="name" :value="account.name"></v-text-field>
+                    <v-btn color="success" class="accent mr-4" @click.stop="change">Change wallet name</v-btn>
                     <v-btn
                         v-if="account.tags.includes('imported')"
                         color="error"
@@ -194,9 +170,7 @@
             };
         },
         beforeMount() {
-            const account = store.getters.accounts.find(
-                x => x.id === this.$route.params.account
-            );
+            const account = store.getters.accounts.find(x => x.id === this.$route.params.account);
             if (!account) {
                 router.push({ name: 'home' });
                 return;
@@ -220,14 +194,10 @@
                 this.selectedPayment = payment;
             },
             change() {
-                const name =
-                    this.name.charAt(0).toUpperCase() + this.name.substring(1);
+                const name = this.name.charAt(0).toUpperCase() + this.name.substring(1);
                 this.name = this.name.trim();
 
-                const walletValidation = isValidWalletName(
-                    this.name,
-                    this.accounts
-                );
+                const walletValidation = isValidWalletName(this.name, this.accounts);
                 if (!walletValidation.success) {
                     this.$flashMessage.error(walletValidation.message);
                     return;
@@ -244,13 +214,7 @@
             },
         },
         computed: {
-            ...mapGetters([
-                'threeBotName',
-                'payments',
-                'accounts',
-                'isPaymentLoading',
-                'currencies',
-            ]),
+            ...mapGetters(['threeBotName', 'payments', 'accounts', 'isPaymentLoading', 'currencies']),
             account() {
                 return this.accounts.find(a => a.id === this.id);
             },
@@ -258,9 +222,7 @@
                 return this.payments(this.id);
             },
             getHumanWalletAddress() {
-                return `${this.account.name.replace(/\s/g, '')}@${
-                    this.threeBotName
-                }`;
+                return `${this.account.name.replace(/\s/g, '')}@${this.threeBotName}`;
             },
         },
         mounted() {

@@ -2,47 +2,29 @@
     <section class="to-dialog">
         <v-dialog v-model="dialog" fullscreen scrollable persistent>
             <v-card class="no-radius">
-                <v-card-title
-                    style="background-color: #34495e; color: white;"
-                    dense
-                >
+                <v-card-title style="background-color: #34495e; color: white" dense>
                     Search contact
                     <v-spacer></v-spacer>
                     <v-btn text icon @click="closeDialog(false)">
-                        <v-icon :color="$route.meta.accent">
-                            fas fa-times
-                        </v-icon>
+                        <v-icon :color="$route.meta.accent"> fas fa-times </v-icon>
                     </v-btn>
                 </v-card-title>
 
                 <v-card-text class="px-1">
                     <v-col>
                         <v-row justify="center" class="mb-3">
-                            <v-btn-toggle
-                                v-model="selected"
-                                dense
-                                mandatory
-                                class="round elevation-0"
-                            >
-                                <v-btn
-                                    text
-                                    class="px-3 my-1 mx-1 round"
-                                    v-for="(tab, index) in tabs"
-                                    :key="toDialog"
+                            <v-btn-toggle v-model="selected" dense mandatory class="round elevation-0">
+                                <v-btn text class="px-3 my-1 mx-1 round" v-for="(tab, index) in tabs" :key="tab.name"
                                     >{{ tab.name }}
                                 </v-btn>
                             </v-btn-toggle>
                         </v-row>
 
-                        <v-row
-                            justify="center"
-                            class="mx-2"
-                            v-show="selected === 0"
-                        >
+                        <v-row justify="center" class="mx-2" v-show="selected === 0">
                             <accountCard
-                                style="width: 100%;"
+                                style="width: 100%"
                                 v-for="(account, index) in computedAccounts"
-                                :key="toDialog"
+                                :key="account.id"
                                 class="my-2"
                                 @click.native="useAccount(account)"
                                 :account="account"
@@ -80,7 +62,7 @@
 
                             <v-row justify="center" class="mt-2">
                                 <v-btn
-                                    style="width: 90%;"
+                                    style="width: 90%"
                                     :color="$route.meta.accent"
                                     @click="
                                         selectAccount({
@@ -140,14 +122,10 @@
         },
         computed: {
             computedAccounts() {
-                return this.accounts.filter(
-                    x => x.name != this.selectedAccount.name
-                );
+                return this.accounts.filter(x => x.name != this.selectedAccount.name);
             },
             isBtcAddress() {
-                return this.accounts.filter(
-                    x => x.name != this.selectedAccount.name
-                );
+                return this.accounts.filter(x => x.name != this.selectedAccount.name);
             },
         },
         mounted() {},

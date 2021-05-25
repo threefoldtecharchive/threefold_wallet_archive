@@ -16,7 +16,7 @@ import Logger from 'js-logger';
 Logger.useDefaults();
 
 const consoleHandler = Logger.createDefaultHandler();
-const myHandler = function(messages, context) {
+const myHandler = function (messages, context) {
     const [message, ctxUnformated] = messages;
 
     store.commit('addLog', {
@@ -27,7 +27,7 @@ const myHandler = function(messages, context) {
     });
 };
 
-Logger.setHandler(function(messages, context) {
+Logger.setHandler(function (messages, context) {
     consoleHandler(messages, context);
     myHandler(messages, context);
 });
@@ -66,9 +66,7 @@ async function startVueApp() {
     initializeStellarCryptoConfig();
 
     new Vue({
-        created: function() {
-            Logger.info("I'm a debug message!");
-        },
+        created: () => {},
         filters,
         router,
         store,

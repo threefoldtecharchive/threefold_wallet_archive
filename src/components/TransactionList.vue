@@ -15,12 +15,11 @@
         <div
             class="dark align-center layout px-4 py-6 layout justify-space-between"
             v-if="
-                selectedCurrency === 'BTC' &&
-                account.balances.find(b => b.asset_code === 'BTC').balance > 0 // @todo: link this to transfer screen
+                selectedCurrency === 'BTC' && account.balances.find(b => b.asset_code === 'BTC').balance > 0 // @todo: link this to transfer screen
             "
             @click="
                 $router.push({
-                    name: 'transfer',
+                    name: 'withdraw',
                     params: {
                         account: account.id,
                         asset_code: 'BTC',
@@ -29,7 +28,7 @@
             "
             style="background-color: #e1ffe5; color: #09b812"
         >
-            <span class="d-block"> withdraw your btc </span>
+            <span class="d-block"> withdraw your BTC </span>
             <v-icon color="#09b812" class="d-block">fa-chevron-right</v-icon>
         </div>
         <div class="input white align-center pa-6 pb-0 layout">
@@ -44,26 +43,31 @@
                 append-icon="fas fa-caret-down"
             >
             </v-select>
-            <v-btn
-                class="ml-8"
-                color="primary"
-                icon
-                @click="updatePayments"
-                :loading="fetchingPayments"
-            >
+            <v-btn class="ml-8" color="primary" icon @click="updatePayments" :loading="fetchingPayments">
                 <v-icon>fas fa-sync-alt</v-icon>
             </v-btn>
         </div>
-        <v-container
-            v-if="!accountPayments.length && isPaymentLoading(account.id)"
-        >
+        <v-container v-if="!accountPayments.length && isPaymentLoading(account.id)">
             <v-row align-content="center" justify="center">
-                <v-col class="subtitle-1 text-center" cols="12">
-                    Getting payments
-                </v-col>
+                <v-col class="subtitle-1 text-center" cols="12"> Getting payments </v-col>
             </v-row>
         </v-container>
-        <v-list three-line class="pa-0 payment-list">
+        <v-list three-line class="pa-0 payment-list" v-if="selectedCurrency === 'Trades'">
+            <template v-for="(trade, i) in trades">
+                <div class="date" v-if="showDateTrades(trade, i)">
+                    <span>
+                        {{ trade.created_at | formatDay }}
+                    </span>
+                    <v-divider></v-divider>
+                </div>
+                <buy-item
+                    @click.stop="$flashMessage.info(`Bought ${trade.bought_asset_code}.`)"
+                    :key="trade.id"
+                    :trade="trade"
+                />
+            </template>
+        </v-list>
+        <v-list three-line class="pa-0 payment-list" v-else>
             <template v-for="(payment, i) in filteredAccountPayments">
                 <div class="date" v-if="showDate(payment, i)">
                     <span>
@@ -80,10 +84,8 @@
                     @click.stop="$emit('selectPayment', payment)"
                 />
                 <buy-item
-                    v-else-if="payment.type === 'buy'"
-                    @click.stop="
-                        $flashMessage.info(`Buy ${payment.asset_code}.`)
-                    "
+                    v-else-if="payment.type === 'buy' || payment.type === 'sell'"
+                    @click.stop="$flashMessage.info(`Buy ${payment.asset_code}.`)"
                     :key="payment.id"
                     :payment="payment"
                 />
@@ -91,21 +93,13 @@
                     :key="payment.id"
                     :payments="getPreviousAndCurrentTrusts(payment, i)"
                     @click.stop="$flashMessage.info(`asset(s) added`)"
-                    v-else-if="
-                        payment.type === 'trust' && showCombiBuyItem(payment, i)
-                    "
+                    v-else-if="payment.type === 'trust' && showCombiBuyItem(payment, i)"
                 />
             </template>
-            <infinite-loading
-                class="py-4"
-                @infinite="infiniteHandler"
-                spinner="waveDots"
-            >
+            <infinite-loading class="py-4" @infinite="infiniteHandler" spinner="waveDots">
                 <div slot="no-more">
                     No
-                    {{
-                        filteredAccountPayments.length ? 'more ' : ''
-                    }}operations
+                    {{ filteredAccountPayments.length ? 'more ' : '' }}operations
                     {{ filteredAccountPayments.length ? ' ' : 'yet' }}
                 </div>
             </infinite-loading>
@@ -118,7 +112,7 @@
     import { mapActions, mapGetters, mapMutations } from 'vuex';
     import { isValidWalletName } from '@/services/AccountManagementService';
     import router from '@/router';
-    import { fetchPayments } from '@/services/PaymentService';
+    import { fetchPayments, fetchTrades } from '@/services/PaymentService';
     import moment from 'moment';
     import BuyItem from '@/components/BuyItem';
     import CombiTrustItem from '@/components/CombiTrustItem';
@@ -142,6 +136,7 @@
             return {
                 fetchingPayments: false,
                 selectedCurrency: null,
+                trades: [],
             };
         },
         watch: {
@@ -151,15 +146,10 @@
         },
         mounted() {
             this.selectedCurrency = this.$props.startSelectedCurrency;
+            fetchTrades(this.account.id).then(trades => (this.trades = trades));
         },
         computed: {
-            ...mapGetters([
-                'threeBotName',
-                'payments',
-                'accounts',
-                'isPaymentLoading',
-                'currencies',
-            ]),
+            ...mapGetters(['threeBotName', 'payments', 'accounts', 'isPaymentLoading', 'currencies']),
             hasMultipleTrustlines() {
                 return this.account.balances > 1;
             },
@@ -172,19 +162,20 @@
                                 this.selectedCurrency === 'All' ||
                                 payment.asset_code === this.selectedCurrency ||
                                 (payment.type === 'buy' &&
-                                    payment.rawPayment.selling_asset_type ===
-                                        this.selectedCurrency)
+                                    payment.rawPayment.selling_asset_type === this.selectedCurrency)
                             );
                         })
                 );
             },
             getHumanWalletAddress() {
-                return `${this.account.name.replace(/\s/g, '')}@${
-                    this.threeBotName
-                }`;
+                return `${this.account.name.replace(/\s/g, '')}@${this.threeBotName}`;
             },
             filterOptions() {
-                return ['All', ...this.account.balances.map(b => b.asset_code)];
+                let filters = ['All', ...this.account.balances.map(b => b.asset_code)];
+                if (this.trades.length > 0) {
+                    filters.push('Trades');
+                }
+                return filters;
             },
         },
         methods: {
@@ -212,15 +203,20 @@
 
                 return !time.isSame(String(previousPayment.created_at), 'day');
             },
+            showDateTrades(payment, i) {
+                const previousPayment = this.trades[i - 1];
+                if (!previousPayment) {
+                    return true;
+                }
+                const time = moment(String(payment.created_at));
+
+                return !time.isSame(String(previousPayment.created_at), 'day');
+            },
             change() {
-                const name =
-                    this.name.charAt(0).toUpperCase() + this.name.substring(1);
+                const name = this.name.charAt(0).toUpperCase() + this.name.substring(1);
                 this.name = this.name.trim();
 
-                const walletValidation = isValidWalletName(
-                    this.name,
-                    this.accounts
-                );
+                const walletValidation = isValidWalletName(this.name, this.accounts);
                 if (!walletValidation.success) {
                     this.$flashMessage.error(walletValidation.message);
                     return;
@@ -275,14 +271,8 @@
                 }
             },
             showCombiBuyItem(payment, i) {
-                const currentLength = this.getPreviousAndCurrentTrusts(
-                    payment,
-                    i
-                ).length;
-                const nextLength = this.getPreviousAndCurrentTrusts(
-                    payment,
-                    i + 1
-                ).length;
+                const currentLength = this.getPreviousAndCurrentTrusts(payment, i).length;
+                const nextLength = this.getPreviousAndCurrentTrusts(payment, i + 1).length;
                 return !(currentLength > 0 && nextLength > 0);
             },
         },
