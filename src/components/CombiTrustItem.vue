@@ -11,15 +11,8 @@
                     Asset has been successfully added
                 </v-list-item-title>
                 <v-list-item-title v-else>
-                    <span
-                        v-for="(payment, i) in payments"
-                        :key="payment.asset_code"
-                    >
-                        {{
-                            payment.asset_code === 'native'
-                                ? 'xlm'
-                                : payment.asset_code
-                        }}
+                    <span v-for="(payment, i) in payments" :key="`${payment.id}-${payment.asset_code}`">
+                        {{ payment.asset_code === 'native' ? 'xlm' : payment.asset_code }}
                         {{ payments.length > i + 2 ? ',' : '' }}
                         {{ payments.length === i + 2 ? 'and' : '' }}
                     </span>

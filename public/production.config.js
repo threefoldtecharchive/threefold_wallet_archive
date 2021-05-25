@@ -9,17 +9,21 @@ export default {
     env: 'production',
     currencies: {
         TFT: {
-            asset_code: "TFT",
-            issuer: "GBOVQKJYHXRR3DX6NOX2RRYFRCUMSADGDESTDNBDS6CDVLGVESRTAC47",
+            asset_code: 'TFT',
+            issuer: 'GBOVQKJYHXRR3DX6NOX2RRYFRCUMSADGDESTDNBDS6CDVLGVESRTAC47',
+        },
+        BTC: {
+            asset_code: 'BTC',
+            issuer: 'GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P',
         },
         TFTA: {
-            asset_code: "TFTA",
-            issuer: "GBUT4GP5GJ6B3XW5PXENHQA7TXJI5GOPW3NF4W3ZIW6OOO4ISY6WNLN2"
+            asset_code: 'TFTA',
+            issuer: 'GBUT4GP5GJ6B3XW5PXENHQA7TXJI5GOPW3NF4W3ZIW6OOO4ISY6WNLN2',
         },
         FreeTFT: {
-            asset_code: "FreeTFT",
-            issuer: "GCBGS5TFE2BPPUVY55ZPEMWWGR6CLQ7T6P46SOFGHXEBJ34MSP6HVEUT",
-        }
+            asset_code: 'FreeTFT',
+            issuer: 'GCBGS5TFE2BPPUVY55ZPEMWWGR6CLQ7T6P46SOFGHXEBJ34MSP6HVEUT',
+        },
     },
     watchersEnabled: false,
 };

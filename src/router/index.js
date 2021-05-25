@@ -12,6 +12,10 @@ import errorScreen from '@/views/errorScreen.vue';
 import Buy from '@/views/Buy.vue';
 import Deposit from '@/views/Deposit.vue';
 import Activate from '@/views/Activate.vue';
+import BuyConfirmation from '@/views/BuyConfirmation';
+import Trading from '@/views/Trading';
+import PaymentSuccess from '@/views/PaymentSuccess';
+import Withdraw from '@/views/Withdraw';
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
@@ -50,7 +54,7 @@ const routes = [
         component: DevView,
     },
     {
-        path: '/errorscreen:reason?:fix?',
+        path: '/errorscreen/:reason?/:fix?',
         name: 'error screen',
         meta: {
             title: 'Error Screen',
@@ -90,11 +94,31 @@ const routes = [
         path: '/buy/:asset/:account',
         name: 'buy',
         meta: {
-            title: 'buy',
+            title: 'Trade',
             overview: 'home',
             accent: 'accent',
         },
         component: Buy,
+    },
+    {
+        path: '/buy',
+        name: 'buyConfirmation',
+        meta: {
+            title: 'Confirmation',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: BuyConfirmation,
+    },
+    {
+        path: '/trading',
+        name: 'trading',
+        meta: {
+            title: 'trading',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Trading,
     },
     {
         path: '/deposit/:asset/:account',
@@ -105,6 +129,16 @@ const routes = [
             accent: 'accent',
         },
         component: Deposit,
+    },
+    {
+        path: '/withdraw/:asset/:account',
+        name: 'withdraw',
+        meta: {
+            title: 'withdraw',
+            overview: 'home',
+            accent: 'accent',
+        },
+        component: Withdraw,
     },
     {
         path: '/activate/:asset/:account',
@@ -127,6 +161,15 @@ const routes = [
         component: Transfer,
     },
     {
+        path: '/paymentSuccess',
+        name: 'paymentSuccess',
+        meta: {
+            overview: 'paymentSuccess',
+            accent: 'accent',
+        },
+        component: PaymentSuccess,
+    },
+    {
         path: '/walletinfo/:account',
         name: 'wallet info',
 
@@ -138,8 +181,7 @@ const routes = [
                 text: 'this is info',
             },
         },
-        component: () =>
-            import(/* webpackChunkName: "wallet-info" */ '../views/WalletInfo'),
+        component: () => import(/* webpackChunkName: "wallet-info" */ '../views/WalletInfo'),
     },
 ];
 
@@ -153,15 +195,18 @@ router.beforeEach((to, from, next) => {
     window.noCopyPaste = false;
 
     store.dispatch('disableAccountEventStreams');
-    if (
-        !store.getters.initialized &&
-        to.name !== 'error' &&
-        to.name !== 'init'
-    ) {
+    if (!store.getters.initialized && to.name !== 'error' && to.name !== 'init') {
         next({
             name: 'init',
         });
         return;
+    }
+    next();
+});
+
+router.beforeEach((to, from, next) => {
+    if (!(to.name === 'buyConfirmation' || to.name === 'trading')) {
+        store.commit('clearTradeInfo');
     }
     next();
 });

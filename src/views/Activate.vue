@@ -4,11 +4,7 @@
             <v-card-title> Activate {{ asset }} Asset</v-card-title>
             <v-card-text>
                 <v-form ref="form" v-model="valid" lazy-validation>
-                    <v-checkbox
-                        v-model="terms"
-                        :rules="[v => !!v || 'You must agree to continue!']"
-                        required
-                    >
+                    <v-checkbox v-model="terms" :rules="[v => !!v || 'You must agree to continue!']" required>
                         <template v-slot:label>
                             <div>
                                 By clicking 'Activate', I acknowledge
@@ -26,14 +22,7 @@
                                 and agree to the 
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
-                                        <a
-                                            target="_blank"
-                                            href="http://example.com"
-                                            @click.stop
-                                            v-on="on"
-                                        >
-                                            Terms and Conditions
-                                        </a>
+                                        <a @click.prevent.stop="showTerms = true">Terms and Conditions.</a>
                                     </template>
                                     Opens in new window
                                 </v-tooltip>
@@ -55,15 +44,32 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
+        <v-dialog v-model="showTerms" fullscreen>
+            <v-card>
+                <v-card-title>
+                    <v-row>
+                        Terms & conditions
+                        <v-spacer></v-spacer>
+                        <v-btn icon @click="showTerms = false">
+                            <v-icon>fas fa-times</v-icon>
+                        </v-btn>
+                    </v-row>
+                </v-card-title>
+                <iframe
+                    style="height: calc(100vh - 62px); width: 100%"
+                    src="https://threefold.io/info/threefold#/legal__terms_conditions_griduser"
+                    frameborder="0"
+                ></iframe>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
     import store from '@/store';
     import router from '@/router';
-    import { Asset, Operation, TransactionBuilder } from 'stellar-base';
     import { mapMutations } from 'vuex';
-    import { getConfig } from '@jimber/stellar-crypto';
+    import { selfFundTrustLine, fundTrustLine } from '@jimber/stellar-crypto';
 
     export default {
         name: 'Deposit',
@@ -73,12 +79,11 @@
                 account: null,
                 terms: false,
                 valid: true,
+                showTerms: false,
             };
         },
         beforeMount() {
-            this.account = store.getters.accounts.find(
-                x => x.id === this.$route.params.account
-            );
+            this.account = store.getters.accounts.find(x => x.id === this.$route.params.account);
 
             this.asset = this.$route.params.asset;
 
@@ -86,14 +91,20 @@
                 router.push({ name: 'error screen' });
                 return;
             }
+
+            if (this.account.balances.find(b => b.asset_code === this.asset)) {
+                this.$router.replace({
+                    name: 'details',
+                    params: {
+                        account: this.account.id,
+                    },
+                });
+                return;
+            }
         },
         mounted() {},
         methods: {
-            ...mapMutations([
-                'startAppLoading',
-                'stopAppLoading',
-                'setLoadingMessage',
-            ]),
+            ...mapMutations(['startAppLoading', 'stopAppLoading', 'setLoadingMessage']),
             onActivateClick() {
                 if (!this.$refs.form.validate()) {
                     return;
@@ -107,8 +118,11 @@
                         message: `Activating ${this.asset} Asset`,
                     });
 
-                    await this.selfActivateAsset();
-                    await this.$router.push({
+                    await selfFundTrustLine(this.account.keyPair, 'BTC');
+                    this.$flashMessage.info(
+                        `Successfully activated ${this.asset}, it could take a few moments before you see it.`
+                    );
+                    await this.$router.replace({
                         name: 'details',
                         params: {
                             account: this.account.id,
@@ -116,68 +130,26 @@
                     });
                     this.stopAppLoading();
                 } catch (e) {
-                    await this.activateWithFunding();
-                }
-            },
-            async selfActivateAsset() {
-                const { server, currencies, network } = getConfig();
-                console.log({ server, currencies, network });
-                const fee = String(await server.fetchBaseFee());
+                    console.log('transaction with activation service');
 
-                const transactionAccount = await server.loadAccount(
-                    this.account.keyPair.publicKey()
-                );
+                    this.setLoadingMessage({
+                        message: `activating ${this.asset} Asset`,
+                        additional: `trying to activate ${this.asset} with activation service`,
+                    });
+                    await fundTrustLine(this.account.keyPair, 'BTC');
+                    this.$flashMessage.info(
+                        `Successfully activated ${this.asset} Asset, it could take a few moments before you see it.`
+                    );
+                    
+                    await this.$router.replace({
+                        name: 'details',
 
-                const transaction = new TransactionBuilder(transactionAccount, {
-                    fee,
-                    networkPassphrase: network,
-                });
-
-                const asset = new Asset(
-                    currencies[this.asset].asset_code,
-                    currencies[this.asset].issuer
-                );
-                transaction.addOperation(
-                    Operation.changeTrust({
-                        asset: asset,
-                    })
-                );
-
-                transaction.setTimeout(3000);
-                const tx = transaction.build();
-                tx.sign(this.account.keyPair);
-
-                await server.submitTransaction(tx);
-
-                this.$flashMessage.info(
-                    `Successfully activated ${this.asset} Asset, it could take a few moments before you see it.`
-                );
-            },
-            async activateWithFunding() {
-                this.setLoadingMessage({
-                    message: `activating ${this.asset} Asset`,
-                    additional: `trying to activate ${this.asset} with activation service`,
-                });
-                try {
-                    throw new Error('not implemented');
-                } catch (e) {
-                    await this.$router.push({
-                        name: 'error screen',
                         params: {
-                            reason: 'asset activation mistake',
-                            fix: 'Contact Support',
+                            account: this.account.id,
                         },
                     });
                     this.stopAppLoading();
-                    return;
                 }
-                await this.$router.push({
-                    name: 'details',
-                    params: {
-                        account: this.account.id,
-                    },
-                });
-                this.stopAppLoading();
             },
         },
     };

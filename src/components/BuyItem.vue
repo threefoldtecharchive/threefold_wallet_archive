@@ -4,58 +4,44 @@
             <v-list-item-content>
                 <v-list-item-subtitle class="text--primary">
                     Trade
-                    {{
-                        payment.rawPayment.selling_asset_type === 'native'
-                            ? 'XLM'
-                            : payment.rawPayment.selling_asset_type
-                    }}
+                    {{ trade.sold_asset_type === 'native' ? 'XLM' : trade.sold_asset_code }}
                     for
                     {{
-                        payment.asset_code ||
-                        (payment.asset_type === 'native'
-                            ? 'xlm'
-                            : payment.asset_type)
+                        trade.bought_asset_code ||
+                        (trade.bought_asset_type === 'native' ? 'xlm' : trade.bought_asset_code)
                     }}
                 </v-list-item-subtitle>
                 <v-list-item-subtitle class="amount" style="overflow: visible">
                     <span class="sell">
                         -
-                        {{
-                            (payment.amount * payment.rawPayment.price)
-                                | formatBalance
-                        }}
+                        {{ trade.sold_amount | formatBalance }}
                         <sup class="currency font-weight-light">
-                            {{
-                                payment.rawPayment.selling_asset_type ===
-                                'native'
-                                    ? 'XLM'
-                                    : payment.rawPayment.selling_asset_type
-                            }}
+                            {{ trade.sold_asset_type === 'native' ? 'XLM' : trade.sold_asset_code }}
                         </sup>
                     </span>
                     <span class="buy ml-4"
                         >+
-                        {{ payment.amount | formatBalance }}
+                        {{ trade.bought_amount | formatBalance }}
                         <sup class="currency font-weight-light">
                             {{
-                                payment.asset_code ||
-                                (payment.asset_type === 'native'
-                                    ? 'xlm'
-                                    : payment.asset_type)
+                                trade.bought_asset_code ||
+                                (trade.bought_asset_type === 'native' ? 'xlm' : trade.bought_asset_code)
                             }}
                         </sup></span
                     >
                 </v-list-item-subtitle>
             </v-list-item-content>
+
+            <!--            <pre>{{ trade }}</pre>-->
         </v-list-item>
         <v-divider />
     </div>
 </template>
 <script>
     export default {
-        name: 'paymentItem',
+        name: 'tradeItem',
         props: {
-            payment: {
+            trade: {
                 type: Object,
             },
         },

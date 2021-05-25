@@ -13,10 +13,8 @@
                 <CopyField
                     label="BTC Wallet Address"
                     :value="address"
-                    :message="`Address has been successfully copied to clipboard (${address.substring(
-                        0,
-                        8
-                    )}...).`"
+                    :message="`Address has been successfully copied to clipboard (${address.substring(0, 8)}...).`"
+
                     title="Copy address to clipboard"
                 />
                 <qrcode
@@ -29,13 +27,7 @@
                         },
                     }"
                 />
-                <img
-                    height="148"
-                    width="148"
-                    v-if="address === '...'"
-                    src="/loading.gif"
-                    alt=""
-                />
+                <img height="148" width="148" v-if="address === '...'" src="/loading.gif" alt="" />
             </v-card-text>
         </v-card>
     </div>
@@ -61,18 +53,14 @@
             };
         },
         beforeMount() {
-            this.account = store.getters.accounts.find(
-                x => x.id === this.$route.params.account
-            );
+            this.account = store.getters.accounts.find(x => x.id === this.$route.params.account);
             if (!this.account) {
                 router.push({ name: 'error screen' });
                 return;
             }
         },
         mounted() {
-            getDepositAddress(this.account.id).then(
-                address => (this.address = address)
-            );
+            getDepositAddress(this.account.id).then(address => (this.address = address));
         },
     };
 </script>

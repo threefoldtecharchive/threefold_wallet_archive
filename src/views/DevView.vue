@@ -5,18 +5,12 @@
             <v-tab-item class="pa-4">
                 <v-card class="my-2 pa-2">
                     <p class="display-1 text--primary">application logs</p>
-                    <v-btn @click="copyLogs" color="primary" elevation="0">
-                        copy logs
-                    </v-btn>
+                    <v-btn @click="copyLogs" color="primary" elevation="0"> copy logs </v-btn>
                     <copy-field label="logs" :value="value" />
                     <pre
                         ref="logcard"
                         class="pa-2"
-                        style="
-                            width: 100%;
-                            white-space: pre-wrap;
-                            background-color: #f3f3f3;
-                        "
+                        style="width: 100%; white-space: pre-wrap; background-color: #f3f3f3"
                         >{{ value }}</pre
                     >
                 </v-card>
@@ -28,23 +22,14 @@
                     <v-card-text>
                         <ul>
                             <li>
-                                <copy-field
-                                    label="appSeedPhrase"
-                                    :value="appSeedPhrase"
-                                ></copy-field>
+                                <copy-field label="appSeedPhrase" :value="appSeedPhrase"></copy-field>
                             </li>
                             <li>
-                                <copy-field
-                                    label="appSeedPhrase"
-                                    :value="debugSeed"
-                                ></copy-field>
+                                <copy-field label="appSeedPhrase" :value="debugSeed"></copy-field>
                             </li>
 
                             <li>
-                                <copy-field
-                                    label="threeBotName"
-                                    :value="threeBotName"
-                                ></copy-field>
+                                <copy-field label="threeBotName" :value="threeBotName"></copy-field>
                             </li>
                         </ul>
                     </v-card-text>
@@ -53,16 +38,10 @@
                     <rawDisplayer title="accounts data" :value="accounts" />
                 </v-card>
                 <v-card class="pa-2 my-2">
-                    <rawDisplayer
-                        title="pkid app accounts data"
-                        :value="pkidApp"
-                    />
+                    <rawDisplayer title="pkid app accounts data" :value="pkidApp" />
                 </v-card>
                 <v-card class="pa-2 my-2">
-                    <rawDisplayer
-                        title="pkid imported accounts data"
-                        :value="pkidImported"
-                    />
+                    <rawDisplayer title="pkid imported accounts data" :value="pkidImported" />
                 </v-card>
             </v-tab-item>
             <v-tab> Actions</v-tab>
@@ -73,30 +52,18 @@
                         <p>Restart ThreeFold Connect Wallet</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn dark text color="deep-purple" @click="Restart">
-                            Restart
-                        </v-btn>
+                        <v-btn dark text color="deep-purple" @click="Restart"> Restart </v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="pa-2 my-2">
                     <v-card-title> Retry Migration</v-card-title>
                     <v-card-text>
-                        <p>
-                            Retry the conversion from TFChain to Stellar Network
-                        </p>
+                        <p>Retry the conversion from TFChain to Stellar Network</p>
                         <v-col>
-                            <v-row
-                                v-for="account in accounts"
-                                :key="account.id"
-                            >
+                            <v-row v-for="account in accounts" :key="account.id">
                                 {{ account.name }}
                                 <v-spacer></v-spacer>
-                                <v-btn
-                                    x-small
-                                    dark
-                                    text
-                                    color="deep-purple"
-                                    @click="retryMigrate(account)"
+                                <v-btn x-small dark text color="deep-purple" @click="retryMigrate(account)"
                                     >Retry
                                 </v-btn>
                             </v-row>
@@ -110,27 +77,13 @@
                         <p>Resets App wallets</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn
-                            dark
-                            text
-                            color="deep-purple"
-                            @click="ResetAppWallets"
-                        >
-                            Reset
-                        </v-btn>
+                        <v-btn dark text color="deep-purple" @click="ResetAppWallets"> Reset </v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="pa-2 my-2">
                     <v-card-title> Remove Imported Wallets</v-card-title>
                     <v-card-actions>
-                        <v-btn
-                            dark
-                            text
-                            color="deep-purple"
-                            @click="RemoveImportedAccounts"
-                        >
-                            Remove
-                        </v-btn>
+                        <v-btn dark text color="deep-purple" @click="RemoveImportedAccounts"> Remove </v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="pa-2 my-2">
@@ -139,14 +92,7 @@
                         <p>Show the error screen</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn
-                            dark
-                            text
-                            color="deep-purple"
-                            @click="errorScreen"
-                        >
-                            Error
-                        </v-btn>
+                        <v-btn dark text color="deep-purple" @click="errorScreen"> Error </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-tab-item>
@@ -155,10 +101,7 @@
 </template>
 <script>
     import { mapGetters, mapActions, mapMutations } from 'vuex';
-    import {
-        convertTokens,
-        revineAddressFromSeed,
-    } from '@jimber/stellar-crypto';
+    import { convertTokens, revineAddressFromSeed } from '@jimber/stellar-crypto';
     import AddTrustlineCard from '@/components/AddTrustlineCard.vue';
     import CopyField from '@/components/CopyField';
 
@@ -194,15 +137,11 @@
                 }
 
                 function is_object(x) {
-                    return (
-                        Object.prototype.toString.call(x) === '[object Object]'
-                    );
+                    return Object.prototype.toString.call(x) === '[object Object]';
                 }
 
                 function is_array(x) {
-                    return (
-                        Object.prototype.toString.call(x) === '[object Array]'
-                    );
+                    return Object.prototype.toString.call(x) === '[object Array]';
                 }
 
                 let tab = 0;
@@ -293,9 +232,7 @@
                 location.reload();
             },
             createWallet() {
-                this.generateAppAccount(
-                    `dev wallet #${Math.random().toString(36).substr(2, 5)}`
-                );
+                this.generateAppAccount(`dev wallet #${Math.random().toString(36).substr(2, 5)}`);
             },
             copyLogs() {
                 console.log(this.$refs.logcard.innerText);
@@ -304,10 +241,7 @@
                     toCopy: this.$refs.logcard.innerText,
                     callback: () => {
                         this.$flashMessage.info(
-                            `logs has been copied to clipboard (${this.$refs.logcard.innerText.substring(
-                                0,
-                                8
-                            )}...).`
+                            `logs has been copied to clipboard (${this.$refs.logcard.innerText.substring(0, 8)}...).`
                         );
                     },
                 });
@@ -319,11 +253,6 @@
                         walletName: 'Daily',
                         position: 0,
                         index: 0,
-                    },
-                    {
-                        walletName: 'Staging',
-                        position: 1,
-                        index: 1,
                     },
                 ]);
                 await this.syncAccounts();
@@ -342,10 +271,7 @@
                 });
             },
             async retryMigrate(account) {
-                const revineAddress = revineAddressFromSeed(
-                    account.seedPhrase,
-                    account.index
-                );
+                const revineAddress = revineAddressFromSeed(account.seedPhrase, account.index);
                 await convertTokens(revineAddress, account.keyPair.publicKey());
             },
         },
