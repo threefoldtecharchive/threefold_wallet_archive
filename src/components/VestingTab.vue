@@ -1,9 +1,6 @@
 <template>
     <div class="VestingTab pa-0 fill-height">
-        <VestingWarningDialog
-            @accepted="accepted = true"
-            @declined="$emit('declined')"
-        />
+        <VestingWarningDialog @accepted="accepted = true" @declined="$emit('declined')" />
         <div v-if="loading || !accepted" class="fill-height">
             <div class="container">
                 <v-progress-circular color="accent" size="100" indeterminate>
@@ -17,16 +14,9 @@
                     Activate Vesting for
                     <b class="ml-1">{{ account.name }}</b></v-card-title
                 >
-                <v-card-text
-                    >Activate Vesting to be able to join the vesting program.
-                </v-card-text>
+                <v-card-text>Activate Vesting to be able to join the vesting program. </v-card-text>
                 <v-card-actions>
-                    <v-btn
-                        color="accent"
-                        elevation="0"
-                        @click="onActivateVesting"
-                        >Activate Vesting
-                    </v-btn>
+                    <v-btn color="accent" elevation="0" @click="onActivateVesting">Activate Vesting </v-btn>
                 </v-card-actions>
             </v-card>
         </div>
@@ -39,66 +29,44 @@
                     <v-card-text class="py-1">
                         <v-col>
                             <v-row>
-                                <span class="title text-capitalize">
-                                    Vesting Wallet
-                                </span>
+                                <span class="title text-capitalize"> Vesting Wallet </span>
 
-                                <span
-                                    class="font-weight-light fa-xs blue-grey--text ml-1"
-                                >
-                                    Vesting
-                                </span>
+                                <span class="font-weight-light fa-xs blue-grey--text ml-1"> Vesting </span>
                             </v-row>
                             <v-row>
-                                <span
-                                    class="font-weight-light blue-grey--text ml-1"
-                                    style="width: 80%"
-                                >
+                                <span class="font-weight-light blue-grey--text ml-1" style="width: 80%">
                                     {{ vestingAccount.id }}
                                 </span>
                             </v-row>
                             <v-row>
                                 <v-col class="py-1" align="center">
-                                    <div
-                                        class="subtitle-2 blue-grey--text font-weight-light"
-                                    >
-                                        Amount of vested TFT
-                                    </div>
+                                    <div class="subtitle-2 blue-grey--text font-weight-light">Vested TFT</div>
                                     <div class="body-2">
                                         {{
-                                            vestingAccount.balances.find(
-                                                b => b.asset_code === 'TFT'
-                                            ).balance
+                                            vestingAccount.balances.find(b => b.asset_code === 'TFT').balance
                                                 | formatBalanceHumanReadable
                                         }}
+                                        TFT
                                     </div>
                                 </v-col>
                             </v-row>
                         </v-col>
                         <v-col class="pt-8">
                             <v-row>
-                                <div>
-                                    Transfer <b>TFT</b> to the
-                                    <b>Vesting Wallet</b> to start vesting.
-                                </div>
+                                <div>Transfer <b>TFT</b> to the <b>Vesting Wallet</b> to start vesting.</div>
                             </v-row>
                         </v-col>
                     </v-card-text>
                 </div>
                 <v-card-actions class="pa-4">
-                    <v-btn elevation="0" color="accent" @click="onVestTokens"
-                        >Vest TFT
-                    </v-btn>
+                    <v-btn elevation="0" color="accent" @click="onVestTokens">Vest TFT </v-btn>
                 </v-card-actions>
             </v-card>
         </div>
     </div>
 </template>
 <script>
-    import {
-        checkVesting,
-        generateVestingAccount,
-    } from '@jimber/stellar-crypto';
+    import { checkVesting, generateVestingAccount } from '@jimber/stellar-crypto';
     import VestingWarningDialog from '@/components/VestingWarningDialog';
 
     export default {
@@ -119,9 +87,7 @@
         methods: {
             async onActivateVesting() {
                 this.loading = true;
-                const vestingAccount = await generateVestingAccount(
-                    this.$props.account.id
-                );
+                const vestingAccount = await generateVestingAccount(this.$props.account.id);
                 if (vestingAccount) {
                     this.vestingAccount = vestingAccount;
                 }

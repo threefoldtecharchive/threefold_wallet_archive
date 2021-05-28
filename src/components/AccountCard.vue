@@ -1,20 +1,7 @@
 <template>
     <v-card :class="`pr-0 min ${selected ? 'border' : ''}`" v-bind="$attrs">
-        <div
-            ref="card"
-            class="content"
-            :style="clickable ? 'cursor:pointer' : ''"
-            @click="clicked"
-        >
-            <v-btn
-                dark
-                small
-                icon
-                text
-                @click.stop="copyAddress"
-                class="copybutton"
-                :class="$route.meta.accent"
-            >
+        <div ref="card" class="content" :style="clickable ? 'cursor:pointer' : ''" @click="clicked">
+            <v-btn dark small icon text @click.stop="copyAddress" class="copybutton" :class="$route.meta.accent">
                 <v-icon size="15"> fas fa-copy</v-icon>
             </v-btn>
             <v-card-text class="py-1">
@@ -32,24 +19,12 @@
                         </span>
                     </v-row>
                     <v-row>
-                        <v-col
-                            class="py-1"
-                            align="center"
-                            v-for="balance in allowedBalances"
-                            :key="balance.issuer"
-                        >
-                            <div
-                                class="subtitle-2 blue-grey--text font-weight-light"
-                            >
+                        <v-col class="py-1" align="center" v-for="balance in allowedBalances" :key="balance.issuer">
+                            <div class="subtitle-2 blue-grey--text font-weight-light">
                                 {{ balance.asset_code }}
                             </div>
-                            <div
-                                class="body-2"
-                                v-if="balance.asset_code !== 'BTC'"
-                            >
-                                {{
-                                    balance.balance | formatBalanceHumanReadable
-                                }}
+                            <div class="body-2" v-if="balance.asset_code !== 'BTC'">
+                                {{ balance.balance | formatBalanceHumanReadable }}
                             </div>
                             <div class="body-2" v-else>
                                 {{ balance.balance }}
@@ -99,14 +74,10 @@
         computed: {
             ...mapGetters(['accounts', 'threeBotName', 'currencies']),
             getHumanWalletAddress() {
-                return `${this.account.name.replace(/\s/g, '')}@${
-                    this.threeBotName
-                }`;
+                return `${this.account.name.replace(/\s/g, '')}@${this.threeBotName}`;
             },
             allowedBalances() {
-                return this.account.balances.filter(b =>
-                    this.currencies.includes(b.asset_code)
-                );
+                return this.account.balances.filter(b => this.currencies.includes(b.asset_code));
             },
         },
         mounted() {},
@@ -117,10 +88,7 @@
                     toCopy: this.account.id,
                     callback: () => {
                         this.$flashMessage.info(
-                            `Successfully copied address to clipboard (${this.account.id.substring(
-                                0,
-                                8
-                            )}...).`
+                            `Successfully copied address to clipboard (${this.account.id.substring(0, 8)}...).`
                         );
                     },
                 });
@@ -128,7 +96,7 @@
             clicked() {
                 if (this.clickable) {
                     router.push({
-                        name: 'Details',
+                        name: 'details',
                         params: {
                             account: this.account.id,
                         },

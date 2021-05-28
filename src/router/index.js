@@ -84,7 +84,7 @@ const routes = [
         path: '/details/:account',
         name: 'details',
         meta: {
-            title: 'details',
+            title: 'Details',
             transfer: 'transfer',
             accent: 'accent',
         },
@@ -104,7 +104,7 @@ const routes = [
         path: '/buy',
         name: 'buyConfirmation',
         meta: {
-            title: 'Confirmation',
+            title: 'Confirm Order',
             overview: 'home',
             accent: 'accent',
         },

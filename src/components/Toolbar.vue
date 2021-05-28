@@ -5,7 +5,7 @@
                 <v-icon>fas fa-arrow-left</v-icon>
             </v-btn>
 
-            <v-toolbar-title class="subbatitle text-capitalize ml-2" @click="addDevClick">
+            <v-toolbar-title class="subbatitle text-capitalize ml-2" @click="showBack ? $router.back() : addDevClick()">
                 {{ $route.meta.title || $route.name || '3Bot' }}
             </v-toolbar-title>
 

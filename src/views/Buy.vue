@@ -101,9 +101,7 @@
                     </p>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn color="accent" block elevation="0" @click="onSubmit" :disabled="!valid"
-                        >Submit Order</v-btn
-                    >
+                    <v-btn color="accent" block elevation="0" @click="onSubmit" :disabled="!valid">Submit Order</v-btn>
                 </v-card-actions>
             </v-form>
         </v-card>
@@ -184,15 +182,12 @@
             },
             onChangeUSDPrice(value) {
                 const usdPrice = Number(value) > 0.1 ? Number(value) : 0.1;
-
-                debugger;
                 this.shownPriceInUSD = usdPrice;
                 this.price = this.currentBtcPrice / usdPrice ? this.currentBtcPrice / usdPrice : 0;
 
                 this.price = Number(this.price) > 1000 ? Number(this.price) : 1000;
             },
             onSubmit() {
-                debugger;
                 this.setTradeInfo({
                     id: this.account.id,
                     buyAssetCode: 'TFT',

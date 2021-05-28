@@ -10,21 +10,17 @@
                                 By clicking 'Activate', I acknowledge
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
-                                        <a
-                                            target="_blank"
-                                            href="http://example.com"
-                                            @click.stop
-                                            v-on="on"
+                                        <a @click.prevent.stop="showGuide = true" v-on="on">
+                                            ThreeFold's BTC Asset Guide</a
                                         >
-                                            ThreeFold's {{ asset }}  Asset Guide
-                                        </a>
                                     </template>
-                                and agree to the 
+                                    Opens in popup </v-tooltip
+                                >, and agree to the
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
-                                        <a @click.prevent.stop="showTerms = true">Terms and Conditions.</a>
+                                        <a @click.prevent.stop="showTerms = true" v-on="on">Terms and Conditions.</a>
                                     </template>
-                                    Opens in new window
+                                    Opens in popup
                                 </v-tooltip>
                             </div>
                         </template>
@@ -44,7 +40,7 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-        <v-dialog v-model="showTerms" fullscreen>
+        <v-dialog v-model="showTerms" fullscreen eager>
             <v-card>
                 <v-card-title>
                     <v-row>
@@ -58,6 +54,24 @@
                 <iframe
                     style="height: calc(100vh - 62px); width: 100%"
                     src="https://threefold.io/info/threefold#/legal__terms_conditions_griduser"
+                    frameborder="0"
+                ></iframe>
+            </v-card>
+        </v-dialog>
+        <v-dialog v-model="showGuide" fullscreen eager>
+            <v-card>
+                <v-card-title>
+                    <v-row>
+                        ThreeFold's BTC Asset Guide
+                        <v-spacer></v-spacer>
+                        <v-btn icon @click="showGuide = false">
+                            <v-icon>fas fa-times</v-icon>
+                        </v-btn>
+                    </v-row>
+                </v-card-title>
+                <iframe
+                    style="height: calc(100vh - 62px); width: 100%"
+                    src="https://wiki.threefold.io/#/threefold__threefold_connect_btc_asset_guide"
                     frameborder="0"
                 ></iframe>
             </v-card>
@@ -80,6 +94,7 @@
                 terms: false,
                 valid: true,
                 showTerms: false,
+                showGuide: false,
             };
         },
         beforeMount() {
@@ -120,7 +135,7 @@
 
                     await selfFundTrustLine(this.account.keyPair, 'BTC');
                     this.$flashMessage.info(
-                        `Successfully activated ${this.asset}, it could take a few moments before you see it.`
+                        `Successfully activated ${this.asset.toUpperCase()} Asset, it could take a few moments before you see it.`
                     );
                     await this.$router.replace({
                         name: 'details',
@@ -138,9 +153,9 @@
                     });
                     await fundTrustLine(this.account.keyPair, 'BTC');
                     this.$flashMessage.info(
-                        `Successfully activated ${this.asset} Asset, it could take a few moments before you see it.`
+                        `Successfully activated ${this.asset.toUpperCase()} Asset, it could take a few moments before you see it.`
                     );
-                    
+
                     await this.$router.replace({
                         name: 'details',
 

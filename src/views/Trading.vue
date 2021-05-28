@@ -1,26 +1,23 @@
 <template>
     <div class="Buy fill-height">
         <v-card class="pa-2 fill-height" style="width: 100%" v-if="account">
-            <v-card-title> Wallet: {{ account.name }}</v-card-title>
+            <v-card-title> Wallet Name: {{ account.name }}</v-card-title>
             <v-card-text>
                 <v-col>
                     <v-row class="pb-2">
-                        <h3 class="font-italic error--text">Keep this screen open to continue trading</h3>
+                        <h3 class="font-italic error--text">Stay on this screen to continue trading</h3>
                     </v-row>
                 </v-col>
                 <v-col class="pb-2">
                     <v-row class="pb-2">
                         <span>
-                            <h2 class="dots pb-2">Trading</h2>
-                            <b>{{ tradeInfo.amount }} {{ tradeInfo.sellAssetCode }}</b> (<b
+                            BTC Amount: <b>{{ tradeInfo.amount }} {{ tradeInfo.sellAssetCode }}</b> (<b
                                 >{{ tradeInfo.shownAmountInUsd.toFixed(3) }} USD</b
                             >) <br />
-                            for an estimated <b>{{ tradeInfo.shownAmountTft }} {{ tradeInfo.buyAssetCode }}</b>
-                            <br /><br />
-                            At a maximum price of
-                            <b>{{ (1 / tradeInfo.price).toFixed(8) }} {{ tradeInfo.sellAssetCode }}</b> (<b
+                            Sum: est. <b>{{ tradeInfo.shownAmountTft }} {{ tradeInfo.buyAssetCode }}</b> <br />
+                            Max Price:<b>{{ (1 / tradeInfo.price).toFixed(8) }} {{ tradeInfo.sellAssetCode }}</b> (<b
                                 >{{ tradeInfo.shownPriceInUSD }} USD</b
-                            >) per <b>1 {{ tradeInfo.buyAssetCode }}</b
+                            >) / <b>1 {{ tradeInfo.buyAssetCode }}</b
                             >.
                         </span>
                     </v-row>

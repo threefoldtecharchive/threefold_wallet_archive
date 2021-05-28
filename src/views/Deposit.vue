@@ -13,8 +13,7 @@
                 <CopyField
                     label="BTC Wallet Address"
                     :value="address"
-                    :message="`Address has been successfully copied to clipboard (${address.substring(0, 8)}...).`"
-
+                    :message="`Successfully copied address to clipboard.`"
                     title="Copy address to clipboard"
                 />
                 <qrcode

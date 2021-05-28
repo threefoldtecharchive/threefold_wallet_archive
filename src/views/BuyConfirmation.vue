@@ -1,37 +1,32 @@
 <template>
     <div class="Buy fill-height flex-column">
-        <v-card class="fill-height pt-4" v-if="tradeInfo" full>
-            <v-card-title><h1>Trade Confirmation</h1></v-card-title>
+        <v-card class="fill-height pt-2" v-if="tradeInfo" full>
+            <v-card-title><h1>Order Confirmation</h1></v-card-title>
             <v-card-text>
-                <span
-                    >By clicking 'Confirm Trade', you confirm that you have read and agree with our
-                    <a class="pa-0" @click.prevent="showTerms = true">Terms and conditions </a>
-                </span>
-                <br />
-                <!--                <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{-->
-                <!--                    (1 / tradeInfo.price).toPrecision(8)-->
-                <!--                }}</pre>-->
-                <!--                <pre class="px-4" style="white-space: pre-wrap; width: 100%">{{ tradeInfo }}</pre>-->
-                <span>
-                    <h2>Trade:</h2>
-                    <b>{{ tradeInfo.amount }} {{ tradeInfo.sellAssetCode }}</b> (<b
+                <div>
+                    <h2>Order Summary:</h2>
+                    {{ tradeInfo.sellAssetCode }} Amount:
+                    <b> {{ tradeInfo.amount }} {{ tradeInfo.sellAssetCode }}</b> (<b
                         >{{ tradeInfo.shownAmountInUsd.toFixed(3) }} USD</b
                     >) <br />
-                    for an estimated <b>{{ tradeInfo.shownAmountTft }} {{ tradeInfo.buyAssetCode }}</b> <br /><br />
-                    At a maximum price of
-                    <b>{{ (1 / tradeInfo.price).toFixed(8) }} {{ tradeInfo.sellAssetCode }}</b> (<b
+                    Sum: est. <b>{{ tradeInfo.shownAmountTft }} {{ tradeInfo.buyAssetCode }}</b> <br />
+                    Max Price: <b> {{ (1 / tradeInfo.price).toFixed(8) }} {{ tradeInfo.sellAssetCode }}</b> (<b
                         >{{ tradeInfo.shownPriceInUSD }} USD</b
-                    >) per <b>1 {{ tradeInfo.buyAssetCode }}</b
+                    >) / <b>1 {{ tradeInfo.buyAssetCode }}</b
                     >.
-                </span>
+                </div>
             </v-card-text>
             <v-card-actions class="flex-column">
-                <v-btn class="mb-2" @click="onAgreeClick" block color="accent" elevation="0">Confirm Trade</v-btn>
+                <span class="px-2 pb-2 font-s text--darken-2 grey--text"
+                    >By clicking 'Confirm Order', you confirm that you have read and agree with our
+                    <a class="pa-0" @click.prevent="showTerms = true">Terms and conditions </a>
+                </span>
+                <v-btn class="mb-2" @click="onAgreeClick" block color="accent" elevation="0">Confirm Order</v-btn>
                 <v-btn @click="$router.push({ name: 'home' })" block text color="error" elevation="0">Cancel</v-btn>
             </v-card-actions>
         </v-card>
 
-        <v-dialog v-model="showTerms" fullscreen>
+        <v-dialog v-model="showTerms" fullscreen eager>
             <v-card>
                 <v-card-title>
                     <v-row>

@@ -20,7 +20,7 @@
                 </v-btn>
             </v-card-actions>
         </v-card>
-        <v-dialog v-model="showManual" fullscreen>
+        <v-dialog v-model="showManual" fullscreen eager>
             <v-card>
                 <v-card-title>
                     <v-row>
