@@ -1350,17 +1350,17 @@
     tweetnacl-ts "^1.0.3"
     tweetnacl-util "^0.15.1"
 
-"@jimber/stellar-crypto@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-1.4.0.tgz#6cba710c18176c04b1ee9e90c31628df37aa45b5"
-  integrity sha512-Dl845NogvOoQ8vGRQ3UI0Psl+Eq9rf3y7knn6w6NQSB9TFbNbQa03A0mTpjoB+Ycj4PnVYUT2ZnJyx9RSD+xKQ==
+"@jimber/stellar-crypto@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@jimber/stellar-crypto/-/stellar-crypto-1.5.1.tgz#6e7bd9117f12a4b172bb6c58689400e48c904f64"
+  integrity sha512-TpcUj0Nc4g8U1S1dg5D1F2SFbqIF4XAR4/LNjgiQoB1kpsrFw7H7KJUjb7vSqdZy9YHeCU1AhRq5VPKJbR9Kxw==
   dependencies:
     "@jimber/stellar-crypto" "^0.4.0"
     "@waves/ts-lib-crypto" "^1.4.2"
     axios "^0.19.2"
     bip39 "^3.0.2"
     mnemonicconversion2924 "^1.1.2"
-    stellar-base "^4.0.3"
+    stellar-base "^5.2.1"
     stellar-sdk "^8.0.0"
     tweetnacl-ts "^1.0.3"
     tweetnacl-util "^0.15.1"
@@ -11325,10 +11325,10 @@ stellar-base@^2.1.2:
   optionalDependencies:
     sodium-native "^2.3.0"
 
-stellar-base@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-4.0.3.tgz#03a55fd8ebbd32804d94e87f41bdc56af2a6747b"
-  integrity sha512-Tf1Ko86j4CgUtaiTC6H6qPZ97EziXN6SVokH4FGv5+XvBhFg4V+u9ySMlgPjFbHQumplkHiw8JQx1IZRHnrT3A==
+stellar-base@^5.1.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-5.2.0.tgz#e1eba67893cc9d8d1548cc6d6031c452c111c21e"
+  integrity sha512-OmzItzXiCZsggczp1T/GUzexqOQuz4OovsyCeWLXIXD7dm78w8q6AlC2bTv1y+1v4yta8ijDaq2pSo3p1Kn7GA==
   dependencies:
     base32.js "^0.1.0"
     bignumber.js "^4.0.0"
@@ -11340,10 +11340,10 @@ stellar-base@^4.0.3:
   optionalDependencies:
     sodium-native "^2.3.0"
 
-stellar-base@^5.1.0, stellar-base@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-5.2.0.tgz#e1eba67893cc9d8d1548cc6d6031c452c111c21e"
-  integrity sha512-OmzItzXiCZsggczp1T/GUzexqOQuz4OovsyCeWLXIXD7dm78w8q6AlC2bTv1y+1v4yta8ijDaq2pSo3p1Kn7GA==
+stellar-base@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-5.2.1.tgz#d280d592793bbedeefdd3c92819299fc5bcc7897"
+  integrity sha512-hsooqL2EPSwCZeaWDEvPDc5KG6U68qOCdpdX5b1IA7oDwSjeJ7B/pxZYxSv6JkQNGhkfllNn2k7AyBVo4FR3Sw==
   dependencies:
     base32.js "^0.1.0"
     bignumber.js "^4.0.0"
