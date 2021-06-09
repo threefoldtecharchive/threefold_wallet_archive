@@ -23,7 +23,7 @@ switch (window.location.host) {
             stellarServerUrl: 'https://horizon-testnet.stellar.org',
             stellarNetwork: 'Test SDF Network ; September 2015',
             serviceUrl: 'https://testnet.threefold.io/threefoldfoundation',
-            devWallet: 'RaC+jPOPsNIyVmxvS2qbGkbnANJ2Vf/kqlD3WvQfP/A=',
+            devWallet: '7IZiTghoAbJKdQbBqQoJrSCBD33SMTQAmIrrzfMaHLU=',
             tftFundAccount: 'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID',
             feeDestination: 'GAKONCKYJ7PRRKBZSWVPG3MURUNX4H44AB3CU2YGVKF2FD7KXJBB3XID',
             feeAmount: '0.1000000',
