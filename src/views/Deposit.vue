@@ -1,6 +1,6 @@
 <template>
     <div class="Deposit fill-height pa-4">
-        <v-card>
+        <v-card v-if="false">
             <v-card-title>
                 <h3>Deposit BTC</h3>
             </v-card-title>
@@ -27,6 +27,19 @@
                     }"
                 />
                 <img height="148" width="148" v-if="address === '...'" src="/loading.gif" alt="" />
+            </v-card-text>
+        </v-card>
+        <v-card v-else>
+            <v-card-title>
+                <h3>Deposit BTC (<span class="error--text">disabled</span>)</h3>
+            </v-card-title>
+            <v-card-text class="d-flex flex-column justify-center align-center">
+                <div class="caption layout justify-center">
+                    <h2>We are investigating issues with BTC Deposits.</h2>
+                </div>
+                <div class="pt-4">
+                    <img height="200" src="/undraw_searching_p5ux.svg" alt="" />
+                </div>
             </v-card-text>
         </v-card>
     </div>
