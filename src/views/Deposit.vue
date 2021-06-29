@@ -1,6 +1,6 @@
 <template>
     <div class="Deposit fill-height pa-4">
-        <v-card v-if="false">
+        <v-card v-if="true">
             <v-card-title>
                 <h3>Deposit BTC</h3>
             </v-card-title>
