@@ -11,22 +11,28 @@
                     </span>
                 </div>
                 <CopyField
-                    label="BTC Wallet Address"
-                    :value="address"
                     :message="`Successfully copied address to clipboard.`"
+                    :value="address"
+                    label="BTC Wallet Address"
                     title="Copy address to clipboard"
                 />
                 <qrcode
                     v-if="address !== '...'"
-                    :value="`bitcoin:${address}`"
                     :options="{
                         color: {
                             darklight: '#fff',
                             dark: $vuetify.theme.primary,
                         },
                     }"
+                    :value="`bitcoin:${address}`"
                 />
-                <img height="148" width="148" v-if="address === '...'" src="/loading.gif" alt="" />
+                <img v-if="address === '...'" alt="" height="148" src="/loading.gif" width="148" />
+                <div class="caption layout justify-center">
+                    <span> Minimum transaction amount: {{ min_amount }} BTC </span>
+                </div>
+                <div class="caption layout justify-center">
+                    <span>A fee of around 0.0001 BTC will be applied on deposit. </span>
+                </div>
             </v-card-text>
         </v-card>
         <v-card v-else>
@@ -38,7 +44,7 @@
                     <h2>We are investigating issues with BTC Deposits.</h2>
                 </div>
                 <div class="pt-4">
-                    <img height="200" src="/undraw_searching_p5ux.svg" alt="" />
+                    <img alt="" height="200" src="/undraw_searching_p5ux.svg" />
                 </div>
             </v-card-text>
         </v-card>
@@ -61,6 +67,7 @@
         data() {
             return {
                 address: '...',
+                min_amount: 0.00018798,
                 account: null,
             };
         },
@@ -72,7 +79,11 @@
             }
         },
         mounted() {
-            getDepositAddress(this.account.id).then(address => (this.address = address));
+            getDepositAddress(this.account.id).then(data => {
+                console.log({ data });
+                this.address = data.how;
+                this.min_amount = data.min_amount;
+            });
         },
     };
 </script>
