@@ -164,7 +164,7 @@ const routes = [
         path: '/paymentSuccess',
         name: 'paymentSuccess',
         meta: {
-            overview: 'paymentSuccess',
+            title: 'Success',
             accent: 'accent',
         },
         component: PaymentSuccess,

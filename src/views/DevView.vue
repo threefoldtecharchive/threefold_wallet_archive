@@ -1,12 +1,12 @@
 <template>
     <div class="fill-height dev-view">
-        <v-tabs grow background-color="indigo" dark>
+        <v-tabs background-color="indigo" dark grow>
             <v-tab> Logs</v-tab>
             <v-tab-item class="pa-4">
                 <v-card class="my-2 pa-2">
                     <p class="display-1 text--primary">application logs</p>
-                    <v-btn @click="copyLogs" color="primary" elevation="0"> copy logs </v-btn>
-                    <copy-field label="logs" :value="value" />
+                    <v-btn color="primary" elevation="0" @click="copyLogs"> copy logs</v-btn>
+                    <copy-field :value="value" label="logs" />
                     <pre
                         ref="logcard"
                         class="pa-2"
@@ -22,26 +22,26 @@
                     <v-card-text>
                         <ul>
                             <li>
-                                <copy-field label="appSeedPhrase" :value="appSeedPhrase"></copy-field>
+                                <copy-field :value="appSeedPhrase" label="appSeedPhrase"></copy-field>
                             </li>
                             <li>
-                                <copy-field label="appSeedPhrase" :value="debugSeed"></copy-field>
+                                <copy-field :value="debugSeed" label="appSeedPhrase"></copy-field>
                             </li>
 
                             <li>
-                                <copy-field label="threeBotName" :value="threeBotName"></copy-field>
+                                <copy-field :value="threeBotName" label="threeBotName"></copy-field>
                             </li>
                         </ul>
                     </v-card-text>
                 </v-card>
                 <v-card class="pa-2 my-2">
-                    <rawDisplayer title="accounts data" :value="accounts" />
+                    <rawDisplayer :value="accounts" title="accounts data" />
                 </v-card>
                 <v-card class="pa-2 my-2">
-                    <rawDisplayer title="pkid app accounts data" :value="pkidApp" />
+                    <rawDisplayer :value="pkidApp" title="pkid app accounts data" />
                 </v-card>
                 <v-card class="pa-2 my-2">
-                    <rawDisplayer title="pkid imported accounts data" :value="pkidImported" />
+                    <rawDisplayer :value="pkidImported" title="pkid imported accounts data" />
                 </v-card>
             </v-tab-item>
             <v-tab> Actions</v-tab>
@@ -52,7 +52,7 @@
                         <p>Restart ThreeFold Connect Wallet</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn dark text color="deep-purple" @click="Restart"> Restart </v-btn>
+                        <v-btn color="deep-purple" dark text @click="Restart"> Restart</v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="pa-2 my-2">
@@ -63,7 +63,7 @@
                             <v-row v-for="account in accounts" :key="account.id">
                                 {{ account.name }}
                                 <v-spacer></v-spacer>
-                                <v-btn x-small dark text color="deep-purple" @click="retryMigrate(account)"
+                                <v-btn color="deep-purple" dark text x-small @click="retryMigrate(account)"
                                     >Retry
                                 </v-btn>
                             </v-row>
@@ -77,13 +77,19 @@
                         <p>Resets App wallets</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn dark text color="deep-purple" @click="ResetAppWallets"> Reset </v-btn>
+                        <v-btn color="deep-purple" dark text @click="ResetAppWallets"> Reset</v-btn>
+                    </v-card-actions>
+                </v-card>
+                <v-card class="pa-2 my-2">
+                    <v-card-title>goto PaymentSuccess</v-card-title>
+                    <v-card-actions>
+                        <v-btn color="deep-purple" dark text @click="$router.push('PaymentSuccess')"> Reset</v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="pa-2 my-2">
                     <v-card-title> Remove Imported Wallets</v-card-title>
                     <v-card-actions>
-                        <v-btn dark text color="deep-purple" @click="RemoveImportedAccounts"> Remove </v-btn>
+                        <v-btn color="deep-purple" dark text @click="RemoveImportedAccounts"> Remove</v-btn>
                     </v-card-actions>
                 </v-card>
                 <v-card class="pa-2 my-2">
@@ -92,7 +98,7 @@
                         <p>Show the error screen</p>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn dark text color="deep-purple" @click="errorScreen"> Error </v-btn>
+                        <v-btn color="deep-purple" dark text @click="errorScreen"> Error</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-tab-item>
