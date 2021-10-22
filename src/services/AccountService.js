@@ -273,9 +273,12 @@ const validateAndFixAccountResponse = async (accountResponse, keyPair) => {
 };
 
 export const sendWalletDataToApp = async () => {
-    window.flutter_inappwebview.callHandler('SAVE_WALLETS', [{
-        name: 'example1', chain: 'stellar', address: 'EXAMPLE_ADDRESS_1',
-    }, {
-        name: 'example_2', chain: 'stellar', address: 'EXAMPLE_ADDRESS_2',
-    }]);
+    const toSyncWallets = [...store.getters.accounts]
+        .filter(sa => !sa.error)
+        .map(acc => ({
+            name: acc.name,
+            chain: 'stellar',
+            address: acc.id,
+        }));
+    window.flutter_inappwebview.callHandler('SAVE_WALLETS', toSyncWallets);
 };

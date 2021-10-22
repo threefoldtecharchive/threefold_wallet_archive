@@ -1,4 +1,4 @@
-import { fetchAccount, mapAccount } from '@/services/AccountService';
+import { fetchAccount, mapAccount, sendWalletDataToApp } from '@/services/AccountService';
 import { fetchPayments, mapPayment } from '@/services/PaymentService';
 import { entropyToMnemonic } from 'bip39';
 import {
@@ -434,6 +434,7 @@ export default {
 
             commit('stopAppLoading');
             commit('stopLoadingWallets');
+            sendWalletDataToApp();
         },
     },
     mutations: {

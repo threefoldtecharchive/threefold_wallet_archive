@@ -2,6 +2,7 @@ import config from '@/../public/config';
 import Pkid from '@jimber/pkid';
 import sodium from 'libsodium-wrappers';
 import router from '@/router';
+import { sendWalletDataToApp } from '@/services/AccountService';
 
 export default {
     state: {
@@ -33,11 +34,9 @@ export default {
                 isConverted: account.isConverted,
                 index: account.index,
             }));
-            const importedPromise = dispatch(
-                'persistPkidImportedAccounts',
-                importedAccounts
-            );
+            const importedPromise = dispatch('persistPkidImportedAccounts', importedAccounts);
             await Promise.all([appPromise, importedPromise]);
+            sendWalletDataToApp();
         },
         async persistPkidAppAccounts({ getters }, accounts) {
             // key 'wallets' for historic reasons
@@ -67,10 +66,7 @@ export default {
         },
         async fetchPkidDocument({ getters }, documentKey) {
             const client = getters.client;
-            const data = await client.getDoc(
-                client.keyPair.publicKey,
-                documentKey
-            );
+            const data = await client.getDoc(client.keyPair.publicKey, documentKey);
 
             if (data.success) {
                 return data;
