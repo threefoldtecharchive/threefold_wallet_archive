@@ -71,7 +71,7 @@
                 </v-card-title>
                 <iframe
                     style="height: calc(100vh - 62px); width: 100%"
-                    src="https://wiki.threefold.io/#/threefold__threefold_connect_btc_asset_guide"
+                    src="https://library.threefold.me/info/threefold#/threefold__threefold_connect_btc_asset_guide"
                     frameborder="0"
                 ></iframe>
             </v-card>

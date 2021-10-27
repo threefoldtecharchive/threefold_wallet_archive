@@ -10,7 +10,7 @@
                     <a class="font-weight-bold v-size--large" @click="showManual = true"> here</a>.
                     <br />
                     Or go to:
-                    <copy-field value="https://wiki.threefold.io/#/threefold__btc_withdrawal"></copy-field>
+                    <copy-field value="https://library.threefold.me/info/threefold#/tokens/threefold__btc_withdrawal"></copy-field>
                 </div>
             </v-card-text>
             <v-card-actions>
@@ -33,7 +33,7 @@
                 </v-card-title>
                 <iframe
                     style="height: calc(100vh - 62px); width: 100%"
-                    src="https://wiki.threefold.io/#/threefold__btc_withdrawal"
+                    src="https://library.threefold.me/info/threefold#/tokens/threefold__btc_withdrawal"
                     frameborder="0"
                 ></iframe>
             </v-card>
