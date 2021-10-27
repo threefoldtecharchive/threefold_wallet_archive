@@ -37,7 +37,7 @@
                 </v-card-title>
                 <iframe
                     style="height: calc(100vh - 62px); width: 100%"
-                    src="https://wiki.threefold.io/#/threefold__vesting_pool"
+                    src="https://library.threefold.me/info/threefold#/threefold__vesting_pool"
                     frameborder="0"
                 ></iframe>
             </v-card>
