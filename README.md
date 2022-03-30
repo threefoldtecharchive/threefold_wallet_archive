@@ -1,7 +1,9 @@
 # 3bot_wallet (DEPRECATED)
 
-##DEPRECATED
+## DEPRECATED
 use https://github.com/threefoldtech/wallet-next instead
+
+---
 
 Project to manage cryptographic currency from **[Threefold](https://threefold.io/)** on the [Stellar blockchain](https://www.stellar.org/).
 
